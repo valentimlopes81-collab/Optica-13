@@ -91,7 +91,7 @@ const FontStyle = () => (
 );
 
 /* ── HELPERS ────────────────────────────────────────────────── */
-function Img({ src, alt, className, style }) {
+function Img({ src, alt, className, style }: any) {
   const [err, setErr] = useState(false);
   if (err)
     return (
