@@ -1309,8 +1309,8 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
 /* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
 function BookingModal({ isOpen, onClose }: any) {
   const [step, setStep] = useState(1);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<any>(null);
+  const [selectedTime, setSelectedTime] = useState<any>(null);
   const [clientData, setClientData] = useState({
     name: "",
     phone: "",
@@ -1718,7 +1718,7 @@ export default function App() {
   const [booking, setBooking] = useState(false);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>null);
   const [exitIntent, setExitIntent] = useState(false);
   const [showPromo, setShowPromo] = useState(true);
   const exitShown = useRef(false);
