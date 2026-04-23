@@ -113,6 +113,105 @@ function Img({ src, alt, className, style }) {
     />
   );
 }
+/* ── SHOPIFY INTEGRATION ────────────────────────────────────── */
+import Client from 'shopify-buy';
+
+const client = Client.buildClient({
+  domain: 'dqih6f-80.myshopify.com',
+  storefrontAccessToken: 'a9c7a2f027b84643f7ede12707d4e285'
+});
+
+function ShopifyBuyButton({ productId }) {
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    // Carrega o script do Shopify apenas uma vez
+    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+      initShopify();
+    } else {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      document.head.appendChild(script);
+      script.onload = initShopify;
+    }
+
+    function initShopify() {
+      // Se o botão já existir (para evitar que crie 2 botões na troca de páginas), limpa-o
+      if (buttonRef.current) {
+         buttonRef.current.innerHTML = '';
+      }
+
+      window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('product', {
+          id: productId,
+          node: buttonRef.current,
+          moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
+          options: {
+            product: {
+              buttonDestination: 'cart',
+              contents: {
+                img: false,     // Escondemos a imagem do Shopify
+                title: false,   // Escondemos o título do Shopify
+                price: false,   // Escondemos o preço do Shopify
+                options: true,  // Mantemos as opções caso tenhas tamanhos (L, M, S)
+                quantity: false,
+                button: true    // Mantemos apenas o botão!
+              },
+              text: {
+                button: 'Adicionar ao Carrinho',
+              },
+              styles: {
+                button: {
+                  'background-color': '#0056b3',
+                  'color': '#ffffff',
+                  'border-radius': '12px',
+                  'font-family': 'Jost, sans-serif',
+                  'font-weight': '600',
+                  'font-size': '14px',
+                  'padding': '16px 24px',
+                  'width': '100%',
+                  'letter-spacing': '0.025em',
+                  ':hover': {
+                    'background-color': '#004494'
+                  }
+                }
+              }
+            },
+            cart: {
+              text: {
+                title: 'O seu carrinho',
+                empty: 'O carrinho está vazio.',
+                button: 'Finalizar Compra',
+                total: 'Total'
+              },
+              styles: {
+                button: {
+                  'background-color': '#000000',
+                  'border-radius': '12px',
+                  'font-family': 'Jost, sans-serif',
+                  'font-weight': '600'
+                }
+              }
+            },
+            toggle: {
+              styles: {
+                toggle: {
+                  'background-color': '#000000',
+                  ':hover': {
+                    'background-color': '#333333'
+                  }
+                }
+              }
+            }
+          }
+        });
+      });
+    }
+  }, [productId]);
+
+  return <div ref={buttonRef} className="w-full"></div>;
+}
 
 /* ── DATA ───────────────────────────────────────────────────── */
 const PRODUCTS = {
@@ -1285,16 +1384,16 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
             </div>
 
             <div className="mt-auto space-y-3">
-              <button
-                onClick={() => {
-                  onAdd(product);
-                  onClose();
-                }}
-                className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
-              >
-                <ShoppingBag size={18} /> Adicionar ao Carrinho
-              </button>
-              <button
+  {/* Botão Oficial do Shopify (Teste com Ray-Ban) */}
+  <ShopifyBuyButton productId="15712441500022" />
+  
+  <button
+    onClick={onBook}
+    className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+  >
+    <Calendar size={18} /> Reservar na Loja
+  </button>
+</div>
                 onClick={onBook}
                 className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
               >
