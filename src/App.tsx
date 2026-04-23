@@ -1383,23 +1383,11 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               </div>
             </div>
 
-            <div className="mt-auto space-y-3">
+           <div className="mt-auto space-y-3">
               {/* Botão Oficial do Shopify (Teste com Ray-Ban) */}
               <ShopifyBuyButton productId="15712441500022" />
               
               <button
-                onClick={onBook}
-                className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
-              >
-                <Calendar size={18} /> Reservar na Loja
-              </button>
-            </div>
-            </div>
-        </div>
-      </div>
-    </div>
-  );
-}
                 onClick={onBook}
                 className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
               >
@@ -1412,6 +1400,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
     </div>
   );
 }
+
 /* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
 function BookingModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
