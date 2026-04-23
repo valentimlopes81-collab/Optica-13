@@ -626,7 +626,7 @@ function WhatsAppBtn({ product }: any) {
 }
 
 //* ── EXIT INTENT POPUP ──────────────────────────────────────── */
-function ExitPopup({ onClose }) {
+function ExitPopup({ onClose }: any) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -1127,7 +1127,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
   );
 }
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
-function ProductModal({ product, onClose, onAdd, onBook }) {
+function ProductModal({ product, onClose, onAdd, onBook }: any) {
   if (!product) return null;
   return (
     <div
