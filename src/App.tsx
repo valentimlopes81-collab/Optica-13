@@ -32,15 +32,15 @@ const FontStyle = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap');
     :root {
-      --cream: #ffffff;
-      --cream-dark: #f8f9fa;
-      --forest: #000000;
-      --forest-light: #333333;
-      --gold: #0056b3;
-      --gold-light: #3385ff;
-      --slate: #0f172a;
-      --mist: #e2e8f0;
-      --text: #1e293b;
+      --cream: #ffffff;      /* Fundo Principal: Branco Puro */
+      --cream-dark: #f8f9fa; /* Fundo Secundário: Cinza super claro */
+      --forest: #000000;     /* Elementos Principais: Preto */
+      --forest-light: #333333;/* Cinza Escuro */
+      --gold: #0056b3;       /* Destaque: Azul Premium / Azul Óptica */
+      --gold-light: #3385ff; /* Azul mais vibrante para hovers */
+      --slate: #0f172a;      /* Rodapé: Preto meio azulado escuro */
+      --mist: #e2e8f0;       /* Bordas e Caixas: Cinza claro elegante */
+      --text: #1e293b;       /* Texto: Cinza quase preto para não cansar a vista */
     }
     * { box-sizing: border-box; }
     body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
@@ -91,8 +91,8 @@ const FontStyle = () => (
 );
 
 /* ── HELPERS ────────────────────────────────────────────────── */
-function Img({ src, alt, className, style }: any) {
-  const [err, setErr] = useState<boolean>(false);
+function Img({ src, alt, className, style }) {
+  const [err, setErr] = useState(false);
   if (err)
     return (
       <div
@@ -114,7 +114,7 @@ function Img({ src, alt, className, style }: any) {
 }
 
 /* ── DATA ───────────────────────────────────────────────────── */
-const PRODUCTS: any = {
+const PRODUCTS = {
   men: [
     {
       id: 1,
@@ -417,67 +417,192 @@ const PRODUCTS: any = {
 /* ── ICONS ──────────────────────────────────────────────────── */
 const OptometryIcon = () => (
   <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-    <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="2" opacity="0.25" />
-    <path d="M32 18v28M18 32h28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <circle
+      cx="32"
+      cy="32"
+      r="28"
+      stroke="currentColor"
+      strokeWidth="2"
+      opacity="0.25"
+    />
+    <path
+      d="M32 18v28M18 32h28"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
     <circle cx="32" cy="32" r="9" stroke="currentColor" strokeWidth="2.5" />
-    <path d="M24 24l-7-7M40 24l7-7M24 40l-7 7M40 40l7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path
+      d="M24 24l-7-7M40 24l7-7M24 40l-7 7M40 40l7 7"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
   </svg>
 );
 const LensIcon = () => (
   <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-    <ellipse cx="32" cy="32" rx="22" ry="17" stroke="currentColor" strokeWidth="2" opacity="0.25" />
-    <ellipse cx="32" cy="32" rx="15" ry="12" stroke="currentColor" strokeWidth="2.5" />
-    <circle cx="32" cy="32" r="5" stroke="currentColor" strokeWidth="2" fill="currentColor" opacity="0.2" />
-    <path d="M32 20v-5M32 44v5M17 32h-5M47 32h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <ellipse
+      cx="32"
+      cy="32"
+      rx="22"
+      ry="17"
+      stroke="currentColor"
+      strokeWidth="2"
+      opacity="0.25"
+    />
+    <ellipse
+      cx="32"
+      cy="32"
+      rx="15"
+      ry="12"
+      stroke="currentColor"
+      strokeWidth="2.5"
+    />
+    <circle
+      cx="32"
+      cy="32"
+      r="5"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="currentColor"
+      opacity="0.2"
+    />
+    <path
+      d="M32 20v-5M32 44v5M17 32h-5M47 32h5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
   </svg>
 );
 const CardIcon = () => (
   <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-    <rect x="12" y="18" width="40" height="28" rx="4" stroke="currentColor" strokeWidth="2" opacity="0.25" />
-    <rect x="16" y="22" width="32" height="20" rx="2" stroke="currentColor" strokeWidth="2.5" />
+    <rect
+      x="12"
+      y="18"
+      width="40"
+      height="28"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      opacity="0.25"
+    />
+    <rect
+      x="16"
+      y="22"
+      width="32"
+      height="20"
+      rx="2"
+      stroke="currentColor"
+      strokeWidth="2.5"
+    />
     <circle cx="26" cy="31" r="3.5" stroke="currentColor" strokeWidth="2" />
-    <path d="M34 28h8M34 32h8M34 36h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    <path d="M20 38h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <path
+      d="M34 28h8M34 32h8M34 36h8"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+    <path
+      d="M20 38h14"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
   </svg>
 );
 
 const FaceIcons = {
   oval: () => (
     <svg viewBox="0 0 80 100" className="w-full h-full" fill="none">
-      <ellipse cx="40" cy="50" rx="28" ry="42" stroke="currentColor" strokeWidth="2.5" fill="currentColor" opacity="0.08" />
+      <ellipse
+        cx="40"
+        cy="50"
+        rx="28"
+        ry="42"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="currentColor"
+        opacity="0.08"
+      />
       <circle cx="28" cy="42" r="2.5" fill="currentColor" />
       <circle cx="52" cy="42" r="2.5" fill="currentColor" />
-      <path d="M28 65 Q40 72 52 65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M28 65 Q40 72 52 65"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   ),
   round: () => (
     <svg viewBox="0 0 80 80" className="w-full h-full" fill="none">
-      <circle cx="40" cy="40" r="32" stroke="currentColor" strokeWidth="2.5" fill="currentColor" opacity="0.08" />
+      <circle
+        cx="40"
+        cy="40"
+        r="32"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="currentColor"
+        opacity="0.08"
+      />
       <circle cx="29" cy="36" r="2.5" fill="currentColor" />
       <circle cx="51" cy="36" r="2.5" fill="currentColor" />
-      <path d="M29 54 Q40 60 51 54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M29 54 Q40 60 51 54"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   ),
   square: () => (
     <svg viewBox="0 0 80 80" className="w-full h-full" fill="none">
-      <rect x="12" y="12" width="56" height="56" rx="6" stroke="currentColor" strokeWidth="2.5" fill="currentColor" opacity="0.08" />
+      <rect
+        x="12"
+        y="12"
+        width="56"
+        height="56"
+        rx="6"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="currentColor"
+        opacity="0.08"
+      />
       <circle cx="29" cy="34" r="2.5" fill="currentColor" />
       <circle cx="51" cy="34" r="2.5" fill="currentColor" />
-      <path d="M29 52 Q40 58 51 52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M29 52 Q40 58 51 52"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   ),
   heart: () => (
     <svg viewBox="0 0 80 100" className="w-full h-full" fill="none">
-      <path d="M40 20 L14 44 L24 78 L40 90 L56 78 L66 44 Z" stroke="currentColor" strokeWidth="2.5" fill="currentColor" opacity="0.08" />
+      <path
+        d="M40 20 L14 44 L24 78 L40 90 L56 78 L66 44 Z"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        fill="currentColor"
+        opacity="0.08"
+      />
       <circle cx="29" cy="48" r="2.5" fill="currentColor" />
       <circle cx="51" cy="48" r="2.5" fill="currentColor" />
-      <path d="M29 65 Q40 71 51 65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M29 65 Q40 71 51 65"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   ),
 };
 
 /* ── WHATSAPP ───────────────────────────────────────────────── */
-function WhatsAppBtn({ product }: any) {
+function WhatsAppBtn({ product }) {
   const message = product
     ? `Olá! Estou a ver o modelo ${product.name} (€${product.price}) no site e gostava de fazer uma reserva/saber mais.`
     : `Olá! Gostaria de saber mais sobre os vossos serviços.`;
@@ -501,12 +626,13 @@ function WhatsAppBtn({ product }: any) {
 }
 
 //* ── EXIT INTENT POPUP ──────────────────────────────────────── */
-function ExitPopup({ onClose }: any) {
+function ExitPopup({ onClose }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    // Aqui no futuro faria a ligação à base de dados (Mailchimp, Klaviyo, etc)
     setSubmitted(true);
   };
 
@@ -531,6 +657,7 @@ function ExitPopup({ onClose }: any) {
           <X size={16} />
         </button>
 
+        {/* Lado da Imagem (Escondido em ecrãs muito pequenos, visível em tablets/PCs) */}
         <div className="hidden md:block md:w-5/12 relative">
           <Img
             src="https://images.unsplash.com/photo-1590846123010-8566a7b7a213?w=800&h=1000&fit=crop"
@@ -546,6 +673,7 @@ function ExitPopup({ onClose }: any) {
           </div>
         </div>
 
+        {/* Lado do Conteúdo */}
         <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
           {submitted ? (
             <div className="text-center fade-up">
@@ -634,7 +762,7 @@ function ExitPopup({ onClose }: any) {
                   placeholder="Introduza o seu melhor e-mail"
                   required
                   value={email}
-                  onChange={(e: any) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-5 py-4 rounded-xl border-2 text-sm transition-all focus:ring-4 outline-none"
                   style={{
                     borderColor: "var(--mist)",
@@ -664,16 +792,17 @@ function ExitPopup({ onClose }: any) {
 }
 
 /* ── CART DRAWER (COM CHECKOUT VISUAL) ───────────────────────── */
-function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
-  const [checkoutStep, setCheckoutStep] = useState(1);
+function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
+  const [checkoutStep, setCheckoutStep] = useState(1); // 1: Carrinho, 2: Pagamento, 3: Sucesso
   const [paymentMethod, setPaymentMethod] = useState("");
   const [mbwayPhone, setMbwayPhone] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const total = cart.reduce((s: any, i: any) => s + i.price * i.qty, 0);
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
   const handleCheckout = () => {
     setIsProcessing(true);
+    // Simula o tempo de processamento do banco (2 segundos)
     setTimeout(() => {
       setIsProcessing(false);
       setCheckoutStep(3);
@@ -694,6 +823,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
         className="fixed top-0 right-0 h-full w-full sm:w-[420px] z-[90] flex flex-col slide-right"
         style={{ background: "var(--cream)" }}
       >
+        {/* Cabeçalho do Carrinho */}
         <div
           className="flex items-center justify-between p-6 border-b"
           style={{ borderColor: "var(--mist)" }}
@@ -724,6 +854,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
           </button>
         </div>
 
+        {/* PASSO 1: Lista do Carrinho */}
         {checkoutStep === 1 && (
           <>
             <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide">
@@ -735,7 +866,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
                   </p>
                 </div>
               ) : (
-                cart.map((item: any) => (
+                cart.map((item) => (
                   <div key={item.id} className="flex gap-4 items-start">
                     <div
                       className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0"
@@ -829,6 +960,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
           </>
         )}
 
+        {/* PASSO 2: Simulação de Pagamento */}
         {checkoutStep === 2 && (
           <div className="flex-1 p-6 flex flex-col">
             <button
@@ -843,6 +975,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
               Escolha o método de pagamento:
             </p>
             <div className="space-y-3 mb-8">
+              {/* Opção MB Way */}
               <label
                 className={`flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   paymentMethod === "mbway"
@@ -856,7 +989,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
                     name="payment"
                     value="mbway"
                     checked={paymentMethod === "mbway"}
-                    onChange={(e: any) => setPaymentMethod(e.target.value)}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-5 h-5"
                   />
                   <div className="flex-1">
@@ -871,13 +1004,14 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
                     type="tel"
                     placeholder="Número de telemóvel"
                     value={mbwayPhone}
-                    onChange={(e: any) => setMbwayPhone(e.target.value)}
+                    onChange={(e) => setMbwayPhone(e.target.value)}
                     className="mt-3 px-4 py-2 rounded-lg border-2 text-sm"
                     style={{ borderColor: "var(--mist)" }}
                   />
                 )}
               </label>
 
+              {/* Opção Multibanco */}
               <label
                 className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   paymentMethod === "multibanco"
@@ -890,7 +1024,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
                   name="payment"
                   value="multibanco"
                   checked={paymentMethod === "multibanco"}
-                  onChange={(e: any) => setPaymentMethod(e.target.value)}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
                   className="w-5 h-5"
                 />
                 <div className="flex-1">
@@ -901,6 +1035,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
                 </div>
               </label>
 
+              {/* Opção Cartão */}
               <label
                 className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   paymentMethod === "card"
@@ -913,7 +1048,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
                   name="payment"
                   value="card"
                   checked={paymentMethod === "card"}
-                  onChange={(e: any) => setPaymentMethod(e.target.value)}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
                   className="w-5 h-5"
                 />
                 <div className="flex-1">
@@ -958,6 +1093,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
           </div>
         )}
 
+        {/* PASSO 3: Sucesso */}
         {checkoutStep === 3 && (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
             <div
@@ -990,9 +1126,8 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
     </>
   );
 }
-
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
-function ProductModal({ product, onClose, onAdd, onBook }: any) {
+function ProductModal({ product, onClose, onAdd, onBook }) {
   if (!product) return null;
   return (
     <div
@@ -1003,8 +1138,9 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
       <div
         className="w-full sm:max-w-6xl rounded-t-3xl sm:rounded-3xl overflow-hidden fade-up flex flex-col relative shadow-2xl"
         style={{ background: "var(--cream)", maxHeight: "90vh" }}
-        onClick={(e: any) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
+        {/* Botão de Fechar flutuante em mobile */}
         <button
           onClick={onClose}
           className="md:hidden absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-lg"
@@ -1014,6 +1150,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
         </button>
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto scrollbar-hide">
+          {/* Lado da Imagem: Maior (metade do ecrã no PC) e mais alta */}
           <div
             className="w-full md:w-1/2 flex-shrink-0 img-zoom relative"
             style={{ background: "var(--mist)", minHeight: "350px" }}
@@ -1025,6 +1162,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
             />
           </div>
 
+          {/* Lado da Informação */}
           <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col bg-white">
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -1041,6 +1179,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
                   {product.name}
                 </h2>
               </div>
+              {/* Botão de Fechar no PC */}
               <button
                 onClick={onClose}
                 className="hidden md:flex w-11 h-11 rounded-full items-center justify-center flex-shrink-0 ml-4 transition-colors hover:bg-gray-100"
@@ -1066,13 +1205,13 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
 
             <div className="grid grid-cols-2 gap-4 mb-8">
               {[
-                { k: "Material", v: product.material },
-                { k: "Cor", v: product.color },
-                { k: "Formato", v: product.shape },
-                { k: "Estilo", v: product.style },
-              ].map((item: any) => (
+                ["Material", product.material],
+                ["Cor", product.color],
+                ["Formato", product.shape],
+                ["Estilo", product.style],
+              ].map(([k, v]) => (
                 <div
-                  key={item.k}
+                  key={k}
                   className="p-4 rounded-2xl border"
                   style={{
                     background: "var(--cream-dark)",
@@ -1083,13 +1222,13 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
                     className="text-[11px] font-bold uppercase tracking-wider mb-1"
                     style={{ color: "#888" }}
                   >
-                    {item.k}
+                    {k}
                   </p>
                   <p
                     className="text-sm font-semibold"
                     style={{ color: "var(--forest)" }}
                   >
-                    {item.v}
+                    {v}
                   </p>
                 </div>
               ))}
@@ -1103,7 +1242,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
                 Rostos recomendados
               </p>
               <div className="flex gap-2 flex-wrap">
-                {product.faceShape.map((f: any) => (
+                {product.faceShape.map((f) => (
                   <span
                     key={f}
                     className="text-xs px-4 py-1.5 rounded-full font-bold capitalize shadow-sm border"
@@ -1119,6 +1258,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
               </div>
             </div>
 
+            {/* Trust Section */}
             <div className="mb-8 grid grid-cols-2 gap-4">
               <div className="flex items-center gap-3 p-4 rounded-xl border bg-gray-50 border-gray-100">
                 <Award size={20} style={{ color: "var(--gold)" }} />
@@ -1166,13 +1306,12 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
     </div>
   );
 }
-
-/* ── BOOKING MODAL ────────────────────────────── */
-function BookingModal({ isOpen, onClose }: any) {
+/* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
+function BookingModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
-  const [selectedDate, setSelectedDate] = useState<any>(null);
-  const [selectedTime, setSelectedTime] = useState<any>(null);
-  const [clientData, setClientData] = useState<any>({
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [clientData, setClientData] = useState({
     name: "",
     phone: "",
     email: "",
@@ -1180,13 +1319,37 @@ function BookingModal({ isOpen, onClose }: any) {
   const [month, setMonth] = useState(new Date());
   const [confirmed, setConfirmed] = useState(false);
 
+  // Definição dos horários
   const slotsSemana = [
-    "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
-    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
   ];
   const slotsSabado = [
-    "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", 
-    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
   ];
 
   const today = new Date();
@@ -1214,6 +1377,7 @@ function BookingModal({ isOpen, onClose }: any) {
     month.getMonth() === today.getMonth() &&
     month.getFullYear() === today.getFullYear();
 
+  // Descobrir que slots mostrar
   const currentSlots =
     selectedDate && selectedDate.getDay() === 6 ? slotsSabado : slotsSemana;
 
@@ -1236,8 +1400,9 @@ function BookingModal({ isOpen, onClose }: any) {
       <div
         className="relative rounded-2xl overflow-hidden max-w-3xl w-full fade-up"
         style={{ background: "var(--cream)", maxHeight: "90vh" }}
-        onClick={(e: any) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <div
           className="p-6 border-b flex items-center justify-between"
           style={{ borderColor: "var(--mist)" }}
@@ -1275,6 +1440,7 @@ function BookingModal({ isOpen, onClose }: any) {
           </button>
         </div>
 
+        {/* Content */}
         <div
           className="p-6 overflow-y-auto"
           style={{ maxHeight: "calc(90vh - 140px)" }}
@@ -1341,7 +1507,7 @@ function BookingModal({ isOpen, onClose }: any) {
                 </button>
               </div>
               <div className="grid grid-cols-7 gap-2 mb-4">
-                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d: any) => (
+                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
                   <div
                     key={d}
                     className="text-center text-xs font-semibold py-2"
@@ -1354,12 +1520,12 @@ function BookingModal({ isOpen, onClose }: any) {
               <div className="grid grid-cols-7 gap-2">
                 {Array(startDay)
                   .fill(0)
-                  .map((_, i: any) => (
+                  .map((_, i) => (
                     <div key={`e-${i}`} />
                   ))}
                 {Array(daysInMonth)
                   .fill(0)
-                  .map((_, i: any) => {
+                  .map((_, i) => {
                     const day = i + 1;
                     const d = new Date(
                       month.getFullYear(),
@@ -1367,7 +1533,7 @@ function BookingModal({ isOpen, onClose }: any) {
                       day
                     );
                     const dow = d.getDay();
-                   const isPast = d.getTime() < today.setHours(0, 0, 0, 0);
+                    const isPast = d < today.setHours(0, 0, 0, 0);
                     const isSunday = dow === 0;
                     const isSelected =
                       selectedDate &&
@@ -1412,7 +1578,7 @@ function BookingModal({ isOpen, onClose }: any) {
                 <strong>Data:</strong> {dateLabel}
               </p>
               <div className="grid grid-cols-3 gap-3">
-                {currentSlots.map((t: any) => (
+                {currentSlots.map((t) => (
                   <button
                     key={t}
                     onClick={() => setSelectedTime(t)}
@@ -1448,30 +1614,26 @@ function BookingModal({ isOpen, onClose }: any) {
           ) : step === 3 ? (
             <>
               <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Nome Completo"
-                  value={clientData.name}
-                  onChange={(e: any) => setClientData({ ...clientData, name: e.target.value })}
-                  className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                  style={{ borderColor: "var(--mist)", fontFamily: "Jost,sans-serif" }}
-                />
-                <input
-                  type="tel"
-                  placeholder="Telefone"
-                  value={clientData.phone}
-                  onChange={(e: any) => setClientData({ ...clientData, phone: e.target.value })}
-                  className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                  style={{ borderColor: "var(--mist)", fontFamily: "Jost,sans-serif" }}
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={clientData.email}
-                  onChange={(e: any) => setClientData({ ...clientData, email: e.target.value })}
-                  className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                  style={{ borderColor: "var(--mist)", fontFamily: "Jost,sans-serif" }}
-                />
+                {[
+                  ["text", "Nome Completo", "name"],
+                  ["tel", "Telefone", "phone"],
+                  ["email", "Email", "email"],
+                ].map(([t, p, k]) => (
+                  <input
+                    key={k}
+                    type={t}
+                    placeholder={p}
+                    value={clientData[k]}
+                    onChange={(e) =>
+                      setClientData({ ...clientData, [k]: e.target.value })
+                    }
+                    className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
+                    style={{
+                      borderColor: "var(--mist)",
+                      fontFamily: "Jost,sans-serif",
+                    }}
+                  />
+                ))}
               </div>
               <div className="mt-6 flex gap-3">
                 <button
@@ -1554,15 +1716,15 @@ function BookingModal({ isOpen, onClose }: any) {
 export default function App() {
   const [page, setPage] = useState("home");
   const [booking, setBooking] = useState(false);
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
   const [showPromo, setShowPromo] = useState(true);
   const exitShown = useRef(false);
 
   useEffect(() => {
-    const h = (e: any) => {
+    const h = (e) => {
       if (e.clientY <= 10 && !exitShown.current) {
         exitShown.current = true;
         setExitIntent(true);
@@ -1576,31 +1738,21 @@ export default function App() {
     setBooking(true);
     setExitIntent(false);
   };
-  const addToCart = (p: any) => {
-    const ex = cart.find((x: any) => x.id === p.id);
+  const addToCart = (p) => {
+    const ex = cart.find((x) => x.id === p.id);
     if (ex)
-      setCart(cart.map((x: any) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
+      setCart(cart.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
     else setCart([...cart, { ...p, qty: 1 }]);
   };
-  const removeFromCart = (id: any) => setCart(cart.filter((x: any) => x.id !== id));
-  const updateQty = (id: any, q: any) => {
+  const removeFromCart = (id) => setCart(cart.filter((x) => x.id !== id));
+  const updateQty = (id, q) => {
     if (q < 1) removeFromCart(id);
-    else setCart(cart.map((x: any) => (x.id === id ? { ...x, qty: q } : x)));
+    else setCart(cart.map((x) => (x.id === id ? { ...x, qty: q } : x)));
   };
 
   /* HEADER */
   const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    
-    const menuLinks = [
-      { label: "Serviços", path: "services" },
-      { label: "Vantagens", path: "vantagens" },
-      { label: "Homem", path: "men" },
-      { label: "Mulher", path: "women" },
-      { label: "Sobre Nós", path: "about" },
-      { label: "Contactos", path: "contact" },
-    ];
-
     return (
       <header
         className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl"
@@ -1628,17 +1780,25 @@ export default function App() {
             </span>
           </button>
 
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-6 text-sm">
-            {menuLinks.map((item: any) => (
+            {[
+              ["Serviços", "services"],
+              ["Vantagens", "vantagens"],
+              ["Homem", "men"],
+              ["Mulher", "women"],
+              ["Sobre Nós", "about"],
+              ["Contactos", "contact"],
+            ].map(([label, p]) => (
               <button
-                key={item.path}
-                onClick={() => setPage(item.path)}
+                key={p}
+                onClick={() => setPage(p)}
                 className={`font-medium transition-all hover:opacity-100 ${
-                  page === item.path ? "opacity-100" : "opacity-60"
+                  page === p ? "opacity-100" : "opacity-60"
                 }`}
-                style={{ color: page === item.path ? "var(--gold)" : "var(--forest)" }}
+                style={{ color: page === p ? "var(--gold)" : "var(--forest)" }}
               >
-                {item.label}
+                {label}
               </button>
             ))}
             <button
@@ -1662,7 +1822,7 @@ export default function App() {
                   className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold text-white"
                   style={{ background: "var(--gold)" }}
                 >
-                  {cart.reduce((s: any, i: any) => s + i.qty, 0)}
+                  {cart.reduce((s, i) => s + i.qty, 0)}
                 </span>
               )}
             </button>
@@ -1681,26 +1841,34 @@ export default function App() {
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div
             className="lg:hidden border-t"
             style={{ background: "white", borderColor: "var(--mist)" }}
           >
             <div className="px-6 py-4 space-y-2">
-              {menuLinks.map((item: any) => (
+              {[
+                ["Serviços", "services"],
+                ["Vantagens", "vantagens"],
+                ["Homem", "men"],
+                ["Mulher", "women"],
+                ["Sobre Nós", "about"],
+                ["Contactos", "contact"],
+              ].map(([label, p]) => (
                 <button
-                  key={item.path}
+                  key={p}
                   onClick={() => {
-                    setPage(item.path);
+                    setPage(p);
                     setMobileMenuOpen(false);
                   }}
                   className="block w-full text-left px-4 py-2 rounded-xl font-medium transition-all"
                   style={{
-                    background: page === item.path ? "var(--mist)" : "transparent",
-                    color: page === item.path ? "var(--gold)" : "var(--forest)",
+                    background: page === p ? "var(--mist)" : "transparent",
+                    color: page === p ? "var(--gold)" : "var(--forest)",
                   }}
                 >
-                  {item.label}
+                  {label}
                 </button>
               ))}
               <button
@@ -1729,149 +1897,143 @@ export default function App() {
       </header>
     );
   };
-  
   /* FOOTER */
-  const Footer = () => {
-    const navLinks = [
-      { path: "services", label: "Serviços" },
-      { path: "vantagens", label: "Vantagens" },
-      { path: "men", label: "Coleção Homem" },
-      { path: "women", label: "Coleção Mulher" },
-      { path: "quiz", label: "Quiz de Estilo" },
-      { path: "contact", label: "Contactos" },
-    ];
-
-    return (
-      <footer className="py-16" style={{ background: "var(--slate)" }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "var(--forest)" }}
-                >
-                  <Glasses size={18} style={{ color: "var(--gold)" }} />
-                </div>
-                <span className="font-display text-xl font-semibold text-white">
-                  Óptica <span style={{ color: "var(--gold)" }}>13</span>
-                </span>
+  const Footer = () => (
+    <footer className="py-16" style={{ background: "var(--slate)" }}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid md:grid-cols-4 gap-12 mb-12">
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: "var(--forest)" }}
+              >
+                <Glasses size={18} style={{ color: "var(--gold)" }} />
               </div>
-              <p
-                className="text-sm leading-relaxed mb-3"
-                style={{ color: "rgba(250,247,242,0.45)" }}
-              >
-                Cuidamos da sua visão com tecnologia de ponta e profissionalismo.
-              </p>
-              <p className="text-xs font-semibold text-gray-500">
-                Nº Registo ERS: E131391
-              </p>
+              <span className="font-display text-xl font-semibold text-white">
+                Óptica <span style={{ color: "var(--gold)" }}>13</span>
+              </span>
             </div>
-            <div>
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-5"
-                style={{ color: "var(--gold)" }}
-              >
-                Navegação
-              </p>
-              <ul className="space-y-3">
-                {navLinks.map((item: any) => (
-                  <li key={item.path}>
-                    <button
-                      onClick={() => setPage(item.path)}
-                      className="text-sm transition-all"
-                      style={{ color: "rgba(250,247,242,0.5)" }}
-                      onMouseEnter={(e: any) => (e.target.style.color = "var(--gold)")}
-                      onMouseLeave={(e: any) =>
-                        (e.target.style.color = "rgba(250,247,242,0.5)")
-                      }
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-5"
-                style={{ color: "var(--gold)" }}
-              >
-                Contactos
-              </p>
-              <ul
-                className="space-y-3 text-sm"
-                style={{ color: "rgba(250,247,242,0.5)" }}
-              >
-                <li className="flex items-start gap-2">
-                  <Phone
-                    size={14}
-                    className="mt-1 flex-shrink-0"
-                    style={{ color: "var(--gold)" }}
-                  />
-                  <span>
-                    214 578 119
-                    <br />
-                    934 421 310
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Mail size={14} style={{ color: "var(--gold)" }} />{" "}
-                  info@optica13.com
-                </li>
-                <li className="flex items-start gap-2">
-                  <MapPin
-                    size={14}
-                    className="mt-1 flex-shrink-0"
-                    style={{ color: "var(--gold)" }}
-                  />
-                  <span>
-                    Sede: R. 31 de Janeiro 8-B
-                    <br />
-                    Loja 2: R. José Relvas 105-B
-                    <br />
-                    2775 Parede
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-5"
-                style={{ color: "var(--gold)" }}
-              >
-                Horário
-              </p>
-              <ul
-                className="space-y-2 text-sm"
-                style={{ color: "rgba(250,247,242,0.5)" }}
-              >
-                <li>Dias Úteis: 9:30 – 19:30</li>
-                <li>Sáb: 9h30–13h30 / 15h00–18h00</li>
-                <li>Domingo: Encerrado</li>
-              </ul>
-              <button
-                onClick={openBook}
-                className="btn-gold mt-6 w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2"
-              >
-                <Calendar size={13} /> Agendar agora
-              </button>
-            </div>
+            <p
+              className="text-sm leading-relaxed mb-3"
+              style={{ color: "rgba(250,247,242,0.45)" }}
+            >
+              Cuidamos da sua visão com tecnologia de ponta e profissionalismo.
+            </p>
+            <p className="text-xs font-semibold text-gray-500">
+              Nº Registo ERS: E131391
+            </p>
           </div>
-          <div
-            className="border-t pt-8 text-center text-xs"
-            style={{
-              borderColor: "rgba(250,247,242,0.08)",
-              color: "rgba(250,247,242,0.25)",
-            }}
-          >
-            © 2026 Óptica 13 · Todos os direitos reservados
+          <div>
+            <p
+              className="text-xs font-semibold tracking-widest uppercase mb-5"
+              style={{ color: "var(--gold)" }}
+            >
+              Navegação
+            </p>
+            <ul className="space-y-3">
+              {[
+                ["services", "Serviços"],
+                ["vantagens", "Vantagens"],
+                ["men", "Coleção Homem"],
+                ["women", "Coleção Mulher"],
+                ["quiz", "Quiz de Estilo"],
+                ["contact", "Contactos"],
+              ].map(([p, l]) => (
+                <li key={p}>
+                  <button
+                    onClick={() => go(p)}
+                    className="text-sm transition-all"
+                    style={{ color: "rgba(250,247,242,0.5)" }}
+                    onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
+                    onMouseLeave={(e) =>
+                      (e.target.style.color = "rgba(250,247,242,0.5)")
+                    }
+                  >
+                    {l}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold tracking-widest uppercase mb-5"
+              style={{ color: "var(--gold)" }}
+            >
+              Contactos
+            </p>
+            <ul
+              className="space-y-3 text-sm"
+              style={{ color: "rgba(250,247,242,0.5)" }}
+            >
+              <li className="flex items-start gap-2">
+                <Phone
+                  size={14}
+                  className="mt-1 flex-shrink-0"
+                  style={{ color: "var(--gold)" }}
+                />
+                <span>
+                  214 578 119
+                  <br />
+                  934 421 310
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail size={14} style={{ color: "var(--gold)" }} />{" "}
+                info@optica13.com
+              </li>
+              <li className="flex items-start gap-2">
+                <MapPin
+                  size={14}
+                  className="mt-1 flex-shrink-0"
+                  style={{ color: "var(--gold)" }}
+                />
+                <span>
+                  Sede: R. 31 de Janeiro 8-B
+                  <br />
+                  Loja 2: R. José Relvas 105-B
+                  <br />
+                  2775 Parede
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold tracking-widest uppercase mb-5"
+              style={{ color: "var(--gold)" }}
+            >
+              Horário
+            </p>
+            <ul
+              className="space-y-2 text-sm"
+              style={{ color: "rgba(250,247,242,0.5)" }}
+            >
+              <li>Dias Úteis: 9:30 – 19:30</li>
+              <li>Sáb: 9h30–13h30 / 15h00–18h00</li>
+              <li>Domingo: Encerrado</li>
+            </ul>
+            <button
+              onClick={openBook}
+              className="btn-gold mt-6 w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2"
+            >
+              <Calendar size={13} /> Agendar agora
+            </button>
           </div>
         </div>
-      </footer>
-    );
-  };
-  
+        <div
+          className="border-t pt-8 text-center text-xs"
+          style={{
+            borderColor: "rgba(250,247,242,0.08)",
+            color: "rgba(250,247,242,0.25)",
+          }}
+        >
+          © 2026 Óptica 13 · Todos os direitos reservados
+        </div>
+      </div>
+    </footer>
+  );
   /* TESTIMONIALS CAROUSEL */
   const TestimonialsSection = () => {
     const [active, setActive] = useState(0);
@@ -1917,11 +2079,13 @@ export default function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mt-10">
+              {/* Nome e Avatar */}
               <div
                 className="flex items-center gap-4 bg-gray-50 pr-6 rounded-full border w-fit"
                 style={{ borderColor: "var(--mist)" }}
               >
                 <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center flex-shrink-0 border-4 border-white shadow-sm">
+                  {/* Ícone de utilizador igual à tua imagem */}
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -1943,8 +2107,9 @@ export default function App() {
                 </span>
               </div>
 
+              {/* Bolinhas / Controlos */}
               <div className="flex items-center gap-2">
-                {testimonials.map((_, i: any) => (
+                {testimonials.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
@@ -1964,10 +2129,10 @@ export default function App() {
       </section>
     );
   };
-  
   /* HOME PAGE */
   const HomePage = () => (
     <div>
+      {/* Hero */}
       <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           <div className="text-white">
@@ -2028,6 +2193,7 @@ export default function App() {
         </div>
       </section>
 
+      {/* Services */}
       <section className="py-24" style={{ background: "var(--cream)" }}>
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -2064,7 +2230,7 @@ export default function App() {
                 title: "Certificados de Condução",
                 desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
               },
-            ].map(({ Icon, title, desc }: any, i: any) => (
+            ].map(({ Icon, title, desc }, i) => (
               <div
                 key={i}
                 className={`card-hover p-8 rounded-2xl bg-white border fade-up-${
@@ -2096,9 +2262,11 @@ export default function App() {
         </div>
       </section>
 
+      {/* CONSULTORIA DE IMAGEM */}
       <section className="py-24" style={{ background: "var(--cream)" }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Lado da Imagem */}
             <div
               className="order-2 lg:order-1 rounded-3xl overflow-hidden img-zoom shadow-2xl relative"
               style={{ height: "550px" }}
@@ -2108,6 +2276,7 @@ export default function App() {
                 alt="Consultoria de Imagem"
                 className="w-full h-full object-cover"
               />
+              {/* Etiqueta flutuante na imagem */}
               <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white/50 max-w-[250px] fade-up-2">
                 <div className="flex gap-1 mb-2">
                   {[1, 2, 3, 4, 5].map((s) => (
@@ -2126,6 +2295,7 @@ export default function App() {
               </div>
             </div>
 
+            {/* Lado do Texto */}
             <div className="order-1 lg:order-2 fade-up-1">
               <span
                 className="inline-block text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6"
@@ -2170,7 +2340,7 @@ export default function App() {
                     title: "Curadoria de Marcas",
                     text: "Seleção personalizada dentro do nosso portefólio premium.",
                   },
-                ].map((item: any, i: any) => (
+                ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
@@ -2214,7 +2384,7 @@ export default function App() {
           </div>
         </div>
       </section>
-      
+      {/* CTA */}
       <section className="py-20" style={{ background: "var(--cream-dark)" }}>
         <div className="max-w-4xl mx-auto px-6 text-center">
           <Award
@@ -2240,7 +2410,7 @@ export default function App() {
           </button>
         </div>
       </section>
-      
+      {/* MAIS VENDIDOS */}
       <section className="py-20" style={{ background: "white" }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-10">
@@ -2279,7 +2449,7 @@ export default function App() {
               PRODUCTS.men[3],
               PRODUCTS.women[0],
               PRODUCTS.women[2],
-            ].map((p: any) => (
+            ].map((p) => (
               <div
                 key={p.id}
                 onClick={() => setSelectedProduct(p)}
@@ -2316,7 +2486,7 @@ export default function App() {
           </div>
         </div>
       </section>
-      
+      {/* Testemunhos */}
       <TestimonialsSection />
     </div>
   );
@@ -2697,6 +2867,7 @@ export default function App() {
                 key={idx}
                 className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center fade-up-1"
               >
+                {/* Lado da Imagem (Muda de lado dependendo se o índice é par ou ímpar) */}
                 <div
                   className={`relative rounded-3xl overflow-hidden shadow-xl h-[400px] lg:h-[550px] img-zoom ${
                     idx % 2 === 1 ? "lg:order-2" : ""
@@ -2710,6 +2881,7 @@ export default function App() {
                   <div className="absolute inset-0 border-[12px] border-white/10 rounded-3xl pointer-events-none"></div>
                 </div>
 
+                {/* Lado do Texto */}
                 <div className={`${idx % 2 === 1 ? "lg:order-1" : ""}`}>
                   <h2
                     className="font-display text-3xl lg:text-4xl font-semibold mb-6"
@@ -2737,9 +2909,8 @@ export default function App() {
       </div>
     );
   };
-  
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ gender }: any) => {
+  const CollectionPage = ({ gender }) => {
     const [filters, setFilters] = useState({
       material: "",
       priceRange: "",
@@ -2751,7 +2922,7 @@ export default function App() {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const products = PRODUCTS[gender];
-    const filtered = products.filter((p: any) => {
+    const filtered = products.filter((p) => {
       if (
         search &&
         !p.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -2769,17 +2940,10 @@ export default function App() {
       return true;
     });
 
-    const priceRanges = [
-      { range: "", label: "Todos" },
-      { range: "0-100", label: "Até €100" },
-      { range: "100-200", label: "€100 - €200" },
-      { range: "200-300", label: "€200 - €300" },
-      { range: "300-999", label: "Mais de €300" }
-    ];
-
-    const FilterPanel = ({ isMobile }: any) => (
+    const FilterPanel = ({ isMobile }) => (
       <div className={isMobile ? "p-6" : ""}>
         <div className="space-y-6">
+          {/* Material */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-wide mb-3"
@@ -2788,7 +2952,7 @@ export default function App() {
               Material
             </p>
             <div className="space-y-2">
-              {["", "Metal", "Acetato", "Titânio"].map((m: any) => (
+              {["", "Metal", "Acetato", "Titânio"].map((m) => (
                 <label
                   key={m}
                   className="flex items-center gap-2 cursor-pointer"
@@ -2806,6 +2970,7 @@ export default function App() {
             </div>
           </div>
 
+          {/* Preço */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-wide mb-3"
@@ -2814,26 +2979,33 @@ export default function App() {
               Preço
             </p>
             <div className="space-y-2">
-              {priceRanges.map((item: any) => (
+              {[
+                ["", "Todos"],
+                ["0-100", "Até €100"],
+                ["100-200", "€100 - €200"],
+                ["200-300", "€200 - €300"],
+                ["300-999", "Mais de €300"],
+              ].map(([range, label]) => (
                 <label
-                  key={item.range}
+                  key={range}
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <input
                     type="radio"
                     name={isMobile ? "price-mobile" : "price"}
-                    checked={filters.priceRange === item.range}
+                    checked={filters.priceRange === range}
                     onChange={() =>
-                      setFilters({ ...filters, priceRange: item.range })
+                      setFilters({ ...filters, priceRange: range })
                     }
                     className="w-4 h-4"
                   />
-                  <span className="text-sm">{item.label}</span>
+                  <span className="text-sm">{label}</span>
                 </label>
               ))}
             </div>
           </div>
 
+          {/* Cor */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-wide mb-3"
@@ -2849,7 +3021,7 @@ export default function App() {
                 "Prateado",
                 "Transparente",
                 "Tartaruga",
-              ].map((c: any) => (
+              ].map((c) => (
                 <label
                   key={c}
                   className="flex items-center gap-2 cursor-pointer"
@@ -2867,6 +3039,7 @@ export default function App() {
             </div>
           </div>
 
+          {/* Estilo */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-wide mb-3"
@@ -2876,7 +3049,7 @@ export default function App() {
             </p>
             <div className="space-y-2">
               {["", "Clássico", "Desportivo", "Discreto", "Arrojado"].map(
-                (s: any) => (
+                (s) => (
                   <label
                     key={s}
                     className="flex items-center gap-2 cursor-pointer"
@@ -2895,6 +3068,7 @@ export default function App() {
             </div>
           </div>
 
+          {/* Formato */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-wide mb-3"
@@ -2904,7 +3078,7 @@ export default function App() {
             </p>
             <div className="space-y-2">
               {gender === "men"
-                ? ["", "Aviador", "Quadrado", "Redondo"].map((sh: any) => (
+                ? ["", "Aviador", "Quadrado", "Redondo"].map((sh) => (
                     <label
                       key={sh}
                       className="flex items-center gap-2 cursor-pointer"
@@ -2920,7 +3094,7 @@ export default function App() {
                     </label>
                   ))
                 : ["", "Cat-Eye", "Redondo", "Quadrado", "Aviador"].map(
-                    (sh: any) => (
+                    (sh) => (
                       <label
                         key={sh}
                         className="flex items-center gap-2 cursor-pointer"
@@ -2957,6 +3131,7 @@ export default function App() {
         style={{ background: "var(--cream)" }}
       >
         <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
           <div className="mb-8">
             <p
               className="text-xs font-semibold tracking-widest uppercase mb-3"
@@ -2974,6 +3149,7 @@ export default function App() {
               Óculos <em>Premium</em>
             </h1>
 
+            {/* Search & Filter Toggle */}
             <div className="flex gap-4">
               <div className="flex-1 relative">
                 <Search
@@ -2985,7 +3161,7 @@ export default function App() {
                   type="text"
                   placeholder="Pesquisar por marca ou modelo..."
                   value={search}
-                  onChange={(e: any) => setSearch(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm"
                   style={{ borderColor: "var(--mist)" }}
                 />
@@ -3000,6 +3176,7 @@ export default function App() {
           </div>
 
           <div className="flex gap-8">
+            {/* Desktop Sidebar */}
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div
                 className="sticky top-28 p-6 rounded-2xl border"
@@ -3010,13 +3187,14 @@ export default function App() {
               </div>
             </aside>
 
+            {/* Products Grid */}
             <div className="flex-1">
               <p className="text-sm mb-6" style={{ color: "#666" }}>
                 {filtered.length}{" "}
                 {filtered.length === 1 ? "produto" : "produtos"}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filtered.map((p: any) => (
+                {filtered.map((p) => (
                   <div
                     key={p.id}
                     className="card-hover rounded-2xl overflow-hidden bg-white border cursor-pointer"
@@ -3066,7 +3244,7 @@ export default function App() {
                       <p className="font-semibold mb-1">{p.name}</p>
                       <div className="flex items-center gap-2 mb-3">
                         {(() => {
-                          const colorMap: any = {
+                          const colorMap = {
                             Preto: "#1a1a1a",
                             Dourado: "#c9a84c",
                             Prateado: "#9ca3af",
@@ -3100,7 +3278,7 @@ export default function App() {
                         {p.rating && (
                           <div className="flex items-center gap-1.5 mb-1">
                             <div className="flex gap-0.5">
-                              {[1, 2, 3, 4, 5].map((s: any) => (
+                              {[1, 2, 3, 4, 5].map((s) => (
                                 <svg
                                   key={s}
                                   viewBox="0 0 12 12"
@@ -3137,6 +3315,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* Mobile Filter Drawer */}
         {drawerOpen && (
           <>
             <div
@@ -3171,7 +3350,7 @@ export default function App() {
   /* QUIZ */
   const QuizPage = () => {
     const [step, setStep] = useState(1);
-    const [answers, setAnswers] = useState<any>({
+    const [answers, setAnswers] = useState({
       type: "",
       gender: "",
       shapes: [],
@@ -3185,7 +3364,7 @@ export default function App() {
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
 
-    const answerSingle = (field: any, value: any) => {
+    const answerSingle = (field, value) => {
       setAnswers({ ...answers, [field]: value });
       setTimeout(() => {
         setStep(step + 1);
@@ -3193,11 +3372,11 @@ export default function App() {
       }, 300);
     };
 
-    const toggleMulti = (field: any, value: any) => {
-      setAnswers((prev: any) => ({
+    const toggleMulti = (field, value) => {
+      setAnswers((prev) => ({
         ...prev,
         [field]: prev[field].includes(value)
-          ? prev[field].filter((item: any) => item !== value)
+          ? prev[field].filter((item) => item !== value)
           : [...prev[field], value],
       }));
     };
@@ -3207,21 +3386,22 @@ export default function App() {
       window.scrollTo(0, 0);
     };
 
-    const finishQuiz = (e: any) => {
+    const finishQuiz = (e) => {
       if (e) e.preventDefault();
       setLoading(true);
-      setStep(9); 
+      setStep(9); // Loading Step
       window.scrollTo(0, 0);
       setTimeout(() => {
+        // Simple filter for the prototype to show results
         const pool =
           answers.gender === "men"
             ? PRODUCTS.men
             : answers.gender === "women"
             ? PRODUCTS.women
             : [...PRODUCTS.men, ...PRODUCTS.women];
-        setResults(pool.slice(0, 3) as any);
+        setResults(pool.slice(0, 3));
         setLoading(false);
-        setStep(10);
+        setStep(10); // Results Step
       }, 2000);
     };
 
@@ -3349,22 +3529,31 @@ export default function App() {
             {step === 1 && (
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-2 gap-4 w-full mb-8">
-                  <button
-                    onClick={() => answerSingle("type", "eyeglasses")}
-                    className="bg-white p-12 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center gap-6 shadow-sm"
-                    style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                  >
-                    <div style={{ color: "var(--gold)" }}><Glasses size={48} strokeWidth={1.5} /></div>
-                    <span className="font-semibold text-lg">Óculos de grau</span>
-                  </button>
-                  <button
-                    onClick={() => answerSingle("type", "sunglasses")}
-                    className="bg-white p-12 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center gap-6 shadow-sm"
-                    style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                  >
-                    <div style={{ color: "var(--gold)" }}><Eye size={48} strokeWidth={1.5} /></div>
-                    <span className="font-semibold text-lg">Óculos de sol</span>
-                  </button>
+                  {[
+                    [
+                      "eyeglasses",
+                      "Óculos de grau",
+                      <Glasses size={48} strokeWidth={1.5} />,
+                    ],
+                    [
+                      "sunglasses",
+                      "Óculos de sol",
+                      <Eye size={48} strokeWidth={1.5} />,
+                    ],
+                  ].map(([v, l, icon]) => (
+                    <button
+                      key={v}
+                      onClick={() => answerSingle("type", v)}
+                      className="bg-white p-12 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center gap-6 shadow-sm"
+                      style={{
+                        borderColor: "var(--mist)",
+                        color: "var(--forest)",
+                      }}
+                    >
+                      <div style={{ color: "var(--gold)" }}>{icon}</div>
+                      <span className="font-semibold text-lg">{l}</span>
+                    </button>
+                  ))}
                 </div>
                 <button
                   onClick={nextStep}
@@ -3379,20 +3568,22 @@ export default function App() {
             {step === 2 && (
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-2 gap-4 w-full mb-8">
-                  <button
-                    onClick={() => answerSingle("gender", "women")}
-                    className="bg-white p-14 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center shadow-sm"
-                    style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                  >
-                    <span className="font-semibold text-lg">Estilos femininos</span>
-                  </button>
-                  <button
-                    onClick={() => answerSingle("gender", "men")}
-                    className="bg-white p-14 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center shadow-sm"
-                    style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                  >
-                    <span className="font-semibold text-lg">Estilos masculinos</span>
-                  </button>
+                  {[
+                    ["women", "Estilos femininos"],
+                    ["men", "Estilos masculinos"],
+                  ].map(([v, l]) => (
+                    <button
+                      key={v}
+                      onClick={() => answerSingle("gender", v)}
+                      className="bg-white p-14 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center shadow-sm"
+                      style={{
+                        borderColor: "var(--mist)",
+                        color: "var(--forest)",
+                      }}
+                    >
+                      <span className="font-semibold text-lg">{l}</span>
+                    </button>
+                  ))}
                 </div>
                 <button
                   onClick={nextStep}
@@ -3413,7 +3604,7 @@ export default function App() {
                     "Redondo",
                     "Gatinho",
                     "Aviador",
-                  ].map((v: any) => {
+                  ].map((v) => {
                     const isSel = answers.shapes.includes(v);
                     return (
                       <button
@@ -3467,20 +3658,26 @@ export default function App() {
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-8">
                   {[
-                    { label: "Cores", bg: "radial-gradient(circle, #ef4444, #3b82f6, #22c55e)" },
-                    { label: "Neutros", bg: "#d6d3d1" },
-                    { label: "Preto", bg: "#000000" },
-                    { label: "Tartaruga", bg: "linear-gradient(45deg, #78350f, #d97706)" },
-                    { label: "Dois tons", bg: "linear-gradient(to bottom, #1f2937 50%, #d1d5db 50%)" },
-                    { label: "Cristais", bg: "#f0f9ff" },
-                    { label: "Ouro", bg: "#fbbf24" },
-                    { label: "Prata", bg: "#9ca3af" },
-                  ].map((item: any) => {
-                    const isSel = answers.colors.includes(item.label);
+                    [
+                      "Cores",
+                      "radial-gradient(circle, #ef4444, #3b82f6, #22c55e)",
+                    ],
+                    ["Neutros", "#d6d3d1"],
+                    ["Preto", "#000000"],
+                    ["Tartaruga", "linear-gradient(45deg, #78350f, #d97706)"],
+                    [
+                      "Dois tons",
+                      "linear-gradient(to bottom, #1f2937 50%, #d1d5db 50%)",
+                    ],
+                    ["Cristais", "#f0f9ff"],
+                    ["Ouro", "#fbbf24"],
+                    ["Prata", "#9ca3af"],
+                  ].map(([v, bg]) => {
+                    const isSel = answers.colors.includes(v);
                     return (
                       <button
-                        key={item.label}
-                        onClick={() => toggleMulti("colors", item.label)}
+                        key={v}
+                        onClick={() => toggleMulti("colors", v)}
                         className="bg-white p-5 rounded-xl border transition-all flex items-center justify-center gap-3 shadow-sm relative overflow-hidden"
                         style={{
                           borderColor: isSel ? "var(--gold)" : "var(--mist)",
@@ -3495,10 +3692,10 @@ export default function App() {
                         )}
                         <div
                           className="w-6 h-6 rounded-full shadow-inner relative z-10 border border-gray-200"
-                          style={{ background: item.bg }}
+                          style={{ background: bg }}
                         />
                         <span className="font-semibold text-sm relative z-10">
-                          {item.label}
+                          {v}
                         </span>
                       </button>
                     );
@@ -3528,7 +3725,7 @@ export default function App() {
             {step === 5 && (
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-8">
-                  {["Acetato", "Metal", "Misto"].map((v: any) => {
+                  {["Acetato", "Metal", "Misto"].map((v) => {
                     const isSel = answers.materials.includes(v);
                     return (
                       <button
@@ -3584,13 +3781,13 @@ export default function App() {
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-3 gap-4 w-full mb-8">
                   {[
-                    { val: "narrow", label: "Estreita" },
-                    { val: "medium", label: "Média" },
-                    { val: "wide", label: "Larga" },
-                  ].map((item: any) => (
+                    ["narrow", "Estreita"],
+                    ["medium", "Média"],
+                    ["wide", "Larga"],
+                  ].map(([v, l]) => (
                     <button
-                      key={item.val}
-                      onClick={() => answerSingle("size", item.val)}
+                      key={v}
+                      onClick={() => answerSingle("size", v)}
                       className="bg-white py-10 px-4 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center shadow-sm"
                       style={{
                         borderColor: "var(--mist)",
@@ -3603,7 +3800,7 @@ export default function App() {
                       >
                         {FaceIcons.oval()}
                       </div>
-                      <span className="font-semibold">{item.label}</span>
+                      <span className="font-semibold">{l}</span>
                     </button>
                   ))}
                 </div>
@@ -3620,7 +3817,7 @@ export default function App() {
             {step === 7 && (
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
-                  {["Sim", "Não"].map((v: any) => (
+                  {["Sim", "Não"].map((v) => (
                     <button
                       key={v}
                       onClick={() => answerSingle("contacts", v)}
@@ -3657,7 +3854,7 @@ export default function App() {
                     <input
                       type="email"
                       value={answers.email}
-                      onChange={(e: any) =>
+                      onChange={(e) =>
                         setAnswers({ ...answers, email: e.target.value })
                       }
                       className="w-full p-4 rounded-lg border focus:ring-1 outline-none transition-all"
@@ -3672,7 +3869,7 @@ export default function App() {
                     <input
                       type="checkbox"
                       checked={answers.optIn}
-                      onChange={(e: any) =>
+                      onChange={(e) =>
                         setAnswers({ ...answers, optIn: e.target.checked })
                       }
                       className="mt-1 w-5 h-5 rounded"
@@ -3741,7 +3938,7 @@ export default function App() {
                   </p>
                 </div>
                 <div className="grid md:grid-cols-3 gap-5 mb-8">
-                  {results.map((p: any, i: any) => (
+                  {results.map((p, i) => (
                     <div
                       key={p.id}
                       className="rounded-2xl overflow-hidden card-hover bg-white border relative"
@@ -3780,7 +3977,7 @@ export default function App() {
                           €{p.price}
                         </p>
                         <button
-                          onClick={() => addToCart(p)}
+                          onClick={() => addCart(p)}
                           className="w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-white"
                           style={{ background: "var(--forest)" }}
                         >
@@ -3827,10 +4024,619 @@ export default function App() {
       </div>
     );
   };
-  
+  /* VANTAGENS PAGE */
+  const VantagensPage = () => {
+    const [showSeguros, setShowSeguros] = useState(false);
+
+    return (
+      <div
+        className="pt-28 pb-24 min-h-screen"
+        style={{ background: "var(--cream)" }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16 fade-up">
+            <p
+              className="text-xs font-semibold tracking-widest uppercase mb-3"
+              style={{ color: "var(--gold)" }}
+            >
+              Benefícios Exclusivos
+            </p>
+            <h1
+              className="font-display mb-6"
+              style={{
+                fontSize: "clamp(2.5rem,5vw,4rem)",
+                color: "var(--forest)",
+                lineHeight: 1.1,
+              }}
+            >
+              Oferecemos-lhe <em>Mais!</em>
+            </h1>
+            <p
+              className="text-lg mx-auto"
+              style={{ color: "#666", maxWidth: 600 }}
+            >
+              Na Óptica 13, a sua satisfação vai além da visão perfeita.
+              Descubra todas as comodidades e facilidades financeiras que
+              criámos a pensar em si.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-up-1">
+            {[
+              {
+                icon: Shield,
+                title: "IO Segurança",
+                desc: "Os seus óculos protegidos contra acidentes, quebras, furtos e roubos. Cobertura válida em Portugal e no estrangeiro.",
+                highlight: "Desde 19,99€/ano (Até 2000€)",
+                img: "https://images.unsplash.com/photo-1589821540306-0391ab1a1200?w=600&h=400&fit=crop",
+              },
+              {
+                icon: Calendar,
+                title: "Cofidis Pay",
+                desc: "Uma solução de pagamentos 100% digital e segura. Controle as suas despesas com total flexibilidade e sem burocracias.",
+                highlight: "Até 12x Sem Juros",
+                img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
+              },
+              {
+                icon: MapPin,
+                title: "Óptica ao Domicílio",
+                desc: "Deslocamo-nos para consertos de óculos, aquisição de lentes e aros ou entregas, num raio de 20km da nossa loja.",
+                highlight: "Deslocação Gratuita",
+                img: "https://images.unsplash.com/photo-1615592389070-bcc97e050475?w=600&h=400&fit=crop",
+              },
+              {
+                icon: Award,
+                title: "Acordos e Protocolos",
+                desc: "Trabalhamos em parceria com as principais seguradoras. Comparticipação direta na loja ou condições exclusivas de desconto.",
+                highlight: "Mais de 15 Entidades Parceiras",
+                img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop",
+                isAction: true, // Identifica que este cartão tem um botão especial
+              },
+              {
+                icon: Sparkles,
+                title: "Open Day Mensal",
+                desc: "No primeiro sábado de cada mês, oferecemos descontos imperdíveis e consultoria de imagem (método de 3 passos).",
+                highlight: "Até 40% Sol | 30% Armações",
+                img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop",
+              },
+              {
+                icon: Phone,
+                title: "App Óptica 13",
+                desc: "A nossa aplicação tem tudo: Loja online, marcação de consultas, cartão de fidelização e sistema de Cashback.",
+                highlight: "Instale já e ganhe vantagens",
+                img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=600&h=400&fit=crop",
+              },
+            ].map((v, i) => (
+              <div
+                key={i}
+                className="rounded-2xl flex flex-col card-hover overflow-hidden relative"
+                style={{ background: "white", border: "1px solid var(--mist)" }}
+              >
+                <div
+                  className="h-48 relative img-zoom overflow-hidden"
+                  style={{ background: "var(--mist)" }}
+                >
+                  <Img
+                    src={v.img}
+                    alt={v.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-4 left-4 w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg">
+                    <v.icon size={20} style={{ color: "var(--gold)" }} />
+                  </div>
+                </div>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3
+                    className="font-display text-2xl font-semibold mb-2"
+                    style={{ color: "var(--forest)" }}
+                  >
+                    {v.title}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed mb-6 flex-1"
+                    style={{ color: "#666" }}
+                  >
+                    {v.desc}
+                  </p>
+
+                  {v.isAction ? (
+                    <button
+                      onClick={() => setShowSeguros(true)}
+                      className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider mt-auto transition-all shadow-md flex items-center justify-center gap-2"
+                      style={{ background: "var(--gold)", color: "white" }}
+                    >
+                      Ver Seguros e Acordos <ChevronRight size={14} />
+                    </button>
+                  ) : (
+                    <div
+                      className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold w-fit mt-auto"
+                      style={{ background: "#e8f5ee", color: "var(--forest)" }}
+                    >
+                      <CheckCircle size={14} style={{ color: "var(--gold)" }} />
+                      {v.highlight}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Estacionamento Banner */}
+          <div
+            className="mt-16 rounded-3xl overflow-hidden relative fade-up-2 shadow-2xl"
+            style={{ background: "var(--forest)" }}
+          >
+            <div
+              className="absolute inset-0 opacity-25"
+              style={{
+                background:
+                  "radial-gradient(circle at right, var(--gold), transparent 70%)",
+              }}
+            />
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-0">
+              <div className="p-10 md:p-16 flex-1 text-white text-center md:text-left">
+                <h2 className="font-display text-4xl md:text-5xl font-semibold mb-5 leading-tight">
+                  Estacionamento
+                  <br />
+                  <em style={{ color: "var(--gold)" }}>Gratuito</em>
+                </h2>
+                <p className="opacity-90 leading-relaxed text-base mb-8 max-w-xl">
+                  O seu conforto é a nossa prioridade. Oferecemos estacionamento
+                  gratuito na <strong>Garagem Plátano</strong>, a apenas 200
+                  metros da nossa ótica. Venha visitar-nos sem preocupações!
+                </p>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=R.+Cap.+Leitão+344,+2775-275+Parede"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-gold inline-flex px-8 py-4 rounded-xl font-semibold text-sm items-center gap-2 shadow-lg transition-transform hover:scale-105"
+                >
+                  <MapPin size={16} /> Abrir no Google Maps
+                </a>
+              </div>
+              <div className="w-full md:w-2/5 h-64 md:h-[420px] relative overflow-hidden flex-shrink-0">
+                <Img
+                  src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&h=800&fit=crop"
+                  alt="Estacionamento Garagem Plátano"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MODAL DE SEGUROS E PROTOCOLOS */}
+        {showSeguros && (
+          <div
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+            style={{
+              background: "rgba(10,20,15,0.85)",
+              backdropFilter: "blur(8px)",
+            }}
+            onClick={() => setShowSeguros(false)}
+          >
+            <div
+              className="relative rounded-2xl overflow-hidden max-w-2xl w-full fade-up flex flex-col"
+              style={{ background: "var(--cream)", maxHeight: "90vh" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                className="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10"
+                style={{ borderColor: "var(--mist)" }}
+              >
+                <h2
+                  className="font-display text-2xl font-semibold"
+                  style={{ color: "var(--forest)" }}
+                >
+                  Seguros e Protocolos
+                </h2>
+                <button
+                  onClick={() => setShowSeguros(false)}
+                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-gray-100"
+                  style={{ background: "var(--mist)" }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="p-6 md:p-10 overflow-y-auto scrollbar-hide">
+                {/* Acordos Diretos */}
+                <div className="mb-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Shield size={24} style={{ color: "var(--gold)" }} />
+                    <h3
+                      className="font-display text-2xl font-semibold"
+                      style={{ color: "var(--forest)" }}
+                    >
+                      Acordos Diretos
+                    </h3>
+                  </div>
+                  <p
+                    className="text-sm leading-relaxed mb-5"
+                    style={{ color: "#555" }}
+                  >
+                    A Óptica 13 dispõe de acordos diretos(*) com as seguintes
+                    entidades.{" "}
+                    <strong>A comparticipação é direta na loja</strong>, ou
+                    seja, o benefício do seguro é imediatamente retirado no ato
+                    da compra.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {[
+                      "Advancecare",
+                      "Victória",
+                      "Future Health Care",
+                      "Tranquilidade",
+                      "Allianz",
+                      "BES Seguros",
+                      "Ageas",
+                      "Lusitânia Seguros",
+                      "Açoreana Seguros",
+                      "Médis",
+                      "CGD",
+                    ].map((seg) => (
+                      <span
+                        key={seg}
+                        className="px-4 py-2 rounded-lg text-xs font-bold border shadow-sm"
+                        style={{
+                          borderColor: "var(--mist)",
+                          color: "var(--forest)",
+                          background: "white",
+                        }}
+                      >
+                        {seg}
+                      </span>
+                    ))}
+                  </div>
+                  <p
+                    className="text-[11px] leading-tight"
+                    style={{ color: "#999" }}
+                  >
+                    (*) O desconto direto do benefício depende das condições da
+                    apólice contratada com a sua entidade seguradora. Informe-se
+                    sobre as condições da mesma.
+                  </p>
+                </div>
+
+                <div
+                  className="w-full h-px mb-10"
+                  style={{ background: "var(--mist)" }}
+                ></div>
+
+                {/* Protocolos de Desconto */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Award size={24} style={{ color: "var(--gold)" }} />
+                    <h3
+                      className="font-display text-2xl font-semibold"
+                      style={{ color: "var(--forest)" }}
+                    >
+                      Protocolos de Desconto
+                    </h3>
+                  </div>
+                  <p
+                    className="text-sm leading-relaxed mb-4"
+                    style={{ color: "#555" }}
+                  >
+                    A Óptica 13 tem também protocolos de desconto com várias
+                    entidades associadas, garantindo-lhe:
+                  </p>
+                  <ul
+                    className="space-y-3 mb-6 p-5 rounded-xl border"
+                    style={{
+                      background: "#f8f9fa",
+                      borderColor: "var(--mist)",
+                    }}
+                  >
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle
+                        size={16}
+                        className="flex-shrink-0 mt-0.5"
+                        style={{ color: "var(--gold)" }}
+                      />
+                      <span>
+                        <strong>10% de desconto</strong> em lentes de contacto e
+                        produtos de contactologia.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle
+                        size={16}
+                        className="flex-shrink-0 mt-0.5"
+                        style={{ color: "var(--gold)" }}
+                      />
+                      <span>
+                        <strong>15% de desconto</strong> em óculos de sol.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle
+                        size={16}
+                        className="flex-shrink-0 mt-0.5"
+                        style={{ color: "var(--gold)" }}
+                      />
+                      <span>
+                        <strong>20% de desconto</strong> em óculos graduados.
+                      </span>
+                    </li>
+                  </ul>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {[
+                      "Medicare",
+                      "Multicare",
+                      "ADM",
+                      "SAMS",
+                      "ACP",
+                      "SAD GNR",
+                      "ADSE",
+                    ].map((seg) => (
+                      <span
+                        key={seg}
+                        className="px-4 py-2 rounded-lg text-xs font-bold border shadow-sm"
+                        style={{
+                          borderColor: "var(--mist)",
+                          color: "var(--forest)",
+                          background: "white",
+                        }}
+                      >
+                        {seg}
+                      </span>
+                    ))}
+                  </div>
+                  <p
+                    className="text-[11px] leading-tight"
+                    style={{ color: "#999" }}
+                  >
+                    (Descontos não acumuláveis com outras promoções, campanhas
+                    ou descontos em vigor).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+  /* ABOUT PAGE */
+  const AboutPage = () => (
+    <div
+      className="pt-28 pb-24 min-h-screen"
+      style={{ background: "var(--cream)" }}
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Cabeçalho */}
+        <div className="text-center mb-20 fade-up">
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-3"
+            style={{ color: "var(--gold)" }}
+          >
+            Quem Somos
+          </p>
+          <h1
+            className="font-display mb-6"
+            style={{
+              fontSize: "clamp(2.5rem,5vw,4rem)",
+              color: "var(--forest)",
+              lineHeight: 1.1,
+            }}
+          >
+            A Óptica 13
+          </h1>
+          <p
+            className="text-lg max-w-2xl mx-auto leading-relaxed"
+            style={{ color: "#666" }}
+          >
+            A Óptica 13 reúne um espaço dedicado aos serviços óticos e de imagem
+            desde 1986, na típica vila da Parede.
+          </p>
+        </div>
+
+        {/* História e Valores */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-32 fade-up-1">
+          {/* Lado da Imagem com Selo */}
+          <div className="relative">
+            <div
+              className="rounded-3xl overflow-hidden shadow-2xl img-zoom"
+              style={{ height: "550px" }}
+            >
+              <Img
+                src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=1000&fit=crop"
+                alt="Interior da Óptica 13"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Selo Desde 1986 */}
+            <div
+              className="absolute -bottom-8 -right-4 md:-right-8 w-36 h-36 rounded-full flex flex-col items-center justify-center shadow-2xl border-4 border-white"
+              style={{ background: "var(--gold)", color: "white" }}
+            >
+              <span className="text-xs font-semibold uppercase tracking-widest opacity-90 mb-1">
+                Desde
+              </span>
+              <span className="font-display text-4xl font-bold">1986</span>
+            </div>
+          </div>
+
+          {/* Lado do Texto */}
+          <div>
+            <h2
+              className="font-display text-3xl font-semibold mb-6"
+              style={{ color: "var(--forest)", lineHeight: 1.2 }}
+            >
+              A sua satisfação é a nossa prioridade.
+            </h2>
+            <p
+              className="text-base leading-relaxed mb-6"
+              style={{ color: "#555" }}
+            >
+              Para os que trabalham neste projeto, o importante é que os
+              clientes se sintam bem no espaço e recebam o carinho e a boa
+              disposição desta equipa empenhada na satisfação das suas
+              expectativas.
+            </p>
+            <p
+              className="text-base leading-relaxed mb-10"
+              style={{ color: "#555" }}
+            >
+              E, para tornar a sua visita mais agradável, oferecemos-lhe algumas
+              comodidades como estacionamento gratuito e um pequeno espaço
+              infantil. Conheça o nosso espaço e a nossa simpática equipa.
+              Esperamos por si!
+            </p>
+
+            {/* Missão e Visão em Colunas */}
+            <div
+              className="grid sm:grid-cols-2 gap-8 pt-8 border-t"
+              style={{ borderColor: "var(--mist)" }}
+            >
+              <div>
+                <h3
+                  className="font-bold text-base mb-4 flex items-center gap-2"
+                  style={{ color: "var(--forest)" }}
+                >
+                  <Star size={16} style={{ color: "var(--gold)" }} /> A nossa
+                  Missão
+                </h3>
+                <ul className="space-y-3 text-sm" style={{ color: "#666" }}>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Comodidade ao cliente
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Visão e conforto
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Cuidado personalizado
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Inovar e satisfazer
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3
+                  className="font-bold text-base mb-4 flex items-center gap-2"
+                  style={{ color: "var(--forest)" }}
+                >
+                  <Eye size={16} style={{ color: "var(--gold)" }} /> A nossa
+                  Visão
+                </h3>
+                <ul className="space-y-3 text-sm" style={{ color: "#666" }}>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Excelência em saúde ocular
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Cliente como prioridade
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Acessibilidade para todos
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle
+                      size={16}
+                      className="flex-shrink-0"
+                      style={{ color: "var(--gold)" }}
+                    />{" "}
+                    Tecnologia de ponta
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Secção da Equipa */}
+        <div
+          className="bg-white rounded-3xl p-8 md:p-16 border shadow-sm fade-up-2 text-center relative overflow-hidden"
+          style={{ borderColor: "var(--mist)" }}
+        >
+          {/* Decoração de fundo */}
+          <div
+            className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-5 pointer-events-none"
+            style={{
+              background: "var(--gold)",
+              transform: "translate(30%, -30%)",
+            }}
+          ></div>
+
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-4 relative z-10"
+            style={{ color: "var(--gold)" }}
+          >
+            A Nossa Equipa
+          </p>
+          <h2
+            className="font-display text-3xl md:text-4xl font-semibold mb-10 max-w-3xl mx-auto relative z-10"
+            style={{ color: "var(--forest)", lineHeight: 1.3 }}
+          >
+            Temos 38 anos de especialização na ótica, totalmente focados em
+            satisfazer as suas necessidades.
+          </h2>
+
+          <div
+            className="mt-8 rounded-2xl overflow-hidden mx-auto shadow-lg border relative z-10"
+            style={{ maxWidth: "800px", borderColor: "var(--mist)" }}
+          >
+            {/* NOTA: Substituir o SRC desta imagem pelo URL da fotografia real da vossa equipa */}
+            <Img
+              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1000&h=600&fit=crop"
+              alt="Equipa Óptica 13"
+              className="w-full h-auto object-cover"
+              style={{ maxHeight: "500px" }}
+            />
+          </div>
+
+          <div className="mt-12 relative z-10">
+            <button
+              onClick={() => setPage("contact")}
+              className="btn-forest px-10 py-4 rounded-xl font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
+            >
+              Entre Em Contacto
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   /* CONTACT */
   const ContactPage = () => {
-    const [form, setForm] = useState<any>({
+    const [form, setForm] = useState({
       name: "",
       email: "",
       phone: "",
@@ -3862,111 +4668,51 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-10">
             <div>
               <div className="space-y-5 mb-10">
-                <div
-                  className="flex items-start gap-4 p-5 rounded-xl"
-                  style={{
-                    background: "white",
-                    border: "1px solid var(--mist)",
-                  }}
-                >
+                {[
+                  [
+                    Phone,
+                    "Contactos Telefónicos",
+                    "Fixo: 214 578 119\nMóvel: 934 421 310",
+                  ],
+                  [Mail, "Email", "info@optica13.com"],
+                  [
+                    MapPin,
+                    "As nossas lojas",
+                    "Sede: Rua 31 de Janeiro 8-B, 2775-295 Parede\n\nLoja 2: Rua José Relvas 105-B, 2775-222 Parede",
+                  ],
+                  [
+                    Clock,
+                    "Horário",
+                    "Dias Úteis: 9:30 – 19:30\nSábados: 9h30–13h30 / 15h00–18h00",
+                  ],
+                ].map(([Icon, l, v]) => (
                   <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "#e8f5ee" }}
+                    key={l}
+                    className="flex items-start gap-4 p-5 rounded-xl"
+                    style={{
+                      background: "white",
+                      border: "1px solid var(--mist)",
+                    }}
                   >
-                    <Phone size={18} style={{ color: "var(--forest)" }} />
-                  </div>
-                  <div>
-                    <p
-                      className="text-xs uppercase tracking-wide mb-0.5"
-                      style={{ color: "#aaa" }}
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: "#e8f5ee" }}
                     >
-                      Contactos Telefónicos
-                    </p>
-                    <p className="text-sm font-semibold whitespace-pre-line">
-                      Fixo: 214 578 119{"\n"}Móvel: 934 421 310
-                    </p>
+                      <Icon size={18} style={{ color: "var(--forest)" }} />
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-wide mb-0.5"
+                        style={{ color: "#aaa" }}
+                      >
+                        {l}
+                      </p>
+                      <p className="text-sm font-semibold whitespace-pre-line">
+                        {v}
+                      </p>
+                    </div>
                   </div>
-                </div>
-
-                <div
-                  className="flex items-start gap-4 p-5 rounded-xl"
-                  style={{
-                    background: "white",
-                    border: "1px solid var(--mist)",
-                  }}
-                >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "#e8f5ee" }}
-                  >
-                    <Mail size={18} style={{ color: "var(--forest)" }} />
-                  </div>
-                  <div>
-                    <p
-                      className="text-xs uppercase tracking-wide mb-0.5"
-                      style={{ color: "#aaa" }}
-                    >
-                      Email
-                    </p>
-                    <p className="text-sm font-semibold whitespace-pre-line">
-                      info@optica13.com
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="flex items-start gap-4 p-5 rounded-xl"
-                  style={{
-                    background: "white",
-                    border: "1px solid var(--mist)",
-                  }}
-                >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "#e8f5ee" }}
-                  >
-                    <MapPin size={18} style={{ color: "var(--forest)" }} />
-                  </div>
-                  <div>
-                    <p
-                      className="text-xs uppercase tracking-wide mb-0.5"
-                      style={{ color: "#aaa" }}
-                    >
-                      As nossas lojas
-                    </p>
-                    <p className="text-sm font-semibold whitespace-pre-line">
-                      Sede: Rua 31 de Janeiro 8-B, 2775-295 Parede{"\n\n"}
-                      Loja 2: Rua José Relvas 105-B, 2775-222 Parede
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="flex items-start gap-4 p-5 rounded-xl"
-                  style={{
-                    background: "white",
-                    border: "1px solid var(--mist)",
-                  }}
-                >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "#e8f5ee" }}
-                  >
-                    <Clock size={18} style={{ color: "var(--forest)" }} />
-                  </div>
-                  <div>
-                    <p
-                      className="text-xs uppercase tracking-wide mb-0.5"
-                      style={{ color: "#aaa" }}
-                    >
-                      Horário
-                    </p>
-                    <p className="text-sm font-semibold whitespace-pre-line">
-                      Dias Úteis: 9:30 – 19:30{"\n"}
-                      Sábados: 9h30–13h30 / 15h00–18h00
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
               <button
                 onClick={openBook}
@@ -3975,7 +4721,6 @@ export default function App() {
                 <Calendar size={15} /> Agendar Consulta Gratuita
               </button>
             </div>
-            
             <div
               className="rounded-2xl p-8"
               style={{ background: "white", border: "1px solid var(--mist)" }}
@@ -4006,35 +4751,31 @@ export default function App() {
                     Enviar mensagem
                   </p>
                   <div className="space-y-4">
-                    <input
-                      type="text"
-                      placeholder="Nome"
-                      value={form.name}
-                      onChange={(e: any) => setForm({ ...form, name: e.target.value })}
-                      className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                      style={{ borderColor: "var(--mist)", fontFamily: "Jost,sans-serif" }}
-                    />
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      value={form.email}
-                      onChange={(e: any) => setForm({ ...form, email: e.target.value })}
-                      className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                      style={{ borderColor: "var(--mist)", fontFamily: "Jost,sans-serif" }}
-                    />
-                    <input
-                      type="tel"
-                      placeholder="Telefone"
-                      value={form.phone}
-                      onChange={(e: any) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                      style={{ borderColor: "var(--mist)", fontFamily: "Jost,sans-serif" }}
-                    />
+                    {[
+                      ["text", "Nome", "name"],
+                      ["email", "Email", "email"],
+                      ["tel", "Telefone", "phone"],
+                    ].map(([t, p, k]) => (
+                      <input
+                        key={k}
+                        type={t}
+                        placeholder={p}
+                        value={form[k]}
+                        onChange={(e) =>
+                          setForm({ ...form, [k]: e.target.value })
+                        }
+                        className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
+                        style={{
+                          borderColor: "var(--mist)",
+                          fontFamily: "Jost,sans-serif",
+                        }}
+                      />
+                    ))}
                     <textarea
                       placeholder="Mensagem"
                       rows={4}
                       value={form.msg}
-                      onChange={(e: any) =>
+                      onChange={(e) =>
                         setForm({ ...form, msg: e.target.value })
                       }
                       className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all resize-none"
@@ -4055,6 +4796,7 @@ export default function App() {
             </div>
           </div>
 
+          {/* MAPA INTERATIVO */}
           <div className="mt-16">
             <h2
               className="font-display text-3xl font-semibold mb-6"
@@ -4185,5 +4927,3 @@ export default function App() {
     </>
   );
 }
-
-
