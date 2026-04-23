@@ -3387,7 +3387,7 @@ export default function App() {
     };
 
     const finishQuiz = (e: any) => {
-      if (e: any) e.preventDefault();
+      if (e:) e.preventDefault();
       setLoading(true);
       setStep(9); // Loading Step
       window.scrollTo(0, 0);
