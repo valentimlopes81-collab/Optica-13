@@ -630,7 +630,7 @@ function ExitPopup({ onClose }: any) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+ const handleSubmit = (e: any) => {
     e.preventDefault();
     // Aqui no futuro faria a ligação à base de dados (Mailchimp, Klaviyo, etc)
     setSubmitted(true);
@@ -762,7 +762,7 @@ function ExitPopup({ onClose }: any) {
                   placeholder="Introduza o seu melhor e-mail"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e: any) => setEmail(e.target.value)}
                   className="w-full px-5 py-4 rounded-xl border-2 text-sm transition-all focus:ring-4 outline-none"
                   style={{
                     borderColor: "var(--mist)",
@@ -989,7 +989,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
                     name="payment"
                     value="mbway"
                     checked={paymentMethod === "mbway"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    onChange={(e: any) => setPaymentMethod(e.target.value)}
                     className="w-5 h-5"
                   />
                   <div className="flex-1">
@@ -1004,7 +1004,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
                     type="tel"
                     placeholder="Número de telemóvel"
                     value={mbwayPhone}
-                    onChange={(e) => setMbwayPhone(e.target.value)}
+                    onChange={(e: any) => setMbwayPhone(e.target.value)}
                     className="mt-3 px-4 py-2 rounded-lg border-2 text-sm"
                     style={{ borderColor: "var(--mist)" }}
                   />
@@ -1024,7 +1024,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
                   name="payment"
                   value="multibanco"
                   checked={paymentMethod === "multibanco"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  onChange={(e: any) => setPaymentMethod(e.target.value)}
                   className="w-5 h-5"
                 />
                 <div className="flex-1">
@@ -1048,7 +1048,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
                   name="payment"
                   value="card"
                   checked={paymentMethod === "card"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  onChange={(e: any) => setPaymentMethod(e.target.value)}
                   className="w-5 h-5"
                 />
                 <div className="flex-1">
@@ -1138,7 +1138,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
       <div
         className="w-full sm:max-w-6xl rounded-t-3xl sm:rounded-3xl overflow-hidden fade-up flex flex-col relative shadow-2xl"
         style={{ background: "var(--cream)", maxHeight: "90vh" }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: any) => e.stopPropagation()}
       >
         {/* Botão de Fechar flutuante em mobile */}
         <button
@@ -1400,7 +1400,7 @@ function BookingModal({ isOpen, onClose }) {
       <div
         className="relative rounded-2xl overflow-hidden max-w-3xl w-full fade-up"
         style={{ background: "var(--cream)", maxHeight: "90vh" }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: any) => e.stopPropagation()}
       >
         {/* Header */}
         <div
@@ -1624,7 +1624,7 @@ function BookingModal({ isOpen, onClose }) {
                     type={t}
                     placeholder={p}
                     value={clientData[k]}
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       setClientData({ ...clientData, [k]: e.target.value })
                     }
                     className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
@@ -1724,7 +1724,7 @@ export default function App() {
   const exitShown = useRef(false);
 
   useEffect(() => {
-    const h = (e) => {
+    const h = (e: any) => {
       if (e.clientY <= 10 && !exitShown.current) {
         exitShown.current = true;
         setExitIntent(true);
@@ -1945,8 +1945,8 @@ export default function App() {
                     onClick={() => go(p)}
                     className="text-sm transition-all"
                     style={{ color: "rgba(250,247,242,0.5)" }}
-                    onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
-                    onMouseLeave={(e) =>
+                    onMouseEnter={(e: any) => (e.target.style.color = "var(--gold)")}
+                    onMouseLeave={(e: any) =>
                       (e.target.style.color = "rgba(250,247,242,0.5)")
                     }
                   >
@@ -3161,7 +3161,7 @@ export default function App() {
                   type="text"
                   placeholder="Pesquisar por marca ou modelo..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e: any) => setSearch(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm"
                   style={{ borderColor: "var(--mist)" }}
                 />
@@ -3386,8 +3386,8 @@ export default function App() {
       window.scrollTo(0, 0);
     };
 
-    const finishQuiz = (e) => {
-      if (e) e.preventDefault();
+    const finishQuiz = (e: any) => {
+      if (e: any) e.preventDefault();
       setLoading(true);
       setStep(9); // Loading Step
       window.scrollTo(0, 0);
@@ -3854,7 +3854,7 @@ export default function App() {
                     <input
                       type="email"
                       value={answers.email}
-                      onChange={(e) =>
+                      onChange={(e; any) =>
                         setAnswers({ ...answers, email: e.target.value })
                       }
                       className="w-full p-4 rounded-lg border focus:ring-1 outline-none transition-all"
@@ -3869,7 +3869,7 @@ export default function App() {
                     <input
                       type="checkbox"
                       checked={answers.optIn}
-                      onChange={(e) =>
+                      onChange={(e; any) =>
                         setAnswers({ ...answers, optIn: e.target.checked })
                       }
                       className="mt-1 w-5 h-5 rounded"
@@ -4218,7 +4218,7 @@ export default function App() {
             <div
               className="relative rounded-2xl overflow-hidden max-w-2xl w-full fade-up flex flex-col"
               style={{ background: "var(--cream)", maxHeight: "90vh" }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: any) => e.stopPropagation()}
             >
               <div
                 className="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10"
@@ -4761,7 +4761,7 @@ export default function App() {
                         type={t}
                         placeholder={p}
                         value={form[k]}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                           setForm({ ...form, [k]: e.target.value })
                         }
                         className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
@@ -4775,7 +4775,7 @@ export default function App() {
                       placeholder="Mensagem"
                       rows={4}
                       value={form.msg}
-                      onChange={(e) =>
+                      onChange={(e: any) =>
                         setForm({ ...form, msg: e.target.value })
                       }
                       className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all resize-none"
