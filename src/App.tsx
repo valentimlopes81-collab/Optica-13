@@ -219,6 +219,7 @@ const PRODUCTS = {
     {
       id: 1,
       name: "Aviator Classic",
+      shopifyId: "15712441500022",
       rating: 4.8,
       reviews: 234,
       badge: "Bestseller",
@@ -238,6 +239,7 @@ const PRODUCTS = {
     {
       id: 2,
       name: "Wayfarer Noir",
+      shopifyId: "ID_PENDENTE",
       rating: 4.6,
       reviews: 189,
       brand: "Ray-Ban",
@@ -256,6 +258,7 @@ const PRODUCTS = {
     {
       id: 3,
       name: "Sport Pro",
+      shopifyId: "ID_PENDENTE",
       rating: 4.7,
       reviews: 98,
       brand: "Oakley",
@@ -274,6 +277,7 @@ const PRODUCTS = {
     {
       id: 4,
       name: "Round Vintage",
+      shopifyId: "ID_PENDENTE",
       rating: 4.9,
       reviews: 312,
       badge: "Staff Pick",
@@ -292,6 +296,7 @@ const PRODUCTS = {
     },
     {
       id: 5,
+      shopifyId: "ID_PENDENTE",
       name: "Wire Minimal",
       rating: 4.8,
       reviews: 76,
@@ -310,6 +315,7 @@ const PRODUCTS = {
     },
     {
       id: 6,
+      shopifyId: "ID_PENDENTE",
       name: "Bold Square",
       rating: 4.5,
       reviews: 143,
@@ -329,6 +335,7 @@ const PRODUCTS = {
     },
     {
       id: 7,
+      shopifyId: "ID_PENDENTE",
       name: "Clear Frame",
       rating: 4.4,
       reviews: 201,
@@ -347,6 +354,7 @@ const PRODUCTS = {
     },
     {
       id: 8,
+      shopifyId: "ID_PENDENTE",
       name: "Navigator Gold",
       rating: 4.7,
       reviews: 88,
@@ -367,6 +375,7 @@ const PRODUCTS = {
   women: [
     {
       id: 9,
+      shopifyId: "ID_PENDENTE",
       name: "Cat Eye Luxe",
       rating: 4.9,
       reviews: 267,
@@ -386,6 +395,7 @@ const PRODUCTS = {
     },
     {
       id: 10,
+      shopifyId: "ID_PENDENTE",
       name: "Butterfly Rose",
       rating: 4.7,
       reviews: 154,
@@ -404,6 +414,7 @@ const PRODUCTS = {
     },
     {
       id: 11,
+      shopifyId: "ID_PENDENTE",
       name: "Round Chic",
       rating: 4.8,
       reviews: 203,
@@ -423,6 +434,7 @@ const PRODUCTS = {
     },
     {
       id: 12,
+      shopifyId: "ID_PENDENTE",
       name: "Clear Cat",
       rating: 4.6,
       reviews: 91,
@@ -441,6 +453,7 @@ const PRODUCTS = {
     },
     {
       id: 13,
+      shopifyId: "ID_PENDENTE",
       name: "Square Bold",
       rating: 4.5,
       reviews: 178,
@@ -459,6 +472,7 @@ const PRODUCTS = {
     },
     {
       id: 14,
+      shopifyId: "ID_PENDENTE",
       name: "Aviator Slim",
       rating: 4.7,
       reviews: 220,
@@ -477,6 +491,7 @@ const PRODUCTS = {
     },
     {
       id: 15,
+      shopifyId: "ID_PENDENTE",
       name: "Wire Delicate",
       rating: 4.8,
       reviews: 65,
@@ -495,6 +510,7 @@ const PRODUCTS = {
     },
     {
       id: 16,
+      shopifyId: "ID_PENDENTE",
       name: "Tortoise Classic",
       rating: 4.3,
       reviews: 312,
