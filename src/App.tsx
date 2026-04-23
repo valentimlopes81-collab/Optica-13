@@ -630,7 +630,7 @@ function ExitPopup({ onClose }: any) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
- const handleSubmit = (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     // Aqui no futuro faria a ligação à base de dados (Mailchimp, Klaviyo, etc)
     setSubmitted(true);
@@ -792,13 +792,13 @@ function ExitPopup({ onClose }: any) {
 }
 
 /* ── CART DRAWER (COM CHECKOUT VISUAL) ───────────────────────── */
-function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
+function CartDrawer({ cart, onClose, onRemove, onQty, onBook }: any) {
   const [checkoutStep, setCheckoutStep] = useState(1); // 1: Carrinho, 2: Pagamento, 3: Sucesso
   const [paymentMethod, setPaymentMethod] = useState("");
   const [mbwayPhone, setMbwayPhone] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const total = cart.reduce((s: any, i: any) => s + i.price * i.qty, 0);
 
   const handleCheckout = () => {
     setIsProcessing(true);
@@ -866,7 +866,7 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
                   </p>
                 </div>
               ) : (
-                cart.map((item) => (
+                cart.map((item: any) => (
                   <div key={item.id} className="flex gap-4 items-start">
                     <div
                       className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0"
@@ -1209,7 +1209,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
                 ["Cor", product.color],
                 ["Formato", product.shape],
                 ["Estilo", product.style],
-              ].map(([k, v]) => (
+              ].map(([k, v]: any) => (
                 <div
                   key={k}
                   className="p-4 rounded-2xl border"
@@ -1242,7 +1242,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
                 Rostos recomendados
               </p>
               <div className="flex gap-2 flex-wrap">
-                {product.faceShape.map((f) => (
+                {product.faceShape.map((f: any) => (
                   <span
                     key={f}
                     className="text-xs px-4 py-1.5 rounded-full font-bold capitalize shadow-sm border"
@@ -1307,7 +1307,7 @@ function ProductModal({ product, onClose, onAdd, onBook }: any) {
   );
 }
 /* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
-function BookingModal({ isOpen, onClose }) {
+function BookingModal({ isOpen, onClose }: any) {
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -1507,7 +1507,7 @@ function BookingModal({ isOpen, onClose }) {
                 </button>
               </div>
               <div className="grid grid-cols-7 gap-2 mb-4">
-                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
+                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d: any) => (
                   <div
                     key={d}
                     className="text-center text-xs font-semibold py-2"
@@ -1520,12 +1520,12 @@ function BookingModal({ isOpen, onClose }) {
               <div className="grid grid-cols-7 gap-2">
                 {Array(startDay)
                   .fill(0)
-                  .map((_, i) => (
+                  .map((_, i: any) => (
                     <div key={`e-${i}`} />
                   ))}
                 {Array(daysInMonth)
                   .fill(0)
-                  .map((_, i) => {
+                  .map((_, i: any) => {
                     const day = i + 1;
                     const d = new Date(
                       month.getFullYear(),
@@ -1578,7 +1578,7 @@ function BookingModal({ isOpen, onClose }) {
                 <strong>Data:</strong> {dateLabel}
               </p>
               <div className="grid grid-cols-3 gap-3">
-                {currentSlots.map((t) => (
+                {currentSlots.map((t: any) => (
                   <button
                     key={t}
                     onClick={() => setSelectedTime(t)}
@@ -1618,7 +1618,7 @@ function BookingModal({ isOpen, onClose }) {
                   ["text", "Nome Completo", "name"],
                   ["tel", "Telefone", "phone"],
                   ["email", "Email", "email"],
-                ].map(([t, p, k]) => (
+                ].map(([t, p, k]: any) => (
                   <input
                     key={k}
                     type={t}
@@ -1738,16 +1738,16 @@ export default function App() {
     setBooking(true);
     setExitIntent(false);
   };
-  const addToCart = (p) => {
-    const ex = cart.find((x) => x.id === p.id);
+  const addToCart = (p: any) => {
+    const ex = cart.find((x: any) => x.id === p.id);
     if (ex)
-      setCart(cart.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
+      setCart(cart.map((x: any) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
     else setCart([...cart, { ...p, qty: 1 }]);
   };
-  const removeFromCart = (id) => setCart(cart.filter((x) => x.id !== id));
-  const updateQty = (id, q) => {
+  const removeFromCart = (id: any) => setCart(cart.filter((x: any) => x.id !== id));
+  const updateQty = (id: any, q: any) => {
     if (q < 1) removeFromCart(id);
-    else setCart(cart.map((x) => (x.id === id ? { ...x, qty: q } : x)));
+    else setCart(cart.map((x: any) => (x.id === id ? { ...x, qty: q } : x)));
   };
 
   /* HEADER */
@@ -1789,7 +1789,7 @@ export default function App() {
               ["Mulher", "women"],
               ["Sobre Nós", "about"],
               ["Contactos", "contact"],
-            ].map(([label, p]) => (
+            ].map(([label, p]: any) => (
               <button
                 key={p}
                 onClick={() => setPage(p)}
@@ -1822,7 +1822,7 @@ export default function App() {
                   className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold text-white"
                   style={{ background: "var(--gold)" }}
                 >
-                  {cart.reduce((s, i) => s + i.qty, 0)}
+                  {cart.reduce((s: any, i: any) => s + i.qty, 0)}
                 </span>
               )}
             </button>
@@ -1855,7 +1855,7 @@ export default function App() {
                 ["Mulher", "women"],
                 ["Sobre Nós", "about"],
                 ["Contactos", "contact"],
-              ].map(([label, p]) => (
+              ].map(([label, p]: any) => (
                 <button
                   key={p}
                   onClick={() => {
@@ -1939,10 +1939,10 @@ export default function App() {
                 ["women", "Coleção Mulher"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
-              ].map(([p, l]) => (
+              ].map(([p, l]: any) => (
                 <li key={p}>
                   <button
-                    onClick={() => go(p)}
+                    onClick={() => setPage(p)}
                     className="text-sm transition-all"
                     style={{ color: "rgba(250,247,242,0.5)" }}
                     onMouseEnter={(e: any) => (e.target.style.color = "var(--gold)")}
@@ -2109,7 +2109,7 @@ export default function App() {
 
               {/* Bolinhas / Controlos */}
               <div className="flex items-center gap-2">
-                {testimonials.map((_, i) => (
+                {testimonials.map((_, i: any) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
@@ -2230,7 +2230,7 @@ export default function App() {
                 title: "Certificados de Condução",
                 desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
               },
-            ].map(({ Icon, title, desc }, i) => (
+            ].map(({ Icon, title, desc }: any, i: any) => (
               <div
                 key={i}
                 className={`card-hover p-8 rounded-2xl bg-white border fade-up-${
@@ -2340,7 +2340,7 @@ export default function App() {
                     title: "Curadoria de Marcas",
                     text: "Seleção personalizada dentro do nosso portefólio premium.",
                   },
-                ].map((item, i) => (
+                ].map((item: any, i: any) => (
                   <div key={i} className="flex items-start gap-4">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
@@ -2449,7 +2449,7 @@ export default function App() {
               PRODUCTS.men[3],
               PRODUCTS.women[0],
               PRODUCTS.women[2],
-            ].map((p) => (
+            ].map((p: any) => (
               <div
                 key={p.id}
                 onClick={() => setSelectedProduct(p)}
@@ -2910,7 +2910,7 @@ export default function App() {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ gender }) => {
+  const CollectionPage = ({ gender }: any) => {
     const [filters, setFilters] = useState({
       material: "",
       priceRange: "",
@@ -2922,7 +2922,7 @@ export default function App() {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const products = PRODUCTS[gender];
-    const filtered = products.filter((p) => {
+    const filtered = products.filter((p: any) => {
       if (
         search &&
         !p.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -2940,7 +2940,7 @@ export default function App() {
       return true;
     });
 
-    const FilterPanel = ({ isMobile }) => (
+    const FilterPanel = ({ isMobile }: any) => (
       <div className={isMobile ? "p-6" : ""}>
         <div className="space-y-6">
           {/* Material */}
@@ -2952,7 +2952,7 @@ export default function App() {
               Material
             </p>
             <div className="space-y-2">
-              {["", "Metal", "Acetato", "Titânio"].map((m) => (
+              {["", "Metal", "Acetato", "Titânio"].map((m: any) => (
                 <label
                   key={m}
                   className="flex items-center gap-2 cursor-pointer"
@@ -2985,7 +2985,7 @@ export default function App() {
                 ["100-200", "€100 - €200"],
                 ["200-300", "€200 - €300"],
                 ["300-999", "Mais de €300"],
-              ].map(([range, label]) => (
+              ].map(([range, label]: any) => (
                 <label
                   key={range}
                   className="flex items-center gap-2 cursor-pointer"
@@ -3021,7 +3021,7 @@ export default function App() {
                 "Prateado",
                 "Transparente",
                 "Tartaruga",
-              ].map((c) => (
+              ].map((c: any) => (
                 <label
                   key={c}
                   className="flex items-center gap-2 cursor-pointer"
@@ -3049,7 +3049,7 @@ export default function App() {
             </p>
             <div className="space-y-2">
               {["", "Clássico", "Desportivo", "Discreto", "Arrojado"].map(
-                (s) => (
+                (s: any) => (
                   <label
                     key={s}
                     className="flex items-center gap-2 cursor-pointer"
@@ -3078,7 +3078,7 @@ export default function App() {
             </p>
             <div className="space-y-2">
               {gender === "men"
-                ? ["", "Aviador", "Quadrado", "Redondo"].map((sh) => (
+                ? ["", "Aviador", "Quadrado", "Redondo"].map((sh: any) => (
                     <label
                       key={sh}
                       className="flex items-center gap-2 cursor-pointer"
@@ -3094,7 +3094,7 @@ export default function App() {
                     </label>
                   ))
                 : ["", "Cat-Eye", "Redondo", "Quadrado", "Aviador"].map(
-                    (sh) => (
+                    (sh: any) => (
                       <label
                         key={sh}
                         className="flex items-center gap-2 cursor-pointer"
@@ -3194,7 +3194,7 @@ export default function App() {
                 {filtered.length === 1 ? "produto" : "produtos"}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filtered.map((p) => (
+                {filtered.map((p: any) => (
                   <div
                     key={p.id}
                     className="card-hover rounded-2xl overflow-hidden bg-white border cursor-pointer"
@@ -3244,7 +3244,7 @@ export default function App() {
                       <p className="font-semibold mb-1">{p.name}</p>
                       <div className="flex items-center gap-2 mb-3">
                         {(() => {
-                          const colorMap = {
+                          const colorMap: any = {
                             Preto: "#1a1a1a",
                             Dourado: "#c9a84c",
                             Prateado: "#9ca3af",
@@ -3278,7 +3278,7 @@ export default function App() {
                         {p.rating && (
                           <div className="flex items-center gap-1.5 mb-1">
                             <div className="flex gap-0.5">
-                              {[1, 2, 3, 4, 5].map((s) => (
+                              {[1, 2, 3, 4, 5].map((s: any) => (
                                 <svg
                                   key={s}
                                   viewBox="0 0 12 12"
@@ -3364,7 +3364,7 @@ export default function App() {
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
 
-    const answerSingle = (field, value) => {
+    const answerSingle = (field: any, value: any) => {
       setAnswers({ ...answers, [field]: value });
       setTimeout(() => {
         setStep(step + 1);
@@ -3372,11 +3372,11 @@ export default function App() {
       }, 300);
     };
 
-    const toggleMulti = (field, value) => {
-      setAnswers((prev) => ({
+    const toggleMulti = (field: any, value: any) => {
+      setAnswers((prev: any) => ({
         ...prev,
         [field]: prev[field].includes(value)
-          ? prev[field].filter((item) => item !== value)
+          ? prev[field].filter((item: any) => item !== value)
           : [...prev[field], value],
       }));
     };
@@ -3387,7 +3387,7 @@ export default function App() {
     };
 
     const finishQuiz = (e: any) => {
-      if (e:) e.preventDefault();
+      if (e) e.preventDefault();
       setLoading(true);
       setStep(9); // Loading Step
       window.scrollTo(0, 0);
@@ -3399,7 +3399,7 @@ export default function App() {
             : answers.gender === "women"
             ? PRODUCTS.women
             : [...PRODUCTS.men, ...PRODUCTS.women];
-        setResults(pool.slice(0, 3));
+        setResults(pool.slice(0, 3) as any);
         setLoading(false);
         setStep(10); // Results Step
       }, 2000);
@@ -3540,7 +3540,7 @@ export default function App() {
                       "Óculos de sol",
                       <Eye size={48} strokeWidth={1.5} />,
                     ],
-                  ].map(([v, l, icon]) => (
+                  ].map(([v, l, icon]: any) => (
                     <button
                       key={v}
                       onClick={() => answerSingle("type", v)}
@@ -3571,7 +3571,7 @@ export default function App() {
                   {[
                     ["women", "Estilos femininos"],
                     ["men", "Estilos masculinos"],
-                  ].map(([v, l]) => (
+                  ].map(([v, l]: any) => (
                     <button
                       key={v}
                       onClick={() => answerSingle("gender", v)}
@@ -3604,8 +3604,8 @@ export default function App() {
                     "Redondo",
                     "Gatinho",
                     "Aviador",
-                  ].map((v) => {
-                    const isSel = answers.shapes.includes(v);
+                  ].map((v: any) => {
+                    const isSel = (answers.shapes as any).includes(v);
                     return (
                       <button
                         key={v}
@@ -3672,8 +3672,8 @@ export default function App() {
                     ["Cristais", "#f0f9ff"],
                     ["Ouro", "#fbbf24"],
                     ["Prata", "#9ca3af"],
-                  ].map(([v, bg]) => {
-                    const isSel = answers.colors.includes(v);
+                  ].map(([v, bg]: any) => {
+                    const isSel = (answers.colors as any).includes(v);
                     return (
                       <button
                         key={v}
@@ -3725,8 +3725,8 @@ export default function App() {
             {step === 5 && (
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-8">
-                  {["Acetato", "Metal", "Misto"].map((v) => {
-                    const isSel = answers.materials.includes(v);
+                  {["Acetato", "Metal", "Misto"].map((v: any) => {
+                    const isSel = (answers.materials as any).includes(v);
                     return (
                       <button
                         key={v}
@@ -3784,7 +3784,7 @@ export default function App() {
                     ["narrow", "Estreita"],
                     ["medium", "Média"],
                     ["wide", "Larga"],
-                  ].map(([v, l]) => (
+                  ].map(([v, l]: any) => (
                     <button
                       key={v}
                       onClick={() => answerSingle("size", v)}
@@ -3817,7 +3817,7 @@ export default function App() {
             {step === 7 && (
               <div className="flex flex-col items-center">
                 <div className="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
-                  {["Sim", "Não"].map((v) => (
+                  {["Sim", "Não"].map((v: any) => (
                     <button
                       key={v}
                       onClick={() => answerSingle("contacts", v)}
@@ -3854,7 +3854,7 @@ export default function App() {
                     <input
                       type="email"
                       value={answers.email}
-                      onChange={(e; any) =>
+                      onChange={(e: any) =>
                         setAnswers({ ...answers, email: e.target.value })
                       }
                       className="w-full p-4 rounded-lg border focus:ring-1 outline-none transition-all"
@@ -3869,7 +3869,7 @@ export default function App() {
                     <input
                       type="checkbox"
                       checked={answers.optIn}
-                      onChange={(e; any) =>
+                      onChange={(e: any) =>
                         setAnswers({ ...answers, optIn: e.target.checked })
                       }
                       className="mt-1 w-5 h-5 rounded"
@@ -3938,7 +3938,7 @@ export default function App() {
                   </p>
                 </div>
                 <div className="grid md:grid-cols-3 gap-5 mb-8">
-                  {results.map((p, i) => (
+                  {results.map((p: any, i: any) => (
                     <div
                       key={p.id}
                       className="rounded-2xl overflow-hidden card-hover bg-white border relative"
@@ -3977,7 +3977,7 @@ export default function App() {
                           €{p.price}
                         </p>
                         <button
-                          onClick={() => addCart(p)}
+                          onClick={() => addToCart(p)}
                           className="w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-white"
                           style={{ background: "var(--forest)" }}
                         >
@@ -4106,7 +4106,7 @@ export default function App() {
                 highlight: "Instale já e ganhe vantagens",
                 img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=600&h=400&fit=crop",
               },
-            ].map((v, i) => (
+            ].map((v: any, i: any) => (
               <div
                 key={i}
                 className="rounded-2xl flex flex-col card-hover overflow-hidden relative"
@@ -4274,7 +4274,7 @@ export default function App() {
                       "Açoreana Seguros",
                       "Médis",
                       "CGD",
-                    ].map((seg) => (
+                    ].map((seg: any) => (
                       <span
                         key={seg}
                         className="px-4 py-2 rounded-lg text-xs font-bold border shadow-sm"
@@ -4369,7 +4369,7 @@ export default function App() {
                       "ACP",
                       "SAD GNR",
                       "ADSE",
-                    ].map((seg) => (
+                    ].map((seg: any) => (
                       <span
                         key={seg}
                         className="px-4 py-2 rounded-lg text-xs font-bold border shadow-sm"
@@ -4685,7 +4685,7 @@ export default function App() {
                     "Horário",
                     "Dias Úteis: 9:30 – 19:30\nSábados: 9h30–13h30 / 15h00–18h00",
                   ],
-                ].map(([Icon, l, v]) => (
+                ].map(([Icon, l, v]: any) => (
                   <div
                     key={l}
                     className="flex items-start gap-4 p-5 rounded-xl"
@@ -4755,12 +4755,12 @@ export default function App() {
                       ["text", "Nome", "name"],
                       ["email", "Email", "email"],
                       ["tel", "Telefone", "phone"],
-                    ].map(([t, p, k]) => (
+                    ].map(([t, p, k]: any) => (
                       <input
                         key={k}
                         type={t}
                         placeholder={p}
-                        value={form[k]}
+                        value={(form as any)[k]}
                         onChange={(e: any) =>
                           setForm({ ...form, [k]: e.target.value })
                         }
