@@ -1401,7 +1401,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
            <div className="mt-auto space-y-3">
               {/* Botão Oficial do Shopify (Teste com Ray-Ban) */}
-              <ShopifyBuyButton productId="15712441500022" />
+              <ShopifyBuyButton productId={product.shopifyId} />
               
               <button
                 onClick={onBook}
