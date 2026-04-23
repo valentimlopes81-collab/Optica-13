@@ -602,7 +602,7 @@ const FaceIcons = {
 };
 
 /* ── WHATSAPP ───────────────────────────────────────────────── */
-function WhatsAppBtn({ product }) {
+function WhatsAppBtn({ product }: any) {
   const message = product
     ? `Olá! Estou a ver o modelo ${product.name} (€${product.price}) no site e gostava de fazer uma reserva/saber mais.`
     : `Olá! Gostaria de saber mais sobre os vossos serviços.`;
