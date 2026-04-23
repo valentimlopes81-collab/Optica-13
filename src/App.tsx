@@ -1367,7 +1367,7 @@ function BookingModal({ isOpen, onClose }: any) {
                       day
                     );
                     const dow = d.getDay();
-                    const isPast = d < today.setHours(0, 0, 0, 0);
+                   const isPast = d.getTime() < today.setHours(0, 0, 0, 0);
                     const isSunday = dow === 0;
                     const isSelected =
                       selectedDate &&
