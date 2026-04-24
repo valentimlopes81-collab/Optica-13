@@ -2049,8 +2049,11 @@ export default function App() {
   const Footer = () => (
     <footer className="py-16" style={{ background: "var(--slate)" }}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
-          <div>
+        {/* Usamos 5 colunas para caber tudo bem */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+          
+          {/* 1. Logotipo e ERS */}
+          <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -2063,7 +2066,7 @@ export default function App() {
               </span>
             </div>
             <p
-              className="text-sm leading-relaxed mb-3"
+              className="text-sm leading-relaxed mb-3 max-w-sm"
               style={{ color: "rgba(250,247,242,0.45)" }}
             >
               Cuidamos da sua visão com tecnologia de ponta e profissionalismo.
@@ -2072,6 +2075,8 @@ export default function App() {
               Nº Registo ERS: E131391
             </p>
           </div>
+
+          {/* 2. Navegação */}
           <div>
             <p
               className="text-xs font-semibold tracking-widest uppercase mb-5"
@@ -2090,7 +2095,7 @@ export default function App() {
               ].map(([p, l]) => (
                 <li key={p}>
                   <button
-                    onClick={() => go(p)}
+                    onClick={() => setPage(p)}
                     className="text-sm transition-all"
                     style={{ color: "rgba(250,247,242,0.5)" }}
                     onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
@@ -2104,6 +2109,8 @@ export default function App() {
               ))}
             </ul>
           </div>
+
+          {/* 3. Contactos e Horário */}
           <div>
             <p
               className="text-xs font-semibold tracking-widest uppercase mb-5"
@@ -2111,90 +2118,70 @@ export default function App() {
             >
               Contactos
             </p>
-            <ul
-              className="space-y-3 text-sm"
-              style={{ color: "rgba(250,247,242,0.5)" }}
-            >
+            <ul className="space-y-3 text-sm" style={{ color: "rgba(250,247,242,0.5)" }}>
               <li className="flex items-start gap-2">
-                <Phone
-                  size={14}
-                  className="mt-1 flex-shrink-0"
-                  style={{ color: "var(--gold)" }}
-                />
+                <Phone size={14} className="mt-1 flex-shrink-0" style={{ color: "var(--gold)" }} />
                 <span>
                   214 578 119
                   <br />
                   934 421 310
                 </span>
               </li>
-              <li className="flex items-center gap-2">
-                <Mail size={14} style={{ color: "var(--gold)" }} />{" "}
-                info@optica13.com
-              </li>
               <li className="flex items-start gap-2">
-                <MapPin
-                  size={14}
-                  className="mt-1 flex-shrink-0"
-                  style={{ color: "var(--gold)" }}
-                />
+                <MapPin size={14} className="mt-1 flex-shrink-0" style={{ color: "var(--gold)" }} />
                 <span>
                   Sede: R. 31 de Janeiro 8-B
-                  <br />
-                  Loja 2: R. José Relvas 105-B
                   <br />
                   2775 Parede
                 </span>
               </li>
+              <li className="flex items-start gap-2 mt-4 pt-4 border-t border-gray-800">
+                <Clock size={14} className="mt-1 flex-shrink-0" style={{ color: "var(--gold)" }} />
+                <span>
+                  Dias Úteis: 9:30 – 19:30
+                  <br />
+                  Sáb: 9h30–13h30 / 15h–18h
+                </span>
+              </li>
             </ul>
           </div>
+
+          {/* 4. Informação Legal (Novo) */}
           <div>
             <p
               className="text-xs font-semibold tracking-widest uppercase mb-5"
               style={{ color: "var(--gold)" }}
             >
-              Horário
-            </p>
-            <ul
-              className="space-y-2 text-sm"
-              style={{ color: "rgba(250,247,242,0.5)" }}
-            >
-              <li>Dias Úteis: 9:30 – 19:30</li>
-              <li>Sáb: 9h30–13h30 / 15h00–18h00</li>
-              <li>Domingo: Encerrado</li>
-            </ul>
-            <button
-              onClick={openBook}
-              className="btn-gold mt-6 w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2"
-            >
-              <Calendar size={13} /> Agendar agora
-            </button>
-          </div>
-          <div>
-            <p className="text-xs font-semibold tracking-widest uppercase mb-5 mt-8 md:mt-0" style={{ color: "var(--gold)" }}>
-              Informação Legal
+              Legal
             </p>
             <ul className="space-y-3 text-sm" style={{ color: "rgba(250,247,242,0.5)" }}>
-              <li><button onClick={() => setPage("terms")} className="hover:text-white transition-colors">Termos e Privacidade</button></li>
+              <li>
+                <button onClick={() => setPage("terms")} className="hover:text-white transition-colors">
+                  Termos e Privacidade
+                </button>
+              </li>
             </ul>
-            
+
             <p className="text-[10px] mt-6 leading-tight" style={{ color: "rgba(250,247,242,0.4)" }}>
               Em caso de litígio, o consumidor pode recorrer ao Centro de Arbitragem de Conflitos de Consumo de Lisboa (CACCL). Mais informações em www.consumidor.pt.
             </p>
 
-            <a 
-              href="https://www.livroreclamacoes.pt/" 
-              target="_blank" 
+            <a
+              href="https://www.livroreclamacoes.pt/"
+              target="_blank"
               rel="noreferrer"
               className="inline-block mt-4 transition-transform hover:scale-105"
             >
-              <img 
-                src="https://www.livroreclamacoes.pt/Autenticacao_CC/img/logo-livro-reclamacoes.svg" 
-                alt="Livro de Reclamações Eletrónico" 
+              <img
+                src="https://www.livroreclamacoes.pt/Autenticacao_CC/img/logo-livro-reclamacoes.svg"
+                alt="Livro de Reclamações Eletrónico"
                 className="h-8 bg-white p-1 rounded"
               />
             </a>
           </div>
-       
+        </div>
+
+        {/* Direitos de Autor */}
         <div
           className="border-t pt-8 text-center text-xs"
           style={{
