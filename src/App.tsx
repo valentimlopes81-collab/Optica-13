@@ -5046,6 +5046,7 @@ export default function App() {
         {page === "quiz" && <QuizPage />}
         {page === "about" && <AboutPage />}
         {page === "contact" && <ContactPage />}
+        {page === "terms" && <TermsPage />}
 
         <BookingModal isOpen={booking} onClose={() => setBooking(false)} />
         {cartOpen && (
