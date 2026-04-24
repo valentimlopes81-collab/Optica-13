@@ -903,6 +903,46 @@ function ExitPopup({ onClose }) {
     </div>
   );
 }
+/* ── COOKIE BANNER ──────────────────────────────────────────── */
+function CookieBanner() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    // Verifica se o cliente já aceitou antes
+    if (!localStorage.getItem("cookies_optica13")) {
+      setShow(true);
+    }
+  }, []);
+
+  const acceptCookies = () => {
+    localStorage.setItem("cookies_optica13", "true");
+    setShow(false);
+  };
+
+  if (!show) return null;
+
+  return (
+    <div 
+      className="fixed bottom-0 left-0 right-0 z-[300] p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 fade-up shadow-[0_-10px_40px_rgba(0,0,0,0.1)]"
+      style={{ background: "white", borderTop: "1px solid var(--mist)" }}
+    >
+      <div className="text-sm" style={{ color: "#555" }}>
+        <p>
+          <strong style={{ color: "var(--forest)" }}>Usamos cookies 🍪</strong><br/>
+          Utilizamos cookies para melhorar a sua experiência de navegação, personalizar conteúdos e analisar o nosso tráfego. Ao continuar a navegar, concorda com a nossa Política de Privacidade.
+        </p>
+      </div>
+      <div className="flex gap-3 w-full sm:w-auto flex-shrink-0">
+        <button 
+          onClick={acceptCookies} 
+          className="btn-forest w-full sm:w-auto px-8 py-3 rounded-xl font-semibold text-sm"
+        >
+          Aceitar Todos
+        </button>
+      </div>
+    </div>
+  );
+}
 
 /* ── CART DRAWER (COM CHECKOUT VISUAL) ───────────────────────── */
 function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
@@ -2129,7 +2169,32 @@ export default function App() {
               <Calendar size={13} /> Agendar agora
             </button>
           </div>
-        </div>
+          <div>
+            <p className="text-xs font-semibold tracking-widest uppercase mb-5 mt-8 md:mt-0" style={{ color: "var(--gold)" }}>
+              Informação Legal
+            </p>
+            <ul className="space-y-3 text-sm" style={{ color: "rgba(250,247,242,0.5)" }}>
+              <li><button onClick={() => setPage("terms")} className="hover:text-white transition-colors">Termos e Privacidade</button></li>
+            </ul>
+            
+            <p className="text-[10px] mt-6 leading-tight" style={{ color: "rgba(250,247,242,0.4)" }}>
+              Em caso de litígio, o consumidor pode recorrer ao Centro de Arbitragem de Conflitos de Consumo de Lisboa (CACCL). Mais informações em www.consumidor.pt.
+            </p>
+
+            <a 
+              href="https://www.livroreclamacoes.pt/" 
+              target="_blank" 
+              rel="noreferrer"
+              className="inline-block mt-4 transition-transform hover:scale-105"
+            >
+              <img 
+                src="https://www.livroreclamacoes.pt/Autenticacao_CC/img/logo-livro-reclamacoes.svg" 
+                alt="Livro de Reclamações Eletrónico" 
+                className="h-8 bg-white p-1 rounded"
+              />
+            </a>
+          </div>
+       
         <div
           className="border-t pt-8 text-center text-xs"
           style={{
@@ -5031,6 +5096,7 @@ export default function App() {
 
         <Footer />
         <WhatsAppBtn />
+        <CookieBanner />
       </div>
     </>
   );
