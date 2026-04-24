@@ -114,18 +114,11 @@ function Img({ src, alt, className, style }) {
   );
 }
 /* ── SHOPIFY INTEGRATION ────────────────────────────────────── */
-import Client from 'shopify-buy';
-
-const client = Client.buildClient({
-  domain: 'dqih6f-80.myshopify.com',
-  storefrontAccessToken: 'a9c7a2f027b84643f7ede12707d4e285'
-});
 
 function ShopifyBuyButton({ productId }) {
   const buttonRef = useRef(null);
 
   useEffect(() => {
-    // Carrega o script do Shopify apenas uma vez
     if (window.ShopifyBuy && window.ShopifyBuy.UI) {
       initShopify();
     } else {
@@ -137,10 +130,15 @@ function ShopifyBuyButton({ productId }) {
     }
 
     function initShopify() {
-      // Se o botão já existir (para evitar que crie 2 botões na troca de páginas), limpa-o
       if (buttonRef.current) {
          buttonRef.current.innerHTML = '';
       }
+
+      // CRIAMOS O CLIENTE AQUI DENTRO (Resolve o erro do Console!)
+      const client = window.ShopifyBuy.buildClient({
+        domain: 'dqih6f-80.myshopify.com',
+        storefrontAccessToken: 'a9c7a2f027b84643f7ede12707d4e285'
+      });
 
       window.ShopifyBuy.UI.onReady(client).then(function (ui) {
         ui.createComponent('product', {
@@ -151,12 +149,12 @@ function ShopifyBuyButton({ productId }) {
             product: {
               buttonDestination: 'cart',
               contents: {
-                img: false,     // Escondemos a imagem do Shopify
-                title: false,   // Escondemos o título do Shopify
-                price: false,   // Escondemos o preço do Shopify
-                options: true,  // Mantemos as opções caso tenhas tamanhos (L, M, S)
+                img: false,
+                title: false,
+                price: false,
+                options: true,
                 quantity: false,
-                button: true    // Mantemos apenas o botão!
+                button: true
               },
               text: {
                 button: 'Adicionar ao Carrinho',
@@ -212,7 +210,6 @@ function ShopifyBuyButton({ productId }) {
 
   return <div ref={buttonRef} className="w-full"></div>;
 }
-
 /* ── DATA ───────────────────────────────────────────────────── */
 const PRODUCTS = {
   men: [
