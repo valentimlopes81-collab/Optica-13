@@ -218,8 +218,8 @@ const PRODUCTS = {
   men: [
     {
       id: 1,
-      name: "Aviator Classic",
       shopifyId: "15712441500022",
+      name: "Aviator Classic",
       rating: 4.8,
       reviews: 234,
       badge: "Bestseller",
