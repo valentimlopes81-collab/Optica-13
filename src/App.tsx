@@ -5006,7 +5006,7 @@ export default function App() {
       </div>
     );
   };
-  /* TERMS & PRIVACY PAGE */
+ /* TERMS & PRIVACY PAGE */
   const TermsPage = () => (
     <div className="pt-28 pb-24 min-h-screen" style={{ background: "var(--cream)" }}>
       <div className="max-w-4xl mx-auto px-6">
@@ -5021,16 +5021,50 @@ export default function App() {
 
         <div className="bg-white rounded-3xl p-8 md:p-12 border shadow-sm fade-up-1" style={{ borderColor: "var(--mist)" }}>
           <div className="prose prose-sm md:prose-base max-w-none text-gray-600">
-            {/* AQUI DENTRO COLOCAS O TEXTO GERADO PELO SHOPIFY DEPOIS */}
             
-            <h3 className="text-black font-bold mb-4 text-lg">1. Termos e Condições</h3>
-            <p className="mb-6 text-sm">Cole aqui o texto dos Termos de Serviço gerado pelo Shopify...</p>
+            {/* 1. TERMOS E CONDIÇÕES */}
+            <h3 className="text-black font-bold mb-4 text-xl">1. Termos e Condições Gerais</h3>
+            <p className="mb-4 text-sm">
+              Bem-vindo à loja online da Óptica 13. Ao aceder e utilizar este site, o utilizador concorda em vincular-se aos presentes Termos e Condições.
+            </p>
+            <p className="mb-8 text-sm">
+              Todos os preços indicados incluem IVA à taxa legal em vigor em Portugal. A Óptica 13 reserva-se o direito de alterar os preços a qualquer momento. Comercializamos exclusivamente óculos de sol e armações não graduadas através do nosso portal online. Para serviços de optometria e aquisição de lentes graduadas, o cliente deverá agendar uma visita às nossas lojas físicas.
+            </p>
 
-            <h3 className="text-black font-bold mb-4 text-lg">2. Política de Privacidade</h3>
-            <p className="mb-6 text-sm">Cole aqui o texto da Política de Privacidade gerado pelo Shopify...</p>
+            {/* 2. POLÍTICA DE PRIVACIDADE (RGPD) */}
+            <h3 className="text-black font-bold mb-4 text-xl">2. Política de Privacidade (RGPD)</h3>
+            <p className="mb-4 text-sm">
+              A sua privacidade é fundamental para a Óptica 13. Comprometemo-nos a proteger os seus dados pessoais de acordo com o Regulamento Geral sobre a Proteção de Dados (RGPD).
+            </p>
+            <ul className="list-disc pl-5 mb-8 text-sm space-y-2">
+              <li><strong>Recolha e Uso:</strong> Recolhemos apenas os dados estritamente necessários para o envio da sua encomenda (nome, morada, telefone). Os seus dados não serão vendidos ou cedidos a terceiros, exceto à transportadora responsável pela entrega.</li>
+              <li><strong>Os Seus Direitos:</strong> Tem o direito de solicitar o acesso, retificação ou apagamento dos seus dados pessoais a qualquer momento, através do e-mail info@optica13.com.</li>
+            </ul>
 
-            <h3 className="text-black font-bold mb-4 text-lg">3. Política de Devoluções</h3>
-            <p className="text-sm">O cliente tem o direito de devolver o produto num prazo de 14 dias após a receção da encomenda, sem necessidade de indicar o motivo, de acordo com o Direito de Livre Resolução...</p>
+            {/* 3. POLÍTICA DE ENVIOS */}
+            <h3 className="text-black font-bold mb-4 text-xl">3. Política de Envios e Entregas</h3>
+            <p className="mb-4 text-sm">
+              As encomendas são processadas e expedidas no prazo de 1 a 2 dias úteis após a confirmação do pagamento.
+            </p>
+            <ul className="list-disc pl-5 mb-8 text-sm space-y-2">
+              <li><strong>Portugal Continental:</strong> Entregas via transportadora expresso, com prazo estimado de 1 a 3 dias úteis após expedição.</li>
+              <li><strong>Ilhas (Açores e Madeira):</strong> Entregas via CTT Expresso, com prazo estimado de 3 a 5 dias úteis.</li>
+              <li>Em caso de rutura de stock que atrase o envio, o cliente será imediatamente contactado para escolher entre aguardar a reposição ou o reembolso integral.</li>
+            </ul>
+
+            {/* 4. POLÍTICA DE DEVOLUÇÕES */}
+            <h3 className="text-black font-bold mb-4 text-xl">4. Política de Devoluções</h3>
+            <p className="mb-4 text-sm">
+              De acordo com o Direito de Livre Resolução (Decreto-Lei n.º 24/2014), o consumidor dispõe de um prazo de <strong>14 dias seguidos</strong>, a contar da data de receção do produto, para efetuar a devolução da sua encomenda online, sem necessidade de indicar o motivo.
+            </p>
+            <ul className="list-disc pl-5 mb-4 text-sm space-y-2">
+              <li>O artigo deve ser devolvido na sua embalagem original, sem sinais de uso, acompanhado de todos os acessórios originais (estojos, panos) e fatura.</li>
+              <li>Os custos de envio da devolução ficam a cargo do cliente, salvo em caso de defeito de fabrico ou erro no envio por parte da Óptica 13.</li>
+            </ul>
+            <p className="text-sm">
+              Para iniciar uma devolução, contacte a nossa equipa através do e-mail info@optica13.com. O reembolso será processado no prazo máximo de 14 dias após a verificação dos artigos devolvidos, utilizando o mesmo método de pagamento da compra original.
+            </p>
+
           </div>
         </div>
       </div>
