@@ -5006,6 +5006,36 @@ export default function App() {
       </div>
     );
   };
+  /* TERMS & PRIVACY PAGE */
+  const TermsPage = () => (
+    <div className="pt-28 pb-24 min-h-screen" style={{ background: "var(--cream)" }}>
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-16 fade-up">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--gold)" }}>
+            Informação Legal
+          </p>
+          <h1 className="font-display text-4xl md:text-5xl font-semibold mb-6" style={{ color: "var(--forest)" }}>
+            Termos e Políticas
+          </h1>
+        </div>
+
+        <div className="bg-white rounded-3xl p-8 md:p-12 border shadow-sm fade-up-1" style={{ borderColor: "var(--mist)" }}>
+          <div className="prose prose-sm md:prose-base max-w-none text-gray-600">
+            {/* AQUI DENTRO COLOCAS O TEXTO GERADO PELO SHOPIFY DEPOIS */}
+            
+            <h3 className="text-black font-bold mb-4 text-lg">1. Termos e Condições</h3>
+            <p className="mb-6 text-sm">Cole aqui o texto dos Termos de Serviço gerado pelo Shopify...</p>
+
+            <h3 className="text-black font-bold mb-4 text-lg">2. Política de Privacidade</h3>
+            <p className="mb-6 text-sm">Cole aqui o texto da Política de Privacidade gerado pelo Shopify...</p>
+
+            <h3 className="text-black font-bold mb-4 text-lg">3. Política de Devoluções</h3>
+            <p className="text-sm">O cliente tem o direito de devolver o produto num prazo de 14 dias após a receção da encomenda, sem necessidade de indicar o motivo, de acordo com o Direito de Livre Resolução...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   return (
     <>
       <FontStyle />
