@@ -1868,7 +1868,6 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
-  const [showPromo, setShowPromo] = useState(true);
   const exitShown = useRef(false);
 
   useEffect(() => {
@@ -2296,12 +2295,17 @@ export default function App() {
       <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           <div className="text-white">
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-4 fade-up"
-              style={{ color: "var(--gold)" }}
+            {/* NOVA ETIQUETA DE OFERTA AQUI */}
+            <button 
+              onClick={openBook}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
+              style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}
             >
-              Desde 1986
-            </p>
+              <span className="text-base">🎁</span>
+              <span className="text-xs font-bold tracking-wide uppercase" style={{ color: "var(--gold)" }}>
+                Oferta: Consulta Gratuita esta semana
+              </span>
+            </button>
             <h1
               className="font-display mb-6 fade-up-1"
               style={{ fontSize: "clamp(2.5rem,6vw,5rem)", lineHeight: 1.1 }}
@@ -5077,29 +5081,7 @@ export default function App() {
         className="min-h-screen"
         style={{ background: "var(--cream)", fontFamily: "Jost, sans-serif" }}
       >
-        {showPromo && (
-          <div
-            className="relative z-[60] text-center py-2.5 px-6 text-sm font-medium"
-            style={{ background: "var(--forest)", color: "var(--gold)" }}
-          >
-            <span style={{ color: "#e2e8f0" }}>🎁 Consulta de Optometria </span>
-            <button
-              onClick={openBook}
-              className="underline font-semibold mx-1"
-              style={{ color: "var(--gold)" }}
-            >
-              Gratuita esta semana
-            </button>
-            <span style={{ color: "#e2e8f0" }}> — Agende agora</span>
-            <button
-              onClick={() => setShowPromo(false)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
-              style={{ color: "#e2e8f0" }}
-            >
-              <X size={14} />
-            </button>
-          </div>
-        )}
+       
         <Header />
 
         {page === "home" && <HomePage />}
