@@ -3983,7 +3983,7 @@ const openBook = (service = "Consulta Geral") => {
                 title: "Óptica ao Domicílio",
                 desc: "Deslocamo-nos para consertos de óculos, aquisição de lentes e aros ou entregas, num raio de 20km da nossa loja.",
                 highlight: "Deslocação Gratuita",
-                img: "https://images.unsplash.com/photo-1615592389070-bcc97e050475?w=600&h=400&fit=crop",
+                img: "https://i.postimg.cc/ZYPGPhpn/Otica-ao-domicilio-300x300.png",
               },
               {
                 icon: Award,
@@ -3998,7 +3998,7 @@ const openBook = (service = "Consulta Geral") => {
                 title: "Open Day Mensal",
                 desc: "No primeiro sábado de cada mês, oferecemos descontos imperdíveis e consultoria de imagem (método de 3 passos).",
                 highlight: "Até 40% Sol | 30% Armações",
-                img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop",
+                img: "https://i.postimg.cc/HnKXcNYC/6-600x338.png",
               },
               {
                 icon: Phone,
