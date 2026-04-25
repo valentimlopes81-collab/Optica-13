@@ -4001,11 +4001,15 @@ const openBook = (service = "Consulta Geral") => {
                 img: "https://i.postimg.cc/HnKXcNYC/6-600x338.png",
               },
               {
+               {
                 icon: Phone,
                 title: "App Óptica 13",
                 desc: "A nossa aplicação tem tudo: Loja online, marcação de consultas, cartão de fidelização e sistema de Cashback.",
-                highlight: "Instale já e ganhe vantagens",
+                isApp: true,
+                playStore: "https://play.google.com/store/apps/details?id=com.optica13.opticae&pli=1",
+                appStore: "https://apps.apple.com/sa/app/%C3%B3ptica-13/id1580926491",
                 img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=600&h=400&fit=crop",
+              },
               },
             ].map((v, i) => (
               <div
@@ -4040,7 +4044,7 @@ const openBook = (service = "Consulta Geral") => {
                     {v.desc}
                   </p>
 
-                  {v.isAction ? (
+                {v.isAction ? (
                     <button
                       onClick={() => setShowSeguros(true)}
                       className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider mt-auto transition-all shadow-md flex items-center justify-center gap-2"
@@ -4048,6 +4052,27 @@ const openBook = (service = "Consulta Geral") => {
                     >
                       Ver Seguros e Acordos <ChevronRight size={14} />
                     </button>
+                  ) : v.isApp ? (
+                    <div className="flex gap-2 mt-auto">
+                      <a
+                        href={v.playStore}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 py-3 rounded-xl text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-transform shadow-lg flex items-center justify-center hover:-translate-y-1"
+                        style={{ background: "black", color: "white" }}
+                      >
+                        Play Store
+                      </a>
+                      <a
+                        href={v.appStore}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 py-3 rounded-xl text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-transform shadow-lg flex items-center justify-center hover:-translate-y-1"
+                        style={{ background: "black", color: "white" }}
+                      >
+                        App Store
+                      </a>
+                    </div>
                   ) : (
                     <div
                       className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold w-fit mt-auto"
@@ -4057,10 +4082,6 @@ const openBook = (service = "Consulta Geral") => {
                       {v.highlight}
                     </div>
                   )}
-                </div>
-              </div>
-            ))}
-          </div>
 
           {/* Estacionamento Banner */}
           <div
