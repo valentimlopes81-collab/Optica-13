@@ -738,15 +738,37 @@ function WhatsAppBtn({ product }) {
   );
 }
 
-//* ── EXIT INTENT POPUP ──────────────────────────────────────── */
+/* ── EXIT INTENT POPUP ──────────────────────────────────────── */
 function ExitPopup({ onClose }) {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    // Aqui no futuro faria a ligação à base de dados (Mailchimp, Klaviyo, etc)
-    setSubmitted(true);
+    if (!email) return;
+
+    try {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
+        body: new URLSearchParams({
+          'g': 'XUnUvX', // Teu List ID
+          'email': email,
+          '$fields': '$source',
+          '$source': 'Site Optica 13'
+        })
+      };
+
+      await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
+      setSubscribed(true);
+      setEmail("");
+    } catch (error) {
+      console.error("Erro ao subscrever:", error);
+      setSubscribed(true); 
+    }
   };
 
   return (
@@ -770,7 +792,6 @@ function ExitPopup({ onClose }) {
           <X size={16} />
         </button>
 
-        {/* Lado da Imagem (Escondido em ecrãs muito pequenos, visível em tablets/PCs) */}
         <div className="hidden md:block md:w-5/12 relative">
           <Img
             src="https://images.unsplash.com/photo-1590846123010-8566a7b7a213?w=800&h=1000&fit=crop"
@@ -786,122 +807,61 @@ function ExitPopup({ onClose }) {
           </div>
         </div>
 
-        {/* Lado do Conteúdo */}
         <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
-          {submitted ? (
+          {subscribed ? (
             <div className="text-center fade-up">
               <div
                 className="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6"
                 style={{ background: "#e8f5ee" }}
               >
-                <CheckCircle size={40} style={{ color: "var(--gold)" }} />
+                <CheckCircle size={40} style={{ color: "#16a34a" }} />
               </div>
-              <h3
-                className="font-display text-3xl font-semibold mb-3"
-                style={{ color: "var(--forest)" }}
-              >
+              <h3 className="font-display text-3xl font-semibold mb-3" style={{ color: "var(--forest)" }}>
                 Desconto Garantido!
               </h3>
-              <p
-                className="text-base mb-6 leading-relaxed"
-                style={{ color: "#555" }}
-              >
-                Enviámos o seu cupão exclusivo de{" "}
-                <strong>10% de desconto</strong> para a caixa de entrada de{" "}
-                <em>{email}</em>.
+              <p className="text-sm mb-6 leading-relaxed" style={{ color: "#555" }}>
+                Enviámos o seu cupão exclusivo de <strong>10% de desconto</strong> para a sua caixa de entrada.
               </p>
-              <div className="p-4 rounded-xl border border-gray-200 bg-gray-50 text-sm text-left mb-8">
-                <p className="font-semibold mb-1 flex items-center gap-2">
-                  <Sparkles size={14} style={{ color: "var(--gold)" }} />{" "}
-                  Lembrete:
-                </p>
-                <p style={{ color: "#666" }}>
-                  Ao utilizar o seu desconto numa armação (online ou na nossa
-                  ótica física), a sua{" "}
-                  <strong>Consulta de Optometria é 100% gratuita</strong>!
-                </p>
-              </div>
               <button
                 onClick={onClose}
-                className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide shadow-lg transition-transform hover:-translate-y-1"
+                className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide shadow-lg"
               >
                 Continuar a explorar
               </button>
             </div>
           ) : (
             <div className="fade-up">
-              <span
-                className="text-xs font-bold uppercase tracking-widest mb-3 block"
-                style={{ color: "var(--gold)" }}
-              >
+              <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: "var(--gold)" }}>
                 Oferta Exclusiva
               </span>
-              <h3
-                className="font-display text-3xl sm:text-4xl font-semibold mb-4 leading-tight"
-                style={{ color: "var(--forest)" }}
-              >
+              <h3 className="font-display text-3xl sm:text-4xl font-semibold mb-4 leading-tight" style={{ color: "var(--forest)" }}>
                 Não saia de mãos a abanar.
               </h3>
-              <p
-                className="text-sm sm:text-base mb-6 leading-relaxed"
-                style={{ color: "#555" }}
-              >
-                Registe o seu email e receba instantaneamente{" "}
-                <strong>10% de desconto</strong> na sua próxima compra.
+              <p className="text-sm sm:text-base mb-6 leading-relaxed" style={{ color: "#555" }}>
+                Registe o seu email e receba instantaneamente <strong>10% de desconto</strong>.
               </p>
 
-              <div
-                className="flex items-start gap-3 p-4 rounded-xl mb-8 border border-green-100"
-                style={{ background: "#f0fdf4" }}
-              >
-                <Award
-                  size={24}
-                  className="flex-shrink-0 mt-0.5"
-                  style={{ color: "#16a34a" }}
+              <form onSubmit={handleSubscribe} className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Introduza o seu melhor e-mail"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-5 py-4 rounded-xl border-2 text-sm outline-none text-black"
+                  style={{ borderColor: "var(--mist)", background: "white" }}
                 />
-                <p
-                  className="text-sm leading-snug"
-                  style={{ color: "#166534" }}
+                <button
+                  type="submit"
+                  className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg"
                 >
-                  <strong>Bónus:</strong> Na compra de qualquer modelo,
-                  oferecemos-lhe o acesso direto a uma{" "}
-                  <strong>consulta de optometria gratuita</strong>.
-                </p>
-              </div>
-
-             {!subscribed ? (
-          <form onSubmit={handleSubscribe} className="space-y-4">
-            <input
-              type="email"
-              placeholder="Introduza o seu melhor e-mail"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-5 py-4 rounded-xl border-2 text-sm transition-all focus:ring-4 outline-none text-black"
-              style={{
-                borderColor: "var(--mist)",
-                background: "white",
-              }}
-            />
-            <button
-              type="submit"
-              className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg transition-transform hover:-translate-y-1"
-            >
-              Quero os meus 10% <ArrowRight size={16} />
-            </button>
-          </form>
-        ) : (
-          <div className="bg-green-50 text-green-700 p-6 rounded-2xl border border-green-100 flex items-center gap-3 fade-up">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <div>
-              <p className="font-bold text-left">Sucesso!</p>
-              <p className="text-sm opacity-90 text-left">O seu cupão foi enviado. Verifique a sua caixa de entrada!</p>
-            </div>
-          </div>
-        )}
+                  Quero os meus 10% <ArrowRight size={16} />
+                </button>
+              </form>
+              
               <button
                 onClick={onClose}
-                className="mt-6 text-xs w-full text-center block underline transition-colors"
+                className="mt-6 text-xs w-full text-center block underline"
                 style={{ color: "#999" }}
               >
                 Não, obrigado. Prefiro pagar o preço inteiro.
@@ -1879,38 +1839,6 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
   const exitShown = useRef(false);
-
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-    if (!email) return;
-
-    try {
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json'
-        },
-        body: new URLSearchParams({
-          'g': 'XUnUvX',
-          'email': email,
-          '$fields': '$source',
-          '$source': 'Site Optica 13'
-        })
-      };
-
-      await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
-      
-      setSubscribed(true);
-      setEmail("");
-    } catch (error) {
-      console.error("Erro ao subscrever:", error);
-      setSubscribed(true); 
-    }
-  };
 
   useEffect(() => {
     const h = (e) => {
