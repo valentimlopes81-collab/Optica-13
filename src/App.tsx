@@ -1617,8 +1617,8 @@ export default function App() {
     return () => document.removeEventListener("mouseout", h);
   }, []);
 
- const openBook = (service = "Consulta Geral") => {
-    setBookingService(service);
+const openBook = (service = "Consulta Geral") => {
+    setBookingService(service); // O site guarda o nome do serviço
     setBooking(true);
     setExitIntent(false);
   };
@@ -1711,7 +1711,7 @@ export default function App() {
               )}
             </button>
             <button
-              onClick={openBook}
+             onClick={() => openBook("Consulta Geral - Topo")}
               className="hidden sm:flex btn-forest px-5 py-2.5 rounded-xl text-sm font-semibold items-center gap-2"
             >
               <Calendar size={14} /> Agendar Exame
@@ -2059,7 +2059,7 @@ export default function App() {
             </p>
             <div className="flex flex-wrap gap-4 fade-up-3">
               <button
-                onClick={openBook}
+              onClick={() => openBook("Exame Gratuito - Principal")}
                 className="bg-white px-8 py-4 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all hover:scale-105"
                 style={{ color: "var(--forest)" }}
               >
@@ -2269,7 +2269,7 @@ export default function App() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={openBook}
+                  onClick={() => openBook("Consultoria de Imagem")}
                   className="btn-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
                 >
                   <Calendar size={16} /> Agendar Consultoria
@@ -2527,7 +2527,7 @@ export default function App() {
         ),
         img: "https://images.unsplash.com/photo-1506465487777-628a8d16eb95?w=800&h=800&fit=crop",
         actionLabel: "Marcar Exame",
-        actionFn: openBook,
+       actionFn: () => openBook("Exame Carta de Condução"),
       },
       {
         title: "Consultas de Contactologia",
