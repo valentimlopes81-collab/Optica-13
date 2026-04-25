@@ -4080,9 +4080,12 @@ const openBook = (service = "Consulta Geral") => {
                       {v.highlight}
                     </div>
                   )}
+                </div>
+              </div>
+            ))}
+          </div>
 
           {/* Estacionamento Banner */}
-          <div
             className="mt-16 rounded-3xl overflow-hidden relative fade-up-2 shadow-2xl"
             style={{ background: "var(--forest)" }}
           >
