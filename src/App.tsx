@@ -869,26 +869,36 @@ function ExitPopup({ onClose }) {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="email"
-                  placeholder="Introduza o seu melhor e-mail"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-5 py-4 rounded-xl border-2 text-sm transition-all focus:ring-4 outline-none"
-                  style={{
-                    borderColor: "var(--mist)",
-                    background: "white",
-                  }}
-                />
-                <button
-                  type="submit"
-                  className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg transition-transform hover:-translate-y-1"
-                >
-                  Quero os meus 10% <ArrowRight size={16} />
-                </button>
-              </form>
+             {!subscribed ? (
+          <form onSubmit={handleSubscribe} className="space-y-4">
+            <input
+              type="email"
+              placeholder="Introduza o seu melhor e-mail"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-5 py-4 rounded-xl border-2 text-sm transition-all focus:ring-4 outline-none text-black"
+              style={{
+                borderColor: "var(--mist)",
+                background: "white",
+              }}
+            />
+            <button
+              type="submit"
+              className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg transition-transform hover:-translate-y-1"
+            >
+              Quero os meus 10% <ArrowRight size={16} />
+            </button>
+          </form>
+        ) : (
+          <div className="bg-green-50 text-green-700 p-6 rounded-2xl border border-green-100 flex items-center gap-3 fade-up">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <div>
+              <p className="font-bold text-left">Sucesso!</p>
+              <p className="text-sm opacity-90 text-left">O seu cupão foi enviado. Verifique a sua caixa de entrada!</p>
+            </div>
+          </div>
+        )}
               <button
                 onClick={onClose}
                 className="mt-6 text-xs w-full text-center block underline transition-colors"
@@ -1869,6 +1879,38 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
   const exitShown = useRef(false);
+
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+
+    try {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
+        body: new URLSearchParams({
+          'g': 'XUnUvX',
+          'email': email,
+          '$fields': '$source',
+          '$source': 'Site Optica 13'
+        })
+      };
+
+      await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
+      
+      setSubscribed(true);
+      setEmail("");
+    } catch (error) {
+      console.error("Erro ao subscrever:", error);
+      setSubscribed(true); 
+    }
+  };
 
   useEffect(() => {
     const h = (e) => {
