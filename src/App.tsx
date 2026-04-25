@@ -4515,7 +4515,7 @@ const openBook = (service = "Consulta Geral") => {
           >
             {/* NOTA: Substituir o SRC desta imagem pelo URL da fotografia real da vossa equipa */}
             <Img
-              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1000&h=600&fit=crop"
+              src="https://i.postimg.cc/vmz3kPmW/Equipa-Optica13-r2p8lpvixuoy0zmplkvnvhdg2jia66ckxheqrzn9tc.jpg"
               alt="Equipa Óptica 13"
               className="w-full h-auto object-cover"
               style={{ maxHeight: "500px" }}
