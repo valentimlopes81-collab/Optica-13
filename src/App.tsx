@@ -4342,7 +4342,7 @@ const openBook = (service = "Consulta Geral") => {
               style={{ height: "550px" }}
             >
               <Img
-                src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=1000&fit=crop"
+                src="https://i.postimg.cc/9QfMy0qS/DSC2432-scaled.jpg"
                 alt="Interior da Óptica 13"
                 className="w-full h-full object-cover"
               />
