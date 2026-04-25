@@ -1426,7 +1426,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
 /* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
 /* ── BOOKING MODAL (COM NOTIFICAÇÃO REAL) ────────────────────────────── */
-function BookingModal({ isOpen, onClose }) {
+function BookingModal({ isOpen, onClose, service }) {
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -1446,6 +1446,7 @@ function BookingModal({ isOpen, onClose }) {
     const templateParams = {
       name: clientData.name,
       phone: clientData.phone,
+      service: service,
       email: clientData.email,
       date: selectedDate ? new Intl.DateTimeFormat("pt-PT").format(selectedDate) : "",
       time: selectedTime,
@@ -1598,6 +1599,7 @@ function BookingModal({ isOpen, onClose }) {
 export default function App() {
   const [page, setPage] = useState("home");
   const [booking, setBooking] = useState(false);
+  const [bookingService, setBookingService] = useState("Consulta Geral");
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -1615,7 +1617,8 @@ export default function App() {
     return () => document.removeEventListener("mouseout", h);
   }, []);
 
-  const openBook = () => {
+ const openBook = (service = "Consulta Geral") => {
+    setBookingService(service);
     setBooking(true);
     setExitIntent(false);
   };
@@ -4828,7 +4831,11 @@ export default function App() {
         {page === "contact" && <ContactPage />}
         {page === "terms" && <TermsPage />}
 
-        <BookingModal isOpen={booking} onClose={() => setBooking(false)} />
+        <BookingModal 
+          isOpen={booking} 
+          onClose={() => setBooking(false)} 
+          service={bookingService}
+          />
         {cartOpen && (
           <CartDrawer
             cart={cart}
