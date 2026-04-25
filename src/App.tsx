@@ -3969,14 +3969,14 @@ const openBook = (service = "Consulta Geral") => {
                 title: "IO Segurança",
                 desc: "Os seus óculos protegidos contra acidentes, quebras, furtos e roubos. Cobertura válida em Portugal e no estrangeiro.",
                 highlight: "Desde 19,99€/ano (Até 2000€)",
-                img: "https://images.unsplash.com/photo-1589821540306-0391ab1a1200?w=600&h=400&fit=crop",
+                img: "https://i.postimg.cc/QdKSbpw9/Post-240x300.jpg",
               },
               {
                 icon: Calendar,
                 title: "Cofidis Pay",
                 desc: "Uma solução de pagamentos 100% digital e segura. Controle as suas despesas com total flexibilidade e sem burocracias.",
                 highlight: "Até 12x Sem Juros",
-                img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
+                img: "https://i.postimg.cc/nrLGQ7q0/Cofidis-Pay-600x341.png",
               },
               {
                 icon: MapPin,
