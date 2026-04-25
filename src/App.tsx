@@ -3999,19 +3999,17 @@ const openBook = (service = "Consulta Geral") => {
                 desc: "No primeiro sábado de cada mês, oferecemos descontos imperdíveis e consultoria de imagem (método de 3 passos).",
                 highlight: "Até 40% Sol | 30% Armações",
                 img: "https://i.postimg.cc/HnKXcNYC/6-600x338.png",
-              },
-              {
-               {
-                icon: Phone,
-                title: "App Óptica 13",
-                desc: "A nossa aplicação tem tudo: Loja online, marcação de consultas, cartão de fidelização e sistema de Cashback.",
-                isApp: true,
-                playStore: "https://play.google.com/store/apps/details?id=com.optica13.opticae&pli=1",
-                appStore: "https://apps.apple.com/sa/app/%C3%B3ptica-13/id1580926491",
-                img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=600&h=400&fit=crop",
-              },
-              },
-            ].map((v, i) => (
+             },
+            {
+              icon: Phone,
+              title: "App Óptica 13",
+              desc: "A nossa aplicação tem tudo: Loja online, marcação de consultas, cartão de fidelização e sistema de Cashback.",
+              isApp: true,
+              playStore: "https://play.google.com/store/apps/details?id=com.optica13.opticae&pli=1",
+              appStore: "https://apps.apple.com/sa/app/%C3%B3ptica-13/id1580926491",
+              img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=600&h=400&fit=crop",
+            },
+          ].map((v, i) => (
               <div
                 key={i}
                 className="rounded-2xl flex flex-col card-hover overflow-hidden relative"
