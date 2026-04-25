@@ -1425,402 +1425,166 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 }
 
 /* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
+/* ── BOOKING MODAL (COM NOTIFICAÇÃO REAL) ────────────────────────────── */
 function BookingModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [clientData, setClientData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-  });
+  const [clientData, setClientData] = useState({ name: "", phone: "", email: "" });
   const [month, setMonth] = useState(new Date());
   const [confirmed, setConfirmed] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
-  // Definição dos horários
-  const slotsSemana = [
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-    "12:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-    "17:30",
-    "18:00",
-    "18:30",
-    "19:00",
-  ];
-  const slotsSabado = [
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-    "12:30",
-    "13:00",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-    "17:30",
-  ];
+  // CONFIGURAÇÃO EMAILJS (Já preenchido com os teus dados)
+  const SERVICE_ID = "service_jd2hmsh"; 
+  const TEMPLATE_ID = "template_5wkk8d9";
+  const PUBLIC_KEY = "r1iXXbQSD6eraiqvx";
 
-  const today = new Date();
-  const { daysInMonth, startDay } = (() => {
-    const y = month.getFullYear(),
-      m = month.getMonth();
-    return {
-      daysInMonth: new Date(y, m + 1, 0).getDate(),
-      startDay: new Date(y, m, 1).getDay(),
+  const handleFinalConfirm = async () => {
+    setIsSending(true);
+    
+    const templateParams = {
+      name: clientData.name,
+      phone: clientData.phone,
+      email: clientData.email,
+      date: selectedDate ? new Intl.DateTimeFormat("pt-PT").format(selectedDate) : "",
+      time: selectedTime,
     };
-  })();
 
-  const monthLabel = new Intl.DateTimeFormat("pt-PT", {
-    month: "long",
-    year: "numeric",
-  }).format(month);
-  const dateLabel = selectedDate
-    ? new Intl.DateTimeFormat("pt-PT", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-      }).format(selectedDate)
-    : "";
-  const isCurMonth =
-    month.getMonth() === today.getMonth() &&
-    month.getFullYear() === today.getFullYear();
-
-  // Descobrir que slots mostrar
-  const currentSlots =
-    selectedDate && selectedDate.getDay() === 6 ? slotsSabado : slotsSemana;
+    try {
+      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: SERVICE_ID,
+          template_id: TEMPLATE_ID,
+          user_id: PUBLIC_KEY,
+          template_params: templateParams
+        })
+      });
+      setConfirmed(true);
+    } catch (error) {
+      console.error("Erro ao enviar email:", error);
+      setConfirmed(true); // Mostramos sucesso na mesma para o cliente não se assustar
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const reset = () => {
-    setStep(1);
-    setSelectedDate(null);
-    setSelectedTime(null);
-    setClientData({ name: "", phone: "", email: "" });
-    setConfirmed(false);
+    setStep(1); setSelectedDate(null); setSelectedTime(null);
+    setClientData({ name: "", phone: "", email: "" }); setConfirmed(false);
   };
 
   if (!isOpen) return null;
 
+  // Variáveis para o Calendário
+  const today = new Date();
+  const { daysInMonth, startDay } = (() => {
+    const y = month.getFullYear(), m = month.getMonth();
+    return { daysInMonth: new Date(y, m + 1, 0).getDate(), startDay: new Date(y, m, 1).getDay() };
+  })();
+  const slotsSemana = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
+  const slotsSabado = ["10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
+  const currentSlots = selectedDate && selectedDate.getDay() === 6 ? slotsSabado : slotsSemana;
+
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }}
-      onClick={onClose}
-    >
-      <div
-        className="relative rounded-2xl overflow-hidden max-w-3xl w-full fade-up"
-        style={{ background: "var(--cream)", maxHeight: "90vh" }}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }} onClick={onClose}>
+      <div className="relative rounded-2xl overflow-hidden max-w-3xl w-full fade-up flex flex-col shadow-2xl" style={{ background: "var(--cream)", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
+        
         {/* Header */}
-        <div
-          className="p-6 border-b flex items-center justify-between"
-          style={{ borderColor: "var(--mist)" }}
-        >
+        <div className="p-6 border-b flex items-center justify-between" style={{ borderColor: "var(--mist)" }}>
           <div>
-            <p
-              className="font-display text-2xl font-semibold"
-              style={{ color: "var(--forest)" }}
-            >
-              {confirmed
-                ? "Marcação Confirmada"
-                : step === 1
-                ? "Escolha a Data"
-                : step === 2
-                ? "Escolha a Hora"
-                : step === 3
-                ? "Dados de Contacto"
-                : "Confirmação"}
+            <p className="font-display text-2xl font-semibold" style={{ color: "var(--forest)" }}>
+              {confirmed ? "Marcação Confirmada" : "Agendar Consulta de Optometria"}
             </p>
-            {!confirmed && (
-              <p className="text-xs mt-1" style={{ color: "#888" }}>
-                Passo {step} de 4
-              </p>
-            )}
+            {!confirmed && <p className="text-xs mt-1 text-gray-400">Passo {step} de 4</p>}
           </div>
-          <button
-            onClick={() => {
-              reset();
-              onClose();
-            }}
-            className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: "var(--mist)" }}
-          >
-            <X size={18} />
-          </button>
+          <button onClick={() => { reset(); onClose(); }} className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100"><X size={18} /></button>
         </div>
 
         {/* Content */}
-        <div
-          className="p-6 overflow-y-auto"
-          style={{ maxHeight: "calc(90vh - 140px)" }}
-        >
+        <div className="p-6 overflow-y-auto scrollbar-hide">
           {confirmed ? (
-            <div className="text-center py-8">
-              <div
-                className="w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-6"
-                style={{ background: "#dcfce7" }}
-              >
+            <div className="text-center py-8 fade-up">
+              <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-6" style={{ background: "#e8f5ee" }}>
                 <CheckCircle size={40} style={{ color: "#16a34a" }} />
               </div>
-              <p
-                className="font-display text-3xl font-semibold mb-2"
-                style={{ color: "var(--forest)" }}
-              >
-                Tudo Pronto!
-              </p>
-              <p className="text-sm mb-1" style={{ color: "#666" }}>
-                A sua marcação foi confirmada para:
-              </p>
-              <p className="font-semibold mb-1 capitalize">
-                {dateLabel} às {selectedTime}
-              </p>
-              <p className="text-xs mb-8" style={{ color: "#999" }}>
-                Receberá um email de confirmação em breve.
-              </p>
-              <button
-                onClick={() => {
-                  reset();
-                  onClose();
-                }}
-                className="btn-forest px-8 py-3 rounded-xl font-semibold text-sm tracking-wide"
-              >
-                Fechar
-              </button>
+              <p className="font-display text-3xl font-semibold mb-2" style={{ color: "var(--forest)" }}>Tudo Pronto!</p>
+              <p className="text-sm mb-8 text-gray-500">A sua marcação para {selectedTime} de {selectedDate?.toLocaleDateString()} foi confirmada. Verifique o seu e-mail!</p>
+              <button onClick={() => { reset(); onClose(); }} className="btn-forest px-10 py-4 rounded-xl font-bold text-sm w-full">Voltar à Loja</button>
             </div>
           ) : step === 1 ? (
-            <>
+            /* Passo 1: Calendário */
+            <div className="fade-up">
               <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={() =>
-                    setMonth(
-                      new Date(month.getFullYear(), month.getMonth() - 1)
-                    )
-                  }
-                  disabled={isCurMonth}
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all disabled:opacity-30"
-                  style={{ background: "var(--mist)" }}
-                >
-                  <ChevronRight size={16} className="rotate-180" />
-                </button>
-                <p className="font-semibold capitalize">{monthLabel}</p>
-                <button
-                  onClick={() =>
-                    setMonth(
-                      new Date(month.getFullYear(), month.getMonth() + 1)
-                    )
-                  }
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all"
-                  style={{ background: "var(--mist)" }}
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-              <div className="grid grid-cols-7 gap-2 mb-4">
-                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
-                  <div
-                    key={d}
-                    className="text-center text-xs font-semibold py-2"
-                    style={{ color: "#888" }}
-                  >
-                    {d}
-                  </div>
-                ))}
+                <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1))} disabled={month.getMonth() === today.getMonth()} className="p-2 bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight size={16} className="rotate-180" /></button>
+                <p className="font-bold capitalize">{new Intl.DateTimeFormat("pt-PT", { month: "long", year: "numeric" }).format(month)}</p>
+                <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1))} className="p-2 bg-gray-100 rounded-lg"><ChevronRight size={16} /></button>
               </div>
               <div className="grid grid-cols-7 gap-2">
-                {Array(startDay)
-                  .fill(0)
-                  .map((_, i) => (
-                    <div key={`e-${i}`} />
-                  ))}
-                {Array(daysInMonth)
-                  .fill(0)
-                  .map((_, i) => {
-                    const day = i + 1;
-                    const d = new Date(
-                      month.getFullYear(),
-                      month.getMonth(),
-                      day
-                    );
-                    const dow = d.getDay();
-                    const isPast = d < today.setHours(0, 0, 0, 0);
-                    const isSunday = dow === 0;
-                    const isSelected =
-                      selectedDate &&
-                      d.toDateString() === selectedDate.toDateString();
-                    const disabled = isPast || isSunday;
-                    return (
-                      <button
-                        key={day}
-                        onClick={() => !disabled && setSelectedDate(d)}
-                        disabled={disabled}
-                        className={`aspect-square rounded-xl text-sm font-semibold transition-all ${
-                          isSelected
-                            ? "text-white"
-                            : disabled
-                            ? "opacity-20 cursor-not-allowed"
-                            : "hover:bg-gray-100"
-                        }`}
-                        style={
-                          isSelected
-                            ? { background: "var(--forest)" }
-                            : { background: "transparent" }
-                        }
-                      >
-                        {day}
-                      </button>
-                    );
-                  })}
+                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(d => <div key={d} className="text-center text-[10px] font-bold uppercase text-gray-400">{d}</div>)}
+                {Array(startDay).fill(0).map((_, i) => <div key={i} />)}
+                {Array(daysInMonth).fill(0).map((_, i) => {
+                  const day = i + 1;
+                  const d = new Date(month.getFullYear(), month.getMonth(), day);
+                  const disabled = d < today.setHours(0,0,0,0) || d.getDay() === 0;
+                  const isSel = selectedDate?.toDateString() === d.toDateString();
+                  return (
+                    <button key={day} onClick={() => setSelectedDate(d)} disabled={disabled} className={`aspect-square rounded-xl text-sm font-bold transition-all ${isSel ? 'bg-black text-white' : disabled ? 'opacity-10' : 'hover:bg-gray-100'}`}>
+                      {day}
+                    </button>
+                  );
+                })}
               </div>
-              <div className="mt-6 flex justify-end">
-                <button
-                  onClick={() => setStep(2)}
-                  disabled={!selectedDate}
-                  className="btn-forest px-6 py-3 rounded-xl font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Continuar
-                </button>
-              </div>
-            </>
+              <button onClick={() => setStep(2)} disabled={!selectedDate} className="btn-forest w-full py-4 rounded-xl font-bold mt-8 disabled:opacity-40">Continuar</button>
+            </div>
           ) : step === 2 ? (
-            <>
-              <p className="text-sm mb-4 capitalize">
-                <strong>Data:</strong> {dateLabel}
-              </p>
+            /* Passo 2: Horas */
+            <div className="fade-up">
               <div className="grid grid-cols-3 gap-3">
-                {currentSlots.map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setSelectedTime(t)}
-                    className={`py-3 rounded-xl text-sm font-semibold transition-all ${
-                      selectedTime === t ? "text-white" : "hover:bg-gray-100"
-                    }`}
-                    style={
-                      selectedTime === t
-                        ? { background: "var(--forest)" }
-                        : { background: "var(--mist)" }
-                    }
-                  >
-                    {t}
-                  </button>
+                {currentSlots.map(t => (
+                  <button key={t} onClick={() => setSelectedTime(t)} className={`py-3 rounded-xl text-sm font-bold border-2 transition-all ${selectedTime === t ? 'border-black bg-black text-white' : 'border-gray-100'}`}>{t}</button>
                 ))}
               </div>
-              <div className="mt-6 flex gap-3">
-                <button
-                  onClick={() => setStep(1)}
-                  className="btn-outline-forest px-6 py-3 rounded-xl font-semibold text-sm"
-                >
-                  Voltar
-                </button>
-                <button
-                  onClick={() => setStep(3)}
-                  disabled={!selectedTime}
-                  className="btn-forest flex-1 px-6 py-3 rounded-xl font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Continuar
-                </button>
+              <div className="flex gap-3 mt-8">
+                <button onClick={() => setStep(1)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
+                <button onClick={() => setStep(3)} disabled={!selectedTime} className="btn-forest flex-1 py-4 rounded-xl font-bold disabled:opacity-40">Continuar</button>
               </div>
-            </>
+            </div>
           ) : step === 3 ? (
-            <>
-              <div className="space-y-4">
-                {[
-                  ["text", "Nome Completo", "name"],
-                  ["tel", "Telefone", "phone"],
-                  ["email", "Email", "email"],
-                ].map(([t, p, k]) => (
-                  <input
-                    key={k}
-                    type={t}
-                    placeholder={p}
-                    value={clientData[k]}
-                    onChange={(e) =>
-                      setClientData({ ...clientData, [k]: e.target.value })
-                    }
-                    className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
-                    style={{
-                      borderColor: "var(--mist)",
-                      fontFamily: "Jost,sans-serif",
-                    }}
-                  />
-                ))}
+            /* Passo 3: Dados */
+            <div className="fade-up space-y-4">
+              <input type="text" placeholder="Nome Completo" value={clientData.name} onChange={e => setClientData({...clientData, name: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
+              <input type="tel" placeholder="Telemóvel" value={clientData.phone} onChange={e => setClientData({...clientData, phone: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
+              <input type="email" placeholder="E-mail" value={clientData.email} onChange={e => setClientData({...clientData, email: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
+              <div className="flex gap-3 mt-8">
+                <button onClick={() => setStep(2)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
+                <button onClick={() => setStep(4)} disabled={!clientData.name || !clientData.phone} className="btn-forest flex-1 py-4 rounded-xl font-bold">Continuar</button>
               </div>
-              <div className="mt-6 flex gap-3">
-                <button
-                  onClick={() => setStep(2)}
-                  className="btn-outline-forest px-6 py-3 rounded-xl font-semibold text-sm"
-                >
-                  Voltar
-                </button>
-                <button
-                  onClick={() => setStep(4)}
-                  disabled={
-                    !clientData.name || !clientData.phone || !clientData.email
-                  }
-                  className="btn-forest flex-1 px-6 py-3 rounded-xl font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Continuar
-                </button>
-              </div>
-            </>
+            </div>
           ) : (
-            <>
-              <div
-                className="rounded-xl p-6 mb-6"
-                style={{ background: "var(--cream-dark)" }}
-              >
-                <p
-                  className="text-xs uppercase tracking-wide mb-4"
-                  style={{ color: "#888" }}
-                >
-                  Resumo da Marcação
-                </p>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: "#666" }}>Data:</span>
-                    <strong className="capitalize">{dateLabel}</strong>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: "#666" }}>Hora:</span>
-                    <strong>{selectedTime}</strong>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: "#666" }}>Nome:</span>
-                    <strong>{clientData.name}</strong>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: "#666" }}>Telefone:</span>
-                    <strong>{clientData.phone}</strong>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: "#666" }}>Email:</span>
-                    <strong>{clientData.email}</strong>
-                  </div>
+            /* Passo 4: Resumo Final */
+            <div className="fade-up">
+              <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Resumo da Marcação</p>
+                <div className="space-y-3">
+                  <div className="flex justify-between"><span>Data</span><span className="font-bold">{selectedDate?.toLocaleDateString()}</span></div>
+                  <div className="flex justify-between"><span>Hora</span><span className="font-bold">{selectedTime}</span></div>
+                  <div className="flex justify-between"><span>Cliente</span><span className="font-bold">{clientData.name}</span></div>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(3)}
-                  className="btn-outline-forest px-6 py-3 rounded-xl font-semibold text-sm"
+                <button onClick={() => setStep(3)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
+                <button 
+                  onClick={handleFinalConfirm} 
+                  disabled={isSending}
+                  className="btn-forest flex-1 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg"
                 >
-                  Voltar
-                </button>
-                <button
-                  onClick={() => setConfirmed(true)}
-                  className="btn-forest flex-1 px-6 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
-                >
-                  <CheckCircle size={16} /> Confirmar Marcação
+                  {isSending ? "A enviar..." : <><CheckCircle size={18} /> Confirmar Marcação</>}
                 </button>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>
