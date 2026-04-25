@@ -4141,11 +4141,11 @@ export default function App() {
                           €{p.price}
                         </p>
                         <button
-                          onClick={() => addCart(p)}
+                          onClick={() => setSelectedProduct(p)}
                           className="w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-white"
                           style={{ background: "var(--forest)" }}
                         >
-                          <ShoppingBag size={14} /> Reservar na Loja
+                          <Eye size={14} /> Ver Detalhes
                         </button>
                       </div>
                     </div>
