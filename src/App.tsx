@@ -2463,7 +2463,7 @@ const openBook = (service = "Consulta Geral") => {
             </div>
           </>
         ),
-        img: "https://images.unsplash.com/photo-1589821540306-0391ab1a1200?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/vmz3kPmW/Equipa-Optica13-r2p8lpvixuoy0zmplkvnvhdg2jia66ckxheqrzn9tc.jpg",
         actionLabel: "Agendar Consulta",
         actionFn: openBook,
       },
