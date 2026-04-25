@@ -2463,7 +2463,7 @@ const openBook = (service = "Consulta Geral") => {
             </div>
           </>
         ),
-        img: "https://i.postimg.cc/JhwHWJ0V/Optometria.png",
+        img: "https://i.postimg.cc/FHv1WvBX/Consulta-de-Optometria-600x318.png",
         actionLabel: "Agendar Consulta",
         actionFn: openBook,
       },
@@ -2525,7 +2525,7 @@ const openBook = (service = "Consulta Geral") => {
             </p>
           </>
         ),
-        img: "https://images.unsplash.com/photo-1506465487777-628a8d16eb95?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/cLT1Fn31/carta-Conduc-2-300x200.jpg",
         actionLabel: "Marcar Exame",
        actionFn: () => openBook("Exame Carta de Condução"),
       },
@@ -2583,7 +2583,7 @@ const openBook = (service = "Consulta Geral") => {
             </ul>
           </>
         ),
-        img: "https://images.unsplash.com/photo-1512803362140-5e364ed8a719?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/MZySsB2x/Contactologia-1-300x300.png",
         actionLabel: "Agendar Consulta",
         actionFn: openBook,
       },
@@ -2636,7 +2636,7 @@ const openBook = (service = "Consulta Geral") => {
             </ul>
           </>
         ),
-        img: "https://images.unsplash.com/photo-1556306535-38febf6cdbe4?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/GpZWKLXj/Oculos-Personalizados-300x300.png",
         actionLabel: "Fazer Quiz Virtual",
         actionFn: () => setPage("quiz"),
       },
@@ -2684,7 +2684,7 @@ const openBook = (service = "Consulta Geral") => {
             </div>
           </>
         ),
-        img: "https://images.unsplash.com/photo-1615592389070-bcc97e050475?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/ZYPGPhpn/Otica-ao-domicilio-300x300.png",
         actionLabel: "Contactar-nos",
         actionFn: () => setPage("contact"),
       },
@@ -2724,7 +2724,7 @@ const openBook = (service = "Consulta Geral") => {
             </div>
           </>
         ),
-        img: "https://images.unsplash.com/photo-1576092762791-dd9e2220bac1?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/RZh2z687/Medicao-de-tensao-ocular-300x300.png",
         actionLabel: "Visitar Loja",
         actionFn: () => setPage("contact"),
       },
