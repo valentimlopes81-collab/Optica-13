@@ -2025,373 +2025,463 @@ const openBook = (service = "Consulta Geral") => {
       </section>
     );
   };
-  /* HOME PAGE */
-  const HomePage = () => (
-    <div>
-      {/* Hero */}
-      <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="text-white">
-            {/* NOVA ETIQUETA DE OFERTA AQUI */}
-            <button 
-              onClick={openBook}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
-              style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}
-            >
-              <span className="text-base">🎁</span>
-              <span className="text-xs font-bold tracking-wide uppercase" style={{ color: "var(--gold)" }}>
-                Oferta: Consulta Gratuita esta semana
-              </span>
-            </button>
-            <h1
-              className="font-display mb-6 fade-up-1"
-              style={{ fontSize: "clamp(2.5rem,6vw,5rem)", lineHeight: 1.1 }}
-            >
-              A sua visão,
-              <br />a nossa <em style={{ color: "var(--gold)" }}>missão</em>
-            </h1>
-            <p
-              className="text-lg mb-8 opacity-90 fade-up-2"
-              style={{ maxWidth: 480 }}
-            >
-              Exames de optometria gratuitos. Marcas premium. Tecnologia de
-              ponta. Tudo num só lugar.
-            </p>
-            <div className="flex flex-wrap gap-4 fade-up-3">
-              <button
-              onClick={() => openBook("Exame Gratuito - Principal")}
-                className="bg-white px-8 py-4 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all hover:scale-105"
-                style={{ color: "var(--forest)" }}
-              >
-                <Calendar size={16} /> Marcar Exame Gratuito
-              </button>
-              <button
-                onClick={() => setPage("men")}
-                className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
-              >
-                Ver Coleções
-              </button>
-            </div>
-          </div>
-          <div className="relative fade-up-2">
-            <div className="aspect-square rounded-3xl overflow-hidden img-zoom">
-              <Img
-                src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=800&fit=crop"
-                alt="Óculos premium"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div
-              className="absolute -bottom-6 -left-6 w-40 h-40 rounded-2xl flex items-center justify-center shadow-2xl"
-              style={{ background: "var(--gold)" }}
-            >
-              <div className="text-center text-white">
-                <p className="font-display text-5xl font-bold">+39</p>
-                <p className="text-xs uppercase tracking-wider">Anos</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+  /* HOME PAGE (COM CARROSSEL) */
+  const HomePage = () => {
+    // 1. Definir os Slides do Carrossel
+    const slides = [
+      {
+        id: 1,
+        tag: "Oferta: Consulta Gratuita esta semana",
+        titlePt1: "A sua visão,",
+        titlePt2: "a nossa ",
+        titleHighlight: "missão",
+        desc: "Exames de optometria gratuitos. Marcas premium. Tecnologia de ponta. Tudo num só lugar.",
+        btn1Text: "Marcar Exame Gratuito",
+        btn1Action: () => openBook("Exame Gratuito - Principal"),
+        img: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=800&fit=crop",
+        badgeNum: "+39",
+        badgeText: "Anos"
+      },
+      {
+        id: 2,
+        tag: "Nova Coleção Primavera",
+        titlePt1: "O estilo que",
+        titlePt2: "marca a ",
+        titleHighlight: "diferença",
+        desc: "Descubra as novas tendências de 2026. Óculos de sol e armações das melhores marcas internacionais.",
+        btn1Text: "Ver Coleção Mulher",
+        btn1Action: () => setPage("women"),
+        img: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=800&h=800&fit=crop",
+        badgeNum: "-15%",
+        badgeText: "Óculos de Sol"
+      },
+      {
+        id: 3,
+        tag: "Exclusivo Online",
+        titlePt1: "Encontre o seu",
+        titlePt2: "par ",
+        titleHighlight: "perfeito",
+        desc: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra em 2 minutos.",
+        btn1Text: "Fazer Quiz Virtual",
+        btn1Action: () => setPage("quiz"),
+        img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&h=800&fit=crop",
+        badgeNum: "100+",
+        badgeText: "Modelos"
+      }
+    ];
 
-      {/* Services */}
-      <section className="py-24" style={{ background: "var(--cream)" }}>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-3"
-              style={{ color: "var(--gold)" }}
-            >
-              Serviços Premium
-            </p>
-            <h2
-              className="font-display mb-4"
-              style={{
-                fontSize: "clamp(2rem,4vw,3rem)",
-                color: "var(--forest)",
-              }}
-            >
-              Tudo o que precisa para <em>ver melhor</em>
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                Icon: OptometryIcon,
-                title: "Optometria",
-                desc: "Exames completos com tecnologia de última geração. Totalmente gratuitos.",
-              },
-              {
-                Icon: LensIcon,
-                title: "Contactologia",
-                desc: "Adaptação personalizada de lentes de contacto para o seu conforto máximo.",
-              },
-              {
-                Icon: CardIcon,
-                title: "Certificados de Condução",
-                desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
-              },
-            ].map(({ Icon, title, desc }, i) => (
-              <div
-                key={i}
-                className={`card-hover p-8 rounded-2xl bg-white border fade-up-${
-                  i + 1
-                }`}
-                style={{ borderColor: "var(--mist)" }}
-              >
-                <div
-                  className="w-16 h-16 mb-6"
-                  style={{ color: "var(--forest)" }}
+    // 2. Estado para controlar o slide ativo
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    // 3. Efeito para auto-play (muda a cada 6 segundos)
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+      }, 6000);
+      return () => clearInterval(timer);
+    }, [slides.length]);
+
+    // Funções para os botões manuais
+    const nextSlide = () => setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+
+    return (
+      <div>
+        {/* Hero Carrossel */}
+        <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            
+            {/* O Contentor do Slide Ativo */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[500px]">
+              
+              {/* Lado Esquerdo (Texto) */}
+              <div className="text-white" key={`text-${currentSlide}`}>
+                <button 
+                  onClick={slides[currentSlide].btn1Action}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
+                  style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}
                 >
-                  <Icon />
-                </div>
-                <h3
-                  className="font-display text-2xl font-semibold mb-3"
-                  style={{ color: "var(--forest)" }}
+                  <span className="text-base">✨</span>
+                  <span className="text-xs font-bold tracking-wide uppercase" style={{ color: "var(--gold)" }}>
+                    {slides[currentSlide].tag}
+                  </span>
+                </button>
+                <h1
+                  className="font-display mb-6 fade-up-1"
+                  style={{ fontSize: "clamp(2.5rem,6vw,5rem)", lineHeight: 1.1 }}
                 >
-                  {title}
-                </h3>
+                  {slides[currentSlide].titlePt1}
+                  <br />{slides[currentSlide].titlePt2} <em style={{ color: "var(--gold)" }}>{slides[currentSlide].titleHighlight}</em>
+                </h1>
                 <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: "#666" }}
+                  className="text-lg mb-8 opacity-90 fade-up-2"
+                  style={{ maxWidth: 480 }}
                 >
-                  {desc}
+                  {slides[currentSlide].desc}
                 </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CONSULTORIA DE IMAGEM */}
-      <section className="py-24" style={{ background: "var(--cream)" }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Lado da Imagem */}
-            <div
-              className="order-2 lg:order-1 rounded-3xl overflow-hidden img-zoom shadow-2xl relative"
-              style={{ height: "550px" }}
-            >
-              <Img
-                src="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?w=800&h=1000&fit=crop"
-                alt="Consultoria de Imagem"
-                className="w-full h-full object-cover"
-              />
-              {/* Etiqueta flutuante na imagem */}
-              <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white/50 max-w-[250px] fade-up-2">
-                <div className="flex gap-1 mb-2">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star
-                      key={s}
-                      size={12}
-                      fill="var(--gold)"
-                      style={{ color: "var(--gold)" }}
-                    />
-                  ))}
-                </div>
-                <p className="text-xs font-medium italic text-gray-700">
-                  "Ajudaram-me a descobrir as cores e formatos que realmente me
-                  favorecem. Serviço 5 estrelas!"
-                </p>
-              </div>
-            </div>
-
-            {/* Lado do Texto */}
-            <div className="order-1 lg:order-2 fade-up-1">
-              <span
-                className="inline-block text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6"
-                style={{
-                  background: "rgba(201,168,76,0.15)",
-                  color: "var(--gold)",
-                }}
-              >
-                Atendimento Premium
-              </span>
-              <h2
-                className="font-display text-4xl md:text-5xl font-semibold mb-6 leading-tight"
-                style={{ color: "var(--forest)" }}
-              >
-                Consultoria de <br />
-                <em style={{ color: "var(--gold)" }}>Imagem Especializada</em>
-              </h2>
-              <p
-                className="text-base leading-relaxed mb-10"
-                style={{ color: "#666" }}
-              >
-                Não vendemos apenas óculos. Acreditamos que a sua armação é a
-                moldura do seu rosto. A nossa equipa utiliza técnicas de
-                visagismo para identificar os modelos que melhor harmonizam com
-                os seus traços, tom de pele e estilo de vida.
-              </p>
-
-              <div className="space-y-6 mb-10">
-                {[
-                  {
-                    icon: Eye,
-                    title: "Análise Facial",
-                    text: "Estudo detalhado do formato e proporções do seu rosto.",
-                  },
-                  {
-                    icon: Sparkles,
-                    title: "Coloração Pessoal",
-                    text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar.",
-                  },
-                  {
-                    icon: Award,
-                    title: "Curadoria de Marcas",
-                    text: "Seleção personalizada dentro do nosso portefólio premium.",
-                  },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-4">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
-                      style={{
-                        background: "var(--cream-dark)",
-                        border: "1px solid var(--mist)",
-                      }}
-                    >
-                      <item.icon size={20} style={{ color: "var(--gold)" }} />
-                    </div>
-                    <div>
-                      <p
-                        className="font-semibold text-sm mb-1"
-                        style={{ color: "var(--forest)" }}
-                      >
-                        {item.title}
-                      </p>
-                      <p className="text-xs" style={{ color: "#888" }}>
-                        {item.text}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => openBook("Consultoria de Imagem")}
-                  className="btn-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
-                >
-                  <Calendar size={16} /> Agendar Consultoria
-                </button>
-                <button
-                  onClick={() => setPage("quiz")}
-                  className="btn-outline-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:-translate-y-1 transition-transform"
-                >
-                  <Glasses size={16} /> Fazer Quiz Virtual
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* CTA */}
-      <section className="py-20" style={{ background: "var(--cream-dark)" }}>
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <Award
-            size={48}
-            className="mx-auto mb-6"
-            style={{ color: "var(--gold)" }}
-          />
-          <h2
-            className="font-display mb-4"
-            style={{ fontSize: "clamp(2rem,4vw,3rem)", color: "var(--forest)" }}
-          >
-            Exame de Vista <em style={{ color: "var(--gold)" }}>Gratuito</em>
-          </h2>
-          <p className="text-lg mb-8" style={{ color: "#666" }}>
-            Agende a sua consulta de optometria sem qualquer custo. Rápido,
-            profissional e sem compromisso.
-          </p>
-          <button
-            onClick={openBook}
-            className="btn-forest px-10 py-4 rounded-xl font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-lg"
-          >
-            <Calendar size={16} /> Marcar Agora
-          </button>
-        </div>
-      </section>
-      {/* MAIS VENDIDOS */}
-      <section className="py-20" style={{ background: "white" }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-2"
-                style={{ color: "var(--gold)" }}
-              >
-                Coleção
-              </p>
-              <h2
-                className="font-display text-4xl font-medium"
-                style={{ color: "var(--forest)" }}
-              >
-                Os <em>Mais Vendidos</em>
-              </h2>
-            </div>
-            <div className="hidden sm:flex gap-3">
-              <button
-                onClick={() => setPage("men")}
-                className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
-              >
-                Homem
-              </button>
-              <button
-                onClick={() => setPage("women")}
-                className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
-              >
-                Mulher
-              </button>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {[
-              PRODUCTS.men[0],
-              PRODUCTS.men[3],
-              PRODUCTS.women[0],
-              PRODUCTS.women[2],
-            ].map((p) => (
-              <div
-                key={p.id}
-                onClick={() => setSelectedProduct(p)}
-                className="cursor-pointer card-hover rounded-2xl overflow-hidden group"
-                style={{ border: "1px solid var(--mist)" }}
-              >
-                <div
-                  className="aspect-square img-zoom"
-                  style={{ background: "#f5f4f0" }}
-                >
-                  <Img
-                    src={p.image}
-                    alt={p.name}
-                    className="w-full h-full object-cover mix-blend-multiply"
-                  />
-                </div>
-                <div className="p-4 bg-white">
-                  <p
-                    className="text-xs font-semibold tracking-wide mb-0.5"
-                    style={{ color: "var(--gold)" }}
-                  >
-                    {p.brand}
-                  </p>
-                  <p className="font-semibold text-sm mb-1">{p.name}</p>
-                  <p
-                    className="font-display text-lg font-semibold"
+                <div className="flex flex-wrap gap-4 fade-up-3">
+                  <button
+                    onClick={slides[currentSlide].btn1Action}
+                    className="bg-white px-8 py-4 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all hover:scale-105"
                     style={{ color: "var(--forest)" }}
                   >
-                    €{p.price}
+                    {slides[currentSlide].btn1Text}
+                  </button>
+                  <button
+                    onClick={() => setPage("men")}
+                    className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
+                  >
+                    Ver Coleções
+                  </button>
+                </div>
+              </div>
+
+              {/* Lado Direito (Imagem) */}
+              <div className="relative fade-up-2" key={`img-${currentSlide}`}>
+                <div className="aspect-square rounded-3xl overflow-hidden img-zoom">
+                  <Img
+                    src={slides[currentSlide].img}
+                    alt="Slide"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div
+                  className="absolute -bottom-6 -left-6 w-40 h-40 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-500"
+                  style={{ background: "var(--gold)" }}
+                >
+                  <div className="text-center text-white">
+                    <p className="font-display text-5xl font-bold">{slides[currentSlide].badgeNum}</p>
+                    <p className="text-xs uppercase tracking-wider">{slides[currentSlide].badgeText}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Controlos do Carrossel (Setas e Bolinhas) */}
+            <div className="flex items-center gap-6 mt-12">
+              <div className="flex gap-2">
+                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                  <ChevronRight size={18} className="rotate-180" />
+                </button>
+                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+              <div className="flex gap-2">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlide(idx)}
+                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/50"}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ... Restante código da HomePage (Services, etc) ... */}
+        
+        {/* Services */}
+        <section className="py-24" style={{ background: "var(--cream)" }}>
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <p
+                className="text-xs font-semibold tracking-widest uppercase mb-3"
+                style={{ color: "var(--gold)" }}
+              >
+                Serviços Premium
+              </p>
+              <h2
+                className="font-display mb-4"
+                style={{
+                  fontSize: "clamp(2rem,4vw,3rem)",
+                  color: "var(--forest)",
+                }}
+              >
+                Tudo o que precisa para <em>ver melhor</em>
+              </h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  Icon: OptometryIcon,
+                  title: "Optometria",
+                  desc: "Exames completos com tecnologia de última geração. Totalmente gratuitos.",
+                },
+                {
+                  Icon: LensIcon,
+                  title: "Contactologia",
+                  desc: "Adaptação personalizada de lentes de contacto para o seu conforto máximo.",
+                },
+                {
+                  Icon: CardIcon,
+                  title: "Certificados de Condução",
+                  desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
+                },
+              ].map(({ Icon, title, desc }, i) => (
+                <div
+                  key={i}
+                  className={`card-hover p-8 rounded-2xl bg-white border fade-up-${
+                    i + 1
+                  }`}
+                  style={{ borderColor: "var(--mist)" }}
+                >
+                  <div
+                    className="w-16 h-16 mb-6"
+                    style={{ color: "var(--forest)" }}
+                  >
+                    <Icon />
+                  </div>
+                  <h3
+                    className="font-display text-2xl font-semibold mb-3"
+                    style={{ color: "var(--forest)" }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "#666" }}
+                  >
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONSULTORIA DE IMAGEM */}
+        <section className="py-24" style={{ background: "var(--cream)" }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Lado da Imagem */}
+              <div
+                className="order-2 lg:order-1 rounded-3xl overflow-hidden img-zoom shadow-2xl relative"
+                style={{ height: "550px" }}
+              >
+                <Img
+                  src="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?w=800&h=1000&fit=crop"
+                  alt="Consultoria de Imagem"
+                  className="w-full h-full object-cover"
+                />
+                {/* Etiqueta flutuante na imagem */}
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white/50 max-w-[250px] fade-up-2">
+                  <div className="flex gap-1 mb-2">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        size={12}
+                        fill="var(--gold)"
+                        style={{ color: "var(--gold)" }}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-xs font-medium italic text-gray-700">
+                    "Ajudaram-me a descobrir as cores e formatos que realmente me
+                    favorecem. Serviço 5 estrelas!"
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      {/* Testemunhos */}
-      <TestimonialsSection />
-    </div>
-  );
 
+              {/* Lado do Texto */}
+              <div className="order-1 lg:order-2 fade-up-1">
+                <span
+                  className="inline-block text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6"
+                  style={{
+                    background: "rgba(201,168,76,0.15)",
+                    color: "var(--gold)",
+                  }}
+                >
+                  Atendimento Premium
+                </span>
+                <h2
+                  className="font-display text-4xl md:text-5xl font-semibold mb-6 leading-tight"
+                  style={{ color: "var(--forest)" }}
+                >
+                  Consultoria de <br />
+                  <em style={{ color: "var(--gold)" }}>Imagem Especializada</em>
+                </h2>
+                <p
+                  className="text-base leading-relaxed mb-10"
+                  style={{ color: "#666" }}
+                >
+                  Não vendemos apenas óculos. Acreditamos que a sua armação é a
+                  moldura do seu rosto. A nossa equipa utiliza técnicas de
+                  visagismo para identificar os modelos que melhor harmonizam com
+                  os seus traços, tom de pele e estilo de vida.
+                </p>
+
+                <div className="space-y-6 mb-10">
+                  {[
+                    {
+                      icon: Eye,
+                      title: "Análise Facial",
+                      text: "Estudo detalhado do formato e proporções do seu rosto.",
+                    },
+                    {
+                      icon: Sparkles,
+                      title: "Coloração Pessoal",
+                      text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar.",
+                    },
+                    {
+                      icon: Award,
+                      title: "Curadoria de Marcas",
+                      text: "Seleção personalizada dentro do nosso portefólio premium.",
+                    },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                        style={{
+                          background: "var(--cream-dark)",
+                          border: "1px solid var(--mist)",
+                        }}
+                      >
+                        <item.icon size={20} style={{ color: "var(--gold)" }} />
+                      </div>
+                      <div>
+                        <p
+                          className="font-semibold text-sm mb-1"
+                          style={{ color: "var(--forest)" }}
+                        >
+                          {item.title}
+                        </p>
+                        <p className="text-xs" style={{ color: "#888" }}>
+                          {item.text}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={() => openBook("Consultoria de Imagem")}
+                    className="btn-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
+                  >
+                    <Calendar size={16} /> Agendar Consultoria
+                  </button>
+                  <button
+                    onClick={() => setPage("quiz")}
+                    className="btn-outline-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:-translate-y-1 transition-transform"
+                  >
+                    <Glasses size={16} /> Fazer Quiz Virtual
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* CTA */}
+        <section className="py-20" style={{ background: "var(--cream-dark)" }}>
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <Award
+              size={48}
+              className="mx-auto mb-6"
+              style={{ color: "var(--gold)" }}
+            />
+            <h2
+              className="font-display mb-4"
+              style={{ fontSize: "clamp(2rem,4vw,3rem)", color: "var(--forest)" }}
+            >
+              Exame de Vista <em style={{ color: "var(--gold)" }}>Gratuito</em>
+            </h2>
+            <p className="text-lg mb-8" style={{ color: "#666" }}>
+              Agende a sua consulta de optometria sem qualquer custo. Rápido,
+              profissional e sem compromisso.
+            </p>
+            <button
+              onClick={openBook}
+              className="btn-forest px-10 py-4 rounded-xl font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-lg"
+            >
+              <Calendar size={16} /> Marcar Agora
+            </button>
+          </div>
+        </section>
+        {/* MAIS VENDIDOS */}
+        <section className="py-20" style={{ background: "white" }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <p
+                  className="text-xs font-semibold tracking-widest uppercase mb-2"
+                  style={{ color: "var(--gold)" }}
+                >
+                  Coleção
+                </p>
+                <h2
+                  className="font-display text-4xl font-medium"
+                  style={{ color: "var(--forest)" }}
+                >
+                  Os <em>Mais Vendidos</em>
+                </h2>
+              </div>
+              <div className="hidden sm:flex gap-3">
+                <button
+                  onClick={() => setPage("men")}
+                  className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+                  Homem
+                </button>
+                <button
+                  onClick={() => setPage("women")}
+                  className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+                  Mulher
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+              {[
+                PRODUCTS.men[0],
+                PRODUCTS.men[3],
+                PRODUCTS.women[0],
+                PRODUCTS.women[2],
+              ].map((p) => (
+                <div
+                  key={p.id}
+                  onClick={() => setSelectedProduct(p)}
+                  className="cursor-pointer card-hover rounded-2xl overflow-hidden group"
+                  style={{ border: "1px solid var(--mist)" }}
+                >
+                  <div
+                    className="aspect-square img-zoom"
+                    style={{ background: "#f5f4f0" }}
+                  >
+                    <Img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full h-full object-cover mix-blend-multiply"
+                    />
+                  </div>
+                  <div className="p-4 bg-white">
+                    <p
+                      className="text-xs font-semibold tracking-wide mb-0.5"
+                      style={{ color: "var(--gold)" }}
+                    >
+                      {p.brand}
+                    </p>
+                    <p className="font-semibold text-sm mb-1">{p.name}</p>
+                    <p
+                      className="font-display text-lg font-semibold"
+                      style={{ color: "var(--forest)" }}
+                    >
+                      €{p.price}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* Testemunhos */}
+        <TestimonialsSection />
+      </div>
+    );
+  };
   /* SERVICES PAGE */
   const ServicesPage = () => {
     const servicesData = [
