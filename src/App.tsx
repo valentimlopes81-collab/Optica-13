@@ -156,10 +156,19 @@ function ShopifyBuyButton({ productId }) {
                 quantity: false,
                 button: true
               },
-              text: {
+             text: {
                 button: 'Adicionar ao Carrinho',
               },
               styles: {
+                product: {
+                  '@media (min-width: 601px)': {
+                    'max-width': '100%',
+                    'margin-left': '0',
+                    'margin-bottom': '0'
+                  },
+                  'width': '100%',
+                  'max-width': '100%'
+                },
                 button: {
                   'background-color': '#0056b3',
                   'color': '#ffffff',
@@ -169,6 +178,7 @@ function ShopifyBuyButton({ productId }) {
                   'font-size': '14px',
                   'padding': '16px 24px',
                   'width': '100%',
+                  'max-width': '100%',
                   'letter-spacing': '0.025em',
                   ':hover': {
                     'background-color': '#004494'
