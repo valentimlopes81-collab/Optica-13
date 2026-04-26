@@ -1956,7 +1956,7 @@ const openBook = (service = "Consulta Geral") => {
             style={{ borderColor: "var(--mist)" }}
           >
             <h2
-              className="font-display text-4xl md:text-5xl font-bold mb-10 leading-tight"
+              className="font-display text-4xl md:text-5xl font-bold mb-6 leading-tight"
               style={{ color: "var(--forest)" }}
             >
               O que é que os nossos
@@ -1964,6 +1964,18 @@ const openBook = (service = "Consulta Geral") => {
               clientes dizem sobre a<br />
               Óptica 13?
             </h2>
+
+            {/* ADICIONADO: 5 Estrelas */}
+            <div className="flex gap-1 mb-6">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <Star
+                  key={s}
+                  size={24}
+                  fill="var(--gold)"
+                  style={{ color: "var(--gold)" }}
+                />
+              ))}
+            </div>
 
             <div className="min-h-[220px] sm:min-h-[160px] flex items-center">
               <p
@@ -1973,7 +1985,6 @@ const openBook = (service = "Consulta Geral") => {
                 {testimonials[active].text}
               </p>
             </div>
-
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mt-10">
               {/* Nome e Avatar */}
               <div
