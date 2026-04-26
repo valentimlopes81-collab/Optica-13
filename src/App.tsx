@@ -88,6 +88,13 @@ const FontStyle = () => (
     .btn-gold:hover { background: transparent; color: var(--gold); }
     .btn-outline-forest { background: transparent; color: var(--forest); border: 2px solid var(--forest); transition: all 0.3s; }
     .btn-outline-forest:hover { background: var(--forest); color: white; }
+    /* FORÇAR O BOTÃO DO SHOPIFY A 100% DE LARGURA */
+    .shopify-buy-frame,
+    .shopify-buy-frame iframe {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: block !important;
+    }
   `}</style>
 );
 
