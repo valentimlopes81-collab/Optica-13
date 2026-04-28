@@ -1668,7 +1668,7 @@ const openBook = (service = "Consulta Geral") => {
             className="flex items-center transition-transform hover:scale-105"
           >
             <img 
-              src="https://i.postimg.cc/0r1KTP0m/1200x630wa.png" 
+              src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
               alt="Logo Óptica 13" 
               className="h-10 w-auto" 
             />
@@ -1802,7 +1802,7 @@ const openBook = (service = "Consulta Geral") => {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
               <img 
-                src="https://i.postimg.cc/0r1KTP0m/1200x630wa.png" 
+                src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
                 alt="Logo Óptica 13" 
                 className="h-10 w-auto" 
               />
