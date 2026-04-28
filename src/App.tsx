@@ -1665,20 +1665,13 @@ const openBook = (service = "Consulta Geral") => {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <button
             onClick={() => setPage("home")}
-            className="flex items-center gap-2 group"
+            className="flex items-center transition-transform hover:scale-105"
           >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all group-hover:scale-110"
-              style={{ background: "var(--forest)" }}
-            >
-              <Glasses size={18} className="text-white" />
-            </div>
-            <span
-              className="font-display text-2xl font-semibold"
-              style={{ color: "var(--forest)" }}
-            >
-              Óptica <span style={{ color: "var(--gold)" }}>13</span>
-            </span>
+            <img 
+              src="https://i.postimg.cc/0r1KTP0m/1200x630wa.png" 
+              alt="Logo Óptica 13" 
+              className="h-10 w-auto" 
+            />
           </button>
 
           {/* Desktop Nav */}
@@ -1808,15 +1801,11 @@ const openBook = (service = "Consulta Geral") => {
           {/* 1. Logotipo e ERS */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: "var(--forest)" }}
-              >
-                <Glasses size={18} style={{ color: "var(--gold)" }} />
-              </div>
-              <span className="font-display text-xl font-semibold text-white">
-                Óptica <span style={{ color: "var(--gold)" }}>13</span>
-              </span>
+              <img 
+                src="https://i.postimg.cc/0r1KTP0m/1200x630wa.png" 
+                alt="Logo Óptica 13" 
+                className="h-10 w-auto" 
+              />
             </div>
             <p
               className="text-sm leading-relaxed mb-3 max-w-sm"
