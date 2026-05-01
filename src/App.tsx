@@ -265,7 +265,7 @@ const PRODUCTS = {
               faceShape: ["round", "oval"],
               budget: "mid",
               description: "Onde a audácia encontra o equilíbrio. Frente em acetato vermelho translúcido oversized e hastes em azul profundo. Design MindTheLook by Vera Velosa, ideal para criar ângulos e definição no rosto.",
-              image: "https://i.postimg.cc/T2770VHT/P1023047.jpg",
+              image: "https://dqih6f-80.myshopify.com/cdn/shop/files/P1023047.jpg?v=1777653438&width=832",
             },
     {
       id: 3,
