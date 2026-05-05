@@ -332,24 +332,31 @@ const PRODUCTS = {
         "https://i.postimg.cc/sDD8t576/P1023085.jpg"
          ],     
     },
-    {
-      id: 5,
-      shopifyId: "ID_PENDENTE",
-      name: "Wire Minimal",
-      rating: 4.8,
-      reviews: 76,
-      brand: "Lindberg",
-      price: 420,
-      material: "Titânio",
-      color: "Prateado",
-      style: "Discreto",
-      shape: "Redondo",
-      faceShape: ["oval", "round"],
-      budget: "premium",
-      description:
-        "O epítome da elegância minimalista escandinava, com armação em titânio prateado tão leve que se esquece que a está a usar. Design sem parafusos e acabamento impecável para quem aprecia a beleza da simplicidade refinada.",
-      image:
-        "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&h=600&fit=crop",
+   {
+  id: 5,
+  shopifyId: "15723777851766",
+  name: "Sky Apricot Fusion",
+  rating: 4.9,
+  reviews: 142,
+  badge: "Novo",
+  brand: "MindTheLook by Vera Velosa",
+  price: 139,
+  material: "Acetato Premium Translúcido",
+  color: "Azul Aquamarine / Pêssego",
+  style: "Contemporâneo / Vibrante",
+  shape: "Geométrico Suave",
+  faceShape: ["round", "oval"],
+  budget: "mid",
+  description: "Uma fusão audaz da coleção MindTheLook. O modelo Sky Apricot Fusion combina a transparência do azul frontal com o calor das hastes em tom pêssego. Desenhado para favorecer rostos redondos e ovais, este par brilha intensamente quando acompanhado por uma paleta de cores quentes e solares.",
+  image: "https://i.postimg.cc/bJmMJJj3/P1023086.jpg",
+
+      // NOVA LINHA PARA AS FOTOS EXTRA!
+      gallery: [
+        "https://i.postimg.cc/ZRwgRRhw/P1023087.jpg",
+        "https://i.postimg.cc/Kz0Vzzyf/P1023088.jpg",
+        "https://i.postimg.cc/1tvTttZH/P1023089.jpg",
+        "https://i.postimg.cc/13FLHspX/P1023090.jpg"
+         ],     
     },
     {
       id: 6,
