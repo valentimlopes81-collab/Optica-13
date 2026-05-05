@@ -1264,7 +1264,18 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
 }
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
 function ProductModal({ product, onClose, onAdd, onBook }) {
+  const [activeImage, setActiveImage] = useState(product?.image);
+
+  // Quando o produto abre, garante que a imagem principal volta à 1ª
+  useEffect(() => {
+    if (product) setActiveImage(product.image);
+  }, [product]);
+
   if (!product) return null;
+
+  // Junta a foto de capa com as fotos extra (se o produto tiver a tag "gallery")
+  const allImages = product.gallery ? [product.image, ...product.gallery] : [product.image];
+
   return (
     <div
       className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6"
@@ -1286,16 +1297,34 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
         </button>
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto scrollbar-hide">
-          {/* Lado da Imagem: Maior (metade do ecrã no PC) e mais alta */}
-          <div
-            className="w-full md:w-1/2 flex-shrink-0 img-zoom relative"
-            style={{ background: "var(--mist)", minHeight: "350px" }}
-          >
-            <Img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover md:absolute md:inset-0"
-            />
+          {/* Lado da Imagem com Galeria */}
+          <div className="w-full md:w-1/2 flex flex-col flex-shrink-0" style={{ background: "var(--mist)" }}>
+            {/* Foto Grande Ativa */}
+            <div className="flex-1 relative img-zoom min-h-[350px] md:min-h-[480px]">
+              <Img
+                src={activeImage}
+                alt={product.name}
+                className="w-full h-full object-cover absolute inset-0 mix-blend-multiply"
+              />
+            </div>
+            
+            {/* Barra de Miniaturas (Só aparece se houver mais de 1 foto) */}
+            {allImages.length > 1 && (
+              <div className="flex gap-4 p-5 overflow-x-auto scrollbar-hide bg-white border-t" style={{ borderColor: "var(--mist)" }}>
+                {allImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImage(img)}
+                    className={`w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                      activeImage === img ? "border-black opacity-100 shadow-md" : "border-transparent opacity-50 hover:opacity-100"
+                    }`}
+                    style={{ background: "var(--mist)" }}
+                  >
+                    <Img src={img} alt={`Galeria ${idx + 1}`} className="w-full h-full object-cover mix-blend-multiply" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Lado da Informação */}
@@ -1419,8 +1448,8 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               </div>
             </div>
 
-           <div className="mt-auto space-y-3">
-              {/* Botão Oficial do Shopify (Teste com Ray-Ban) */}
+            <div className="mt-auto space-y-3">
+              {/* Botão Oficial do Shopify */}
               <ShopifyBuyButton productId={product.shopifyId} />
               
               <button
