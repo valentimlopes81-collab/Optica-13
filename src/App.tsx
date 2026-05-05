@@ -412,24 +412,32 @@ const PRODUCTS = {
          ],     
 },
     {
-      id: 8,
-      shopifyId: "ID_PENDENTE",
-      name: "Navigator Gold",
-      rating: 4.7,
-      reviews: 88,
-      brand: "Carrera",
-      price: 245,
-      material: "Metal",
-      color: "Dourado",
-      style: "Desportivo",
-      shape: "Aviador",
-      faceShape: ["square", "oval"],
-      budget: "premium",
-      description:
-        "Legado do automobilismo de competição em metal dourado premium que combina herança desportiva com elegância refinada. Design aerodinâmico e construção robusta para quem vive a vida na linha da frente.",
-      image:
-        "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=600&h=600&fit=crop",
-    },
+  id: 8,
+  shopifyId: "15723698487690",
+  name: "Ivory Skyline",
+  rating: 4.8,
+  reviews: 142,
+  badge: "Elegante",
+  brand: "MindTheLook by Vera Velosa",
+  price: 139,
+  material: "Acetato Premium Bicolor",
+  color: "Creme Marfim / Azul Marinho",
+  style: "Moderno / Executivo",
+  shape: "Retangular Suave",
+  faceShape: ["round", "oval"],
+  budget: "mid",
+  description: "Sofisticação moderna com um toque clássico. O modelo Ivory Skyline combina a leveza do tom marfim com a sobriedade do azul marinho. Ideal para estruturar rostos redondos e ovais, esta peça da coleção MindTheLook destaca-se especialmente quando acompanhada por paletas de cores quentes e acessórios dourados.",
+  image: "https://i.postimg.cc/t4yJ6hvW/P1023210.jpg",
+
+      // NOVA LINHA PARA AS FOTOS EXTRA!
+      gallery: [
+        "https://i.postimg.cc/Vk1vtjZB/P1023211.jpg",
+        "https://i.postimg.cc/CxY58jr4/P1023212.jpg",
+        "https://i.postimg.cc/4xZycz26/P1023213.jpg",
+        "https://i.postimg.cc/sfq3Ypx5/P1023214.jpg"
+         ],     
+      
+},
   ],
   women: [
     {
