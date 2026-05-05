@@ -306,24 +306,31 @@ const PRODUCTS = {
          ],
      },
     {
-      id: 4,
-      name: "Round Vintage",
-      shopifyId: "ID_PENDENTE",
-      rating: 4.9,
-      reviews: 312,
-      badge: "Staff Pick",
-      brand: "Persol",
-      price: 295,
-      material: "Acetato",
-      color: "Tartaruga",
-      style: "Clássico",
-      shape: "Redondo",
-      faceShape: ["square", "heart"],
-      budget: "premium",
+      id: 4, 
+      shopifyId: "15723736039798", 
+      name: "Crystal Aura",
+      rating: 4.9, 
+      reviews: 128, 
+      badge: "Nova Coleção",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Translúcido e Metal Texturado",
+      color: "Cristal / Dourado",
+      style: "Elegante / Moderno",
+      shape: "Cat-eye Suave",
+      faceShape: ["round", "oval"],
+      budget: "mid", 
       description:
-        "Sofisticação italiana artesanal em acetato tartaruga que evoca o charme intelectual das décadas passadas. Cada par é uma obra de arte única, oferecendo um caráter distinto e um conforto luxuoso que só a tradição Persol consegue entregar.",
-      image:
-        "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&h=600&fit=crop",
+        "Uma fusão perfeita de leveza e luxo. O modelo Crystal Aura destaca-se pela sua armação frontal translúcida que ilumina o rosto, complementada por hastes metálicas douradas com um acabamento texturado exclusivo. Este design cat-eye suave é ideal para elevar o estilo de rostos redondos ou ovais. Para um look radiante, combine-os com uma paleta de cores quentes que realce o brilho sofisticado do dourado.",
+      image:"https://i.postimg.cc/nhXWLZdR/P1023080.jpg"
+
+       // NOVA LINHA PARA AS FOTOS EXTRA!
+      gallery: [
+        "https://i.postimg.cc/y8DGNBff/P1023081.jpg",
+        "https://i.postimg.cc/138dzPW7/P1023082.jpg",
+        "https://i.postimg.cc/RZWY09P1/P1023084.jpg",
+        "https://i.postimg.cc/sDD8t576/P1023085.jpg"
+         ],     
     },
     {
       id: 5,
