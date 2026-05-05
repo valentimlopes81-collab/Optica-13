@@ -413,7 +413,7 @@ const PRODUCTS = {
 },
     {
   id: 8,
-  shopifyId: "15723698487690",
+  shopifyId: "15724067225974",
   name: "Ivory Skyline",
   rating: 4.8,
   reviews: 142,
