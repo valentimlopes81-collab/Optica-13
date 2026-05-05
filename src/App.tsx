@@ -6,7 +6,7 @@ import {
   Phone,
   Mail,
   MapPin,
-  ChevronRight,
+  ChevronRight,sky
   Calendar,
   Award,
   Clock,
@@ -347,7 +347,8 @@ const PRODUCTS = {
   shape: "Geométrico Suave",
   faceShape: ["round", "oval"],
   budget: "mid",
-  description: "Uma fusão audaz da coleção MindTheLook. O modelo Sky Apricot Fusion combina a transparência do azul frontal com o calor das hastes em tom pêssego. Desenhado para favorecer rostos redondos e ovais, este par brilha intensamente quando acompanhado por uma paleta de cores quentes e solares.",
+  description: 
+    "Uma fusão audaz da coleção MindTheLook. O modelo Sky Apricot Fusion combina a transparência do azul frontal com o calor das hastes em tom pêssego. Desenhado para favorecer rostos redondos e ovais, este par brilha intensamente quando acompanhado por uma paleta de cores quentes e solares.",
   image: "https://i.postimg.cc/bJmMJJj3/P1023086.jpg", 
 
       // NOVA LINHA PARA AS FOTOS EXTRA!
