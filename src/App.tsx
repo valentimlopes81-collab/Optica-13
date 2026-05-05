@@ -232,23 +232,31 @@ const PRODUCTS = {
   men: [
     {
       id: 1,
-      shopifyId: "15712441500022",
-      name: "Aviator Classic",
-      rating: 4.8,
-      reviews: 234,
-      badge: "Bestseller",
-      brand: "Ray-Ban",
-      price: 189,
-      material: "Metal",
-      color: "Dourado",
-      style: "Clássico",
-      shape: "Aviador",
-      faceShape: ["oval", "square", "heart"],
-      budget: "mid",
+      name: "Noir Signature",
+      shopifyId: "15723698487670",
+      rating: 4.7, 
+      reviews: 149, 
+      badge: "Premium",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato de alta qualidade com dobradiças OBE flexUno",
+      color: "Preto Brilhante",
+      style: "Intelectual / Sofisticado",
+      shape: "Retangular",
+      faceShape: ["round", "oval"],
+      budget: "mid", 
       description:
-        "O ícone intemporal que define gerações, com armação em metal dourado de alta qualidade que combina elegância atemporal e durabilidade excepcional. Perfeito para quem procura um visual sofisticado e clássico que nunca sai de moda.",
+        "A elegância no seu estado mais puro. O modelo Noir Signature da coleção MindTheLook by Vera Velosa é a escolha definitiva para quem procura um visual sofisticado e intelectual. Com armação em acetato preto brilhante e linhas retangulares sólidas, destaca-se pela sua presença marcante e conforto superior graças às dobradiças flexíveis OBE flexUno. Perfeito para equilibrar rostos redondos ou ovais, especialmente quando combinado com cores quentes.",
       image:
-        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&h=600&fit=crop",
+        "https://i.postimg.cc/Z0kfQyS1/P1023073.jpg",
+       // NOVA LINHA PARA AS FOTOS EXTRA!
+      gallery: [
+        "https://i.postimg.cc/pyN0SnHf/P1023074.jpg",
+        "https://i.postimg.cc/mhxdnFs7/P1023075.jpg",
+        "https://i.postimg.cc/5jcPrFVw/P1023076.jpg",
+        "https://i.postimg.cc/9z3xkqh9/P1023077.jpg",
+        "https://i.postimg.cc/qvVYbWBv/P1023078.jpg"
+      ],
     },
    {
               id: 2,
