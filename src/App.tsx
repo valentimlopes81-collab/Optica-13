@@ -1279,15 +1279,30 @@ function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
 function ProductModal({ product, onClose, onAdd, onBook }) {
   const [activeImage, setActiveImage] = useState(product?.image);
 
+  // Junta a foto de capa com as fotos extra
+  const allImages = product?.gallery ? [product.image, ...product.gallery] : [product?.image];
+
   // Quando o produto abre, garante que a imagem principal volta à 1ª
   useEffect(() => {
     if (product) setActiveImage(product.image);
   }, [product]);
 
-  if (!product) return null;
+  // ROTAÇÃO AUTOMÁTICA DAS IMAGENS
+  useEffect(() => {
+    if (!product || allImages.length <= 1) return;
+    
+    const timer = setInterval(() => {
+      setActiveImage((current) => {
+        const currentIndex = allImages.indexOf(current);
+        const nextIndex = (currentIndex + 1) % allImages.length;
+        return allImages[nextIndex];
+      });
+    }, 3500); // Muda a imagem a cada 3.5 segundos
 
-  // Junta a foto de capa com as fotos extra (se o produto tiver a tag "gallery")
-  const allImages = product.gallery ? [product.image, ...product.gallery] : [product.image];
+    return () => clearInterval(timer);
+  }, [product?.id]);
+
+  if (!product) return null;
 
   return (
     <div
@@ -1317,19 +1332,22 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               <Img
                 src={activeImage}
                 alt={product.name}
-                className="w-full h-full object-cover absolute inset-0 mix-blend-multiply"
+                className="w-full h-full object-cover absolute inset-0 mix-blend-multiply transition-all duration-500 ease-in-out"
               />
             </div>
             
-            {/* Barra de Miniaturas (Só aparece se houver mais de 1 foto) */}
+            {/* Barra de Miniaturas (Com Scroll Ativo) */}
             {allImages.length > 1 && (
-              <div className="flex gap-4 p-5 overflow-x-auto scrollbar-hide bg-white border-t" style={{ borderColor: "var(--mist)" }}>
+              <div 
+                className="flex gap-4 p-5 overflow-x-auto bg-white border-t snap-x" 
+                style={{ borderColor: "var(--mist)", scrollBehavior: "smooth" }}
+              >
                 {allImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImage(img)}
-                    className={`w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-                      activeImage === img ? "border-black opacity-100 shadow-md" : "border-transparent opacity-50 hover:opacity-100"
+                    className={`w-20 h-20 flex-shrink-0 snap-center rounded-xl overflow-hidden border-2 transition-all ${
+                      activeImage === img ? "border-black opacity-100 shadow-md scale-105" : "border-transparent opacity-50 hover:opacity-100"
                     }`}
                     style={{ background: "var(--mist)" }}
                   >
