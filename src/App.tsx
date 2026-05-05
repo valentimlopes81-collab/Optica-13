@@ -387,7 +387,7 @@ const PRODUCTS = {
 },
     {
   id: 7,
-  shopifyId: "15723698487685",
+  shopifyId: "15724037341558",
   name: "Midnight Edge",
   rating: 4.8,
   reviews: 167,
