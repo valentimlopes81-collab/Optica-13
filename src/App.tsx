@@ -1311,9 +1311,9 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto scrollbar-hide">
           {/* Lado da Imagem com Galeria */}
-          <div className="w-full md:w-1/2 flex flex-col flex-shrink-0" style={{ background: "var(--mist)" }}>
+          <div className="w-full md:w-1/2 flex flex-col" style={{ background: "var(--mist)" }}>
             {/* Foto Grande Ativa */}
-            <div className="flex-1 relative img-zoom min-h-[350px] md:min-h-[480px]">
+            <div className="relative img-zoom flex-1 h-[350px] md:h-auto min-h-[300px]">
               <Img
                 src={activeImage}
                 alt={product.name}
