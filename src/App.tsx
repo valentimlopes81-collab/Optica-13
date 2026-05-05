@@ -6,7 +6,7 @@ import {
   Phone,
   Mail,
   MapPin,
-  ChevronRight,sky
+  ChevronRight,
   Calendar,
   Award,
   Clock,
