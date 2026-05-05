@@ -322,7 +322,7 @@ const PRODUCTS = {
       budget: "mid", 
       description:
         "Uma fusão perfeita de leveza e luxo. O modelo Crystal Aura destaca-se pela sua armação frontal translúcida que ilumina o rosto, complementada por hastes metálicas douradas com um acabamento texturado exclusivo. Este design cat-eye suave é ideal para elevar o estilo de rostos redondos ou ovais. Para um look radiante, combine-os com uma paleta de cores quentes que realce o brilho sofisticado do dourado.",
-      image:"https://i.postimg.cc/nhXWLZdR/P1023080.jpg"
+      image:"https://i.postimg.cc/nhXWLZdR/P1023080.jpg",
 
        // NOVA LINHA PARA AS FOTOS EXTRA!
       gallery: [
