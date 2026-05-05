@@ -154,7 +154,7 @@ function ShopifyBuyButton({ productId }) {
           moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
           options: {
             product: {
-              buttonDestination: 'cart',
+              buttonDestination: 'checkout',
               contents: {
                 img: false,
                 title: false,
