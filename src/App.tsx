@@ -266,7 +266,13 @@ const PRODUCTS = {
               budget: "mid",
               description: "Onde a audácia encontra o equilíbrio. Frente em acetato vermelho translúcido oversized e hastes em azul profundo. Design MindTheLook by Vera Velosa, ideal para criar ângulos e definição no rosto.",
               image: "https://dqih6f-80.myshopify.com/cdn/shop/files/P1023047.jpg?v=1777653438&width=832",
-            },
+     
+     // NOVA LINHA PARA AS FOTOS EXTRA!
+      gallery: [
+        "https://i.postimg.cc/TY2RPLMN/P1023050.jpg",
+        "https://i.postimg.cc/rmCkVcfB/P1023047.jpg"
+      ],
+     },
     {
       id: 3,
      name: "Ametista Harmony",
@@ -283,7 +289,14 @@ const PRODUCTS = {
       budget: "mid",
       description: "Sofisticação arrojada em acetato translúcido lavanda com hastes em amarelo âmbar. Formato quadrado oversized retro e elegante, perfeito para equilibrar rostos redondos ou ovais. Design exclusivo by Vera Velosa (Made in Italy).",
       image: "https://i.postimg.cc/R0kDjfdD/P1023065.jpg",
-    },
+      
+      // NOVA LINHA PARA AS FOTOS EXTRA!
+      gallery: [
+        "https://i.postimg.cc/CxBpZbvQ/P1023066.jpg",
+        "https://i.postimg.cc/kg03WDZz/P1023071.jpg",
+        "https://i.postimg.cc/JzfVjtvs/P1023072.jpg"
+         ],
+     },
     {
       id: 4,
       name: "Round Vintage",
