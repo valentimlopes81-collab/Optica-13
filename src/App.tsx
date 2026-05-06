@@ -435,9 +435,12 @@ const PRODUCTS = {
         "https://i.postimg.cc/CxY58jr4/P1023212.jpg",
         "https://i.postimg.cc/4xZycz26/P1023213.jpg",
         "https://i.postimg.cc/sfq3Ypx5/P1023214.jpg"
-         ],     
-      
+         ],      
 },
+    ],   // <--- AQUI FECHAS A LISTA "men"
+
+  women: [ // <--- AQUI ABRES A LISTA "women"
+  
    {
   id: 9,
   shopifyId: "15724125893418",
