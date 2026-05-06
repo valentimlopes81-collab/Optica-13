@@ -467,22 +467,26 @@ const PRODUCTS = {
 },
     {
       id: 10,
-      shopifyId: "ID_PENDENTE",
-      name: "Butterfly Rose",
-      rating: 4.7,
-      reviews: 154,
-      brand: "Prada",
-      price: 295,
-      material: "Acetato",
-      color: "Preto",
-      style: "Clássico",
-      shape: "Cat-Eye",
-      faceShape: ["oval", "heart"],
-      budget: "premium",
-      description:
-        "Delicadeza e força combinadas em acetato preto premium com linhas suaves que acentuam traços femininos com subtileza. O equilíbrio perfeito entre sofisticação clássica e modernidade para a mulher contemporânea e confiante.",
-      image:
-        "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&h=600&fit=crop",
+      shopifyId: "15726320091510",
+      name: "Havana Bold",
+      rating: 4.8,
+      reviews: 178,
+      badge: "Clássico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Bold com Detalhes Prateados",
+      color: "Tartaruga",
+      style: "Retro / Intelectual",
+      shape: "Retangular",
+      faceShape: ["round", "oval"],
+      budget: "mid",
+      description: "Um clássico reinventado com ousadia. O Havana Bold destaca-se pela sua armação robusta em acetato padrão tartaruga e rebites prateados retro. Perfeito para estruturar rostos redondos ou ovais, este modelo versátil é um verdadeiro camaleão que se adapta a qualquer guarda-roupa, seja em tons terrosos ou cores vibrantes.",
+      image: "https://i.postimg.cc/15bc425m/P1023417-(1).jpg", // Substituir pelos teus links se já os tiveres gerado no postimg
+      gallery: [
+        "https://i.postimg.cc/4NjbnqN3/P1023419.jpg",
+        "https://i.postimg.cc/RV2QqyVv/P1023420.jpg",
+        "https://i.postimg.cc/zX4S36XD/P1023421-(1).jpg"
+      ],
     },
     {
       id: 11,
