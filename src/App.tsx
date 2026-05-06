@@ -608,22 +608,27 @@ const PRODUCTS = {
     },
     {
       id: 16,
-      shopifyId: "ID_PENDENTE",
-      name: "Tortoise Classic",
-      rating: 4.3,
-      reviews: 312,
-      brand: "Oliver Peoples",
-      price: 95,
-      material: "Acetato",
-      color: "Tartaruga",
-      style: "Clássico",
-      shape: "Redondo",
-      faceShape: ["square", "heart"],
-      budget: "low",
-      description:
-        "Charme atemporal em acetato tartaruga com padrões únicos que celebram a individualidade com preço acessível. Qualidade artesanal e design clássico para quem procura estilo autêntico sem o peso do luxo ostensivo.",
-      image:
-        "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&h=600&fit=crop",
+      shopifyId: "15726400438646", // Atualizar depois
+      name: "Noir Magenta",
+      rating: 4.8,
+      reviews: 134,
+      badge: "Criativo",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato com Bloco de Cor",
+      color: "Preto / Magenta",
+      style: "Moderno / Arrojado",
+      shape: "Quadrado Suave",
+      faceShape: ["round", "oval"],
+      budget: "mid",
+      description: "O clássico preto com uma surpresa de perfil. O modelo Noir Magenta apresenta uma frente sólida e elegante em acetato negro, complementada por hastes com um vibrante bloco de cor em magenta e bege. Ideal para estruturar rostos redondos ou ovais, é a escolha perfeita para quem gosta de detalhes únicos e cheios de atitude.",
+      image: "https://i.postimg.cc/NMpjLKTV/P1023221.jpg", // Lembra-te de trocar pelos links reais
+      gallery: [
+        "https://i.postimg.cc/262S31vG/P1023222.jpg",
+        "https://i.postimg.cc/50n2jXvm/P1023223.jpg",
+        "https://i.postimg.cc/G2qm94YQ/P1023224.jpg",
+        "https://i.postimg.cc/vB3ZD49t/P1023225.jpg"
+      ],
     },
   ],
 };
