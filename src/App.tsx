@@ -654,6 +654,31 @@ const PRODUCTS = {
         "https://i.postimg.cc/ZKyJz7fg/P1023230.jpg"
       ],
 },
+    {
+      id: 18,
+      shopifyId: "15726420296054", // Atualizar depois com o ID do Shopify
+      name: "Havana Color Block",
+      rating: 4.8,
+      reviews: 142,
+      badge: "Dinâmico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium com Detalhe de Cor",
+      color: "Tartaruga / Vermelho e Azul",
+      style: "Moderno / Casual Chic",
+      shape: "Quadrado Suave",
+      faceShape: ["round", "oval"],
+      budget: "mid",
+      description: "A reinvenção do clássico com energia moderna. O modelo Havana Color Block funde a elegância do acetato tartaruga escuro com um detalhe surpreendente nas hastes em blocos de cor vermelho e azul. Ideal para dar estrutura a rostos redondos e ovais, é a escolha perfeita para quem procura um look que transita na perfeição do escritório para o fim de semana.",
+      image: "https://i.postimg.cc/CLYp9hqF/P1023233.jpg", // Lembra-te de trocar pelos links reais!
+      gallery: [
+        "https://i.postimg.cc/DyF3RvXh/P1023234.jpg",
+        "https://i.postimg.cc/7YDrjH2y/P1023235.jpg",
+        "https://i.postimg.cc/7YDrjH2r/P1023236.jpg",
+        "https://i.postimg.cc/zX5Y4zg5/P1023237.jpg"
+      ],
+},
+    
     
   ],
 };
