@@ -678,8 +678,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/zX5Y4zg5/P1023237.jpg"
       ],
 },
-    
-    
+    {
+      id: 19,
+      shopifyId: "15726426489206", // Atualizar depois
+      name: "Feline Noir",
+      rating: 4.9,
+      reviews: 165,
+      badge: "Glamour",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Bold Brilhante",
+      color: "Preto",
+      style: "Arrojado / Glamour",
+      shape: "Cat-Eye",
+      faceShape: ["round", "oval", "heart"],
+      budget: "mid",
+      description: "Puro glamour e feminilidade. O modelo Feline Noir destaca-se pelo seu formato olho de gato vincado em acetato preto espesso. Famoso por criar um efeito de 'lifting' no olhar, é a escolha perfeita para destacar as maçãs do rosto em rostos redondos, ovais ou coração. Uma armação de poder para mulheres com atitude.",
+      image: "https://i.postimg.cc/m2dpVB3K/P1023276.jpg", // Substituir pelos teus links
+      gallery: [
+        "https://i.postimg.cc/Kv9pQx7H/P1023277.jpg",
+        "https://i.postimg.cc/15W7Ms0W/P1023278.jpg",
+        "https://i.postimg.cc/X721x4K1/P1023280.jpg",
+        "https://i.postimg.cc/X721x4KQ/P1023281.jpg"
+      ],
+}, 
   ],
 };
 
