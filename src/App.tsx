@@ -438,28 +438,30 @@ const PRODUCTS = {
          ],     
       
 },
+   {
+  id: 9,
+  shopifyId: "15724125893418",
+  name: "Navy Palette",
+  rating: 4.9,
+  reviews: 145,
+  badge: "Original",
+  brand: "MindTheLook by Vera Velosa",
+  price: 139,
+  material: "Acetato com Dobradiças OBE flexUno",
+  color: "Azul Marinho / Mosaico Colorido",
+  style: "Criativo / Executivo",
+  shape: "Retangular",
+  faceShape: ["round", "oval"],
+  budget: "mid",
+  description: "Onde a sobriedade encontra a expressão artística. O modelo Navy Palette combina uma frente clássica em azul profundo com hastes padronizadas em estilo mosaico. Desenhado para favorecer rostos redondos e ovais, este par da coleção MindTheLook ganha vida quando coordenado com paletas de cores quentes e acessórios vibrantes.",
+  image: "https://i.postimg.cc/GtWrsd5R/P1023464-(1).jpg",
+  gallery: [
+    "https://i.postimg.cc/Y0GM9hbS/P1023465.jpg",
+    "https://i.postimg.cc/wMygv70T/P1023466.jpg",
+    "https://i.postimg.cc/XqG4JpQj/P1023467.jpg",
+    "https://i.postimg.cc/7hGw6fmZ/P1023468.jpg"
   ],
-  women: [
-    {
-      id: 9,
-      shopifyId: "ID_PENDENTE",
-      name: "Cat Eye Luxe",
-      rating: 4.9,
-      reviews: 267,
-      badge: "Bestseller",
-      brand: "Gucci",
-      price: 340,
-      material: "Acetato",
-      color: "Tartaruga",
-      style: "Arrojado",
-      shape: "Cat-Eye",
-      faceShape: ["round", "square"],
-      budget: "premium",
-      description:
-        "Glamour italiano em estado puro com acetato tartaruga que celebra a feminilidade audaciosa e sofisticada. Cada curva é pensada para realçar a elegância natural, oferecendo um visual icónico que transcende tendências passageiras.",
-      image:
-        "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=600&h=600&fit=crop",
-    },
+}
     {
       id: 10,
       shopifyId: "ID_PENDENTE",
