@@ -513,22 +513,27 @@ const PRODUCTS = {
     },
     {
       id: 12,
-      shopifyId: "ID_PENDENTE",
-      name: "Clear Cat",
-      rating: 4.6,
-      reviews: 91,
-      brand: "Céline",
-      price: 380,
-      material: "Acetato",
-      color: "Transparente",
-      style: "Discreto",
-      shape: "Cat-Eye",
-      faceShape: ["round", "oval"],
-      budget: "premium",
-      description:
-        "Minimalismo refinado em acetato transparente que redefine a elegância discreta com um toque de sofisticação parisiense. Leveza visual e conforto absoluto para a mulher que valoriza o estilo atemporal e a qualidade irrepreensível.",
-      image:
-        "https://images.unsplash.com/photo-1622428051623-4c0b0c5d71e1?w=600&h=600&fit=crop",
+      shopifyId: "15726347485558", // Atualizar depois com o ID do Shopify
+      name: "Pantos Havana",
+      rating: 4.8,
+      reviews: 184,
+      badge: "Clássico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Escuro com Dobradiças OBE flexUno",
+      color: "Tartaruga",
+      style: "Intelectual / Retro",
+      shape: "Pantos Suave",
+      faceShape: ["square", "oval"],
+      budget: "mid",
+      description: "A essência do estilo intelectual chic. O modelo Pantos Havana recupera o clássico formato arredondado, enriquecido por um padrão tartaruga profundo e distintos rebites prateados quadrados. Com dobradiças flexíveis para conforto extremo, este modelo é perfeito para suavizar rostos quadrados e combina brilhantemente com tons neutros, camel ou verde esmeralda.",
+      image: "https://i.postimg.cc/c4WnvnVV/P1023391.jpg", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/fTs9V96r/P1023392.jpg",
+        "https://i.postimg.cc/dtFyhyzH/P1023393.jpg",
+        "https://i.postimg.cc/kXCb2bkj/P1023394.jpg",
+        "https://i.postimg.cc/yYKZDZwp/P1023395.jpg"
+      ],
     },
     {
       id: 13,
