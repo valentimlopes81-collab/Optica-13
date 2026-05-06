@@ -561,22 +561,27 @@ const PRODUCTS = {
     },
     {
       id: 14,
-      shopifyId: "ID_PENDENTE",
-      name: "Aviator Slim",
-      rating: 4.7,
-      reviews: 220,
-      brand: "Ray-Ban",
-      price: 189,
-      material: "Metal",
-      color: "Dourado",
-      style: "Clássico",
-      shape: "Aviador",
-      faceShape: ["oval", "heart"],
+      shopifyId: "15726366392694", // Atualizar depois
+      name: "Onyx Halo",
+      rating: 4.9,
+      reviews: 172,
+      badge: "Elegante",
+      brand: "MindTheLook by Vera Velosa",
+      price: 149,
+      material: "Metal Premium com Detalhe Joalharia",
+      color: "Preto / Dourado",
+      style: "Luxo / Clássico",
+      shape: "Redondo",
+      faceShape: ["square", "oval"],
       budget: "mid",
-      description:
-        "Versão feminina do clássico aviador em metal dourado com proporções delicadamente ajustadas para rostos mais finos. Estilo intemporal com um toque de glamour vintage que complementa qualquer ocasião com elegância natural.",
-      image:
-        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&h=600&fit=crop",
+      description: "Uma verdadeira peça de joalharia para o olhar. O modelo Onyx Halo combina a leveza do metal dourado com um elegante contorno negro nas lentes e um detalhe geométrico sofisticado nas hastes. Ideal para suavizar rostos quadrados e perfeito para elevar qualquer look, harmonizando de forma divinal com acessórios dourados.",
+      image: "https://i.postimg.cc/0231tYPn/P1023379.jpg", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/65SxHrtv/P1023380.jpg",
+        "https://i.postimg.cc/bNMf6xpS/P1023381.jpg",
+        "https://i.postimg.cc/fTFQHcD0/P1023382.jpg",
+        "https://i.postimg.cc/J4gCTNMJ/P1023383.jpg"
+      ],
     },
     {
       id: 15,
