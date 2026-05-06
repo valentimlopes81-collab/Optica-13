@@ -490,23 +490,26 @@ const PRODUCTS = {
     },
     {
       id: 11,
-      shopifyId: "ID_PENDENTE",
-      name: "Round Chic",
-      rating: 4.8,
-      reviews: 203,
-      badge: "Staff Pick",
-      brand: "Chanel",
-      price: 450,
-      material: "Metal",
-      color: "Dourado",
-      style: "Clássico",
+      shopifyId: "15726335263094",
+      name: "Retro Circle Havana",
+      rating: 4.9,
+      reviews: 162,
+      badge: "Vintage",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium com Rebites Prateados",
+      color: "Tartaruga",
+      style: "Retro / Intelectual",
       shape: "Redondo",
-      faceShape: ["square", "heart"],
-      budget: "premium",
-      description:
-        "A essência do luxo parisiense em metal dourado com acabamento impecável que define elegância sem esforço. Artesanato francês de excelência para quem reconhece que o verdadeiro luxo está nos detalhes mais subtis.",
-      image:
-        "https://images.unsplash.com/photo-1577803645773-f96470509666?w=600&h=600&fit=crop",
+      faceShape: ["square", "oval"],
+      budget: "mid",
+      description: "O charme intemporal do design vintage. O modelo Retro Circle Havana destaca-se pela sua armação redonda em padrão tartaruga e a clássica ponte em fechadura. Ideal para suavizar rostos quadrados ou retangulares, esta peça de forte personalidade é o complemento perfeito para coordenados em tons terrosos e quentes.",
+      image: "https://i.postimg.cc/cH6c5nsQ/P1023397.jpg", // Lembra-te de trocar pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/gJrKBZYq/P1023398.jpg",
+        "https://i.postimg.cc/HxjtPypw/P1023399.jpg",
+        "https://i.postimg.cc/k4DyhbnN/P1023401.jpg"
+      ],
     },
     {
       id: 12,
