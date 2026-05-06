@@ -461,7 +461,7 @@ const PRODUCTS = {
     "https://i.postimg.cc/XqG4JpQj/P1023467.jpg",
     "https://i.postimg.cc/7hGw6fmZ/P1023468.jpg"
   ],
-}
+},
     {
       id: 10,
       shopifyId: "ID_PENDENTE",
