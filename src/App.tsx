@@ -630,6 +630,31 @@ const PRODUCTS = {
         "https://i.postimg.cc/vB3ZD49t/P1023225.jpg"
       ],
     },
+    {
+    id: 17,
+      shopifyId: "15726409941366", // Atualizar depois
+      name: "Ocean Mosaic",
+      rating: 4.8,
+      reviews: 148,
+      badge: "Vibrante",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium",
+      color: "Azul Mosaico",
+      style: "Criativo / Moderno",
+      shape: "Borboleta Suave",
+      faceShape: ["round", "oval"],
+      budget: "mid",
+      description: "Uma afirmação de estilo e criatividade. O modelo Ocean Mosaic cativa com a sua frente num padrão vibrante de tons azuis e violetas, em perfeito equilíbrio com as hastes num azul profundo sólido. O formato borboleta suave levanta o olhar, sendo ideal para favorecer rostos redondos ou ovais. Uma peça de destaque para quem adora originalidade.",
+      image: "https://i.postimg.cc/Kvgmhqqy/P1023226.jpg", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/YqmtBnXZ/P1023227.jpg",
+        "https://i.postimg.cc/8PrTgKyx/P1023228.jpg",
+        "https://i.postimg.cc/J4BRC6Td/P1023229.jpg",
+        "https://i.postimg.cc/ZKyJz7fg/P1023230.jpg"
+      ],
+},
+    
   ],
 };
 
