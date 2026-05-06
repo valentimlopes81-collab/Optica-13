@@ -537,22 +537,27 @@ const PRODUCTS = {
     },
     {
       id: 13,
-      shopifyId: "ID_PENDENTE",
-      name: "Square Bold",
-      rating: 4.5,
-      reviews: 178,
-      brand: "Dior",
-      price: 420,
-      material: "Acetato",
+      shopifyId: "15726358167926",
+      name: "Hexa Noir",
+      rating: 4.8,
+      reviews: 156, // Reviews entre 100 e 200, conforme pediste
+      badge: "Tendência",
+      brand: "MindTheLook by Vera Velosa",
+      price: 149,
+      material: "Metal Ultrafino",
       color: "Preto",
-      style: "Arrojado",
-      shape: "Quadrado",
+      style: "Minimalista / Moderno",
+      shape: "Geométrico",
       faceShape: ["round", "oval"],
-      budget: "premium",
-      description:
-        "Poder e feminilidade em harmonia perfeita através de linhas arquitetónicas em acetato preto que comandam atenção. Para a mulher moderna que lidera com confiança e não compromete quando se trata de estilo e qualidade.",
-      image:
-        "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=600&fit=crop",
+      budget: "mid",
+      description: "Minimalismo com atitude arquitetónica. O modelo Hexa Noir apresenta uma estrutura metálica negra ultrafina com um formato geométrico moderno. Incrivelmente leve e com plaquetas ajustáveis, é a peça ideal para adicionar ângulos e definição a rostos redondos e ovais. Uma aposta segura para looks urbanos e sofisticados.",
+      image: "https://i.postimg.cc/nztH3vKd/P1023385.jpg", // Substituir pelo teu link real
+      gallery: [
+        "https://i.postimg.cc/8c4PJj6R/P1023386.jpg",
+        "https://i.postimg.cc/vThHgcVL/P1023387.jpg",
+        "https://i.postimg.cc/6qc52yvV/P1023388.jpg",
+        "https://i.postimg.cc/RhdV6NHL/P1023389.jpg"
+      ],
     },
     {
       id: 14,
