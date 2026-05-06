@@ -585,22 +585,26 @@ const PRODUCTS = {
     },
     {
       id: 15,
-      shopifyId: "ID_PENDENTE",
-      name: "Wire Delicate",
+      shopifyId: "15726394835318", // Atualizar depois
+      name: "Noir Heritage",
       rating: 4.8,
-      reviews: 65,
-      brand: "Lindberg",
-      price: 390,
-      material: "Titânio",
-      color: "Prateado",
-      style: "Discreto",
-      shape: "Redondo",
-      faceShape: ["oval", "square"],
-      budget: "premium",
-      description:
-        "Elegância etérea escandinava em titânio prateado ultra-fino que praticamente desaparece no rosto. Conforto celestial e design atemporal para quem prefere que a sua personalidade brilhe mais do que os acessórios.",
-      image:
-        "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=600&h=600&fit=crop",
+      reviews: 158,
+      badge: "Clássico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Preto Brilhante",
+      color: "Preto",
+      style: "Retro / Intelectual",
+      shape: "Pantos / Redondo",
+      faceShape: ["square", "oval"],
+      budget: "mid",
+      description: "Um ícone que transcende tendências. O Noir Heritage em acetato preto brilhante recupera o formato vintage arredondado com a icónica ponte em fechadura e rebites prateados autênticos. Ideal para suavizar rostos quadrados ou retangulares, é a peça mais versátil da coleção, combinando na perfeição com qualquer paleta de cores ou estilo pessoal.",
+      image: "https://i.postimg.cc/K8wLvHFz/P1023316.jpg", // Lembra-te de trocar pelos links reais do postimg
+      gallery: [
+        "https://i.postimg.cc/HkR5shHk/P1023317.jpg",
+        "https://i.postimg.cc/0yFm2Bx2/P1023318.jpg",
+        "https://i.postimg.cc/GmVYh5rp/P1023320.jpg"
+      ],
     },
     {
       id: 16,
