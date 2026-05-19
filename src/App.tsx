@@ -702,6 +702,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/X721x4KQ/P1023281.jpg"
       ],
 }, 
+    {
+      id: 20,
+      gender: "", // Propriedade fantasma
+      shopifyId: "15745550451062", // Atualizar depois
+      name: "Havana Dynamic",
+      rating: 4.8,
+      reviews: 154,
+      badge: "Dinâmico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium com Bloco de Cor",
+      color: "Tartaruga / Vermelho e Azul",
+      style: "Casual Chic / Moderno",
+      shape: "Pantos",
+      faceShape: ["square", "oval"],
+      budget: "mid",
+      description: "A fusão perfeita entre tradição e originalidade. O modelo Havana Dynamic apresenta uma frente clássica em tartaruga escuro, contrastando com hastes desportivas com blocos de cor em vermelho e azul. O seu formato arredondado é ideal para suavizar rostos quadrados ou retangulares. Uma aposta cheia de atitude para os seus looks casuais.",
+      image: "https://i.postimg.cc/ZvBqg93B/1.png", // Substituir pelo link real
+      gallery: [
+        "https://i.postimg.cc/7GQ6m1CH/1.1.png",
+        "https://i.postimg.cc/dZk0X7dy/1.2.png",
+        "https://i.postimg.cc/zHbfMLWR/1.3.png"
+      ],
+}
   ],
 };
 
