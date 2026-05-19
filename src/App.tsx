@@ -725,7 +725,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/FzGJY3HD/1-2.png",
         "https://i.postimg.cc/sxKZM7gK/1-3.png"
       ],
-}
+},
     {
       id: 21,
       gender: "", 
@@ -748,7 +748,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/Bb6LrtJT/2-1.png",
         "https://i.postimg.cc/qq5h40Rg/2-2.png"
       ],
-}
+},
         {
       id: 22,
       gender: "", 
@@ -774,7 +774,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/3RrPm0XV/3-4.png",
         "https://i.postimg.cc/FKVMYVL8/3-5.png"
       ],
-}
+},
         {
       id: 23,
       gender: "", 
@@ -799,7 +799,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/8k3DLw7G/4-3.png",
         "https://i.postimg.cc/8k3DLw7D/4-4.png"
       ],
-}
+},
         {
       id: 25,
       gender: "", 
@@ -823,7 +823,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/JnsXdPMD/5-2.png",
         "https://i.postimg.cc/638Z1Ytv/5-3.png"
       ],
-}
+},
   ],
 };
 
