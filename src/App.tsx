@@ -719,7 +719,7 @@ const PRODUCTS = {
       faceShape: ["square", "oval"],
       budget: "mid",
       description: "A fusão perfeita entre tradição e originalidade. O modelo Havana Dynamic apresenta uma frente clássica em tartaruga escuro, contrastando com hastes desportivas com blocos de cor em vermelho e azul. O seu formato arredondado é ideal para suavizar rostos quadrados ou retangulares. Uma aposta cheia de atitude para os seus looks casuais.",
-      image: "https://i.postimg.cc/ZvBqg93B/1.png", // Substituir pelo link real
+      image: "https://i.postimg.cc/d0x9NMRs/1.jpg", // Substituir pelo link real
       gallery: [
         "https://i.postimg.cc/7GQ6m1CH/1.1.png",
         "https://i.postimg.cc/dZk0X7dy/1.2.png",
