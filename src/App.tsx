@@ -726,6 +726,104 @@ const PRODUCTS = {
         "https://i.postimg.cc/sxKZM7gK/1-3.png"
       ],
 }
+    {
+      id: 21,
+      gender: "", 
+      shopifyId: "15745646461302", // Atualizar depois
+      name: "Iconic Shadow",
+      rating: 4.9,
+      reviews: 192,
+      badge: "Glamour",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium",
+      color: "Preto",
+      style: "Glamour / Clássico",
+      shape: "Cat-Eye",
+      faceShape: ["round", "oval", "heart"],
+      budget: "mid",
+      description: "Glamour intemporal para o seu rosto. O modelo Iconic Shadow destaca-se pelo seu formato cat-eye arrojado em acetato preto de alta densidade e lentes em degradé. Um acessório indispensável que levanta o olhar e confere uma atitude poderosa. Ideal para rostos redondos, ovais ou coração.",
+      image: "https://i.postimg.cc/FFWJjbxx/2.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/Bb6LrtJT/2-1.png",
+        "https://i.postimg.cc/qq5h40Rg/2-2.png"
+      ],
+}
+        {
+      id: 22,
+      gender: "", 
+      shopifyId: "15745654096246", // Atualizar depois
+      name: "Ultem Hexa",
+      rating: 4.9,
+      reviews: 141,
+      badge: "Tecnologia",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Ultem (Material de Alta Performance)",
+      color: "Preto",
+      style: "Vanguardista / Minimalista",
+      shape: "Hexagonal",
+      faceShape: ["round", "oval"],
+      budget: "mid",
+      description: "A vanguarda da ótica ao seu dispor. O modelo Ultem Hexa é fabricado em material de tecnologia aeroespacial, garantindo uma leveza incomparável e flexibilidade extrema. O seu formato hexagonal moderno cria ângulos que definem rostos arredondados, enquanto a sua construção robusta oferece durabilidade superior. Uma escolha inteligente para quem não abdica de conforto e estilo.",
+      image: "https://i.postimg.cc/YSz5vzFK/3.png", // Substituir pelo teu link real
+      gallery: [
+        "https://i.postimg.cc/7L4vPWf5/3-1.png",
+        "https://i.postimg.cc/257s17Zx/3-2.png",
+        "https://i.postimg.cc/MGmCnmBW/3-3.png",
+        "https://i.postimg.cc/3RrPm0XV/3-4.png",
+        "https://i.postimg.cc/FKVMYVL8/3-5.png"
+      ],
+}
+        {
+      id: 23,
+      gender: "", 
+      shopifyId: "15745666482550", // Atualizar depois
+      name: "Vintage Cat-Havana",
+      rating: 4.8,
+      reviews: 139,
+      badge: "Clássico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 149,
+      material: "Acetato Premium",
+      color: "Tartaruga",
+      style: "Retro / Glamour",
+      shape: "Cat-Eye Estruturado",
+      faceShape: ["round", "oval", "heart"],
+      budget: "mid",
+      description: "Glamour intemporal com um toque retro. O modelo Vintage Cat-Havana combina o icónico formato olho de gato com um padrão tartaruga rico e sofisticado. Desenhado para levantar o olhar e definir rostos redondos ou ovais, é uma peça de autor que alia conforto a uma presença inconfundível. Fabricado com a excelência do design italiano.",
+      image: "https://i.postimg.cc/gjfWdcCQ/4.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/QCR3sN2q/4-1.png",
+        "https://i.postimg.cc/KcVFtQ12/4-2.png",
+        "https://i.postimg.cc/8k3DLw7G/4-3.png",
+        "https://i.postimg.cc/8k3DLw7D/4-4.png"
+      ],
+}
+        {
+      id: 25,
+      gender: "", 
+      shopifyId: "15745681555830", // Atualizar depois com o ID do Shopify
+      name: "Teal Horizon",
+      rating: 4.8,
+      reviews: 162,
+      badge: "Statement",
+      brand: "MindTheLook by Vera Velosa",
+      price: 149,
+      material: "Acetato Premium Bicolor",
+      color: "Azul Petróleo / Mosaico",
+      style: "Fashion / Arrojado",
+      shape: "Cat-Eye",
+      faceShape: ["round", "oval", "heart"],
+      budget: "high",
+      description: "Uma verdadeira peça de 'statement' para o seu olhar. O modelo Teal Horizon deslumbra com o seu formato cat-eye estruturado e um design bicolor único: topo em azul petróleo vibrante e base em padrão mosaico escuro. Criado para levantar a expressão facial, é o acessório ideal para transformar instantaneamente qualquer look num visual de alta moda.",
+      image: "https://i.postimg.cc/fLVdgBD0/5.png", // Substituir pelo link real gerado
+      gallery: [
+        "https://i.postimg.cc/mDP968Bg/5-1.png",
+        "https://i.postimg.cc/JnsXdPMD/5-2.png",
+        "https://i.postimg.cc/638Z1Ytv/5-3.png"
+      ],
+}
   ],
 };
 
