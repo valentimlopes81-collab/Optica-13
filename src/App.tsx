@@ -893,6 +893,29 @@ const PRODUCTS = {
         "https://i.postimg.cc/MGXj1fWn/8.png"
       ],
 },
+    {
+      id: 28, // Confirma se é o 30 na tua lista
+      gender: "", 
+      shopifyId: "15751439516022", // Atualizar depois
+      name: "Urban Magenta",
+      rating: 4.8,
+      reviews: 132,
+      badge: "Moderno",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium com Bloco de Cor",
+      color: "Preto / Magenta",
+      style: "Casual Chic / Moderno",
+      shape: "Quadrado Arredondado",
+      faceShape: ["square", "oval"],
+      budget: "mid",
+      description: "O clássico preto com um twist feminino. O modelo Urban Magenta apresenta uma frente suave em acetato negro, perfeitamente complementada por hastes com um detalhe em bloco de cor bege e magenta. Ideal para suavizar rostos quadrados ou retangulares, é a escolha certa para quem procura versatilidade diária com um toque de originalidade.",
+      image: "https://i.postimg.cc/fLnmZTND/9.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/7680DYkD/9-1.png"
+      ],
+},
+    
   ],
 };
 
