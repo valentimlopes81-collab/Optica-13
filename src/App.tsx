@@ -4055,7 +4055,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
  /* QUIZ REFINADO - PT-PT */
-  const QuizPage = () => {
+  const QuizPage = ({ onSelectProduct }) => {
     const [step, setStep] = useState(1);
     const [answers, setAnswers] = useState({
       type: "",
@@ -4212,21 +4212,37 @@ const openBook = (service = "Consulta Geral") => {
 
             {step === 9 && <div className="text-center py-20 font-display text-2xl">A analisar o seu perfil...</div>}
 
-            {step === 10 && (
-              <div className="text-center">
-                <h2 className="text-3xl font-bold mb-8">As nossas sugestões para si:</h2>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {results.map(p => (
-                    <div key={p.id} className="bg-white p-4 rounded-xl border">
-                      <img src={p.image} alt={p.name} className="w-full h-32 object-cover mb-4 rounded-lg" />
-                      <p className="font-bold">{p.name}</p>
-                      <p className="text-sm">{p.price}€</p>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={reset} className="mt-8 px-8 py-3 border rounded-full">Refazer Quiz</button>
-              </div>
-            )}
+           {step === 10 && (
+    <div className="fade-up text-center p-6">
+      <h2 className="text-3xl font-bold mb-8">As nossas sugestões para si:</h2>
+      
+      {/* Resultados aparecem imediatamente */}
+      <div className="grid md:grid-cols-3 gap-6 mb-10">
+        {results.map(p => (
+          <div 
+            key={p.id} 
+            className="bg-white p-4 rounded-xl border cursor-pointer hover:border-black transition-all" 
+            onClick={() => onSelectProduct(p)} //
+            >
+            <img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
+            <p className="font-bold">{p.name}</p>
+            <p className="text-sm font-semibold">{p.price}€</p>
+          </div>
+        ))}
+      </div>
+
+      {/* E-mail opcional apenas para guardar */}
+      <div className="bg-gray-50 p-6 rounded-2xl border max-w-sm mx-auto">
+        <p className="font-semibold mb-3 text-sm">Guardar resultados por e-mail (Opcional):</p>
+        <div className="flex gap-2">
+          <input type="email" placeholder="O seu e-mail" className="p-3 border rounded-xl flex-1" />
+          <button className="bg-black text-white px-4 py-2 rounded-xl font-bold text-sm">Enviar</button>
+        </div>
+      </div>
+      
+      <button onClick={reset} className="mt-8 underline text-sm text-gray-500">Refazer Quiz</button>
+    </div>
+  )}
           </div>
         </div>
       </div>
@@ -5156,7 +5172,7 @@ const openBook = (service = "Consulta Geral") => {
         {page === "vantagens" && <VantagensPage />}
         {page === "men" && <CollectionPage gender="men" />}
         {page === "women" && <CollectionPage gender="women" />}
-        {page === "quiz" && <QuizPage />}
+       {page === "quiz" && <QuizPage onSelectProduct={setSelectedProduct} />}
         {page === "about" && <AboutPage />}
         {page === "contact" && <ContactPage />}
         {page === "terms" && <TermsPage />}
