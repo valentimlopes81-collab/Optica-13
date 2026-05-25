@@ -1033,7 +1033,7 @@ const PRODUCTS = {
       ],
 },
 {
-      id: 35, 
+      id: 34, 
       gender: "Unisexo", 
       shopifyId: "15751463272822", 
       name: "Midnight Edge",
@@ -1053,7 +1053,30 @@ const PRODUCTS = {
       gallery: [
         "https://i.postimg.cc/hjQrK3wy/15-1.png" 
       ],
-},    
+},
+    {
+      id: 35, // Ajusta conforme a tua sequência
+      gender: "Unisexo", 
+      shopifyId: "15751465206134", 
+      name: "Havana Azure",
+      rating: 4.9,
+      reviews: 112,
+      badge: "Classic Twist",
+      brand: "Vera Velosa by Trevi Coliseum",
+      price: 145, 
+      material: "Acetato Premium",
+      color: "Tartaruga (Havana) / Lentes Azuis Degradé",
+      style: "Clássico / Moderno / Coastal",
+      shape: "Retangular (Flat-Top)",
+      faceShape: ["round", "oval"],
+      budget: "mid-high",
+      description: "O clássico reinventado. O modelo Havana Azure equilibra a intemporalidade do padrão tartaruga com a ousadia contemporânea das lentes em degradé azul. Uma peça que evoca sofisticação costeira e atitude urbana, desenhada para quem aprecia detalhes que marcam a diferença.\n\n✨ Design de Impacto: A clássica armação em tom tartaruga ganha uma nova vida com lentes degradé em azul, criando um contraste visual único. Detalhes metálicos discretos nas hastes conferem o toque final de luxo.\n\n☁️ Conforto & Ergonometria: Estrutura robusta em acetato premium que garante durabilidade e um ajuste equilibrado, proporcionando conforto total para longas horas de utilização.\n\n📐 Visagismo & Estilo: O formato flat-top e retangular é a escolha ideal para adicionar estrutura e definição a rostos redondos ou ovais.\n\n🔥 Dica de Estilo: O Havana Azure brilha quando combinado com tons neutros como bege ou branco, deixando que o azul das lentes seja o ponto de cor do seu visual.",
+      image: "https://i.postimg.cc/6pScFXb3/16.png", 
+      gallery: [
+        "https://i.postimg.cc/P5NK6xyw/16-1.png",
+        "https://i.postimg.cc/3xW9LR1d/16-2.png"
+      ],
+},
     
     
     
