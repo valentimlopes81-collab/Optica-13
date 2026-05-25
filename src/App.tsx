@@ -3602,7 +3602,6 @@ const openBook = (service = "Consulta Geral") => {
   const CollectionPage = ({ gender }) => {
     const [filters, setFilters] = useState({
       material: "",
-      priceRange: "",
       color: "",
       style: "",
       shape: "",
@@ -3612,20 +3611,36 @@ const openBook = (service = "Consulta Geral") => {
 
     const products = PRODUCTS[gender];
     const filtered = products.filter((p) => {
+      // Filtro de Pesquisa (Texto)
       if (
         search &&
         !p.name.toLowerCase().includes(search.toLowerCase()) &&
         !p.brand.toLowerCase().includes(search.toLowerCase())
       )
         return false;
-      if (filters.material && p.material !== filters.material) return false;
-      if (filters.color && p.color !== filters.color) return false;
-      if (filters.style && p.style !== filters.style) return false;
-      if (filters.shape && p.shape !== filters.shape) return false;
-      if (filters.priceRange) {
-        const [min, max] = filters.priceRange.split("-").map(Number);
-        if (p.price < min || (max && p.price > max)) return false;
+
+      // Filtros Inteligentes (Lê o texto complexo que puseste nos produtos)
+      if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
+      if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
+      
+      // Lógica avançada para cores (junta palavras semelhantes)
+      if (filters.color) {
+        const c = filters.color.toLowerCase();
+        const pc = p.color.toLowerCase();
+        if (c === "transparente" && !(pc.includes("transparente") || pc.includes("cristal"))) return false;
+        else if (c === "vermelho" && !(pc.includes("vermelho") || pc.includes("burgundy") || pc.includes("vinho"))) return false;
+        else if (c !== "transparente" && c !== "vermelho" && !pc.includes(c)) return false;
       }
+
+      // Lógica avançada para formatos (junta formatos da mesma família)
+      if (filters.shape) {
+        const s = filters.shape.toLowerCase();
+        const ps = p.shape.toLowerCase();
+        if (s === "redondo" && !(ps.includes("redondo") || ps.includes("pantos"))) return false;
+        else if (s === "cat-eye" && !(ps.includes("cat-eye") || ps.includes("borboleta"))) return false;
+        else if (s !== "redondo" && s !== "cat-eye" && !ps.includes(s)) return false;
+      }
+
       return true;
     });
 
@@ -3641,10 +3656,10 @@ const openBook = (service = "Consulta Geral") => {
               Material
             </p>
             <div className="space-y-2">
-              {["", "Metal", "Acetato", "Titânio"].map((m) => (
+              {["", "Acetato", "Metal", "Ultem"].map((m) => (
                 <label
                   key={m}
-                  className="flex items-center gap-2 cursor-pointer"
+                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
                 >
                   <input
                     type="radio"
@@ -3652,68 +3667,38 @@ const openBook = (service = "Consulta Geral") => {
                     checked={filters.material === m}
                     onChange={() => setFilters({ ...filters, material: m })}
                     className="w-4 h-4"
+                    style={{ accentColor: "var(--gold)" }}
                   />
-                  <span className="text-sm">{m || "Todos"}</span>
+                  <span className="text-sm font-medium" style={{ color: filters.material === m ? "var(--forest)" : "#555" }}>
+                    {m || "Todos"}
+                  </span>
                 </label>
               ))}
             </div>
           </div>
 
-          {/* Preço */}
+          {/* Cor Dominante */}
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-wide mb-3"
               style={{ color: "#888" }}
             >
-              Preço
-            </p>
-            <div className="space-y-2">
-              {[
-                ["", "Todos"],
-                ["0-100", "Até €100"],
-                ["100-200", "€100 - €200"],
-                ["200-300", "€200 - €300"],
-                ["300-999", "Mais de €300"],
-              ].map(([range, label]) => (
-                <label
-                  key={range}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    name={isMobile ? "price-mobile" : "price"}
-                    checked={filters.priceRange === range}
-                    onChange={() =>
-                      setFilters({ ...filters, priceRange: range })
-                    }
-                    className="w-4 h-4"
-                  />
-                  <span className="text-sm">{label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Cor */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Cor
+              Cor Dominante
             </p>
             <div className="space-y-2">
               {[
                 "",
                 "Preto",
+                "Tartaruga",
+                "Azul",
                 "Dourado",
                 "Prateado",
                 "Transparente",
-                "Tartaruga",
+                "Vermelho"
               ].map((c) => (
                 <label
                   key={c}
-                  className="flex items-center gap-2 cursor-pointer"
+                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
                 >
                   <input
                     type="radio"
@@ -3721,8 +3706,11 @@ const openBook = (service = "Consulta Geral") => {
                     checked={filters.color === c}
                     onChange={() => setFilters({ ...filters, color: c })}
                     className="w-4 h-4"
+                    style={{ accentColor: "var(--gold)" }}
                   />
-                  <span className="text-sm">{c || "Todos"}</span>
+                  <span className="text-sm font-medium" style={{ color: filters.color === c ? "var(--forest)" : "#555" }}>
+                    {c || "Todas"}
+                  </span>
                 </label>
               ))}
             </div>
@@ -3737,11 +3725,19 @@ const openBook = (service = "Consulta Geral") => {
               Estilo
             </p>
             <div className="space-y-2">
-              {["", "Clássico", "Desportivo", "Discreto", "Arrojado"].map(
+              {[
+                "",
+                "Clássico",
+                "Moderno",
+                "Intelectual",
+                "Arrojado",
+                "Glamour",
+                "Casual"
+              ].map(
                 (s) => (
                   <label
                     key={s}
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
                   >
                     <input
                       type="radio"
@@ -3749,8 +3745,11 @@ const openBook = (service = "Consulta Geral") => {
                       checked={filters.style === s}
                       onChange={() => setFilters({ ...filters, style: s })}
                       className="w-4 h-4"
+                      style={{ accentColor: "var(--gold)" }}
                     />
-                    <span className="text-sm">{s || "Todos"}</span>
+                    <span className="text-sm font-medium" style={{ color: filters.style === s ? "var(--forest)" : "#555" }}>
+                      {s || "Todos"}
+                    </span>
                   </label>
                 )
               )}
@@ -3766,39 +3765,32 @@ const openBook = (service = "Consulta Geral") => {
               Formato
             </p>
             <div className="space-y-2">
-              {gender === "men"
-                ? ["", "Aviador", "Quadrado", "Redondo"].map((sh) => (
-                    <label
-                      key={sh}
-                      className="flex items-center gap-2 cursor-pointer"
-                    >
-                      <input
-                        type="radio"
-                        name={isMobile ? "shape-mobile" : "shape"}
-                        checked={filters.shape === sh}
-                        onChange={() => setFilters({ ...filters, shape: sh })}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-sm">{sh || "Todos"}</span>
-                    </label>
-                  ))
-                : ["", "Cat-Eye", "Redondo", "Quadrado", "Aviador"].map(
-                    (sh) => (
-                      <label
-                        key={sh}
-                        className="flex items-center gap-2 cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name={isMobile ? "shape-mobile" : "shape"}
-                          checked={filters.shape === sh}
-                          onChange={() => setFilters({ ...filters, shape: sh })}
-                          className="w-4 h-4"
-                        />
-                        <span className="text-sm">{sh || "Todos"}</span>
-                      </label>
-                    )
-                  )}
+              {[
+                "",
+                "Retangular",
+                "Quadrado",
+                "Redondo",
+                "Cat-Eye",
+                "Aviador",
+                "Geométrico"
+              ].map((sh) => (
+                <label
+                  key={sh}
+                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
+                >
+                  <input
+                    type="radio"
+                    name={isMobile ? "shape-mobile" : "shape"}
+                    checked={filters.shape === sh}
+                    onChange={() => setFilters({ ...filters, shape: sh })}
+                    className="w-4 h-4"
+                    style={{ accentColor: "var(--gold)" }}
+                  />
+                  <span className="text-sm font-medium" style={{ color: filters.shape === sh ? "var(--forest)" : "#555" }}>
+                    {sh || "Todos"}
+                  </span>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -3851,7 +3843,7 @@ const openBook = (service = "Consulta Geral") => {
                   placeholder="Pesquisar por marca ou modelo..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm"
+                  className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm outline-none transition-colors"
                   style={{ borderColor: "var(--mist)" }}
                 />
               </div>
@@ -3871,7 +3863,7 @@ const openBook = (service = "Consulta Geral") => {
                 className="sticky top-28 p-6 rounded-2xl border"
                 style={{ background: "white", borderColor: "var(--mist)" }}
               >
-                <p className="font-semibold mb-4">Filtros</p>
+                <p className="font-display text-xl font-semibold mb-6" style={{ color: "var(--forest)" }}>Filtros</p>
                 <FilterPanel isMobile={false} />
               </div>
             </aside>
@@ -3896,16 +3888,16 @@ const openBook = (service = "Consulta Geral") => {
                           className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-md"
                           style={{
                             background:
-                              p.badge === "Staff Pick"
+                              p.badge === "Best Seller"
                                 ? "#0056b3"
-                                : p.badge === "Novo"
+                                : p.badge === "Novo" || p.badge === "Nova Coleção"
                                 ? "#7c3aed"
                                 : "#16a34a",
                           }}
                         >
-                          {p.badge === "Staff Pick"
+                          {p.badge === "Best Seller"
                             ? "⭐ "
-                            : p.badge === "Novo"
+                            : p.badge === "Novo" || p.badge === "Nova Coleção"
                             ? "✦ "
                             : "🔥 "}
                           {p.badge}
@@ -3925,35 +3917,44 @@ const openBook = (service = "Consulta Geral") => {
 
                     <div className="p-5">
                       <p
-                        className="text-xs font-semibold uppercase tracking-wide mb-1"
+                        className="text-xs font-semibold uppercase tracking-wide mb-1 truncate"
                         style={{ color: "var(--gold)" }}
                       >
                         {p.brand}
                       </p>
-                      <p className="font-semibold mb-1">{p.name}</p>
+                      <p className="font-semibold mb-1 truncate">{p.name}</p>
                       <div className="flex items-center gap-2 mb-3">
                         {(() => {
                           const colorMap = {
-                            Preto: "#1a1a1a",
-                            Dourado: "#c9a84c",
-                            Prateado: "#9ca3af",
-                            Transparente: "#dbeafe",
-                            Tartaruga: "#92400e",
+                            "Preto": "#1a1a1a",
+                            "Dourado": "#c9a84c",
+                            "Prateado": "#9ca3af",
+                            "Transparente": "#dbeafe",
+                            "Tartaruga": "#92400e",
+                            "Burgundy": "#681329",
+                            "Vermelho": "#dc2626",
+                            "Azul": "#1e3a8a",
+                            "Cristal": "#f0f9ff"
                           };
+                          
+                          // Procura a cor que mais se aproxima no mapa para a bolinha
+                          let dotColor = "#ccc";
+                          Object.keys(colorMap).forEach(key => {
+                            if (p.color.toLowerCase().includes(key.toLowerCase())) dotColor = colorMap[key];
+                          });
+
                           return (
                             <>
                               <div
                                 className="w-4 h-4 rounded-full border border-gray-200 shadow-sm flex-shrink-0"
-                                style={{
-                                  background: colorMap[p.color] || "#ccc",
-                                }}
+                                style={{ background: dotColor }}
                                 title={p.color}
                               />
                               <span
-                                className="text-xs font-medium"
+                                className="text-[11px] font-medium truncate"
                                 style={{ color: "#888" }}
                               >
-                                {p.color} · {p.material}
+                                {p.color}
                               </span>
                             </>
                           );
@@ -3965,7 +3966,7 @@ const openBook = (service = "Consulta Geral") => {
                       >
                         €{p.price}
                         {p.rating && (
-                          <div className="flex items-center gap-1.5 mb-1">
+                          <div className="flex items-center gap-1.5 mb-1 mt-1">
                             <div className="flex gap-0.5">
                               {[1, 2, 3, 4, 5].map((s) => (
                                 <svg
@@ -3993,11 +3994,15 @@ const openBook = (service = "Consulta Geral") => {
                 ))}
               </div>
               {filtered.length === 0 && (
-                <div className="text-center py-16">
+                <div className="text-center py-16 bg-white rounded-2xl border" style={{ borderColor: "var(--mist)" }}>
                   <Search size={40} className="mx-auto mb-4 opacity-20" />
+                  <h3 className="font-display text-xl font-semibold mb-2" style={{ color: "var(--forest)" }}>Sem resultados</h3>
                   <p className="text-sm" style={{ color: "#888" }}>
-                    Nenhum produto encontrado com estes filtros.
+                    Nenhum modelo encontrado com essa combinação exata de filtros.
                   </p>
+                  <button onClick={() => setFilters({ material: "", color: "", style: "", shape: "" })} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
+                    Limpar Filtros
+                  </button>
                 </div>
               )}
             </div>
@@ -4008,7 +4013,7 @@ const openBook = (service = "Consulta Geral") => {
         {drawerOpen && (
           <>
             <div
-              className="fixed inset-0 z-[80] lg:hidden"
+              className="fixed inset-0 z-[80] lg:hidden transition-opacity"
               style={{
                 background: "rgba(10,20,15,0.5)",
                 backdropFilter: "blur(4px)",
@@ -4020,12 +4025,12 @@ const openBook = (service = "Consulta Geral") => {
               style={{ background: "white" }}
             >
               <div
-                className="p-6 border-b flex items-center justify-between"
+                className="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10"
                 style={{ borderColor: "var(--mist)" }}
               >
-                <p className="font-semibold">Filtros</p>
-                <button onClick={() => setDrawerOpen(false)}>
-                  <X size={18} />
+                <p className="font-display text-xl font-semibold">Filtros</p>
+                <button onClick={() => setDrawerOpen(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+                  <X size={16} />
                 </button>
               </div>
               <FilterPanel isMobile={true} />
@@ -4035,7 +4040,6 @@ const openBook = (service = "Consulta Geral") => {
       </div>
     );
   };
-
   /* QUIZ */
   const QuizPage = () => {
     const [step, setStep] = useState(1);
