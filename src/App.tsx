@@ -1010,6 +1010,29 @@ const PRODUCTS = {
         "https://i.postimg.cc/Y0cvYXSX/13-2.png"
       ],
 },
+    {
+      id: 33, // Confirma se é o 35 na tua lista
+      gender: "", 
+      shopifyId: "15751460094326", // Atualizar depois com o ID do Shopify
+      name: "Noir Prestige",
+      rating: 4.8,
+      reviews: 156,
+      badge: "Clássico",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139, 
+      material: "Acetato Premium",
+      color: "Preto / Dourado",
+      style: "Clássico / Minimalista",
+      shape: "Retangular Suave",
+      faceShape: ["round", "oval", "heart"],
+      budget: "mid",
+      description: "O clássico indispensável com um toque de luxo. O modelo Noir Prestige apresenta uma armação em acetato preto brilhante, elevada por um elegante traço dourado nas hastes. Com um formato retangular suave e incrivelmente versátil, é o acessório perfeito para estruturar o rosto e garantir um estilo sofisticado e intemporal em qualquer ocasião.",
+      image: "https://i.postimg.cc/s2RHHzND/14.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/fbhqqsrV/14-1.png"
+      ],
+},
+    
     
     
     
