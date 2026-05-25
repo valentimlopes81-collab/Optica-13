@@ -1149,7 +1149,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/rwLx4wH7/19-2.png"
       ],
 },    
-    
+ {
+      id: 39,
+      gender: "Unisexo", 
+      shopifyId: "15751469531510", 
+      name: "Noir Essence",
+      rating: 4.9,
+      reviews: 142,
+      badge: "Essential",
+      brand: "Vera Velosa by Trevi Coliseum",
+      price: 155, 
+      material: "Acetato Premium",
+      color: "Preto Brilhante",
+      style: "Minimalista / Versátil / Elegante",
+      shape: "Redondo Soft",
+      faceShape: ["oval", "heart", "square"],
+      budget: "mid-high",
+      description: "A definição de luxo minimalista. O Noir Essence é o básico essencial, elevado ao patamar da sofisticação. Com uma silhueta clássica e equilibrada, este modelo foi desenhado para quem valoriza a simplicidade poderosa.\n\n✨ Design de Impacto: Armação em acetato preto de alto brilho com um design soft-round. Minimalista na forma, mas impactante na presença.\n\n☁️ Conforto & Ergonometria: Design ergonómico que garante um ajuste natural e leve para conforto durante todo o dia.\n\n📐 Visagismo & Versatilidade: O formato redondo suave cria harmonia e equilíbrio em vários tipos de rosto, incluindo ovais e quadrados.\n\n🔥 Dica de Estilo: A peça camaleão que combina com tudo. Do formal ao casual, é a escolha certa para quem não quer falhar.",
+      image: "https://i.postimg.cc/wxmVZvSP/20.png", 
+      gallery: [
+        "https://i.postimg.cc/J7kqvn92/20-2.png",
+        "https://i.postimg.cc/mZHwJD06/20-1.png",
+        "https://i.postimg.cc/sfhcqXtn/20-3.png"
+      ],
+},   
     
     
   ],
