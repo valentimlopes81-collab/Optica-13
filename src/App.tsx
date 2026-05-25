@@ -4071,13 +4071,17 @@ const openBook = (service = "Consulta Geral") => {
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
 
-    const answerSingle = (field, value) => {
-      setAnswers({ ...answers, [field]: value });
-      setTimeout(() => {
+   const answerSingle = (field, value) => {
+    setAnswers({ ...answers, [field]: value });
+    setTimeout(() => {
+      if (step === 7) {
+        finishQuiz(); // Termina o quiz e vai para os resultados (passo 10)
+      } else {
         setStep(step + 1);
         window.scrollTo(0, 0);
-      }, 300);
-    };
+      }
+    }, 300);
+  };
 
     const toggleMulti = (field, value) => {
       setAnswers((prev) => ({
@@ -4132,7 +4136,7 @@ const openBook = (service = "Consulta Geral") => {
         <div className="max-w-4xl mx-auto px-6">
           {step <= 8 && (
             <div className="text-center mb-10 fade-up">
-              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de 8</p>
+              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de 7</p>
               
               {step === 1 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que tipo de óculos procura?</h1>}
               {step === 2 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Para quem são os óculos?</h1>}
@@ -4141,7 +4145,6 @@ const openBook = (service = "Consulta Geral") => {
               {step === 5 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Qual o material de eleição?</h1>}
               {step === 6 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Qual o tamanho ideal para si?</h1>}
               {step === 7 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Qual a sua rotina diária?</h1>}
-              {step === 8 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Guardar resultados</h1>}
             </div>
           )}
 
