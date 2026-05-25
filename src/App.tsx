@@ -5103,7 +5103,6 @@ const openBook = (service = "Consulta Geral") => {
   );
   return (
     <>
-      <FontStyle />
       <div
         className="min-h-screen"
         style={{ background: "var(--cream)", fontFamily: "Jost, sans-serif" }}
