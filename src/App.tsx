@@ -801,7 +801,7 @@ const PRODUCTS = {
       ],
 },
         {
-      id: 25,
+      id: 24,
       gender: "", 
       shopifyId: "15745681555830", // Atualizar depois com o ID do Shopify
       name: "Teal Horizon",
@@ -824,6 +824,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/638Z1Ytv/5-3.png"
       ],
 },
+   {
+      id: 25, 
+      gender: "", 
+      shopifyId: "15751421690230", // Atualizar depois
+      name: "Cosmic Noir (2-in-1)",
+      rating: 4.9,
+      reviews: 188,
+      badge: "2-em-1",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium com Clip-On Magnético",
+      color: "Preto / Padrão Cósmico",
+      style: "Prático / Glamour",
+      shape: "Cat-Eye Bold",
+      faceShape: ["round", "oval", "heart"],
+      budget: "high",
+      description: "Praticidade aliada ao glamour absoluto. O Cosmic Noir é um modelo 2-em-1: uma elegante armação cat-eye em preto sólido que se transforma instantaneamente nuns óculos de sol arrojados graças ao seu clip-on magnético com padrão de flocos brilhantes. O formato perfeito para criar um efeito 'lifting' no rosto, garantindo que está sempre pronta para qualquer ambiente.",
+      image: "https://i.postimg.cc/65sxCkhx/6.png", // Substituir pelo link real
+      gallery: [
+        "https://i.postimg.cc/bNXf1793/6-2.png",
+        "https://i.postimg.cc/7Yg89KKR/6-1.png",
+        "https://i.postimg.cc/dtMcGbjN/6-3.png"
+      ],
+} 
   ],
 };
 
