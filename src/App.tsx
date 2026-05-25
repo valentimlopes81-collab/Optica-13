@@ -986,6 +986,31 @@ const PRODUCTS = {
         "https://i.postimg.cc/nzSsrF88/12-2.png"
       ],
 },
+    {
+      id: 32, // Confirma se é o 34 na tua lista
+      gender: "", 
+      shopifyId: "15751458914678", // Atualizar depois com o ID do Shopify
+      name: "Havana Sculpt Polarized",
+      rating: 4.9,
+      reviews: 210,
+      badge: "Polarizado",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139, // Ajusta para 139 se for esse o caso
+      material: "Acetato Bold com Lentes Polarizadas",
+      color: "Tartaruga Escuro",
+      style: "Glamour / Statement",
+      shape: "Cat-Eye Oversize",
+      faceShape: ["round", "oval", "heart"],
+      budget: "high",
+      description: "Alta proteção e design escultural. Os óculos de sol Havana Sculpt destacam-se pelas suas lentes polarizadas premium, que eliminam o brilho e garantem uma visão nítida. A armação oversize em tartaruga escuro possui hastes espessas e geometricamente facetadas para uma presença inesquecível. O acessório definitivo para conduzir com estilo ou brilhar nos dias mais solarengos.",
+      image: "https://i.postimg.cc/vTR4fPmh/13.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/hjQJJFK6/13-3.png",
+        "https://i.postimg.cc/xCNkkr9B/13-1.png",
+        "https://i.postimg.cc/Y0cvYXSX/13-2.png"
+      ],
+},
+    
     
     
     
