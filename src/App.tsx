@@ -1101,6 +1101,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/44q3K20r/17-3.png"
       ],
 },   
+   {
+      id: 37, 
+      gender: "Unisexo", 
+      shopifyId: "15751468089718", 
+      name: "Signature Curve",
+      rating: 4.8,
+      reviews: 84,
+      badge: "Tech & Classic",
+      brand: "Vera Velosa by Trevi Coliseum",
+      price: 155, 
+      material: "Acetato Premium",
+      color: "Tartaruga (Havana)",
+      style: "Intelectual / Clássico / Business",
+      shape: "Arredondado (Pantos)",
+      faceShape: ["square", "rectangular", "diamond"],
+      budget: "mid-high",
+      description: "A elegância encontra a inovação. O modelo Signature Curve é a definição de sofisticação intelectual. Com uma silhueta arredondada intemporal e o exclusivo padrão tartaruga, este modelo apresenta a tecnologia Plus Curve patenteada, garantindo uma ergonomia superior.\n\n✨ Design de Impacto: Uma armação de acetato com um padrão tartaruga profundo. O formato arredondado oferece um look vintage e erudito, elevando qualquer outfit.\n\n☁️ Conforto & Tecnologia: A engenharia Plus Curve garante um ajuste ideal, proporcionando leveza e estabilidade durante todo o dia.\n\n📐 Visagismo & Suavidade: O formato arredondado é o melhor aliado para rostos quadrados ou angulares, ajudando a suavizar os traços faciais.\n\n🔥 Dica de Estilo: Perfeitos para um look office-chic. Combina-os com peças estruturadas para um visual de autoridade e bom gosto.",
+      image: "https://i.postimg.cc/QtS04W2s/18.png", 
+      gallery: [
+        "https://i.postimg.cc/fLM8fvrn/18-2.png",
+        "https://i.postimg.cc/PxK238gs/18-1.png",
+        "https://i.postimg.cc/PxK238gH/18-3.png"
+      ],
+}, 
     
     
     
