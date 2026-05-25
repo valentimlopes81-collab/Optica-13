@@ -963,6 +963,29 @@ const PRODUCTS = {
         "https://i.postimg.cc/QxXPhj8J/11-3.png"
       ],
 },
+    {
+      id: 31, // Confirma se é o 33 na tua lista
+      gender: "", 
+      shopifyId: "15751454851446", // Atualizar depois
+      name: "Gold Empire Sun",
+      rating: 4.9,
+      reviews: 195,
+      badge: "Luxo",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139, 
+      material: "Acetato Bold e Metal Dourado",
+      color: "Preto / Dourado",
+      style: "Glamour / Oversize",
+      shape: "Quadrado Oversize",
+      faceShape: ["round", "oval"],
+      budget: "mid",
+      description: "Uma afirmação de luxo absoluto. Os óculos de sol Gold Empire Sun apresentam uma imponente frente oversize em preto brilhante, contrastando com hastes largas em metal dourado polido. Rematados com o icónico 'V' nas ponteiras, são perfeitos para afinar rostos redondos ou ovais e elevar qualquer look a um patamar de alta sofisticação.",
+      image: "https://i.postimg.cc/vB21TYRw/12.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/wv4tMqKd/12-1.png",
+        "https://i.postimg.cc/nzSsrF88/12-2.png"
+      ],
+}
     
     
   ],
