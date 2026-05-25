@@ -3633,21 +3633,12 @@ const openBook = (service = "Consulta Geral") => {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const products = PRODUCTS[gender];
-  const filtered = useMemo(() => {
+ const filtered = useMemo(() => {
       return products.filter((p) => {
-        // Filtro de Pesquisa (Texto)
-        if (
-          search &&
-          !p.name.toLowerCase().includes(search.toLowerCase()) &&
-          !p.brand.toLowerCase().includes(search.toLowerCase())
-        )
-          return false;
-
-        // Filtros Inteligentes
+        if (search && !p.name.toLowerCase().includes(search.toLowerCase()) && !p.brand.toLowerCase().includes(search.toLowerCase())) return false;
         if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
         if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
-
-        // Lógica avançada para cores
+        
         if (filters.color) {
           const c = filters.color.toLowerCase();
           const pc = p.color.toLowerCase();
@@ -3656,7 +3647,6 @@ const openBook = (service = "Consulta Geral") => {
           else if (c !== "transparente" && c !== "vermelho" && !pc.includes(c)) return false;
         }
 
-        // Lógica avançada para formatos
         if (filters.shape) {
           const s = filters.shape.toLowerCase();
           const ps = p.shape.toLowerCase();
@@ -3666,7 +3656,7 @@ const openBook = (service = "Consulta Geral") => {
         }
         return true;
       });
-    }, [products, search, filters]); // <-- Isto é o segredo!
+    }, [products, search, filters]);
 
     const FilterPanel = ({ isMobile }) => (
       <div className={isMobile ? "p-6" : ""}>
