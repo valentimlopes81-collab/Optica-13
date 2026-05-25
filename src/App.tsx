@@ -985,7 +985,8 @@ const PRODUCTS = {
         "https://i.postimg.cc/wv4tMqKd/12-1.png",
         "https://i.postimg.cc/nzSsrF88/12-2.png"
       ],
-}
+},
+    
     
     
   ],
