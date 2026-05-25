@@ -871,6 +871,28 @@ const PRODUCTS = {
         "https://i.postimg.cc/RVbscKBk/7-1.png"
       ],
 },
+    {
+      id: 27, // Confirma se é o 29 na tua lista
+      gender: "", 
+      shopifyId: "15751431225718", // Atualizar depois com o ID do Shopify
+      name: "Pantos Flex Dark Havana",
+      rating: 4.8,
+      reviews: 147,
+      badge: "Conforto",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139,
+      material: "Acetato Premium com Dobradiças OBE flexUno",
+      color: "Tartaruga Escuro",
+      style: "Intelectual / Clássico",
+      shape: "Pantos",
+      faceShape: ["square", "oval"],
+      budget: "mid",
+      description: "O clássico desenhado para o conforto absoluto. O Pantos Flex Dark Havana combina o icónico formato arredondado com dobradiças OBE flexUno de alta flexibilidade, garantindo um ajuste perfeito sem pressão. Com o seu tom tartaruga profundo e detalhes prateados retro, é a escolha ideal para suavizar rostos quadrados e elevar o seu estilo diário com um toque intelectual.",
+      image: "https://i.postimg.cc/nL592Vzr/8-2.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/MGXj1fWn/8.png"
+      ],
+},
   ],
 };
 
