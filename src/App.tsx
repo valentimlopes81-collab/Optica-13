@@ -1178,7 +1178,7 @@ const PRODUCTS = {
     
   ],
 };
-/* === ORGANIZADOR DE PRODUTOS AUTOMÁTICO === */
+/* === ORGANIZADOR DE PRODUTOS AUTOMÁTICO (ATUALIZADO) === */
 const ALL_PRODUCTS = [...PRODUCTS.men, ...PRODUCTS.women];
 
 // Homem (Exclusivos + Unissexo)
@@ -1190,6 +1190,16 @@ PRODUCTS.men = ALL_PRODUCTS.filter(p =>
 PRODUCTS.women = ALL_PRODUCTS.filter(p => 
   [2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 38].includes(p.id)
 );
+
+// Garantir que os produtos têm a tag de género para o Quiz funcionar
+ALL_PRODUCTS.forEach(p => {
+  const isMan = [1, 6, 7, 10, 11, 12, 15, 18, 20, 27, 29, 30, 33, 34, 35, 37, 39].includes(p.id);
+  const isWoman = [2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 38].includes(p.id);
+  
+  if (isMan && isWoman) p.gender = "Unisexo";
+  else if (isMan) p.gender = "Masculino";
+  else p.gender = "Feminino";
+});
 
 /* ── ICONS ──────────────────────────────────────────────────── */
 const OptometryIcon = () => (
@@ -4053,17 +4063,17 @@ const openBook = (service = "Consulta Geral") => {
       </div>
     );
   };
-  /* QUIZ */
+ /* QUIZ REFINADO - PT-PT */
   const QuizPage = () => {
     const [step, setStep] = useState(1);
     const [answers, setAnswers] = useState({
       type: "",
       gender: "",
-      shapes: [],
+      style: "",      // Novo: Vibe/Estilo
       colors: [],
       materials: [],
       size: "",
-      contacts: "",
+      usage: "",      // Novo: Rotina
       email: "",
       optIn: true,
     });
@@ -4095,634 +4105,129 @@ const openBook = (service = "Consulta Geral") => {
     const finishQuiz = (e) => {
       if (e) e.preventDefault();
       setLoading(true);
-      setStep(9); // Loading Step
+      setStep(9);
       window.scrollTo(0, 0);
       setTimeout(() => {
-        // Simple filter for the prototype to show results
-        const pool =
-          answers.gender === "men"
-            ? PRODUCTS.men
-            : answers.gender === "women"
-            ? PRODUCTS.women
-            : [...PRODUCTS.men, ...PRODUCTS.women];
-        setResults(pool.slice(0, 3));
+        const all = [...PRODUCTS.men, ...PRODUCTS.women];
+        // Filtragem inteligente baseada na "Vibe" e Preferências
+        const filtered = all.filter(p => {
+          let score = 0;
+          if (answers.style && p.style.toLowerCase().includes(answers.style.toLowerCase())) score += 3;
+          if (answers.colors.length > 0 && answers.colors.some(c => p.color.includes(c))) score += 2;
+          if (answers.materials.length > 0 && answers.materials.some(m => p.material.includes(m))) score += 2;
+          return score > 0;
+        });
+        setResults(filtered.length > 0 ? filtered.slice(0, 3) : all.slice(0, 3));
         setLoading(false);
-        setStep(10); // Results Step
+        setStep(10);
       }, 2000);
     };
 
     const reset = () => {
       setStep(1);
-      setAnswers({
-        type: "",
-        gender: "",
-        shapes: [],
-        colors: [],
-        materials: [],
-        size: "",
-        contacts: "",
-        email: "",
-        optIn: true,
-      });
+      setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
       setResults([]);
       window.scrollTo(0, 0);
     };
 
     return (
-      <div
-        className="pt-28 pb-24 min-h-screen"
-        style={{ background: "#f8f9fa" }}
-      >
+      <div className="pt-28 pb-24 min-h-screen" style={{ background: "#f8f9fa" }}>
         <div className="max-w-4xl mx-auto px-6">
           {step <= 8 && (
             <div className="text-center mb-10 fade-up">
-              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>
-                {step} de 8
-              </p>
-
-              {step === 1 && (
-                <h1
-                  className="font-display text-4xl font-medium"
-                  style={{ color: "var(--forest)" }}
-                >
-                  O que você está procurando?
-                </h1>
-              )}
-              {step === 2 && (
-                <h1
-                  className="font-display text-4xl font-medium"
-                  style={{ color: "var(--forest)" }}
-                >
-                  O que você está procurando?
-                </h1>
-              )}
-              {step === 3 && (
-                <>
-                  <h1
-                    className="font-display text-4xl font-medium mb-2"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    De quais formatos você gosta?
-                  </h1>
-                  <p className="text-sm text-gray-500">
-                    Escolha quantos quiser
-                  </p>
-                </>
-              )}
-              {step === 4 && (
-                <>
-                  <h1
-                    className="font-display text-4xl font-medium mb-2"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    De quais cores você gosta?
-                  </h1>
-                  <p className="text-sm text-gray-500">
-                    Escolha quantas quiser
-                  </p>
-                </>
-              )}
-              {step === 5 && (
-                <>
-                  <h1
-                    className="font-display text-4xl font-medium mb-2"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    De quais materiais você gosta?
-                  </h1>
-                  <p className="text-sm text-gray-500">
-                    Escolha quantos quiser
-                  </p>
-                </>
-              )}
-              {step === 6 && (
-                <>
-                  <h1
-                    className="font-display text-4xl font-medium mb-2"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    Qual é o tamanho estimado da sua cabeça?
-                  </h1>
-                  <p className="text-sm text-gray-500">Por favor, escolha um</p>
-                </>
-              )}
-              {step === 7 && (
-                <h1
-                  className="font-display text-4xl font-medium"
-                  style={{ color: "var(--forest)" }}
-                >
-                  Você também usa lentes de contato?
-                </h1>
-              )}
-              {step === 8 && (
-                <>
-                  <h1
-                    className="font-display text-4xl font-medium mb-4"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    Salvar resultados do quiz para mais tarde
-                  </h1>
-                  <p className="text-sm text-gray-600 max-w-lg mx-auto">
-                    Nós lhe enviaremos os resultados do quiz e você receberá
-                    atualizações sobre novas armações, novas lojas e muito mais!
-                  </p>
-                </>
-              )}
+              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de 8</p>
+              
+              {step === 1 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que tipo de óculos procura?</h1>}
+              {step === 2 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Para quem são os óculos?</h1>}
+              {step === 3 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que imagem pretende transmitir?</h1>}
+              {step === 4 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Quais as cores que mais gosta?</h1>}
+              {step === 5 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Qual o material de eleição?</h1>}
+              {step === 6 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Qual o tamanho ideal para si?</h1>}
+              {step === 7 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Qual a sua rotina diária?</h1>}
+              {step === 8 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Guardar resultados</h1>}
             </div>
           )}
 
-          <div className="max-w-3xl mx-auto fade-up-1">
+          <div className="max-w-2xl mx-auto fade-up-1">
             {step === 1 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-2 gap-4 w-full mb-8">
-                  {[
-                    [
-                      "eyeglasses",
-                      "Óculos de grau",
-                      <Glasses size={48} strokeWidth={1.5} />,
-                    ],
-                    [
-                      "sunglasses",
-                      "Óculos de sol",
-                      <Eye size={48} strokeWidth={1.5} />,
-                    ],
-                  ].map(([v, l, icon]) => (
-                    <button
-                      key={v}
-                      onClick={() => answerSingle("type", v)}
-                      className="bg-white p-12 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center gap-6 shadow-sm"
-                      style={{
-                        borderColor: "var(--mist)",
-                        color: "var(--forest)",
-                      }}
-                    >
-                      <div style={{ color: "var(--gold)" }}>{icon}</div>
-                      <span className="font-semibold text-lg">{l}</span>
-                    </button>
-                  ))}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className="px-8 py-3 rounded-full border text-sm font-semibold transition-all hover:bg-gray-100"
-                  style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                >
-                  Não tenho certeza. Vamos pular.
-                </button>
+              <div className="grid gap-4">
+                {["Óculos de graduados", "Óculos de sol"].map(v => (
+                  <button key={v} onClick={() => answerSingle("type", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
+                ))}
               </div>
             )}
 
             {step === 2 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-2 gap-4 w-full mb-8">
-                  {[
-                    ["women", "Estilos femininos"],
-                    ["men", "Estilos masculinos"],
-                  ].map(([v, l]) => (
-                    <button
-                      key={v}
-                      onClick={() => answerSingle("gender", v)}
-                      className="bg-white p-14 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center shadow-sm"
-                      style={{
-                        borderColor: "var(--mist)",
-                        color: "var(--forest)",
-                      }}
-                    >
-                      <span className="font-semibold text-lg">{l}</span>
-                    </button>
-                  ))}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className="px-10 py-3 rounded-full border text-sm font-semibold transition-all hover:bg-gray-100"
-                  style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                >
-                  Sem preferência
-                </button>
+              <div className="grid gap-4">
+                {["Senhora", "Homem"].map(v => (
+                  <button key={v} onClick={() => answerSingle("gender", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
+                ))}
               </div>
             )}
 
             {step === 3 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full mb-8">
-                  {[
-                    "Quadrado",
-                    "Retangular",
-                    "Redondo",
-                    "Gatinho",
-                    "Aviador",
-                  ].map((v) => {
-                    const isSel = answers.shapes.includes(v);
-                    return (
-                      <button
-                        key={v}
-                        onClick={() => toggleMulti("shapes", v)}
-                        className="bg-white p-6 rounded-xl border transition-all flex flex-col items-center justify-center shadow-sm relative overflow-hidden"
-                        style={{
-                          borderColor: isSel ? "var(--gold)" : "var(--mist)",
-                          color: "var(--forest)",
-                        }}
-                      >
-                        {isSel && (
-                          <div
-                            className="absolute inset-0 opacity-10"
-                            style={{ background: "var(--gold)" }}
-                          />
-                        )}
-                        <div
-                          className="h-16 flex items-center justify-center mb-2 relative z-10"
-                          style={{ color: isSel ? "var(--gold)" : "#ccc" }}
-                        >
-                          <Glasses size={40} />
-                        </div>
-                        <span className="font-semibold relative z-10">{v}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className={`px-10 py-3 rounded-full text-sm font-semibold transition-all ${
-                    answers.shapes.length > 0
-                      ? "text-white"
-                      : "border hover:bg-gray-100"
-                  }`}
-                  style={{
-                    background:
-                      answers.shapes.length > 0 ? "var(--gold)" : "transparent",
-                    borderColor:
-                      answers.shapes.length > 0 ? "transparent" : "var(--mist)",
-                    color:
-                      answers.shapes.length > 0 ? "white" : "var(--forest)",
-                  }}
-                >
-                  {answers.shapes.length > 0 ? "Continuar" : "Sem preferência"}
-                </button>
+              <div className="grid gap-4">
+                {["Clássico", "Moderno", "Arrojado", "Minimalista"].map(v => (
+                  <button key={v} onClick={() => answerSingle("style", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
+                ))}
               </div>
             )}
 
             {step === 4 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-8">
-                  {[
-                    [
-                      "Cores",
-                      "radial-gradient(circle, #ef4444, #3b82f6, #22c55e)",
-                    ],
-                    ["Neutros", "#d6d3d1"],
-                    ["Preto", "#000000"],
-                    ["Tartaruga", "linear-gradient(45deg, #78350f, #d97706)"],
-                    [
-                      "Dois tons",
-                      "linear-gradient(to bottom, #1f2937 50%, #d1d5db 50%)",
-                    ],
-                    ["Cristais", "#f0f9ff"],
-                    ["Ouro", "#fbbf24"],
-                    ["Prata", "#9ca3af"],
-                  ].map(([v, bg]) => {
-                    const isSel = answers.colors.includes(v);
-                    return (
-                      <button
-                        key={v}
-                        onClick={() => toggleMulti("colors", v)}
-                        className="bg-white p-5 rounded-xl border transition-all flex items-center justify-center gap-3 shadow-sm relative overflow-hidden"
-                        style={{
-                          borderColor: isSel ? "var(--gold)" : "var(--mist)",
-                          color: "var(--forest)",
-                        }}
-                      >
-                        {isSel && (
-                          <div
-                            className="absolute inset-0 opacity-10"
-                            style={{ background: "var(--gold)" }}
-                          />
-                        )}
-                        <div
-                          className="w-6 h-6 rounded-full shadow-inner relative z-10 border border-gray-200"
-                          style={{ background: bg }}
-                        />
-                        <span className="font-semibold text-sm relative z-10">
-                          {v}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className={`px-10 py-3 rounded-full text-sm font-semibold transition-all ${
-                    answers.colors.length > 0
-                      ? "text-white"
-                      : "border hover:bg-gray-100"
-                  }`}
-                  style={{
-                    background:
-                      answers.colors.length > 0 ? "var(--gold)" : "transparent",
-                    borderColor:
-                      answers.colors.length > 0 ? "transparent" : "var(--mist)",
-                    color:
-                      answers.colors.length > 0 ? "white" : "var(--forest)",
-                  }}
-                >
-                  {answers.colors.length > 0 ? "Continuar" : "Sem preferência"}
-                </button>
+              <div className="grid grid-cols-2 gap-4">
+                {["Preto", "Tartaruga", "Azul", "Dourado", "Transparente"].map(v => (
+                  <button key={v} onClick={() => toggleMulti("colors", v)} className={`p-6 rounded-2xl border text-center font-semibold transition-all ${answers.colors.includes(v) ? 'bg-black text-white' : 'bg-white'}`}>{v}</button>
+                ))}
+                <button onClick={nextStep} className="col-span-2 mt-4 underline text-sm">Passar à frente</button>
               </div>
             )}
 
             {step === 5 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-8">
-                  {["Acetato", "Metal", "Misto"].map((v) => {
-                    const isSel = answers.materials.includes(v);
-                    return (
-                      <button
-                        key={v}
-                        onClick={() => toggleMulti("materials", v)}
-                        className="bg-white p-8 rounded-xl border transition-all flex flex-col items-center justify-center shadow-sm relative overflow-hidden"
-                        style={{
-                          borderColor: isSel ? "var(--gold)" : "var(--mist)",
-                          color: "var(--forest)",
-                        }}
-                      >
-                        {isSel && (
-                          <div
-                            className="absolute inset-0 opacity-10"
-                            style={{ background: "var(--gold)" }}
-                          />
-                        )}
-                        <span className="font-semibold text-lg relative z-10">
-                          {v}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className={`px-10 py-3 rounded-full text-sm font-semibold transition-all ${
-                    answers.materials.length > 0
-                      ? "text-white"
-                      : "border hover:bg-gray-100"
-                  }`}
-                  style={{
-                    background:
-                      answers.materials.length > 0
-                        ? "var(--gold)"
-                        : "transparent",
-                    borderColor:
-                      answers.materials.length > 0
-                        ? "transparent"
-                        : "var(--mist)",
-                    color:
-                      answers.materials.length > 0 ? "white" : "var(--forest)",
-                  }}
-                >
-                  {answers.materials.length > 0
-                    ? "Continuar"
-                    : "Sem preferência"}
-                </button>
+              <div className="grid gap-4">
+                {["Acetato", "Metal", "Ultem"].map(v => (
+                  <button key={v} onClick={() => answerSingle("materials", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
+                ))}
               </div>
             )}
 
             {step === 6 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-3 gap-4 w-full mb-8">
-                  {[
-                    ["narrow", "Estreita"],
-                    ["medium", "Média"],
-                    ["wide", "Larga"],
-                  ].map(([v, l]) => (
-                    <button
-                      key={v}
-                      onClick={() => answerSingle("size", v)}
-                      className="bg-white py-10 px-4 rounded-xl border hover:border-gray-400 transition-all flex flex-col items-center justify-center shadow-sm"
-                      style={{
-                        borderColor: "var(--mist)",
-                        color: "var(--forest)",
-                      }}
-                    >
-                      <div
-                        className="w-16 h-16 mx-auto mb-4"
-                        style={{ color: "var(--forest)", opacity: 0.8 }}
-                      >
-                        {FaceIcons.oval()}
-                      </div>
-                      <span className="font-semibold">{l}</span>
-                    </button>
-                  ))}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className="px-8 py-3 rounded-full border text-sm font-semibold transition-all hover:bg-gray-100"
-                  style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                >
-                  Não tenho certeza. Vamos pular.
-                </button>
+              <div className="grid gap-4">
+                {["Estreito", "Médio", "Largo"].map(v => (
+                  <button key={v} onClick={() => answerSingle("size", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
+                ))}
               </div>
             )}
 
             {step === 7 && (
-              <div className="flex flex-col items-center">
-                <div className="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
-                  {["Sim", "Não"].map((v) => (
-                    <button
-                      key={v}
-                      onClick={() => answerSingle("contacts", v)}
-                      className="bg-white py-12 rounded-xl border hover:border-gray-400 transition-all flex items-center justify-center shadow-sm"
-                      style={{
-                        borderColor: "var(--mist)",
-                        color: "var(--forest)",
-                      }}
-                    >
-                      <span className="font-semibold text-lg">{v}</span>
-                    </button>
-                  ))}
-                </div>
-                <button
-                  onClick={nextStep}
-                  className="px-10 py-3 rounded-full border text-sm font-semibold transition-all hover:bg-gray-100"
-                  style={{ borderColor: "var(--mist)", color: "var(--forest)" }}
-                >
-                  Pular
-                </button>
+              <div className="grid gap-4">
+                {["Trabalho/Escritório", "Uso diário (todo o dia)", "Condução/Lazer", "Apenas leitura"].map(v => (
+                  <button key={v} onClick={() => answerSingle("usage", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
+                ))}
               </div>
             )}
 
             {step === 8 && (
-              <div className="max-w-md mx-auto mt-8">
-                <form onSubmit={finishQuiz} className="space-y-6">
-                  <div className="relative">
-                    <label
-                      className="absolute -top-2 left-3 bg-[#f8f9fa] px-1 text-xs font-semibold"
-                      style={{ color: "#666" }}
-                    >
-                      Endereço de e-mail
-                    </label>
-                    <input
-                      type="email"
-                      value={answers.email}
-                      onChange={(e) =>
-                        setAnswers({ ...answers, email: e.target.value })
-                      }
-                      className="w-full p-4 rounded-lg border focus:ring-1 outline-none transition-all"
-                      style={{
-                        borderColor: "var(--mist)",
-                        background: "transparent",
-                      }}
-                      required
-                    />
-                  </div>
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={answers.optIn}
-                      onChange={(e) =>
-                        setAnswers({ ...answers, optIn: e.target.checked })
-                      }
-                      className="mt-1 w-5 h-5 rounded"
-                      style={{ accentColor: "var(--gold)" }}
-                    />
-                    <span
-                      className="text-sm leading-snug"
-                      style={{ color: "var(--forest)" }}
-                    >
-                      Eu quero receber as últimas novidades sobre novas
-                      armações, eventos e muito mais.
-                    </span>
-                  </label>
-                  <button
-                    type="submit"
-                    className="w-full text-white font-semibold py-4 rounded-full transition-all"
-                    style={{ background: "var(--gold)" }}
-                  >
-                    Continuar
-                  </button>
-                </form>
-              </div>
+              <form onSubmit={finishQuiz} className="space-y-4">
+                <input type="email" placeholder="O seu e-mail" required className="w-full p-4 rounded-xl border" onChange={(e) => setAnswers({...answers, email: e.target.value})} />
+                <button type="submit" className="w-full bg-black text-white py-4 rounded-xl font-bold">Ver Recomendações</button>
+              </form>
             )}
 
-            {step === 9 && (
-              <div className="text-center py-20 fade-up">
-                <div className="relative w-16 h-16 mx-auto mb-6">
-                  <div
-                    className="absolute inset-0 rounded-full border-4"
-                    style={{ borderColor: "var(--mist)" }}
-                  />
-                  <div
-                    className="absolute inset-0 rounded-full border-4 border-transparent animate-spin-slow"
-                    style={{ borderTopColor: "var(--forest)" }}
-                  />
-                </div>
-                <h3
-                  className="font-display text-2xl font-semibold mb-2"
-                  style={{ color: "var(--forest)" }}
-                >
-                  A procurar as armações perfeitas...
-                </h3>
-                <p className="text-sm text-gray-500">
-                  A analisar as suas preferências
-                </p>
-              </div>
-            )}
+            {step === 9 && <div className="text-center py-20 font-display text-2xl">A analisar o seu perfil...</div>}
 
             {step === 10 && (
-              <div className="fade-up">
-                <div className="text-center mb-10">
-                  <div
-                    className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
-                    style={{ background: "#e8f5ee", color: "var(--forest)" }}
-                  >
-                    <CheckCircle size={32} />
-                  </div>
-                  <h2
-                    className="font-display text-3xl font-semibold mb-2"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    As suas recomendações
-                  </h2>
-                  <p className="text-sm text-gray-500">
-                    Selecionadas especialmente para o seu perfil
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-3 gap-5 mb-8">
-                  {results.map((p, i) => (
-                    <div
-                      key={p.id}
-                      className="rounded-2xl overflow-hidden card-hover bg-white border relative"
-                      style={{ borderColor: "var(--mist)" }}
-                    >
-                      {i === 0 && (
-                        <div
-                          className="absolute top-0 left-0 right-0 text-white text-center text-xs font-bold py-2 z-10 tracking-wider"
-                          style={{ background: "var(--gold)" }}
-                        >
-                          ⭐ MELHOR COMBINAÇÃO
-                        </div>
-                      )}
-                      <div
-                        className="img-zoom aspect-square mt-8"
-                        style={{ background: "var(--cream)" }}
-                      >
-                        <Img
-                          src={p.image}
-                          alt={p.name}
-                          className="w-full h-full object-cover mix-blend-multiply"
-                        />
-                      </div>
-                      <div className="p-5 border-t border-gray-100">
-                        <p
-                          className="text-xs font-semibold tracking-wide mb-0.5"
-                          style={{ color: "var(--gold)" }}
-                        >
-                          {p.brand}
-                        </p>
-                        <h3 className="font-semibold mb-2 text-sm">{p.name}</h3>
-                        <p
-                          className="font-display text-2xl font-semibold mb-4"
-                          style={{ color: "var(--forest)" }}
-                        >
-                          €{p.price}
-                        </p>
-                        <button
-                          onClick={() => setSelectedProduct(p)}
-                          className="w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all text-white"
-                          style={{ background: "var(--forest)" }}
-                        >
-                          <Eye size={14} /> Ver Detalhes
-                        </button>
-                      </div>
+              <div className="text-center">
+                <h2 className="text-3xl font-bold mb-8">As nossas sugestões para si:</h2>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {results.map(p => (
+                    <div key={p.id} className="bg-white p-4 rounded-xl border">
+                      <img src={p.image} alt={p.name} className="w-full h-32 object-cover mb-4 rounded-lg" />
+                      <p className="font-bold">{p.name}</p>
+                      <p className="text-sm">{p.price}€</p>
                     </div>
                   ))}
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center mt-10">
-                  <button
-                    onClick={openBook}
-                    className="text-white px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all"
-                    style={{ background: "var(--forest)" }}
-                  >
-                    <Calendar size={15} /> Agendar Visita
-                  </button>
-                  <button
-                    onClick={reset}
-                    className="bg-white border text-black px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:bg-gray-50"
-                    style={{ borderColor: "var(--mist)" }}
-                  >
-                    <ArrowRight size={15} className="rotate-180" /> Refazer Quiz
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {step > 1 && step <= 8 && (
-              <div
-                className="mt-16 text-center border-t pt-8"
-                style={{ borderColor: "var(--mist)" }}
-              >
-                <button
-                  onClick={() => setStep(step - 1)}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-black transition-all"
-                >
-                  <ChevronRight size={14} className="rotate-180" /> Voltar
-                </button>
+                <button onClick={reset} className="mt-8 px-8 py-3 border rounded-full">Refazer Quiz</button>
               </div>
             )}
           </div>
