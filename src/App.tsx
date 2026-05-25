@@ -116,6 +116,7 @@ function Img({ src, alt, className, style }) {
       alt={alt}
       className={className}
       style={style}
+      loading="lazy" // <--- A MÁGICA ESTÁ AQUI!
       onError={() => setErr(true)}
     />
   );
