@@ -2506,7 +2506,7 @@ const openBook = (service = "Consulta Geral") => {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
               <img 
-                src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
+                src="https://i.postimg.cc/dV3TfxyK/Gemini-Generated-Image-aqhqg6aqhqg6aqhq.png" 
                 alt="Logo Óptica 13" 
                 className="h-10 w-auto" 
               />
