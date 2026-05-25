@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   Glasses,
   Star,
@@ -3633,39 +3633,40 @@ const openBook = (service = "Consulta Geral") => {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const products = PRODUCTS[gender];
-    const filtered = products.filter((p) => {
-      // Filtro de Pesquisa (Texto)
-      if (
-        search &&
-        !p.name.toLowerCase().includes(search.toLowerCase()) &&
-        !p.brand.toLowerCase().includes(search.toLowerCase())
-      )
-        return false;
+  const filtered = useMemo(() => {
+      return products.filter((p) => {
+        // Filtro de Pesquisa (Texto)
+        if (
+          search &&
+          !p.name.toLowerCase().includes(search.toLowerCase()) &&
+          !p.brand.toLowerCase().includes(search.toLowerCase())
+        )
+          return false;
 
-      // Filtros Inteligentes (Lê o texto complexo que puseste nos produtos)
-      if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
-      if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
-      
-      // Lógica avançada para cores (junta palavras semelhantes)
-      if (filters.color) {
-        const c = filters.color.toLowerCase();
-        const pc = p.color.toLowerCase();
-        if (c === "transparente" && !(pc.includes("transparente") || pc.includes("cristal"))) return false;
-        else if (c === "vermelho" && !(pc.includes("vermelho") || pc.includes("burgundy") || pc.includes("vinho"))) return false;
-        else if (c !== "transparente" && c !== "vermelho" && !pc.includes(c)) return false;
-      }
+        // Filtros Inteligentes
+        if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
+        if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
 
-      // Lógica avançada para formatos (junta formatos da mesma família)
-      if (filters.shape) {
-        const s = filters.shape.toLowerCase();
-        const ps = p.shape.toLowerCase();
-        if (s === "redondo" && !(ps.includes("redondo") || ps.includes("pantos"))) return false;
-        else if (s === "cat-eye" && !(ps.includes("cat-eye") || ps.includes("borboleta"))) return false;
-        else if (s !== "redondo" && s !== "cat-eye" && !ps.includes(s)) return false;
-      }
+        // Lógica avançada para cores
+        if (filters.color) {
+          const c = filters.color.toLowerCase();
+          const pc = p.color.toLowerCase();
+          if (c === "transparente" && !(pc.includes("transparente") || pc.includes("cristal"))) return false;
+          else if (c === "vermelho" && !(pc.includes("vermelho") || pc.includes("burgundy") || pc.includes("vinho"))) return false;
+          else if (c !== "transparente" && c !== "vermelho" && !pc.includes(c)) return false;
+        }
 
-      return true;
-    });
+        // Lógica avançada para formatos
+        if (filters.shape) {
+          const s = filters.shape.toLowerCase();
+          const ps = p.shape.toLowerCase();
+          if (s === "redondo" && !(ps.includes("redondo") || ps.includes("pantos"))) return false;
+          else if (s === "cat-eye" && !(ps.includes("cat-eye") || ps.includes("borboleta"))) return false;
+          else if (s !== "redondo" && s !== "cat-eye" && !ps.includes(s)) return false;
+        }
+        return true;
+      });
+    }, [products, search, filters]); // <-- Isto é o segredo!
 
     const FilterPanel = ({ isMobile }) => (
       <div className={isMobile ? "p-6" : ""}>
