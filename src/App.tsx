@@ -1077,7 +1077,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/3xW9LR1d/16-2.png"
       ],
 },
-    
+ {
+      id: 36, // Ajusta conforme a tua sequência
+      gender: "Unisexo", 
+      shopifyId: "15751467106678", 
+      name: "Tortuga Horizon",
+      rating: 4.9,
+      reviews: 138,
+      badge: "Best Seller",
+      brand: "Vera Velosa by Trevi Coliseum",
+      price: 145, 
+      material: "Acetato Premium",
+      color: "Tartaruga (Havana) / Lentes Azuis Degradé",
+      style: "Clássico / Moderno / Coastal",
+      shape: "Retangular Suave",
+      faceShape: ["round", "oval", "heart"],
+      budget: "mid-high",
+      description: "Onde a tradição encontra o oceano. Os óculos Tortuga Horizon foram desenhados para quem valoriza a estética clássica do padrão Havana, mas não abdica de um apontamento de cor moderno e inconfundível. As lentes em degradé azul criam um contraste magnético.\n\n✨ Design de Impacto: A armação em acetato no clássico padrão tartaruga é elevada pela modernidade das lentes azuis em degradé, criando um contraste perfeito entre o vintage e o contemporâneo.\n\n☁️ Conforto & Ergonometria: Construídos com acetato de alta qualidade, garantem uma durabilidade excecional e um ajuste anatómico que abraça o rosto para conforto total.\n\n📐 Visagismo & Estilo: Com uma silhueta equilibrada, este modelo adapta-se com facilidade a diferentes traços faciais, proporcionando harmonia e definição extra.\n\n🔥 Dica de Estilo: Combine-os com tons neutros como branco ou bege. Deixe que o azul das lentes seja o destaque do seu visual.",
+      image: "https://i.postimg.cc/v8km12jR/17.png", 
+      gallery: [
+        "https://i.postimg.cc/gcQ0wt7T/17-2.png",
+        "https://i.postimg.cc/c12JKkzp/17-1.png",
+        "https://i.postimg.cc/44q3K20r/17-3.png"
+      ],
+},   
     
     
     
