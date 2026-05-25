@@ -915,6 +915,31 @@ const PRODUCTS = {
         "https://i.postimg.cc/7680DYkD/9-1.png"
       ],
 },
+    {
+      id: 29, // Confirma se é o 31 na tua lista
+      gender: "", 
+      shopifyId: "15751445217654", // Atualizar depois
+      name: "Aero Gunmetal (2-in-1)",
+      rating: 4.9,
+      reviews: 185,
+      badge: "2-em-1",
+      brand: "MindTheLook by Vera Velosa",
+      price: 149, // Preço premium sugerido para metal 2-em-1
+      material: "Metal Premium com Clip-On Magnético",
+      color: "Gunmetal (Cinza Escuro)",
+      style: "Clássico / Piloto",
+      shape: "Aviador",
+      faceShape: ["square", "heart", "oval"],
+      budget: "high",
+      description: "O formato mais icónico do mundo com funcionalidade em dobro. O Aero Gunmetal apresenta o clássico design aviador de ponte dupla numa leve estrutura metálica cinza escuro. O seu prático clip-on magnético converte-o instantaneamente nuns óculos de sol cheios de atitude. Ideal para suavizar rostos quadrados e indispensável para quem valoriza um estilo intemporal e prático.",
+      image: "https://i.postimg.cc/KzjSGFrq/10.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/fLynzZjG/10-2.png",
+        "https://i.postimg.cc/ZRntbZFX/10-1.png",
+        "https://i.postimg.cc/k4G3J9Fj/10-3.png"
+      ],
+},
+    
     
   ],
 };
