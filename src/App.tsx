@@ -4093,27 +4093,33 @@ const openBook = (service = "Consulta Geral") => {
       window.scrollTo(0, 0);
     };
 
-    const finishQuiz = (e) => {
-      if (e) e.preventDefault();
-      setLoading(true);
-      setStep(9);
-      window.scrollTo(0, 0);
-      setTimeout(() => {
+  const finishQuiz = () => {
+    // 1. Forçar o estado de carregamento
+    setStep(9);
+    window.scrollTo(0, 0);
+
+    // 2. Timeout simples para garantir que o React processa o setStep(9)
+    setTimeout(() => {
+      try {
         const all = [...PRODUCTS.men, ...PRODUCTS.women];
-        // Filtragem inteligente baseada na "Vibe" e Preferências
+        
+        // Filtragem simples para testar
         const filtered = all.filter(p => {
           let score = 0;
           if (answers.style && p.style.toLowerCase().includes(answers.style.toLowerCase())) score += 3;
           if (answers.colors.length > 0 && answers.colors.some(c => p.color.includes(c))) score += 2;
-          if (answers.materials.length > 0 && answers.materials.some(m => p.material.includes(m))) score += 2;
           return score > 0;
         });
+        
+        // 3. Resultados e transição FORÇADA para o passo 10
         setResults(filtered.length > 0 ? filtered.slice(0, 3) : all.slice(0, 3));
-        setLoading(false);
         setStep(10);
-      }, 2000);
-    };
-
+      } catch (error) {
+        console.error("Erro no quiz:", error);
+        setStep(10); // Transição de segurança caso o filtro falhe
+      }
+    }, 800);
+  };
     const reset = () => {
       setStep(1);
       setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
