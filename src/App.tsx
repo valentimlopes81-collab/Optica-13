@@ -847,7 +847,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/7Yg89KKR/6-1.png",
         "https://i.postimg.cc/dtMcGbjN/6-3.png"
       ],
-} 
+},
+    {
+      id: 26, // Substituir pelo ID correto na tua lista
+      gender: "", 
+      shopifyId: "15751425196406", // Atualizar depois
+      name: "Ultem Havana (2-in-1)",
+      rating: 4.9,
+      reviews: 176,
+      badge: "2-em-1",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139, // Como é 2-em-1 e Ultem, sugeri o preço premium
+      material: "Ultem Premium com Clip-On Magnético",
+      color: "Tartaruga",
+      style: "Prático / Clássico",
+      shape: "Quadrado Oversize",
+      faceShape: ["round", "oval"],
+      budget: "high",
+      description: "A inteligência do design em formato de óculos. Fabricado em ULTEM ultra-leve e flexível, o modelo Ultem Havana apresenta um formato quadrado oversize em padrão tartaruga. Graças ao seu clipe magnético integrado, transforma-se instantaneamente nuns sofisticados óculos de sol. Ideal para rostos redondos e ovais, é o derradeiro acessório para quem valoriza conforto e praticidade no dia a dia.",
+      image: "https://i.postimg.cc/Yqyn1YHP/7.png", // Substituir pelo link real gerado
+      gallery: [
+        "https://i.postimg.cc/8PnKhMS3/7-2.png",
+        "https://i.postimg.cc/RVbscKBk/7-1.png"
+      ],
+},
   ],
 };
 
