@@ -939,6 +939,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/k4G3J9Fj/10-3.png"
       ],
 },
+    {
+      id: 30, // Confirma se é o 32 na tua lista
+      gender: "", 
+      shopifyId: "INSERIR_ID_AQUI", // Atualizar depois
+      name: "Navigator Silver (2-in-1)",
+      rating: 4.8,
+      reviews: 164,
+      badge: "2-em-1",
+      brand: "MindTheLook by Vera Velosa",
+      price: 149, 
+      material: "Metal Premium com Clip-On Magnético",
+      color: "Prateado",
+      style: "Moderno / Piloto",
+      shape: "Retangular / Aviador",
+      faceShape: ["round", "oval"],
+      budget: "high",
+      description: "A evolução do design clássico com a máxima versatilidade. O Navigator Silver apresenta uma estrutura metálica prateada com ponte dupla e linhas retangulares. Equipado com um prático clip-on magnético, passa de óculos de vista a óculos de sol num instante. A armação perfeita para adicionar estrutura a rostos redondos e ovais com muito estilo.",
+      image: "https://i.postimg.cc/CLFtSwh7/11.png", // Substituir pelos teus links reais
+      gallery: [
+        "https://i.postimg.cc/yYV5s710/11-2.png",
+        "https://i.postimg.cc/RVM84vSQ/11-1.png",
+        "https://i.postimg.cc/QxXPhj8J/11-3.png"
+      ],
+},
     
     
   ],
