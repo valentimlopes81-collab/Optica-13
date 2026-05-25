@@ -2503,14 +2503,15 @@ const openBook = (service = "Consulta Geral") => {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           
           {/* 1. Logotipo e ERS */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-5">
-              <img 
-                src="https://i.postimg.cc/dV3TfxyK/Gemini-Generated-Image-aqhqg6aqhqg6aqhq.png" 
-                alt="Logo Óptica 13" 
-                className="h-10 w-auto" 
-              />
-            </div>
+<div className="lg:col-span-2">
+  <div className="flex items-center gap-3 mb-5">
+    <img 
+      src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
+      alt="Logo Óptica 13" 
+      className="h-10 w-auto" 
+      style={{ filter: "brightness(0) invert(1)" }} // <--- A MAGIA PARA O TORNAR BRANCO
+    />
+  </div>
             <p
               className="text-sm leading-relaxed mb-3 max-w-sm"
               style={{ color: "rgba(250,247,242,0.45)" }}
