@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useRef, useMemo } from "react";
+import './global.css';
 import {
   Glasses,
   Star,
@@ -27,76 +28,6 @@ import {
   ZoomIn,
   Shield,
 } from "lucide-react";
-
-/* ── FONT INJECTION ─────────────────────────────────────────── */
-const FontStyle = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap');
-    :root {
-      --cream: #ffffff;      /* Fundo Principal: Branco Puro */
-      --cream-dark: #f8f9fa; /* Fundo Secundário: Cinza super claro */
-      --forest: #000000;     /* Elementos Principais: Preto */
-      --forest-light: #333333;/* Cinza Escuro */
-      --gold: #0056b3;       /* Destaque: Azul Premium / Azul Óptica */
-      --gold-light: #3385ff; /* Azul mais vibrante para hovers */
-      --slate: #0f172a;      /* Rodapé: Preto meio azulado escuro */
-      --mist: #e2e8f0;       /* Bordas e Caixas: Cinza claro elegante */
-      --text: #1e293b;       /* Texto: Cinza quase preto para não cansar a vista */
-    }
-    * { box-sizing: border-box; }
-    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
-    .font-display { font-family: 'Jost', sans-serif; letter-spacing: -0.02em; }
-    .bg-cream { background-color: var(--cream); }
-    .bg-forest { background-color: var(--forest); }
-    .text-forest { color: var(--forest); }
-    .text-gold { color: var(--gold); }
-    .border-gold { border-color: var(--gold); }
-    .border-forest { border-color: var(--forest); }
-
-    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    @keyframes slideInRight { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    @keyframes pulse-gold { 0%,100% { box-shadow: 0 0 0 0 rgba(0,86,179,0.4); } 50% { box-shadow: 0 0 0 12px rgba(0,86,179,0); } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .fade-up { animation: fadeUp 0.7s ease forwards; }
-    .fade-up-1 { animation: fadeUp 0.7s 0.1s ease both; }
-    .fade-up-2 { animation: fadeUp 0.7s 0.25s ease both; }
-    .fade-up-3 { animation: fadeUp 0.7s 0.4s ease both; }
-    .fade-up-4 { animation: fadeUp 0.7s 0.55s ease both; }
-    .slide-right { animation: slideInRight 0.5s ease forwards; }
-    .animate-marquee { animation: marquee 28s linear infinite; }
-    .animate-spin-slow { animation: spin 1s linear infinite; }
-    .pulse-gold { animation: pulse-gold 2s infinite; }
-
-    .hero-bg {
-      background: linear-gradient(135deg, #000000 0%, #1a1a1a 40%, #002244 100%);
-    }
-    .gold-gradient { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); background-size: 200% 100%; }
-    .card-hover { transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
-    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0,0,0,0.08); }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold) !important; }
-    .scrollbar-hide::-webkit-scrollbar { display: none; }
-    .drawer-open { transform: translateX(0) !important; }
-    .img-zoom { overflow: hidden; }
-    .img-zoom img { transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
-    .img-zoom:hover img { transform: scale(1.08); }
-    .btn-forest { background: var(--forest); color: white; border: 2px solid var(--forest); transition: all 0.3s; }
-    .btn-forest:hover { background: transparent; color: var(--forest); }
-    .btn-gold { background: var(--gold); color: white; border: 2px solid var(--gold); transition: all 0.3s; }
-    .btn-gold:hover { background: transparent; color: var(--gold); }
-    .btn-outline-forest { background: transparent; color: var(--forest); border: 2px solid var(--forest); transition: all 0.3s; }
-    .btn-outline-forest:hover { background: var(--forest); color: white; }
-    /* FORÇAR O BOTÃO DO SHOPIFY A 100% DE LARGURA */
-    .shopify-buy-frame,
-    .shopify-buy-frame iframe {
-      width: 100% !important;
-      max-width: 100% !important;
-      display: block !important;
-    }
-  `}</style>
-);
 
 /* ── HELPERS ────────────────────────────────────────────────── */
 function Img({ src, alt, className, style }) {
@@ -2509,7 +2440,7 @@ const openBook = (service = "Consulta Geral") => {
               Cuidamos da sua visão com tecnologia de ponta e profissionalismo.
             </p>
             <p className="text-xs font-semibold text-gray-500">
-              Nº Registo ERS: E131391
+              Nº Registo ERS: E131391| NIF: 501687459
             </p>
           </div>
 
