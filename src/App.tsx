@@ -1125,7 +1125,30 @@ const PRODUCTS = {
         "https://i.postimg.cc/PxK238gH/18-3.png"
       ],
 }, 
-    
+{
+      id: 38, // Ajusta conforme a tua sequência
+      gender: "Feminino", 
+      shopifyId: "15751468712310", 
+      name: "Burgundy Muse",
+      rating: 4.9,
+      reviews: 98,
+      badge: "Elegance",
+      brand: "Vera Velosa by Trevi Coliseum",
+      price: 145, 
+      material: "Acetato de Alta Precisão",
+      color: "Burgundy (Vinho Profundo)",
+      style: "Elegante / Sofisticado / Cat-Eye",
+      shape: "Cat-Eye Suave",
+      faceShape: ["oval", "heart", "diamond"],
+      budget: "mid-high",
+      description: "Eleve a sua presença com o modelo Burgundy Muse, uma verdadeira declaração de estilo em tons profundos de vinho. Com uma silhueta cat-eye subtil e sofisticada, estes óculos foram desenhados para realçar a feminilidade e conferir um ar de autoridade e confiança ao seu olhar.\n\n✨ Design de Impacto: Armação num tom burgundy rico e profundo, com um formato cat-eye que equilibra elegância intemporal com traços modernos.\n\n☁️ Precisão Técnica: O acabamento Cold Mounting garante uma precisão de montagem superior, conferindo durabilidade e um acabamento impecável.\n\n📐 Efeito Lifting: O design da armação segue uma linha ascendente que ilumina o rosto, sendo o aliado perfeito para definir as maçãs do rosto e criar um efeito de lifting natural.\n\n🔥 Dica de Estilo: O acessório perfeito para transitar do escritório para um jantar especial. Combine com tons neutros para um visual de alto impacto.",
+      image: "https://i.postimg.cc/L8MLP87F/19.png", 
+      gallery: [
+        "https://i.postimg.cc/sgR7WgLt/19-3.png",
+        "https://i.postimg.cc/VkcntkTQ/19-1.png",
+        "https://i.postimg.cc/rwLx4wH7/19-2.png"
+      ],
+},    
     
     
     
