@@ -1032,6 +1032,28 @@ const PRODUCTS = {
         "https://i.postimg.cc/fbhqqsrV/14-1.png"
       ],
 },
+{
+      id: 35, 
+      gender: "Unisexo", 
+      shopifyId: "15751463272822", 
+      name: "Midnight Edge",
+      rating: 4.9,
+      reviews: 124,
+      badge: "Best Seller",
+      brand: "MindTheLook by Vera Velosa",
+      price: 139, 
+      material: "Acetato de Alta Densidade",
+      color: "Preto Brilhante / Detalhes Prateados",
+      style: "Urbano / Contemporâneo",
+      shape: "Retangular (Flat-Top)",
+      faceShape: ["round", "oval"],
+      budget: "mid-high",
+      description: "Redefina o seu estilo com o Midnight Edge, uma peça que funde a força do acetato de alta densidade com um design urbano inconfundível. Mais do que um acessório de visão, estes óculos são uma autêntica moldura de personalidade para o seu rosto.\n\n✨ Design de Impacto: Armação frontal robusta em preto brilhante, com um perfil flat-top geométrico, acentuada por detalhes metálicos em forma de seta.\n\n☁️ Conforto & Ergonometria: Desenhados para o ritmo da cidade, com hastes estudadas para um ajuste perfeito e conforto supremo.\n\n📐 Visagismo & Contraste: A silhueta retangular é a aliada perfeita para criar definição em rostos redondos ou ovais.\n\n🔥 Dica de Estilo: Combine o preto profundo com tons quentes (terracota, bordeaux ou castanho caramelo) para um visual magnético.",
+      image: "https://i.postimg.cc/tTn59mfv/15.png", 
+      gallery: [
+        "https://i.postimg.cc/hjQrK3wy/15-1.png" 
+      ],
+},    
     
     
     
