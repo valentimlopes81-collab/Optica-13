@@ -1547,19 +1547,18 @@ function ExitPopup({ onClose }) {
     </div>
   );
 }
-/* ── COOKIE BANNER ──────────────────────────────────────────── */
+/* ── COOKIE BANNER (LEGALIZADO RGPD) ──────────────────────────── */
 function CookieBanner() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Verifica se o cliente já aceitou antes
     if (!localStorage.getItem("cookies_optica13")) {
       setShow(true);
     }
   }, []);
 
-  const acceptCookies = () => {
-    localStorage.setItem("cookies_optica13", "true");
+  const handleCookies = (type) => {
+    localStorage.setItem("cookies_optica13", type); // Guarda se foi "all" ou "essential"
     setShow(false);
   };
 
@@ -1573,12 +1572,18 @@ function CookieBanner() {
       <div className="text-sm" style={{ color: "#555" }}>
         <p>
           <strong style={{ color: "var(--forest)" }}>Usamos cookies 🍪</strong><br/>
-          Utilizamos cookies para melhorar a sua experiência de navegação, personalizar conteúdos e analisar o nosso tráfego. Ao continuar a navegar, concorda com a nossa Política de Privacidade.
+          Utilizamos cookies para melhorar a sua experiência, personalizar conteúdos e analisar tráfego. Pode aceitar todos ou apenas os estritamente necessários.
         </p>
       </div>
       <div className="flex gap-3 w-full sm:w-auto flex-shrink-0">
         <button 
-          onClick={acceptCookies} 
+          onClick={() => handleCookies("essential")} 
+          className="btn-outline-forest w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-sm"
+        >
+          Apenas Essenciais
+        </button>
+        <button 
+          onClick={() => handleCookies("all")} 
           className="btn-forest w-full sm:w-auto px-8 py-3 rounded-xl font-semibold text-sm"
         >
           Aceitar Todos
@@ -1587,7 +1592,6 @@ function CookieBanner() {
     </div>
   );
 }
-
 /* ── CART DRAWER (COM CHECKOUT VISUAL) ───────────────────────── */
 function CartDrawer({ cart, onClose, onRemove, onQty, onBook }) {
   const [checkoutStep, setCheckoutStep] = useState(1); // 1: Carrinho, 2: Pagamento, 3: Sucesso
@@ -2410,20 +2414,6 @@ const openBook = (service = "Consulta Geral") => {
           </nav>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setCartOpen(true)}
-              className="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-all"
-            >
-              <ShoppingBag size={18} />
-              {cart.length > 0 && (
-                <span
-                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold text-white"
-                  style={{ background: "var(--gold)" }}
-                >
-                  {cart.reduce((s, i) => s + i.qty, 0)}
-                </span>
-              )}
-            </button>
             <button
              onClick={() => openBook("Consulta Geral - Topo")}
               className="hidden sm:flex btn-forest px-5 py-2.5 rounded-xl text-sm font-semibold items-center gap-2"
@@ -4108,11 +4098,27 @@ const openBook = (service = "Consulta Geral") => {
       try {
         const all = [...PRODUCTS.men, ...PRODUCTS.women];
         
-        // Filtragem simples para testar
+        // Filtragem inteligente que cruza TODAS as respostas do cliente
         const filtered = all.filter(p => {
           let score = 0;
+          
+          // 1. Estilo (Vibe)
           if (answers.style && p.style.toLowerCase().includes(answers.style.toLowerCase())) score += 3;
+          
+          // 2. Cor
           if (answers.colors.length > 0 && answers.colors.some(c => p.color.includes(c))) score += 2;
+          
+          // 3. Material (Aplica o filtro da pergunta 5)
+          if (answers.materials && answers.materials.length > 0 && p.material.toLowerCase().includes(answers.materials.toLowerCase())) score += 2;
+          
+          // 4. Tamanho (Aplica o filtro da pergunta 6)
+          if (answers.size === "Largo" && p.shape.toLowerCase().includes("oversize")) score += 2;
+          if (answers.size === "Estreito" && !p.shape.toLowerCase().includes("oversize")) score += 1;
+          
+          // 5. Género (Garante que mulheres não recebem óculos de homem e vice-versa)
+          if (answers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) score += 2;
+          if (answers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) score += 2;
+
           return score > 0;
         });
         
@@ -5189,18 +5195,6 @@ const openBook = (service = "Consulta Geral") => {
           onClose={() => setBooking(false)} 
           service={bookingService}
           />
-        {cartOpen && (
-          <CartDrawer
-            cart={cart}
-            onClose={() => setCartOpen(false)}
-            onRemove={removeFromCart}
-            onQty={updateQty}
-            onBook={() => {
-              setCartOpen(false);
-              openBook();
-            }}
-          />
-        )}
         {selectedProduct && (
           <ProductModal
             product={selectedProduct}
