@@ -4085,6 +4085,12 @@ const openBook = (service = "Consulta Geral") => {
       }
     }, 800);
   };
+    const reset = () => {
+    setStep(1);
+    setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
+    setResults([]);
+    window.scrollTo(0, 0);
+  };
 
     return (
       <div className="pt-28 pb-24 min-h-screen" style={{ background: "#f8f9fa" }}>
