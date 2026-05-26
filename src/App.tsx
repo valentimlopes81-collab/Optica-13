@@ -3994,10 +3994,14 @@ const openBook = (service = "Consulta Geral") => {
     const [results, setResults] = useState([]);
 
    const answerSingle = (field, value) => {
-    setAnswers({ ...answers, [field]: value });
+    // 1. Guardamos a nova resposta imediatamente numa variável fresca
+    const newAnswers = { ...answers, [field]: value };
+    setAnswers(newAnswers); 
+
     setTimeout(() => {
       if (step === 7) {
-        finishQuiz(); // Termina o quiz e vai para os resultados (passo 10)
+        // 2. Enviamos as respostas frescas diretamente para o cálculo!
+        finishQuiz(newAnswers); 
       } else {
         setStep(step + 1);
         window.scrollTo(0, 0);
@@ -4005,83 +4009,82 @@ const openBook = (service = "Consulta Geral") => {
     }, 300);
   };
 
-    const toggleMulti = (field, value) => {
-      setAnswers((prev) => ({
-        ...prev,
-        [field]: prev[field].includes(value)
-          ? prev[field].filter((item) => item !== value)
-          : [...prev[field], value],
-      }));
-    };
+  const toggleMulti = (field, value) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter((item) => item !== value)
+        : [...prev[field], value],
+    }));
+  };
 
-    const nextStep = () => {
-      setStep(step + 1);
-      window.scrollTo(0, 0);
-    };
+  const nextStep = () => {
+    setStep(step + 1);
+    window.scrollTo(0, 0);
+  };
 
-  const finishQuiz = () => {
-    // 1. Forçar o estado de carregamento
+  const finishQuiz = (finalAnswers) => {
+    // 3. Usa as respostas enviadas pelo passo 7
+    const activeAnswers = finalAnswers || answers;
+    
     setStep(9);
     window.scrollTo(0, 0);
 
-    // 2. Timeout para a animação
     setTimeout(() => {
       try {
-        const all = [...PRODUCTS.men, ...PRODUCTS.women];
-        
-        // 3. Avaliar TODOS os produtos (Dar notas)
-        const scoredProducts = all.map(p => {
+        // 4. Usamos o ALL_PRODUCTS original (sem duplicações!)
+        const scoredProducts = ALL_PRODUCTS.map(p => {
           let score = 0;
           
-          // A. Estilo (Vibe) - 3 Pontos
-          if (answers.style && p.style && p.style.toLowerCase().includes(answers.style.toLowerCase())) score += 3;
+          // Estilo
+          if (activeAnswers.style && p.style && p.style.toLowerCase().includes(activeAnswers.style.toLowerCase())) score += 3;
           
-          // B. Cor - 2 Pontos
-          if (answers.colors.length > 0 && p.color) {
-            if (answers.colors.some(c => p.color.toLowerCase().includes(c.toLowerCase()))) score += 2;
+          // Cor
+          if (activeAnswers.colors && activeAnswers.colors.length > 0 && p.color) {
+            if (activeAnswers.colors.some(c => p.color.toLowerCase().includes(c.toLowerCase()))) score += 2;
           }
           
-          // C. Material - 2 Pontos
-          if (answers.materials && p.material) {
-            const matStr = String(answers.materials).toLowerCase();
+          // Material
+          if (activeAnswers.materials && p.material) {
+            const matStr = String(activeAnswers.materials).toLowerCase();
             if (p.material.toLowerCase().includes(matStr)) score += 2;
           }
           
-          // D. Tamanho - 1 a 2 Pontos
-          if (answers.size === "Largo" && p.shape && p.shape.toLowerCase().includes("oversize")) score += 2;
-          if (answers.size === "Estreito" && p.shape && !p.shape.toLowerCase().includes("oversize")) score += 1;
+          // Tamanho
+          if (activeAnswers.size === "Largo" && p.shape && p.shape.toLowerCase().includes("oversize")) score += 2;
+          if (activeAnswers.size === "Estreito" && p.shape && !p.shape.toLowerCase().includes("oversize")) score += 1;
           
-          // E. GÉNERO (FILTRO DE EXCLUSÃO MÁXIMA)
+          // Género (Bloqueio estrito)
           let isCorrectGender = false;
-          if (answers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) isCorrectGender = true;
-          if (answers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) isCorrectGender = true;
+          if (activeAnswers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) isCorrectGender = true;
+          if (activeAnswers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) isCorrectGender = true;
           
-          if (!isCorrectGender) score = -100; // Desclassifica produtos do género oposto
+          if (!isCorrectGender) score = -100;
 
           return { ...p, score };
         });
         
-        // 4. Ordenar do que tem MAIS pontos para o que tem MENOS pontos
+        // 5. Ordena os que têm pontuação positiva do maior para o menor
         const topMatches = scoredProducts
-          .filter(p => p.score > 0) // Remove os que têm pontuação negativa ou 0
-          .sort((a, b) => b.score - a.score); // Ordena de forma decrescente
+          .filter(p => p.score > 0)
+          .sort((a, b) => b.score - a.score);
         
-        // 5. Mostrar os 3 melhores
-        setResults(topMatches.length > 0 ? topMatches.slice(0, 3) : all.slice(0, 3));
-        setStep(10);
+        // 6. Rede de segurança: Se o cliente der respostas impossíveis, mostra os mais populares do género dele
+        const fallbackMatches = ALL_PRODUCTS.filter(p => {
+            if (activeAnswers.gender === "Senhora") return p.gender === "Feminino" || p.gender === "Unisexo";
+            if (activeAnswers.gender === "Homem") return p.gender === "Masculino" || p.gender === "Unisexo";
+            return true;
+        });
 
+        // 7. Mostra os 3 vencedores reais
+        setResults(topMatches.length > 0 ? topMatches.slice(0, 3) : fallbackMatches.slice(0, 3));
+        setStep(10);
       } catch (error) {
         console.error("Erro no quiz:", error);
-        setStep(10); // Transição de segurança
+        setStep(10);
       }
     }, 800);
   };
-    const reset = () => {
-      setStep(1);
-      setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
-      setResults([]);
-      window.scrollTo(0, 0);
-    };
 
     return (
       <div className="pt-28 pb-24 min-h-screen" style={{ background: "#f8f9fa" }}>
