@@ -4024,41 +4024,55 @@ const openBook = (service = "Consulta Geral") => {
     setStep(9);
     window.scrollTo(0, 0);
 
-    // 2. Timeout simples para garantir que o React processa o setStep(9)
+    // 2. Timeout para a animação
     setTimeout(() => {
       try {
         const all = [...PRODUCTS.men, ...PRODUCTS.women];
         
-        // Filtragem inteligente que cruza TODAS as respostas do cliente
-        const filtered = all.filter(p => {
+        // 3. Avaliar TODOS os produtos (Dar notas)
+        const scoredProducts = all.map(p => {
           let score = 0;
           
-          // 1. Estilo (Vibe)
-          if (answers.style && p.style.toLowerCase().includes(answers.style.toLowerCase())) score += 3;
+          // A. Estilo (Vibe) - 3 Pontos
+          if (answers.style && p.style && p.style.toLowerCase().includes(answers.style.toLowerCase())) score += 3;
           
-          // 2. Cor
-          if (answers.colors.length > 0 && answers.colors.some(c => p.color.includes(c))) score += 2;
+          // B. Cor - 2 Pontos
+          if (answers.colors.length > 0 && p.color) {
+            if (answers.colors.some(c => p.color.toLowerCase().includes(c.toLowerCase()))) score += 2;
+          }
           
-          // 3. Material (Aplica o filtro da pergunta 5)
-          if (answers.materials && answers.materials.length > 0 && p.material.toLowerCase().includes(answers.materials.toLowerCase())) score += 2;
+          // C. Material - 2 Pontos
+          if (answers.materials && p.material) {
+            const matStr = String(answers.materials).toLowerCase();
+            if (p.material.toLowerCase().includes(matStr)) score += 2;
+          }
           
-          // 4. Tamanho (Aplica o filtro da pergunta 6)
-          if (answers.size === "Largo" && p.shape.toLowerCase().includes("oversize")) score += 2;
-          if (answers.size === "Estreito" && !p.shape.toLowerCase().includes("oversize")) score += 1;
+          // D. Tamanho - 1 a 2 Pontos
+          if (answers.size === "Largo" && p.shape && p.shape.toLowerCase().includes("oversize")) score += 2;
+          if (answers.size === "Estreito" && p.shape && !p.shape.toLowerCase().includes("oversize")) score += 1;
           
-          // 5. Género (Garante que mulheres não recebem óculos de homem e vice-versa)
-          if (answers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) score += 2;
-          if (answers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) score += 2;
+          // E. GÉNERO (FILTRO DE EXCLUSÃO MÁXIMA)
+          let isCorrectGender = false;
+          if (answers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) isCorrectGender = true;
+          if (answers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) isCorrectGender = true;
+          
+          if (!isCorrectGender) score = -100; // Desclassifica produtos do género oposto
 
-          return score > 0;
+          return { ...p, score };
         });
         
-        // 3. Resultados e transição FORÇADA para o passo 10
-        setResults(filtered.length > 0 ? filtered.slice(0, 3) : all.slice(0, 3));
+        // 4. Ordenar do que tem MAIS pontos para o que tem MENOS pontos
+        const topMatches = scoredProducts
+          .filter(p => p.score > 0) // Remove os que têm pontuação negativa ou 0
+          .sort((a, b) => b.score - a.score); // Ordena de forma decrescente
+        
+        // 5. Mostrar os 3 melhores
+        setResults(topMatches.length > 0 ? topMatches.slice(0, 3) : all.slice(0, 3));
         setStep(10);
+
       } catch (error) {
         console.error("Erro no quiz:", error);
-        setStep(10); // Transição de segurança caso o filtro falhe
+        setStep(10); // Transição de segurança
       }
     }, 800);
   };
