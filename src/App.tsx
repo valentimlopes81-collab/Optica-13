@@ -4009,22 +4009,13 @@ const openBook = (service = "Consulta Geral") => {
     }, 300);
   };
 
-  const toggleMulti = (field, value) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [field]: prev[field].includes(value)
-        ? prev[field].filter((item) => item !== value)
-        : [...prev[field], value],
-    }));
-  };
-
-  const nextStep = () => {
-    setStep(step + 1);
-    window.scrollTo(0, 0);
+ // Helper que apaga acentos para o Quiz não falhar a pesquisa
+  const normalizeText = (text) => {
+    if (!text) return "";
+    return String(text).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   };
 
   const finishQuiz = (finalAnswers) => {
-    // 3. Usa as respostas enviadas pelo passo 7
     const activeAnswers = finalAnswers || answers;
     
     setStep(9);
@@ -4032,51 +4023,63 @@ const openBook = (service = "Consulta Geral") => {
 
     setTimeout(() => {
       try {
-        // 4. Usamos o ALL_PRODUCTS original (sem duplicações!)
         const scoredProducts = ALL_PRODUCTS.map(p => {
           let score = 0;
           
-          // Estilo
-          if (activeAnswers.style && p.style && p.style.toLowerCase().includes(activeAnswers.style.toLowerCase())) score += 3;
+          // 1. Estilo (Vibe) - Ganha 5 Pontos
+          const pStyle = normalizeText(p.style);
+          const aStyle = normalizeText(activeAnswers.style);
+          if (aStyle && pStyle.includes(aStyle)) score += 5;
           
-          // Cor
+          // 2. Cor - Ganha 4 Pontos
           if (activeAnswers.colors && activeAnswers.colors.length > 0 && p.color) {
-            if (activeAnswers.colors.some(c => p.color.toLowerCase().includes(c.toLowerCase()))) score += 2;
+            const pColor = normalizeText(p.color);
+            if (activeAnswers.colors.some(c => pColor.includes(normalizeText(c)))) score += 4;
           }
           
-          // Material
+          // 3. Material - Ganha 3 Pontos
           if (activeAnswers.materials && p.material) {
-            const matStr = String(activeAnswers.materials).toLowerCase();
-            if (p.material.toLowerCase().includes(matStr)) score += 2;
+            const matStr = normalizeText(activeAnswers.materials);
+            const pMat = normalizeText(p.material);
+            if (pMat.includes(matStr)) score += 3;
           }
           
-          // Tamanho
-          if (activeAnswers.size === "Largo" && p.shape && p.shape.toLowerCase().includes("oversize")) score += 2;
-          if (activeAnswers.size === "Estreito" && p.shape && !p.shape.toLowerCase().includes("oversize")) score += 1;
+          // 4. Tamanho - Ganha 1 a 3 Pontos
+          const pShape = normalizeText(p.shape);
+          if (activeAnswers.size === "Largo" && pShape.includes("oversize")) score += 3;
+          if (activeAnswers.size === "Estreito" && !pShape.includes("oversize")) score += 1;
           
-          // Género (Bloqueio estrito)
+          // 5. Rotina Diária (Aproveita a Pergunta 7)
+          const pDesc = normalizeText(p.description);
+          if (activeAnswers.usage === "Trabalho/Escritório" && (pStyle.includes("executivo") || pStyle.includes("intelectual"))) score += 2;
+          if (activeAnswers.usage === "Uso diário (todo o dia)" && pDesc.includes("conforto")) score += 2;
+          if (activeAnswers.usage === "Condução/Lazer" && p.badge === "Polarizado") score += 3;
+
+          // 6. Bloqueio de Género (Obrigatório)
           let isCorrectGender = false;
           if (activeAnswers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) isCorrectGender = true;
           if (activeAnswers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) isCorrectGender = true;
           
-          if (!isCorrectGender) score = -100;
+          if (!isCorrectGender) score = -1000; // Elimina imediatamente
+
+          // 7. Fator Sorte (Para desempatar modelos com a mesma pontuação)
+          score += Math.random() * 0.5;
 
           return { ...p, score };
         });
         
-        // 5. Ordena os que têm pontuação positiva do maior para o menor
+        // Ordena os que tiveram nota positiva
         const topMatches = scoredProducts
           .filter(p => p.score > 0)
           .sort((a, b) => b.score - a.score);
         
-        // 6. Rede de segurança: Se o cliente der respostas impossíveis, mostra os mais populares do género dele
+        // Rede de segurança (caso o cliente dê respostas impossíveis)
         const fallbackMatches = ALL_PRODUCTS.filter(p => {
             if (activeAnswers.gender === "Senhora") return p.gender === "Feminino" || p.gender === "Unisexo";
             if (activeAnswers.gender === "Homem") return p.gender === "Masculino" || p.gender === "Unisexo";
             return true;
-        });
+        }).sort(() => 0.5 - Math.random());
 
-        // 7. Mostra os 3 vencedores reais
         setResults(topMatches.length > 0 ? topMatches.slice(0, 3) : fallbackMatches.slice(0, 3));
         setStep(10);
       } catch (error) {
@@ -4085,7 +4088,8 @@ const openBook = (service = "Consulta Geral") => {
       }
     }, 800);
   };
-    const reset = () => {
+
+  const reset = () => {
     setStep(1);
     setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
     setResults([]);
