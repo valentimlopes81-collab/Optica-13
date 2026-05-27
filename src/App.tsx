@@ -3993,14 +3993,17 @@ const openBook = (service = "Consulta Geral") => {
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
 
-   const answerSingle = (field, value) => {
-    // 1. Guardamos a nova resposta imediatamente numa variável fresca
+  const normalizeText = (text) => {
+    if (!text) return "";
+    return String(text).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  };
+
+  const answerSingle = (field, value) => {
     const newAnswers = { ...answers, [field]: value };
     setAnswers(newAnswers); 
 
     setTimeout(() => {
       if (step === 7) {
-        // 2. Enviamos as respostas frescas diretamente para o cálculo!
         finishQuiz(newAnswers); 
       } else {
         setStep(step + 1);
@@ -4009,10 +4012,18 @@ const openBook = (service = "Consulta Geral") => {
     }, 300);
   };
 
- // Helper que apaga acentos para o Quiz não falhar a pesquisa
-  const normalizeText = (text) => {
-    if (!text) return "";
-    return String(text).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const toggleMulti = (field, value) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter((item) => item !== value)
+        : [...prev[field], value],
+    }));
+  };
+
+  const nextStep = () => {
+    setStep(step + 1);
+    window.scrollTo(0, 0);
   };
 
   const finishQuiz = (finalAnswers) => {
@@ -4049,31 +4060,29 @@ const openBook = (service = "Consulta Geral") => {
           if (activeAnswers.size === "Largo" && pShape.includes("oversize")) score += 3;
           if (activeAnswers.size === "Estreito" && !pShape.includes("oversize")) score += 1;
           
-          // 5. Rotina Diária (Aproveita a Pergunta 7)
+          // 5. Rotina Diária
           const pDesc = normalizeText(p.description);
           if (activeAnswers.usage === "Trabalho/Escritório" && (pStyle.includes("executivo") || pStyle.includes("intelectual"))) score += 2;
           if (activeAnswers.usage === "Uso diário (todo o dia)" && pDesc.includes("conforto")) score += 2;
           if (activeAnswers.usage === "Condução/Lazer" && p.badge === "Polarizado") score += 3;
 
-          // 6. Bloqueio de Género (Obrigatório)
+          // 6. Bloqueio de Género
           let isCorrectGender = false;
           if (activeAnswers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) isCorrectGender = true;
           if (activeAnswers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) isCorrectGender = true;
           
-          if (!isCorrectGender) score = -1000; // Elimina imediatamente
+          if (!isCorrectGender) score = -1000; 
 
-          // 7. Fator Sorte (Para desempatar modelos com a mesma pontuação)
+          // 7. Fator Sorte (desempate)
           score += Math.random() * 0.5;
 
           return { ...p, score };
         });
         
-        // Ordena os que tiveram nota positiva
         const topMatches = scoredProducts
           .filter(p => p.score > 0)
           .sort((a, b) => b.score - a.score);
         
-        // Rede de segurança (caso o cliente dê respostas impossíveis)
         const fallbackMatches = ALL_PRODUCTS.filter(p => {
             if (activeAnswers.gender === "Senhora") return p.gender === "Feminino" || p.gender === "Unisexo";
             if (activeAnswers.gender === "Homem") return p.gender === "Masculino" || p.gender === "Unisexo";
