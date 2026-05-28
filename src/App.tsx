@@ -2500,7 +2500,7 @@ const openBook = (service = "Consulta Geral") => {
                 <span>
                   Sede: R. 31 de Janeiro 8-B
                   <br />
-                  2775 Parede
+                  2775-295 Parede
                 </span>
               </li>
               <li className="flex items-start gap-2 mt-4 pt-4 border-t border-gray-800">
