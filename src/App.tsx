@@ -5132,10 +5132,10 @@ const openBook = (service = "Consulta Geral") => {
             {/* 3. POLÍTICA DE ENVIOS */}
             <h3 className="text-black font-bold mb-4 text-xl">3. Política de Envios e Entregas</h3>
             <p className="mb-4 text-sm">
-              As encomendas são processadas e expedidas no prazo de 1 a 2 dias úteis após a confirmação do pagamento.
+              As encomendas são processadas e expedidas no prazo de 3 a 5 dias úteis após a confirmação do pagamento.
             </p>
             <ul className="list-disc pl-5 mb-8 text-sm space-y-2">
-              <li><strong>Portugal Continental:</strong> Entregas via transportadora expresso, com prazo estimado de 1 a 3 dias úteis após expedição.</li>
+              <li><strong>Portugal Continental:</strong> Entregas via transportadora expresso, com prazo estimado de 3 a 5 dias úteis após expedição.</li>
               <li><strong>Ilhas (Açores e Madeira):</strong> Entregas via CTT Expresso, com prazo estimado de 3 a 5 dias úteis.</li>
               <li>Em caso de rutura de stock que atrase o envio, o cliente será imediatamente contactado para escolher entre aguardar a reposição ou o reembolso integral.</li>
             </ul>
