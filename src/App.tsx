@@ -4026,7 +4026,7 @@ const openBook = (service = "Consulta Geral") => {
     window.scrollTo(0, 0);
   };
 
-  const finishQuiz = (finalAnswers) => {
+ const finishQuiz = (finalAnswers) => {
     const activeAnswers = finalAnswers || answers;
     
     setStep(9);
@@ -4037,59 +4037,81 @@ const openBook = (service = "Consulta Geral") => {
         const scoredProducts = ALL_PRODUCTS.map(p => {
           let score = 0;
           
-          // 1. Estilo (Vibe) - Ganha 5 Pontos
+          const pName = normalizeText(p.name);
+          const pDesc = normalizeText(p.description);
+          const pBadge = normalizeText(p.badge);
+          const pColor = normalizeText(p.color);
+
+          // 0. TIPO DE ÓCULOS (O MAIS IMPORTANTE DE TODOS)
+          const isSunglass = pName.includes("sun") || pName.includes("2-in-1") || pBadge.includes("polarizado") || pBadge.includes("2-em-1") || pDesc.includes("oculos de sol") || pColor.includes("lentes");
+          const is2in1 = pName.includes("2-in-1"); // 2 em 1 serve para ambos os casos!
+
+          if (activeAnswers.type === "Óculos de sol") {
+              if (isSunglass) score += 50; // Super bónus se for de sol
+              else score -= 1000; // Elimina imediatamente armações normais
+          } else if (activeAnswers.type === "Óculos de graduados") {
+              if (!isSunglass || is2in1) score += 50; // Super bónus para graduados normais ou 2-em-1
+              else score -= 1000; // Elimina imediatamente óculos de sol puros
+          }
+
+          // 1. Estilo (Vibe)
           const pStyle = normalizeText(p.style);
           const aStyle = normalizeText(activeAnswers.style);
           if (aStyle && pStyle.includes(aStyle)) score += 5;
           
-          // 2. Cor - Ganha 4 Pontos
+          // 2. Cor
           if (activeAnswers.colors && activeAnswers.colors.length > 0 && p.color) {
-            const pColor = normalizeText(p.color);
             if (activeAnswers.colors.some(c => pColor.includes(normalizeText(c)))) score += 4;
           }
           
-          // 3. Material - Ganha 3 Pontos
+          // 3. Material
           if (activeAnswers.materials && p.material) {
             const matStr = normalizeText(activeAnswers.materials);
             const pMat = normalizeText(p.material);
             if (pMat.includes(matStr)) score += 3;
           }
           
-          // 4. Tamanho - Ganha 1 a 3 Pontos
+          // 4. Tamanho
           const pShape = normalizeText(p.shape);
           if (activeAnswers.size === "Largo" && pShape.includes("oversize")) score += 3;
           if (activeAnswers.size === "Estreito" && !pShape.includes("oversize")) score += 1;
           
           // 5. Rotina Diária
-          const pDesc = normalizeText(p.description);
           if (activeAnswers.usage === "Trabalho/Escritório" && (pStyle.includes("executivo") || pStyle.includes("intelectual"))) score += 2;
           if (activeAnswers.usage === "Uso diário (todo o dia)" && pDesc.includes("conforto")) score += 2;
-          if (activeAnswers.usage === "Condução/Lazer" && p.badge === "Polarizado") score += 3;
+          if (activeAnswers.usage === "Condução/Lazer" && (isSunglass || pBadge.includes("polarizado"))) score += 3;
 
           // 6. Bloqueio de Género
           let isCorrectGender = false;
           if (activeAnswers.gender === "Senhora" && (p.gender === "Feminino" || p.gender === "Unisexo")) isCorrectGender = true;
           if (activeAnswers.gender === "Homem" && (p.gender === "Masculino" || p.gender === "Unisexo")) isCorrectGender = true;
           
-          if (!isCorrectGender) score = -1000; 
+          if (!isCorrectGender) score -= 1000; 
 
-          // 7. Fator Sorte (desempate)
+          // 7. Fator Sorte (desempate para óculos com a mesma nota)
           score += Math.random() * 0.5;
 
           return { ...p, score };
         });
         
+        // Fica apenas com os que não foram desclassificados
         const topMatches = scoredProducts
           .filter(p => p.score > 0)
           .sort((a, b) => b.score - a.score);
         
+        // Fallback super seguro: se algo falhar, dá pelo menos a categoria certa (Sol ou Graduado)
         const fallbackMatches = ALL_PRODUCTS.filter(p => {
-            if (activeAnswers.gender === "Senhora") return p.gender === "Feminino" || p.gender === "Unisexo";
-            if (activeAnswers.gender === "Homem") return p.gender === "Masculino" || p.gender === "Unisexo";
-            return true;
+            const pName = normalizeText(p.name);
+            const pDesc = normalizeText(p.description);
+            const isSun = pName.includes("sun") || pName.includes("2-in-1") || pDesc.includes("oculos de sol") || normalizeText(p.color).includes("lentes");
+            
+            const genderMatch = activeAnswers.gender === "Senhora" ? (p.gender === "Feminino" || p.gender === "Unisexo") : (p.gender === "Masculino" || p.gender === "Unisexo");
+            const typeMatch = activeAnswers.type === "Óculos de sol" ? isSun : (!isSun || pName.includes("2-in-1"));
+            
+            return genderMatch && typeMatch;
         }).sort(() => 0.5 - Math.random());
 
-        setResults(topMatches.length > 0 ? topMatches.slice(0, 3) : fallbackMatches.slice(0, 3));
+        setResults(topMatches.length >= 3 ? topMatches.slice(0, 3) : fallbackMatches.slice(0, 3));
         setStep(10);
       } catch (error) {
         console.error("Erro no quiz:", error);
@@ -4097,7 +4119,6 @@ const openBook = (service = "Consulta Geral") => {
       }
     }, 800);
   };
-
   const reset = () => {
     setStep(1);
     setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
