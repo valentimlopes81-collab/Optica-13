@@ -1114,7 +1114,7 @@ const ALL_PRODUCTS = [...PRODUCTS.men, ...PRODUCTS.women];
 
 // Homem (Exclusivos + Unissexo)
 PRODUCTS.men = ALL_PRODUCTS.filter(p => 
-  [1, 6, 7, 10, 11, 12, 15, 18, 20, 27, 29, 30, 33, 34, 35, 37, 39].includes(p.id)
+  [1, 6, 7, 10, 11, 12, 15, 18, 20, 27, 29, 30, 34, 35, 37, 39].includes(p.id)
 );
 
 // Mulher (Exclusivos + Unissexo)
