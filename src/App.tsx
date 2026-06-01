@@ -874,7 +874,7 @@ const PRODUCTS = {
     {
       id: 30, // Confirma se é o 32 na tua lista
       gender: "", 
-      shopifyId: "INSERIR_ID_AQUI", // Atualizar depois
+      shopifyId: "15751451574646", // Atualizar depois
       name: "Navigator Silver (2-in-1)",
       rating: 4.8,
       reviews: 164,
