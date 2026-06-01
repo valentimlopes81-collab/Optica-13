@@ -3210,7 +3210,7 @@ const openBook = (service = "Consulta Geral") => {
             </div>
           </>
         ),
-        img: "https://i.postimg.cc/FHv1WvBX/Consulta-de-Optometria-600x318.png",
+       img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop",
         actionLabel: "Agendar Consulta",
         actionFn: openBook,
       },
