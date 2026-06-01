@@ -2262,7 +2262,8 @@ export default function App() {
   const [exitIntent, setExitIntent] = useState(false);
   const exitShown = useRef(false);
 
-  useEffect(() => {
+ useEffect(() => {
+    // 1. Gatilho de Saída (Para Computador)
     const h = (e) => {
       if (e.clientY <= 10 && !exitShown.current) {
         exitShown.current = true;
@@ -2270,7 +2271,20 @@ export default function App() {
       }
     };
     document.addEventListener("mouseout", h);
-    return () => document.removeEventListener("mouseout", h);
+
+    // 2. Gatilho de Tempo - 12 Segundos (Para Telemóvel e Computador)
+    const timer = setTimeout(() => {
+      if (!exitShown.current) {
+        exitShown.current = true;
+        setExitIntent(true);
+      }
+    }, 12000);
+
+    // 3. Limpeza de memória do React
+    return () => {
+      document.removeEventListener("mouseout", h);
+      clearTimeout(timer);
+    };
   }, []);
 
 const openBook = (service = "Consulta Geral") => {
