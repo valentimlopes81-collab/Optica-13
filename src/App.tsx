@@ -3210,7 +3210,7 @@ const openBook = (service = "Consulta Geral") => {
             </div>
           </>
         ),
-       img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop",
+       img: "https://i.postimg.cc/KjLFzDfn/newarta-eye-care-5016078-1920.jpg",
         actionLabel: "Agendar Consulta",
         actionFn: openBook,
       },
@@ -3272,7 +3272,7 @@ const openBook = (service = "Consulta Geral") => {
             </p>
           </>
         ),
-        img: "https://i.postimg.cc/cLT1Fn31/carta-Conduc-2-300x200.jpg",
+        img: "https://i.postimg.cc/xd7WzbXY/maximilianovich-doctor-5710159-1920.jpg",
         actionLabel: "Marcar Exame",
        actionFn: () => openBook("Exame Carta de Condução"),
       },
@@ -3383,7 +3383,7 @@ const openBook = (service = "Consulta Geral") => {
             </ul>
           </>
         ),
-        img: "https://i.postimg.cc/GpZWKLXj/Oculos-Personalizados-300x300.png",
+        img: "https://i.postimg.cc/9FR1DNGD/v2-watermarked-a55f23c6-8639-4f5f-b6ac-ee188e16a20b.jpg",
         actionLabel: "Fazer Quiz Virtual",
         actionFn: () => setPage("quiz"),
       },
