@@ -2360,7 +2360,7 @@ const openBook = (service = "Consulta Geral") => {
 
           <div className="flex items-center gap-3">
             <button
-             onClick={() => openBook("Consulta Geral - Topo")}
+             onClick={() => openBook("Consulta de Optometria")}
               className="hidden sm:flex btn-forest px-5 py-2.5 rounded-xl text-sm font-semibold items-center gap-2"
             >
               <Calendar size={14} /> Agendar Exame
