@@ -2694,7 +2694,7 @@ const openBook = (service = "Consulta Geral") => {
         titleHighlight: "missão",
         desc: "Exames de optometria gratuitos. Marcas premium. Tecnologia de ponta. Tudo num só lugar.",
         btn1Text: "Marcar Exame Gratuito",
-        btn1Action: () => openBook("Exame Gratuito - Principal"),
+        btn1Action: () => openBook("Consulta de Optometria"),
         img: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=800&fit=crop",
         badgeNum: "+39",
         badgeText: "Anos"
