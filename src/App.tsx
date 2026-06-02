@@ -1425,7 +1425,7 @@ function ExitPopup({ onClose }) {
                 Desconto Garantido!
               </h3>
               <p className="text-sm mb-6 leading-relaxed" style={{ color: "#555" }}>
-                Enviámos o seu cupão exclusivo de <strong>10% de desconto</strong> para a sua caixa de entrada.
+                Enviámos o seu cupão exclusivo de <strong>20% de desconto</strong> para a sua caixa de entrada.
               </p>
               <button
                 onClick={onClose}
@@ -1443,7 +1443,7 @@ function ExitPopup({ onClose }) {
                 Não saia de mãos a abanar.
               </h3>
               <p className="text-sm sm:text-base mb-6 leading-relaxed" style={{ color: "#555" }}>
-                Registe o seu email e receba instantaneamente <strong>10% de desconto</strong>.
+                Registe o seu email e receba instantaneamente <strong>20% de desconto</strong>.
               </p>
 
               <form onSubmit={handleSubscribe} className="space-y-4">
@@ -1460,7 +1460,7 @@ function ExitPopup({ onClose }) {
                   type="submit"
                   className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg"
                 >
-                  Quero os meus 10% <ArrowRight size={16} />
+                  Quero os meus 20% <ArrowRight size={16} />
                 </button>
               </form>
               
