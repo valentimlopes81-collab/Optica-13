@@ -4243,7 +4243,7 @@ const openBook = (service = "Consulta Geral") => {
           className="bg-white p-4 rounded-xl border cursor-pointer hover:border-black transition-all" 
           onClick={() => onSelectProduct(p)}
         >
-          <img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
+          <Img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
           <p className="font-bold">{p.name}</p>
           <p className="text-sm font-semibold">{p.price}€</p>
         </div>
