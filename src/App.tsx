@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 
 /* ── HELPERS ────────────────────────────────────────────────── */
-function Img({ src, alt, className, style }) {
+function Img({ src, alt, className, style, priority = false }) {
   const [err, setErr] = useState(false);
   if (err)
     return (
@@ -47,7 +47,8 @@ function Img({ src, alt, className, style }) {
       alt={alt}
       className={className}
       style={style}
-      loading="lazy" // <--- A MÁGICA ESTÁ AQUI!
+      loading={priority ? "eager" : "lazy"} // Se for priority, carrega no segundo zero!
+      decoding="async" // Evita engasgos no scroll
       onError={() => setErr(true)}
     />
   );
@@ -2805,6 +2806,8 @@ const openBook = (service = "Consulta Geral") => {
                     src={slides[currentSlide].img}
                     alt="Slide"
                     className="w-full h-full object-cover"
+                    priority={true} // 
+                    
                   />
                 </div>
                 <div
