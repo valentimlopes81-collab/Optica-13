@@ -2261,6 +2261,11 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
   const exitShown = useRef(false);
+  
+  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
 
  useEffect(() => {
     // 1. Gatilho de Saída (Para Computador)
