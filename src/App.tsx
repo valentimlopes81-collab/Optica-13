@@ -2688,7 +2688,7 @@ const openBook = (service = "Consulta Geral") => {
       </section>
     );
   };
-  /* HOME PAGE (COM CARROSSEL) */
+ /* HOME PAGE (COM CARROSSEL) */
   const HomePage = () => {
     // 1. Definir os Slides do Carrossel
     const slides = [
@@ -2702,8 +2702,6 @@ const openBook = (service = "Consulta Geral") => {
         btn1Text: "Marcar Exame Gratuito",
         btn1Action: () => openBook("Consulta de Optometria"),
         img: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=800&fit=crop",
-        badgeNum: "+39",
-        badgeText: "Anos"
       },
       {
         id: 2,
@@ -2715,8 +2713,6 @@ const openBook = (service = "Consulta Geral") => {
         btn1Text: "Ver Coleção Mulher",
         btn1Action: () => setPage("women"),
         img: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=800&h=800&fit=crop",
-        badgeNum: "-15%",
-        badgeText: "Óculos de Sol"
       },
       {
         id: 3,
@@ -2728,8 +2724,6 @@ const openBook = (service = "Consulta Geral") => {
         btn1Text: "Fazer Quiz Virtual",
         btn1Action: () => setPage("quiz"),
         img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&h=800&fit=crop",
-        badgeNum: "100+",
-        badgeText: "Modelos"
       }
     ];
 
@@ -2751,14 +2745,14 @@ const openBook = (service = "Consulta Geral") => {
     return (
       <div>
         {/* Hero Carrossel */}
-        <section className="relative bg-white pt-32 pb-24 overflow-hidden">
+        <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 relative z-10">
             
             {/* O Contentor do Slide Ativo */}
             <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[500px]">
               
               {/* Lado Esquerdo (Texto) */}
-              <div className="text-gray-900" key={`text-${currentSlide}`}>
+              <div className="text-white" key={`text-${currentSlide}`}>
                 <button 
                   onClick={slides[currentSlide].btn1Action}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
@@ -2792,36 +2786,34 @@ const openBook = (service = "Consulta Geral") => {
                   </button>
                   <button
                     onClick={() => setPage("men")}
-                    className="border-2 border-gray-900 px-8 py-4 rounded-xl font-semibold text-sm text-gray-900 transition-all hover:bg-gray-900 hover:text-white"
+                    className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
                   >
                     Ver Coleções
                   </button>
                 </div>
               </div>
 
-              {/* Lado Direito (Imagem) */}
+              {/* Lado Direito (Imagem) - SEM O SELO DOS 15% */}
               <div className="relative fade-up-2" key={`img-${currentSlide}`}>
                 <div className="aspect-square rounded-3xl overflow-hidden img-zoom">
                   <Img
                     src={slides[currentSlide].img}
                     alt="Slide"
                     className="w-full h-full object-cover"
-                    priority={true} // 
-                    
+                    priority={true} 
                   />
                 </div>
-            
               </div>
 
             </div>
 
-           {/* Controlos do Carrossel (Setas e Bolinhas) */}
+            {/* Controlos do Carrossel (Setas e Bolinhas) */}
             <div className="flex items-center gap-6 mt-12">
               <div className="flex gap-2">
-                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-black/20 flex items-center justify-center text-black hover:bg-black/5 transition-colors">
+                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
                   <ChevronRight size={18} className="rotate-180" />
                 </button>
-                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-black/20 flex items-center justify-center text-black hover:bg-black/5 transition-colors">
+                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
                   <ChevronRight size={18} />
                 </button>
               </div>
@@ -2830,7 +2822,7 @@ const openBook = (service = "Consulta Geral") => {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-black" : "w-2 bg-black/20 hover:bg-black/40"}`}
+                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/50"}`}
                   />
                 ))}
               </div>
