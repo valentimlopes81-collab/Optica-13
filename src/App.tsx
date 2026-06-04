@@ -2751,14 +2751,14 @@ const openBook = (service = "Consulta Geral") => {
     return (
       <div>
         {/* Hero Carrossel */}
-        <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
+        <section className="relative bg-white pt-32 pb-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 relative z-10">
             
             {/* O Contentor do Slide Ativo */}
             <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[500px]">
               
               {/* Lado Esquerdo (Texto) */}
-              <div className="text-white" key={`text-${currentSlide}`}>
+              <div className="text-gray-900" key={`text-${currentSlide}`}>
                 <button 
                   onClick={slides[currentSlide].btn1Action}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
@@ -2792,7 +2792,7 @@ const openBook = (service = "Consulta Geral") => {
                   </button>
                   <button
                     onClick={() => setPage("men")}
-                    className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
+                    className="border-2 border-gray-900 px-8 py-4 rounded-xl font-semibold text-sm text-gray-900 transition-all hover:bg-gray-900 hover:text-white"
                   >
                     Ver Coleções
                   </button>
@@ -2810,26 +2810,18 @@ const openBook = (service = "Consulta Geral") => {
                     
                   />
                 </div>
-                <div
-                  className="absolute -bottom-6 -left-6 w-40 h-40 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-500"
-                  style={{ background: "var(--gold)" }}
-                >
-                  <div className="text-center text-white">
-                    <p className="font-display text-5xl font-bold">{slides[currentSlide].badgeNum}</p>
-                    <p className="text-xs uppercase tracking-wider">{slides[currentSlide].badgeText}</p>
-                  </div>
-                </div>
+            
               </div>
 
             </div>
 
-            {/* Controlos do Carrossel (Setas e Bolinhas) */}
+           {/* Controlos do Carrossel (Setas e Bolinhas) */}
             <div className="flex items-center gap-6 mt-12">
               <div className="flex gap-2">
-                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-black/20 flex items-center justify-center text-black hover:bg-black/5 transition-colors">
                   <ChevronRight size={18} className="rotate-180" />
                 </button>
-                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-black/20 flex items-center justify-center text-black hover:bg-black/5 transition-colors">
                   <ChevronRight size={18} />
                 </button>
               </div>
@@ -2838,7 +2830,7 @@ const openBook = (service = "Consulta Geral") => {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/50"}`}
+                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-black" : "w-2 bg-black/20 hover:bg-black/40"}`}
                   />
                 ))}
               </div>
