@@ -1010,7 +1010,8 @@ const PRODUCTS = {
         "https://i.postimg.cc/3xW9LR1d/16-2.png"
       ],
 },
- {
+ /*
+    {
       id: 36, // Ajusta conforme a tua sequência
       gender: "Unisexo", 
       shopifyId: "15751467106678", 
@@ -1033,7 +1034,8 @@ const PRODUCTS = {
         "https://i.postimg.cc/c12JKkzp/17-1.png",
         "https://i.postimg.cc/44q3K20r/17-3.png"
       ],
-},   
+},
+*/
    {
       id: 37, 
       gender: "Unisexo", 
