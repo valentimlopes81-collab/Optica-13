@@ -421,6 +421,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/zX4S36XD/P1023421-(1).jpg"
       ],
     },
+    /*
     {
       id: 11,
       shopifyId: "15726335263094",
@@ -444,7 +445,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/k4DyhbnN/P1023401.jpg"
       ],
     },
-    /*
+    */
     {
       id: 12,
       shopifyId: "15726347485558", // Atualizar depois com o ID do Shopify
@@ -469,7 +470,6 @@ const PRODUCTS = {
         "https://i.postimg.cc/yYKZDZwp/P1023395.jpg"
       ],
     },
-    */
     {
       id: 13,
       shopifyId: "15726358167926",
