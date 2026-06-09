@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useRef, useMemo } from "react";
+import { Analytics } from '@vercel/analytics/react';
 import './global.css';
 import {
   Glasses,
@@ -5216,6 +5217,7 @@ const openBook = (service = "Consulta Geral") => {
         <Footer />
         <WhatsAppBtn />
         <CookieBanner />
+        <Analytics />
       </div>
     </>
   );
