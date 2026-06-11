@@ -1405,7 +1405,7 @@ function ExitPopup({ onClose }) {
 
         <div className="hidden md:block md:w-5/12 relative">
           <Img
-            src="https://images.unsplash.com/photo-1590846123010-8566a7b7a213?w=800&h=1000&fit=crop"
+            src="https://i.postimg.cc/hPPJYq5r/carta-Conduc-1-1024x540.jpg"
             alt="Óculos Premium"
             className="w-full h-full object-cover"
           />
