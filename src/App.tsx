@@ -2863,7 +2863,7 @@ const openBook = (service = "Consulta Geral") => {
                 {
                   Icon: OptometryIcon,
                   title: "Optometria",
-                  desc: "Exames completos com tecnologia de última geração. Totalmente gratuitos.",
+                  desc: "Exames completos com tecnologia de última geração. Gratuitos na compra de óculos.",
                 },
                 {
                   Icon: LensIcon,
@@ -3044,8 +3044,7 @@ const openBook = (service = "Consulta Geral") => {
               Exame de Vista <em style={{ color: "var(--gold)" }}>Gratuito</em>
             </h2>
             <p className="text-lg mb-8" style={{ color: "#666" }}>
-              Agende a sua consulta de optometria sem qualquer custo. Rápido,
-              profissional e sem compromisso.
+             Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
             </p>
             <button
               onClick={openBook}
@@ -3151,8 +3150,7 @@ const openBook = (service = "Consulta Geral") => {
               identificar algum defeito de visão e corrigi-lo ou encaminhá-lo
               para um Oftalmologista, dependendo da patologia detetada.{" "}
               <strong>
-                Se optar pelos nossos serviços para a escolha dos seus óculos, a
-                consulta é oferta.
+               A consulta é totalmente gratuita se fizer os seus óculos connosco ou se não necessitar de levar a prescrição médica. Caso pretenda levar a sua receita consigo, o exame tem o valor de 50€.
               </strong>
             </p>
             <p className="mb-6">
