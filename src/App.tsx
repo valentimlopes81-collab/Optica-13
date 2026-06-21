@@ -2270,6 +2270,10 @@ export default function App() {
 function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const page = location.pathname.replace("/", "") || "home";
+  const setPage = (newPage) => {
+    navigate(newPage === "home" ? "/" : "/" + newPage);
+  };
 
   const [booking, setBooking] = useState(false);
   const [bookingService, setBookingService] = useState("Consulta Geral");
