@@ -5192,16 +5192,15 @@ const openBook = (service = "Consulta Geral") => {
         <Header />
 <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/servicos" element={<ServicesPage />} />
+          <Route path="/services" element={<ServicesPage />} />
           <Route path="/vantagens" element={<VantagensPage />} />
-          <Route path="/homem" element={<CollectionPage gender="men" />} />
-          <Route path="/mulher" element={<CollectionPage gender="women" />} />
+          <Route path="/men" element={<CollectionPage gender="men" />} />
+          <Route path="/women" element={<CollectionPage gender="women" />} />
           <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
-          <Route path="/sobre-nos" element={<AboutPage />} />
-          <Route path="/contactos" element={<ContactPage />} />
-          <Route path="/termos" element={<TermsPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Routes>
-
         <BookingModal 
           isOpen={booking} 
           onClose={() => setBooking(false)} 
