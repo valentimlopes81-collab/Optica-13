@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useRef, useMemo } from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { Analytics } from '@vercel/analytics/react';
 import './global.css';
 import {
@@ -2259,7 +2260,17 @@ function BookingModal({ isOpen, onClose, service }) {
    MAIN APP COMPONENT
    ══════════════════════════════════════════════════════════════ */
 export default function App() {
-  const [page, setPage] = useState("home");
+  return (
+    <Router>
+      <MainLayout />
+    </Router>
+  );
+}
+
+function MainLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [booking, setBooking] = useState(false);
   const [bookingService, setBookingService] = useState("Consulta Geral");
   const [cart, setCart] = useState([]);
@@ -2267,11 +2278,11 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
   const exitShown = useRef(false);
-  
-  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda
+
+  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [page]);
+  }, [location.pathname]);
 
  useEffect(() => {
     // 1. Gatilho de Saída (Para Computador)
@@ -5175,16 +5186,17 @@ const openBook = (service = "Consulta Geral") => {
       >
        
         <Header />
-
-        {page === "home" && <HomePage />}
-        {page === "services" && <ServicesPage />}
-        {page === "vantagens" && <VantagensPage />}
-        {page === "men" && <CollectionPage gender="men" />}
-        {page === "women" && <CollectionPage gender="women" />}
-       {page === "quiz" && <QuizPage onSelectProduct={setSelectedProduct} />}
-        {page === "about" && <AboutPage />}
-        {page === "contact" && <ContactPage />}
-        {page === "terms" && <TermsPage />}
+<Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/servicos" element={<ServicesPage />} />
+          <Route path="/vantagens" element={<VantagensPage />} />
+          <Route path="/homem" element={<CollectionPage gender="men" />} />
+          <Route path="/mulher" element={<CollectionPage gender="women" />} />
+          <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
+          <Route path="/sobre-nos" element={<AboutPage />} />
+          <Route path="/contactos" element={<ContactPage />} />
+          <Route path="/termos" element={<TermsPage />} />
+        </Routes>
 
         <BookingModal 
           isOpen={booking} 
