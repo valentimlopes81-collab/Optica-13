@@ -737,7 +737,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/8k3DLw7D/4-4.png"
       ],
 },
-        {
+       /* {
       id: 24,
       gender: "", 
       shopifyId: "15745681555830", // Atualizar depois com o ID do Shopify
@@ -760,7 +760,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/JnsXdPMD/5-2.png",
         "https://i.postimg.cc/638Z1Ytv/5-3.png"
       ],
-},
+},*/
    {
       id: 25, 
       gender: "", 
