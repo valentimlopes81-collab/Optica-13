@@ -785,7 +785,7 @@ const PRODUCTS = {
         "https://i.postimg.cc/dtMcGbjN/6-3.png"
       ],
 },
-    /*{
+    /* {
       id: 26, // Substituir pelo ID correto na tua lista
       gender: "", 
       shopifyId: "15751425196406", // Atualizar depois
