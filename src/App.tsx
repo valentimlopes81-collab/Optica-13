@@ -1354,11 +1354,15 @@ function WhatsAppBtn({ product }) {
 function ExitPopup({ onClose }) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribeError, setSubscribeError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
 
+    setSubmitting(true);
+    setSubscribeError(false);
     try {
       const options = {
         method: 'POST',
@@ -1374,12 +1378,15 @@ function ExitPopup({ onClose }) {
         })
       };
 
-      await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
+      const res = await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
+      if (!res.ok) throw new Error(`Klaviyo respondeu ${res.status}`);
       setSubscribed(true);
       setEmail("");
     } catch (error) {
       console.error("Erro ao subscrever:", error);
-      setSubscribed(true); 
+      setSubscribeError(true);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -1465,12 +1472,18 @@ function ExitPopup({ onClose }) {
                 />
                 <button
                   type="submit"
-                  className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg"
+                  disabled={submitting}
+                  className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
                 >
-                  Quero os meus 20% <ArrowRight size={16} />
+                  {submitting ? "A processar..." : <>Quero os meus 20% <ArrowRight size={16} /></>}
                 </button>
+                {subscribeError && (
+                  <p className="text-xs text-center" style={{ color: "#c0392b" }}>
+                    Não foi possível registar o seu e-mail agora. Tente novamente.
+                  </p>
+                )}
               </form>
-              
+
               <button
                 onClick={onClose}
                 className="mt-6 text-xs w-full text-center block underline"
@@ -1763,15 +1776,17 @@ function BookingModal({ isOpen, onClose, service }) {
   const [month, setMonth] = useState(new Date());
   const [confirmed, setConfirmed] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [sendError, setSendError] = useState(false);
 
   // CONFIGURAÇÃO EMAILJS (Já preenchido com os teus dados)
-  const SERVICE_ID = "service_jd2hmsh"; 
+  const SERVICE_ID = "service_jd2hmsh";
   const TEMPLATE_ID = "template_5wkk8d9";
   const PUBLIC_KEY = "r1iXXbQSD6eraiqvx";
 
   const handleFinalConfirm = async () => {
     setIsSending(true);
-    
+    setSendError(false);
+
     const templateParams = {
       name: clientData.name,
       phone: clientData.phone,
@@ -1782,7 +1797,7 @@ function BookingModal({ isOpen, onClose, service }) {
     };
 
     try {
-      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1792,10 +1807,11 @@ function BookingModal({ isOpen, onClose, service }) {
           template_params: templateParams
         })
       });
+      if (!res.ok) throw new Error(`EmailJS respondeu ${res.status}`);
       setConfirmed(true);
     } catch (error) {
       console.error("Erro ao enviar email:", error);
-      setConfirmed(true); // Mostramos sucesso na mesma para o cliente não se assustar
+      setSendError(true);
     } finally {
       setIsSending(false);
     }
@@ -1906,14 +1922,19 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setStep(3)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
-                <button 
-                  onClick={handleFinalConfirm} 
+                <button
+                  onClick={handleFinalConfirm}
                   disabled={isSending}
                   className="btn-forest flex-1 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg"
                 >
                   {isSending ? "A enviar..." : <><CheckCircle size={18} /> Confirmar Marcação</>}
                 </button>
               </div>
+              {sendError && (
+                <p className="text-xs mt-4 text-center" style={{ color: "#c0392b" }}>
+                  Não foi possível enviar o pedido de marcação. Ligue-nos para 934 421 310 ou tente novamente.
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -1923,81 +1944,11 @@ function BookingModal({ isOpen, onClose, service }) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MAIN APP COMPONENT
+   PAGE COMPONENTS (Header, Footer, and routed pages)
+   Module-scope so identities stay stable across MainLayout re-renders
    ══════════════════════════════════════════════════════════════ */
-export default function App() {
-  return (
-    <Router>
-      <MainLayout />
-    </Router>
-  );
-}
-
-function MainLayout() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const page = location.pathname.replace("/", "") || "home";
-  const setPage = (newPage) => {
-    navigate(newPage === "home" ? "/" : "/" + newPage);
-  };
-
-  const [booking, setBooking] = useState(false);
-  const [bookingService, setBookingService] = useState("Consulta Geral");
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [exitIntent, setExitIntent] = useState(false);
-  const exitShown = useRef(false);
-
-  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
-
- useEffect(() => {
-    // 1. Gatilho de Saída (Para Computador)
-    const h = (e) => {
-      if (e.clientY <= 10 && !exitShown.current) {
-        exitShown.current = true;
-        setExitIntent(true);
-      }
-    };
-    document.addEventListener("mouseout", h);
-
-    // 2. Gatilho de Tempo - 12 Segundos (Para Telemóvel e Computador)
-    const timer = setTimeout(() => {
-      if (!exitShown.current) {
-        exitShown.current = true;
-        setExitIntent(true);
-      }
-    }, 12000);
-
-    // 3. Limpeza de memória do React
-    return () => {
-      document.removeEventListener("mouseout", h);
-      clearTimeout(timer);
-    };
-  }, []);
-
-const openBook = (service = "Consulta Geral") => {
-    setBookingService(service); // O site guarda o nome do serviço
-    setBooking(true);
-    setExitIntent(false);
-  };
-  const addToCart = (p) => {
-    const ex = cart.find((x) => x.id === p.id);
-    if (ex)
-      setCart(cart.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
-    else setCart([...cart, { ...p, qty: 1 }]);
-  };
-  const removeFromCart = (id) => setCart(cart.filter((x) => x.id !== id));
-  const updateQty = (id, q) => {
-    if (q < 1) removeFromCart(id);
-    else setCart(cart.map((x) => (x.id === id ? { ...x, qty: q } : x)));
-  };
-
   /* HEADER */
-  const Header = () => {
+  const Header = ({ page, setPage, openBook }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     return (
       <header
@@ -2123,7 +2074,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* FOOTER */
-  const Footer = () => (
+  const Footer = ({ setPage }) => (
     <footer className="py-16" style={{ background: "var(--slate)" }}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Usamos 5 colunas para caber tudo bem */}
@@ -2375,7 +2326,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
  /* HOME PAGE (COM CARROSSEL) */
-  const HomePage = () => {
+  const HomePage = ({ setPage, openBook, setSelectedProduct }) => {
     // 1. Definir os Slides do Carrossel
     const slides = [
       {
@@ -2817,7 +2768,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* SERVICES PAGE */
-  const ServicesPage = () => {
+  const ServicesPage = ({ openBook, setPage }) => {
     const servicesData = [
       {
         title: "Consultas de Optometria",
@@ -3234,7 +3185,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ gender }) => {
+  const CollectionPage = ({ gender, setSelectedProduct }) => {
     const [filters, setFilters] = useState({
       material: "",
       color: "",
@@ -3586,7 +3537,7 @@ const openBook = (service = "Consulta Geral") => {
                           );
                         })()}
                       </div>
-                      <p
+                      <div
                         className="font-display text-2xl font-semibold"
                         style={{ color: "var(--forest)" }}
                       >
@@ -3614,7 +3565,7 @@ const openBook = (service = "Consulta Geral") => {
                             </span>
                           </div>
                         )}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -4337,7 +4288,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* ABOUT PAGE */
-  const AboutPage = () => (
+  const AboutPage = ({ setPage }) => (
     <div
       className="pt-28 pb-24 min-h-screen"
       style={{ background: "var(--cream)" }}
@@ -4573,7 +4524,7 @@ const openBook = (service = "Consulta Geral") => {
   );
 
   /* CONTACT */
-  const ContactPage = () => {
+  const ContactPage = ({ openBook }) => {
     const [form, setForm] = useState({
       name: "",
       email: "",
@@ -4581,6 +4532,38 @@ const openBook = (service = "Consulta Geral") => {
       msg: "",
     });
     const [sent, setSent] = useState(false);
+    const [sending, setSending] = useState(false);
+    const [sendError, setSendError] = useState(false);
+
+    const handleSend = async () => {
+      if (!form.name || !form.email || !form.msg) return;
+      setSending(true);
+      setSendError(false);
+      try {
+        const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service_id: 'service_jd2hmsh',
+            template_id: 'template_5wkk8d9',
+            user_id: 'r1iXXbQSD6eraiqvx',
+            template_params: {
+              name: form.name,
+              email: form.email,
+              phone: form.phone,
+              service: `Mensagem de contacto do site: ${form.msg}`,
+            },
+          }),
+        });
+        if (!res.ok) throw new Error(`EmailJS respondeu ${res.status}`);
+        setSent(true);
+      } catch (err) {
+        console.error("Erro ao enviar mensagem de contacto:", err);
+        setSendError(true);
+      } finally {
+        setSending(false);
+      }
+    };
 
     return (
       <div
@@ -4723,11 +4706,17 @@ const openBook = (service = "Consulta Geral") => {
                       }}
                     />
                     <button
-                      onClick={() => setSent(true)}
-                      className="btn-forest w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
+                      onClick={handleSend}
+                      disabled={sending || !form.name || !form.email || !form.msg}
+                      className="btn-forest w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
                     >
-                      <Send size={15} /> Enviar Mensagem
+                      <Send size={15} /> {sending ? "A enviar..." : "Enviar Mensagem"}
                     </button>
+                    {sendError && (
+                      <p className="text-xs mt-3 text-center" style={{ color: "#c0392b" }}>
+                        Não foi possível enviar agora. Ligue-nos para 934 421 310 ou tente novamente.
+                      </p>
+                    )}
                   </div>
                 </>
               )}
@@ -4848,6 +4837,129 @@ const openBook = (service = "Consulta Geral") => {
       </div>
     </div>
   );
+
+/* ── SEO: título e meta description por página ─────────────── */
+const PAGE_META = {
+  home: {
+    title: "Óptica 13 | Especialistas na sua Visão",
+    description: "Na Óptica 13 na Parede cuidamos da sua visão. Marque a sua consulta gratuita, descubra a nossa coleção premium e aproveite os nossos descontos exclusivos.",
+  },
+  services: {
+    title: "Serviços | Óptica 13",
+    description: "Optometria, contactologia, certificados de condução e mais. Conheça os serviços especializados da Óptica 13 na Parede.",
+  },
+  vantagens: {
+    title: "Vantagens e Benefícios | Óptica 13",
+    description: "Seguros, pagamentos facilitados, ótica ao domicílio e outras vantagens exclusivas para os clientes da Óptica 13.",
+  },
+  men: {
+    title: "Coleção Homem | Óptica 13",
+    description: "Descubra a coleção de óculos premium para homem na Óptica 13. Armações e óculos de sol das melhores marcas.",
+  },
+  women: {
+    title: "Coleção Mulher | Óptica 13",
+    description: "Descubra a coleção de óculos premium para mulher na Óptica 13. Armações e óculos de sol das melhores marcas.",
+  },
+  quiz: {
+    title: "Quiz de Estilo | Óptica 13",
+    description: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra o seu par perfeito em minutos.",
+  },
+  about: {
+    title: "Sobre Nós | Óptica 13",
+    description: "Conheça a Óptica 13, na vila da Parede desde 1986. A nossa história, missão e equipa dedicada à sua visão.",
+  },
+  contact: {
+    title: "Contactos | Óptica 13",
+    description: "Contacte a Óptica 13 na Parede. Telefone, morada, horário e formulário de contacto.",
+  },
+  terms: {
+    title: "Termos e Privacidade | Óptica 13",
+    description: "Termos e condições, política de privacidade, envios e devoluções da Óptica 13.",
+  },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN APP COMPONENT
+   ══════════════════════════════════════════════════════════════ */
+export default function App() {
+  return (
+    <Router>
+      <MainLayout />
+    </Router>
+  );
+}
+
+function MainLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const page = location.pathname.replace("/", "") || "home";
+  const setPage = (newPage) => {
+    navigate(newPage === "home" ? "/" : "/" + newPage);
+  };
+
+  const [booking, setBooking] = useState(false);
+  const [bookingService, setBookingService] = useState("Consulta Geral");
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [exitIntent, setExitIntent] = useState(false);
+  const exitShown = useRef(false);
+
+  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Atualiza o <title> e a meta description por página, para SEO e partilhas
+  useEffect(() => {
+    const meta = PAGE_META[page] || PAGE_META.home;
+    document.title = meta.title;
+    const descTag = document.querySelector('meta[name="description"]');
+    if (descTag) descTag.setAttribute("content", meta.description);
+  }, [page]);
+
+ useEffect(() => {
+    // 1. Gatilho de Saída (Para Computador)
+    const h = (e) => {
+      if (e.clientY <= 10 && !exitShown.current) {
+        exitShown.current = true;
+        setExitIntent(true);
+      }
+    };
+    document.addEventListener("mouseout", h);
+
+    // 2. Gatilho de Tempo - 12 Segundos (Para Telemóvel e Computador)
+    const timer = setTimeout(() => {
+      if (!exitShown.current) {
+        exitShown.current = true;
+        setExitIntent(true);
+      }
+    }, 12000);
+
+    // 3. Limpeza de memória do React
+    return () => {
+      document.removeEventListener("mouseout", h);
+      clearTimeout(timer);
+    };
+  }, []);
+
+const openBook = (service = "Consulta Geral") => {
+    setBookingService(service); // O site guarda o nome do serviço
+    setBooking(true);
+    setExitIntent(false);
+  };
+  const addToCart = (p) => {
+    const ex = cart.find((x) => x.id === p.id);
+    if (ex)
+      setCart(cart.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
+    else setCart([...cart, { ...p, qty: 1 }]);
+  };
+  const removeFromCart = (id) => setCart(cart.filter((x) => x.id !== id));
+  const updateQty = (id, q) => {
+    if (q < 1) removeFromCart(id);
+    else setCart(cart.map((x) => (x.id === id ? { ...x, qty: q } : x)));
+  };
+
   return (
     <>
       <div
@@ -4855,16 +4967,16 @@ const openBook = (service = "Consulta Geral") => {
         style={{ background: "var(--cream)", fontFamily: "Jost, sans-serif" }}
       >
        
-        <Header />
+        <Header page={page} setPage={setPage} openBook={openBook} />
 <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
+          <Route path="/services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
           <Route path="/vantagens" element={<VantagensPage />} />
-          <Route path="/men" element={<CollectionPage gender="men" />} />
-          <Route path="/women" element={<CollectionPage gender="women" />} />
+          <Route path="/men" element={<CollectionPage gender="men" setSelectedProduct={setSelectedProduct} />} />
+          <Route path="/women" element={<CollectionPage gender="women" setSelectedProduct={setSelectedProduct} />} />
           <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<AboutPage setPage={setPage} />} />
+          <Route path="/contact" element={<ContactPage openBook={openBook} />} />
           <Route path="/terms" element={<TermsPage />} />
         </Routes>
         <BookingModal 
@@ -4893,7 +5005,7 @@ const openBook = (service = "Consulta Geral") => {
           />
         )}
 
-        <Footer />
+        <Footer setPage={setPage} />
         <WhatsAppBtn />
         <CookieBanner />
         <Analytics />
