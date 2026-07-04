@@ -1116,6 +1116,19 @@ const PRODUCTS = {
     
   ],
 };
+/* Cores usadas na bolinha do cartão de produto e nos swatches do filtro */
+const COLOR_SWATCHES = {
+  "Preto": "#1a1a1a",
+  "Tartaruga": "#92400e",
+  "Azul": "#1e3a8a",
+  "Dourado": "#c9a84c",
+  "Prateado": "#9ca3af",
+  "Transparente": "#dbeafe",
+  "Vermelho": "#dc2626",
+  "Burgundy": "#681329",
+  "Cristal": "#f0f9ff",
+};
+
 /* === ORGANIZADOR DE PRODUTOS AUTOMÁTICO (ATUALIZADO) === */
 const ALL_PRODUCTS = [...PRODUCTS.men, ...PRODUCTS.women];
 
@@ -3221,167 +3234,115 @@ function BookingModal({ isOpen, onClose, service }) {
       });
     }, [products, search, filters]);
 
-    const FilterPanel = ({ isMobile }) => (
-      <div className={isMobile ? "p-6" : ""}>
-        <div className="space-y-6">
-          {/* Material */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Material
-            </p>
-            <div className="space-y-2">
-              {["", "Acetato", "Metal", "Ultem"].map((m) => (
-                <label
-                  key={m}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
+    const activeFilterCount = [filters.material, filters.color, filters.style, filters.shape].filter(Boolean).length;
+    const activeChips = [
+      ...(search ? [{ key: "search", label: `"${search}"`, clear: () => setSearch("") }] : []),
+      ...(filters.material ? [{ key: "material", label: filters.material, clear: () => setFilters({ ...filters, material: "" }) }] : []),
+      ...(filters.color ? [{ key: "color", label: filters.color, clear: () => setFilters({ ...filters, color: "" }) }] : []),
+      ...(filters.style ? [{ key: "style", label: filters.style, clear: () => setFilters({ ...filters, style: "" }) }] : []),
+      ...(filters.shape ? [{ key: "shape", label: filters.shape, clear: () => setFilters({ ...filters, shape: "" }) }] : []),
+    ];
+
+    const FilterPanel = ({ isMobile }) => {
+      const pillGroup = (label, field, options) => (
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide mb-3" style={{ color: "#888" }}>
+            {label}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {options.map((opt) => {
+              const active = filters[field] === opt;
+              return (
+                <button
+                  key={opt || "all"}
+                  type="button"
+                  onClick={() => setFilters({ ...filters, [field]: opt })}
+                  className="px-4 py-2 rounded-full text-xs font-semibold border-2 transition-all hover:-translate-y-0.5"
+                  style={{
+                    borderColor: active ? "var(--forest)" : "var(--mist)",
+                    background: active ? "var(--forest)" : "white",
+                    color: active ? "white" : "#555",
+                  }}
                 >
-                  <input
-                    type="radio"
-                    name={isMobile ? "material-mobile" : "material"}
-                    checked={filters.material === m}
-                    onChange={() => setFilters({ ...filters, material: m })}
-                    className="w-4 h-4"
-                    style={{ accentColor: "var(--gold)" }}
-                  />
-                  <span className="text-sm font-medium" style={{ color: filters.material === m ? "var(--forest)" : "#555" }}>
-                    {m || "Todos"}
-                  </span>
-                </label>
-              ))}
-            </div>
+                  {opt || "Todos"}
+                </button>
+              );
+            })}
           </div>
-
-          {/* Cor Dominante */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Cor Dominante
-            </p>
-            <div className="space-y-2">
-              {[
-                "",
-                "Preto",
-                "Tartaruga",
-                "Azul",
-                "Dourado",
-                "Prateado",
-                "Transparente",
-                "Vermelho"
-              ].map((c) => (
-                <label
-                  key={c}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
-                >
-                  <input
-                    type="radio"
-                    name={isMobile ? "color-mobile" : "color"}
-                    checked={filters.color === c}
-                    onChange={() => setFilters({ ...filters, color: c })}
-                    className="w-4 h-4"
-                    style={{ accentColor: "var(--gold)" }}
-                  />
-                  <span className="text-sm font-medium" style={{ color: filters.color === c ? "var(--forest)" : "#555" }}>
-                    {c || "Todas"}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Estilo */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Estilo
-            </p>
-            <div className="space-y-2">
-              {[
-                "",
-                "Clássico",
-                "Moderno",
-                "Intelectual",
-                "Arrojado",
-                "Glamour",
-                "Casual"
-              ].map(
-                (s) => (
-                  <label
-                    key={s}
-                    className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
-                  >
-                    <input
-                      type="radio"
-                      name={isMobile ? "style-mobile" : "style"}
-                      checked={filters.style === s}
-                      onChange={() => setFilters({ ...filters, style: s })}
-                      className="w-4 h-4"
-                      style={{ accentColor: "var(--gold)" }}
-                    />
-                    <span className="text-sm font-medium" style={{ color: filters.style === s ? "var(--forest)" : "#555" }}>
-                      {s || "Todos"}
-                    </span>
-                  </label>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Formato */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Formato
-            </p>
-            <div className="space-y-2">
-              {[
-                "",
-                "Retangular",
-                "Quadrado",
-                "Redondo",
-                "Cat-Eye",
-                "Aviador",
-                "Geométrico"
-              ].map((sh) => (
-                <label
-                  key={sh}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
-                >
-                  <input
-                    type="radio"
-                    name={isMobile ? "shape-mobile" : "shape"}
-                    checked={filters.shape === sh}
-                    onChange={() => setFilters({ ...filters, shape: sh })}
-                    className="w-4 h-4"
-                    style={{ accentColor: "var(--gold)" }}
-                  />
-                  <span className="text-sm font-medium" style={{ color: filters.shape === sh ? "var(--forest)" : "#555" }}>
-                    {sh || "Todos"}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {isMobile && (
-            <button
-              onClick={() => setDrawerOpen(false)}
-              className="btn-forest w-full py-3 rounded-xl font-semibold text-sm"
-            >
-              Aplicar Filtros
-            </button>
-          )}
         </div>
-      </div>
-    );
+      );
+
+      const colorOptions = ["Preto", "Tartaruga", "Azul", "Dourado", "Prateado", "Transparente", "Vermelho"];
+
+      return (
+        <div className={isMobile ? "p-6" : ""}>
+          <div className="space-y-7">
+            {pillGroup("Material", "material", ["", "Acetato", "Metal", "Ultem"])}
+
+            {/* Cor Dominante — swatches com a cor real, em vez de uma lista de texto */}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide mb-3" style={{ color: "#888" }}>
+                Cor Dominante
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFilters({ ...filters, color: "" })}
+                  className="px-4 py-2 rounded-full text-xs font-semibold border-2 transition-all hover:-translate-y-0.5"
+                  style={{
+                    borderColor: filters.color === "" ? "var(--forest)" : "var(--mist)",
+                    background: filters.color === "" ? "var(--forest)" : "white",
+                    color: filters.color === "" ? "white" : "#555",
+                  }}
+                >
+                  Todas
+                </button>
+                {colorOptions.map((c) => {
+                  const active = filters.color === c;
+                  const isLight = ["Transparente", "Prateado"].includes(c);
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setFilters({ ...filters, color: c })}
+                      title={c}
+                      aria-label={c}
+                      className="relative w-9 h-9 rounded-full transition-transform hover:scale-110 flex-shrink-0"
+                      style={{
+                        background: COLOR_SWATCHES[c],
+                        boxShadow: active
+                          ? "0 0 0 2px white, 0 0 0 4px var(--forest)"
+                          : "0 0 0 2px white, 0 0 0 1px var(--mist)",
+                      }}
+                    >
+                      {active && (
+                        <CheckCircle
+                          size={16}
+                          className="absolute inset-0 m-auto"
+                          style={{ color: isLight ? "var(--forest)" : "white" }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {pillGroup("Estilo", "style", ["", "Clássico", "Moderno", "Intelectual", "Arrojado", "Glamour", "Casual"])}
+            {pillGroup("Formato", "shape", ["", "Retangular", "Quadrado", "Redondo", "Cat-Eye", "Aviador", "Geométrico"])}
+
+            {isMobile && (
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="btn-forest w-full py-3 rounded-xl font-semibold text-sm"
+              >
+                Aplicar Filtros
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    };
 
     return (
       <div
@@ -3426,11 +3387,50 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="lg:hidden btn-outline-forest px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2"
+                className="lg:hidden btn-outline-forest px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 relative"
               >
                 <Filter size={16} /> Filtros
+                {activeFilterCount > 0 && (
+                  <span
+                    className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+                    style={{ background: "var(--gold)" }}
+                  >
+                    {activeFilterCount}
+                  </span>
+                )}
               </button>
             </div>
+
+            {/* Filtros ativos */}
+            {activeChips.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mt-4">
+                {activeChips.map((chip) => (
+                  <span
+                    key={chip.key}
+                    className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full text-xs font-semibold"
+                    style={{ background: "var(--cream-dark)", border: "1px solid var(--mist)", color: "var(--forest)" }}
+                  >
+                    {chip.label}
+                    <button
+                      type="button"
+                      onClick={chip.clear}
+                      className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors"
+                      aria-label={`Remover filtro ${chip.label}`}
+                    >
+                      <X size={11} />
+                    </button>
+                  </span>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); }}
+                  className="text-xs font-semibold underline"
+                  style={{ color: "#888" }}
+                >
+                  Limpar tudo
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex gap-8">
@@ -3502,22 +3502,10 @@ function BookingModal({ isOpen, onClose, service }) {
                       <p className="font-semibold mb-1 truncate">{p.name}</p>
                       <div className="flex items-center gap-2 mb-3">
                         {(() => {
-                          const colorMap = {
-                            "Preto": "#1a1a1a",
-                            "Dourado": "#c9a84c",
-                            "Prateado": "#9ca3af",
-                            "Transparente": "#dbeafe",
-                            "Tartaruga": "#92400e",
-                            "Burgundy": "#681329",
-                            "Vermelho": "#dc2626",
-                            "Azul": "#1e3a8a",
-                            "Cristal": "#f0f9ff"
-                          };
-                          
                           // Procura a cor que mais se aproxima no mapa para a bolinha
                           let dotColor = "#ccc";
-                          Object.keys(colorMap).forEach(key => {
-                            if (p.color.toLowerCase().includes(key.toLowerCase())) dotColor = colorMap[key];
+                          Object.keys(COLOR_SWATCHES).forEach(key => {
+                            if (p.color.toLowerCase().includes(key.toLowerCase())) dotColor = COLOR_SWATCHES[key];
                           });
 
                           return (
