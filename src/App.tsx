@@ -4918,6 +4918,56 @@ function MainLayout() {
     if (descTag) descTag.setAttribute("content", meta.description);
   }, [page]);
 
+  // Scroll-reveal: anima .fade-up/.fade-up-1..4 só quando entram no viewport,
+  // em vez de na montagem (o que os fazia "gastar-se" fora de vista).
+  // Um MutationObserver apanha elementos que aparecem depois (troca de página, modais).
+  useEffect(() => {
+    const REVEAL_SELECTOR = ".fade-up, .fade-up-1, .fade-up-2, .fade-up-3, .fade-up-4";
+    const observed = new WeakSet();
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    const observeWithin = (root) => {
+      root.querySelectorAll?.(REVEAL_SELECTOR).forEach((el) => {
+        if (!observed.has(el)) {
+          observed.add(el);
+          io.observe(el);
+        }
+      });
+    };
+
+    observeWithin(document);
+
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if (node.nodeType !== 1) return;
+          if (node.matches?.(REVEAL_SELECTOR) && !observed.has(node)) {
+            observed.add(node);
+            io.observe(node);
+          }
+          observeWithin(node);
+        });
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+
  useEffect(() => {
     // 1. Gatilho de Saída (Para Computador)
     const h = (e) => {
