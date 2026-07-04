@@ -3437,8 +3437,12 @@ function BookingModal({ isOpen, onClose, service }) {
             {/* Desktop Sidebar */}
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div
-                className="sticky top-28 p-6 rounded-2xl border"
-                style={{ background: "white", borderColor: "var(--mist)" }}
+                className="sticky top-28 p-6 rounded-2xl border overflow-y-auto"
+                style={{
+                  background: "white",
+                  borderColor: "var(--mist)",
+                  maxHeight: "calc(100vh - 8rem)",
+                }}
               >
                 <p className="font-display text-xl font-semibold mb-6" style={{ color: "var(--forest)" }}>Filtros</p>
                 <FilterPanel isMobile={false} />
