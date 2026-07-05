@@ -1903,7 +1903,7 @@ function BookingModal({ isOpen, onClose, service }) {
         <div className="p-6 border-b flex items-center justify-between" style={{ borderColor: "var(--mist)" }}>
           <div>
             <p className="font-display text-2xl font-semibold" style={{ color: "var(--forest)" }}>
-              {confirmed ? "Marcação Confirmada" : "Agendar Consulta de Optometria"}
+              {confirmed ? "Marcação Confirmada" : `Agendar ${service}`}
             </p>
             {!confirmed && <p className="text-xs mt-1 text-gray-400">Passo {step} de 4</p>}
           </div>
@@ -2758,7 +2758,7 @@ function BookingModal({ isOpen, onClose, service }) {
              Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
             </p>
             <button
-              onClick={openBook}
+              onClick={() => openBook("Consulta de Optometria")}
               className="btn-forest px-10 py-4 rounded-xl font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-lg"
             >
               <Calendar size={16} /> Marcar Agora
@@ -2918,7 +2918,7 @@ function BookingModal({ isOpen, onClose, service }) {
         ),
        img: "https://i.postimg.cc/KjLFzDfn/newarta-eye-care-5016078-1920.jpg",
         actionLabel: "Agendar Consulta",
-        actionFn: openBook,
+        actionFn: () => openBook("Consulta de Optometria"),
       },
       {
         title: "Atestado Médico (Cartas de Condução)",
@@ -3038,7 +3038,7 @@ function BookingModal({ isOpen, onClose, service }) {
         ),
         img: "https://i.postimg.cc/MZySsB2x/Contactologia-1-300x300.png",
         actionLabel: "Agendar Consulta",
-        actionFn: openBook,
+        actionFn: () => openBook("Consulta de Contactologia"),
       },
       {
         title: "Aconselhamento Personalizado",
@@ -4740,7 +4740,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ))}
               </div>
               <button
-                onClick={openBook}
+                onClick={() => openBook("Consulta de Optometria")}
                 className="btn-forest w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
               >
                 <Calendar size={15} /> Agendar Consulta Gratuita
