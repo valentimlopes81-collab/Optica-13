@@ -1143,10 +1143,13 @@ PRODUCTS.women = ALL_PRODUCTS.filter(p =>
 );
 
 // Garantir que os produtos têm a tag de género para o Quiz funcionar
+// (derivado das próprias listas Homem/Mulher acima, para nunca desalinhar)
+const menIds = new Set(PRODUCTS.men.map(p => p.id));
+const womenIds = new Set(PRODUCTS.women.map(p => p.id));
 ALL_PRODUCTS.forEach(p => {
-  const isMan = [1, 6, 7, 10, 11, 12, 15, 18, 20, 27, 29, 30, 33, 34, 35, 37, 39].includes(p.id);
-  const isWoman = [2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 38].includes(p.id);
-  
+  const isMan = menIds.has(p.id);
+  const isWoman = womenIds.has(p.id);
+
   if (isMan && isWoman) p.gender = "Unisexo";
   else if (isMan) p.gender = "Masculino";
   else p.gender = "Feminino";
@@ -3620,11 +3623,13 @@ function BookingModal({ isOpen, onClose, service }) {
       materials: [],
       size: "",
       usage: "",      // Novo: Rotina
-      email: "",
-      optIn: true,
     });
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
+    const [resultEmail, setResultEmail] = useState("");
+    const [sendingResults, setSendingResults] = useState(false);
+    const [resultsSent, setResultsSent] = useState(false);
+    const [resultsSendError, setResultsSendError] = useState(false);
 
   const normalizeText = (text) => {
     if (!text) return "";
@@ -3754,15 +3759,47 @@ function BookingModal({ isOpen, onClose, service }) {
   };
   const reset = () => {
     setStep(1);
-    setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
+    setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "" });
     setResults([]);
+    setResultEmail("");
+    setResultsSent(false);
+    setResultsSendError(false);
     window.scrollTo(0, 0);
+  };
+
+  const handleSendResults = async () => {
+    if (!resultEmail) return;
+    setSendingResults(true);
+    setResultsSendError(false);
+    try {
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: 'service_jd2hmsh',
+          template_id: 'template_5wkk8d9',
+          user_id: 'r1iXXbQSD6eraiqvx',
+          template_params: {
+            name: resultEmail,
+            email: resultEmail,
+            service: `Resultados do Quiz de Estilo: ${results.map(p => `${p.name} (€${p.price})`).join(', ')}`,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(`EmailJS respondeu ${res.status}`);
+      setResultsSent(true);
+    } catch (err) {
+      console.error("Erro ao enviar resultados do quiz:", err);
+      setResultsSendError(true);
+    } finally {
+      setSendingResults(false);
+    }
   };
 
     return (
       <div className="pt-28 pb-24 min-h-screen" style={{ background: "#f8f9fa" }}>
         <div className="max-w-4xl mx-auto px-6">
-          {step <= 8 && (
+          {step <= 7 && (
             <div className="text-center mb-10 fade-up">
               <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de 7</p>
               
@@ -3834,13 +3871,6 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
             )}
 
-            {step === 8 && (
-              <form onSubmit={finishQuiz} className="space-y-4">
-                <input type="email" placeholder="O seu e-mail" required className="w-full p-4 rounded-xl border" onChange={(e) => setAnswers({...answers, email: e.target.value})} />
-                <button type="submit" className="w-full bg-black text-white py-4 rounded-xl font-bold">Ver Recomendações</button>
-              </form>
-            )}
-
             {step === 9 && <div className="text-center py-20 font-display text-2xl">A analisar o seu perfil...</div>}
 
       {step === 10 && (
@@ -3864,14 +3894,33 @@ function BookingModal({ isOpen, onClose, service }) {
     {/* E-mail opcional - Removido o "required" */}
     <div className="bg-gray-50 p-6 rounded-2xl border max-w-sm mx-auto">
       <p className="font-semibold mb-3 text-sm">Guardar estes resultados por e-mail (opcional):</p>
-      <div className="flex gap-2">
-        <input 
-            type="email" 
-            placeholder="O seu e-mail" 
-            className="p-3 border rounded-xl flex-1 outline-none" 
-        />
-        <button className="bg-black text-white px-4 py-3 rounded-xl font-bold text-sm">Enviar</button>
-      </div>
+      {resultsSent ? (
+        <p className="text-sm font-semibold" style={{ color: "var(--forest)" }}>Resultados enviados! Verifique o seu e-mail.</p>
+      ) : (
+        <>
+          <div className="flex gap-2">
+            <input
+              type="email"
+              placeholder="O seu e-mail"
+              value={resultEmail}
+              onChange={(e) => setResultEmail(e.target.value)}
+              className="p-3 border rounded-xl flex-1 outline-none"
+            />
+            <button
+              onClick={handleSendResults}
+              disabled={sendingResults || !resultEmail}
+              className="bg-black text-white px-4 py-3 rounded-xl font-bold text-sm disabled:opacity-50"
+            >
+              {sendingResults ? "..." : "Enviar"}
+            </button>
+          </div>
+          {resultsSendError && (
+            <p className="text-xs mt-2" style={{ color: "#c0392b" }}>
+              Não foi possível enviar agora. Tente novamente.
+            </p>
+          )}
+        </>
+      )}
     </div>
     
     <button onClick={reset} className="mt-8 underline text-sm text-gray-500">Refazer Quiz</button>
