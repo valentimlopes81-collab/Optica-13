@@ -1453,7 +1453,7 @@ function ExitPopup({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      className="modal-backdrop fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
       style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }}
     >
       <div
@@ -1636,7 +1636,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
   return (
     <div
-      className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6"
+      className="modal-backdrop fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6"
       style={{ background: "rgba(10,20,15,0.75)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
@@ -1896,7 +1896,7 @@ function BookingModal({ isOpen, onClose, service }) {
   const currentSlots = selectedDate && selectedDate.getDay() === 6 ? slotsSabado : slotsSemana;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }} onClick={onClose}>
+    <div className="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }} onClick={onClose}>
       <div className="relative rounded-2xl overflow-hidden max-w-3xl w-full fade-up flex flex-col shadow-2xl" style={{ background: "var(--cream)", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
         
         {/* Header */}
@@ -3648,7 +3648,7 @@ function BookingModal({ isOpen, onClose, service }) {
         {drawerOpen && (
           <>
             <div
-              className="fixed inset-0 z-[80] lg:hidden transition-opacity"
+              className="modal-backdrop fixed inset-0 z-[80] lg:hidden"
               style={{
                 background: "rgba(10,20,15,0.5)",
                 backdropFilter: "blur(4px)",
@@ -4201,7 +4201,7 @@ function BookingModal({ isOpen, onClose, service }) {
         {/* MODAL DE SEGUROS E PROTOCOLOS */}
         {showSeguros && (
           <div
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+            className="modal-backdrop fixed inset-0 z-[200] flex items-center justify-center p-4"
             style={{
               background: "rgba(10,20,15,0.85)",
               backdropFilter: "blur(8px)",
