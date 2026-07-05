@@ -55,6 +55,51 @@ function Img({ src, alt, className, style, priority = false }) {
     />
   );
 }
+
+/* Anima um número a contar a partir de 0 quando entra no viewport */
+function CountUp({ end, duration = 1500, className, style }) {
+  const ref = useRef(null);
+  const [value, setValue] = useState(0);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setValue(end);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !started.current) {
+            started.current = true;
+            const start = performance.now();
+            const tick = (now) => {
+              const progress = Math.min((now - start) / duration, 1);
+              setValue(Math.floor(progress * end));
+              if (progress < 1) requestAnimationFrame(tick);
+              else setValue(end);
+            };
+            requestAnimationFrame(tick);
+            io.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [end, duration]);
+
+  return (
+    <span ref={ref} className={className} style={style}>
+      {value}
+    </span>
+  );
+}
 /* ── SHOPIFY INTEGRATION ────────────────────────────────────── */
 
 function ShopifyBuyButton({ productId }) {
@@ -1966,23 +2011,32 @@ function BookingModal({ isOpen, onClose, service }) {
   /* HEADER */
   const Header = ({ page, setPage, openBook }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+      const onScroll = () => setScrolled(window.scrollY > 12);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
     return (
       <header
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl"
+        className={`header-shell fixed top-0 left-0 right-0 z-50 backdrop-blur-xl ${scrolled ? "header-scrolled" : ""}`}
         style={{
           background: "rgba(255,255,255,0.92)",
           borderBottom: "1px solid var(--mist)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
           <button
             onClick={() => setPage("home")}
             className="flex items-center transition-transform hover:scale-105"
           >
-            <img 
-              src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
-              alt="Logo Óptica 13" 
-              className="h-10 w-auto" 
+            <img
+              src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png"
+              alt="Logo Óptica 13"
+              className="h-10 w-auto"
             />
           </button>
 
@@ -2238,6 +2292,15 @@ function BookingModal({ isOpen, onClose, service }) {
   /* TESTIMONIALS CAROUSEL */
   const TestimonialsSection = () => {
     const [active, setActive] = useState(0);
+    const [fading, setFading] = useState(false);
+    const goToTestimonial = (i) => {
+      if (i === active) return;
+      setFading(true);
+      setTimeout(() => {
+        setActive(i);
+        setFading(false);
+      }, 300);
+    };
     const testimonials = [
       {
         name: "Luís Correia Tavares",
@@ -2282,9 +2345,9 @@ function BookingModal({ isOpen, onClose, service }) {
               ))}
             </div>
 
-            <div className="min-h-[220px] sm:min-h-[160px] flex items-center">
+            <div className={`min-h-[220px] sm:min-h-[160px] flex items-center testimonial-fade ${fading ? "testimonial-fading" : ""}`}>
               <p
-                className="text-base md:text-lg leading-relaxed transition-opacity duration-500"
+                className="text-base md:text-lg leading-relaxed"
                 style={{ color: "#666" }}
               >
                 {testimonials[active].text}
@@ -2293,7 +2356,7 @@ function BookingModal({ isOpen, onClose, service }) {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mt-10">
               {/* Nome e Avatar */}
               <div
-                className="flex items-center gap-4 bg-gray-50 pr-6 rounded-full border w-fit"
+                className={`flex items-center gap-4 bg-gray-50 pr-6 rounded-full border w-fit testimonial-fade ${fading ? "testimonial-fading" : ""}`}
                 style={{ borderColor: "var(--mist)" }}
               >
                 <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center flex-shrink-0 border-4 border-white shadow-sm">
@@ -2321,19 +2384,19 @@ function BookingModal({ isOpen, onClose, service }) {
 
               {/* Bolinhas / Controlos */}
               <div className="flex items-center gap-2">
-                {testimonials.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActive(i)}
-                    className={`h-3 transition-all ${
-                      active === i
-                        ? "w-8 rounded-full border-2 border-black"
-                        : "w-3 rounded-full bg-gray-600 hover:bg-black"
-                    }`}
-                    style={{ background: active === i ? "transparent" : "" }}
-                    aria-label={`Ver testemunho ${i + 1}`}
-                  />
-                ))}
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goToTestimonial(i)}
+                  className={`h-3 transition-all ${
+                    active === i
+                      ? "w-8 rounded-full border-2 border-black"
+                      : "w-3 rounded-full bg-gray-600 hover:bg-black"
+                  }`}
+                  style={{ background: active === i ? "transparent" : "" }}
+                  aria-label={`Ver testemunho ${i + 1}`}
+                />
+              ))}
               </div>
             </div>
           </div>
@@ -4384,7 +4447,7 @@ function BookingModal({ isOpen, onClose, service }) {
               <span className="text-xs font-semibold uppercase tracking-widest opacity-90 mb-1">
                 Desde
               </span>
-              <span className="font-display text-4xl font-bold">1986</span>
+              <CountUp end={1986} className="font-display text-4xl font-bold" />
             </div>
           </div>
 
@@ -4534,7 +4597,7 @@ function BookingModal({ isOpen, onClose, service }) {
             className="font-display text-3xl md:text-4xl font-semibold mb-10 max-w-3xl mx-auto relative z-10"
             style={{ color: "var(--forest)", lineHeight: 1.3 }}
           >
-            Temos 38 anos de especialização na ótica, totalmente focados em
+            Temos <CountUp end={38} /> anos de especialização na ótica, totalmente focados em
             satisfazer as suas necessidades.
           </h2>
 
@@ -5059,17 +5122,19 @@ const openBook = (service = "Consulta Geral") => {
       >
        
         <Header page={page} setPage={setPage} openBook={openBook} />
-<Routes>
-          <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
-          <Route path="/services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
-          <Route path="/vantagens" element={<VantagensPage />} />
-          <Route path="/men" element={<CollectionPage gender="men" setSelectedProduct={setSelectedProduct} />} />
-          <Route path="/women" element={<CollectionPage gender="women" setSelectedProduct={setSelectedProduct} />} />
-          <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
-          <Route path="/about" element={<AboutPage setPage={setPage} />} />
-          <Route path="/contact" element={<ContactPage openBook={openBook} />} />
-          <Route path="/terms" element={<TermsPage />} />
-        </Routes>
+        <div key={location.pathname} className="page-transition">
+          <Routes>
+            <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
+            <Route path="/services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
+            <Route path="/vantagens" element={<VantagensPage />} />
+            <Route path="/men" element={<CollectionPage gender="men" setSelectedProduct={setSelectedProduct} />} />
+            <Route path="/women" element={<CollectionPage gender="women" setSelectedProduct={setSelectedProduct} />} />
+            <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
+            <Route path="/about" element={<AboutPage setPage={setPage} />} />
+            <Route path="/contact" element={<ContactPage openBook={openBook} />} />
+            <Route path="/terms" element={<TermsPage />} />
+          </Routes>
+        </div>
         <BookingModal 
           isOpen={booking} 
           onClose={() => setBooking(false)} 

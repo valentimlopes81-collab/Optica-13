@@ -42,12 +42,22 @@ body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--t
 .fade-up-4.in-view { animation: fadeUp 0.7s 0.55s ease both; }
 .slide-right { animation: slideInRight 0.5s ease forwards; }
 
+.page-transition { animation: fadeIn 0.35s ease; }
+
+.header-shell { transition: box-shadow 0.3s ease, padding 0.3s ease; }
+.header-scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.testimonial-fade { transition: opacity 0.35s ease; }
+.testimonial-fade.testimonial-fading { opacity: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   .fade-up, .fade-up-1, .fade-up-2, .fade-up-3, .fade-up-4 {
     opacity: 1;
     transform: none;
     animation: none !important;
   }
+  .page-transition { animation: none !important; }
+  .testimonial-fade { transition: none !important; }
 }
 .animate-marquee { animation: marquee 28s linear infinite; }
 .animate-spin-slow { animation: spin 1s linear infinite; }
