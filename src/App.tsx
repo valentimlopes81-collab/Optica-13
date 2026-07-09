@@ -2246,6 +2246,11 @@ function CookieBanner() {
 function ProductModal({ product, onClose, onAdd, onBook }) {
   const [activeImage, setActiveImage] = useState(product?.image);
 
+  // Fotos do Outlet têm fundo cinza (não branco puro), por isso o
+  // truque do mix-blend-multiply (que "corta" fundos brancos) fica
+  // enevoado nelas — desativa-se para produtos com originalPrice.
+  const plainPhoto = !!product?.originalPrice;
+
   // Junta a foto de capa com as fotos extra
   const allImages = product?.gallery ? [product.image, ...product.gallery] : [product?.image];
 
@@ -2299,7 +2304,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               <Img
                 src={activeImage}
                 alt={product.name}
-                className="w-full h-full object-cover absolute inset-0 mix-blend-multiply transition-all duration-500 ease-in-out"
+                className={`w-full h-full object-cover absolute inset-0 transition-all duration-500 ease-in-out ${plainPhoto ? "" : "mix-blend-multiply"}`}
               />
             </div>
             
@@ -2318,7 +2323,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                     }`}
                     style={{ background: "var(--mist)" }}
                   >
-                    <Img src={img} alt={`Galeria ${idx + 1}`} className="w-full h-full object-cover mix-blend-multiply" />
+                    <Img src={img} alt={`Galeria ${idx + 1}`} className={`w-full h-full object-cover ${plainPhoto ? "" : "mix-blend-multiply"}`} />
                   </button>
                 ))}
               </div>
@@ -4218,7 +4223,7 @@ function BookingModal({ isOpen, onClose, service }) {
                         <Img
                           src={p.image}
                           alt={p.name}
-                          className="w-full h-full object-cover mix-blend-multiply"
+                          className={`w-full h-full object-cover ${showDiscount ? "" : "mix-blend-multiply"}`}
                         />
                       </div>
                     </div>
