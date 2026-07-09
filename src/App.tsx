@@ -1186,8 +1186,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Um verdadeiro ícone que nunca sai de moda. Esta armação estilo aviador em metal dourado combina leveza e durabilidade, garantindo um visual polido e versátil. Perfeitos para qualquer ocasião, elevam instantaneamente desde um look mais casual até um visual sofisticado.",
-    image: "SUBSTITUIR_PELA_FOTO_40",
-    gallery: [],
+    image: "https://i.postimg.cc/QBXq8nQX/1.png",
+    gallery: [
+      "https://i.postimg.cc/HJptYPwY/1-1.png",
+      "https://i.postimg.cc/QBXq8nQj/1-2.png"
+    ],
   },
   {
     id: 41,
@@ -1204,8 +1207,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "A fusão perfeita entre a performance desportiva e a estética urbana de streetwear. Com uma armação leve em cinza translúcido e lentes espelhadas vibrantes, estes óculos garantem um visual arrojado e moderno. Ideais para quem procura um conforto extremo sem abdicar de um estilo de alto impacto.",
-    image: "SUBSTITUIR_PELA_FOTO_41",
-    gallery: [],
+    image: "https://i.postimg.cc/B8MBXcp5/2.png",
+    gallery: [
+      "https://i.postimg.cc/2qzxkXQr/2-1.png",
+      "https://i.postimg.cc/TyRcdHVn/2-2.png"
+    ],
   },
   {
     id: 42,
@@ -1222,8 +1228,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Uma reinvenção moderna do clássico modelo aviador, destacando-se pelas suas linhas mais retas e angulares. A estrutura fina em metal prateado contrasta na perfeição com o tom vibrante das lentes azuis. Uma peça extremamente leve e cheia de personalidade para quem gosta de marcar a diferença nos dias de sol.",
-    image: "SUBSTITUIR_PELA_FOTO_42",
-    gallery: [],
+    image: "https://i.postimg.cc/R3XLNQdL/3.png",
+    gallery: [
+      "https://i.postimg.cc/DW2cvYr5/3-1.png"
+    ],
   },
   {
     id: 43,
@@ -1240,8 +1248,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "O modelo Nike EVO funde a performance desportiva com o estilo do dia a dia. A sua armação leve em metal com formato aviador destaca-se pela barra superior contrastante e hastes ergonómicas, garantindo um ajuste seguro e confortável. É o acessório perfeito para quem tem um estilo de vida ativo mas não abdica de um visual urbano e moderno.",
-    image: "SUBSTITUIR_PELA_FOTO_43",
-    gallery: [],
+    image: "https://i.postimg.cc/qhqXnhD9/4.png",
+    gallery: [
+      "https://i.postimg.cc/gwNHnq4W/4-1.png",
+      "https://i.postimg.cc/xJ8yHJpB/4-2.png"
+    ],
   },
   {
     id: 44,
@@ -1258,8 +1269,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "A sofisticação intemporal da Gant encontra o design vintage neste modelo estilo navegador. A elegante armação em metal dourado é realçada por uma barra superior marcante e lentes escuras, conferindo um ar refinado e estruturado ao rosto. Uma peça versátil e cheia de classe que complementa perfeitamente qualquer guarda-roupa, do casual ao formal.",
-    image: "SUBSTITUIR_PELA_FOTO_44",
-    gallery: [],
+    image: "https://i.postimg.cc/CB5HDB6L/5.png",
+    gallery: [
+      "https://i.postimg.cc/YG0fgGyH/5-1.png",
+      "https://i.postimg.cc/mzkNMz6B/5-2.png"
+    ],
   },
   {
     id: 45,
@@ -1276,8 +1290,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "O estilo funcional da Polaroid ganha uma nova dimensão com este formato aviador mais reto e geométrico. A estrutura em metal prateado garante máxima leveza para uso prolongado, oferecendo um look discreto, polido e super moderno. Um óculo de sol essencial e extremamente versátil para te acompanhar no dia a dia.",
-    image: "SUBSTITUIR_PELA_FOTO_45",
-    gallery: [],
+    image: "https://i.postimg.cc/DJNQcvtJ/6.png",
+    gallery: [
+      "https://i.postimg.cc/8JcBWJnC/6-1.png",
+      "https://i.postimg.cc/8JYdbpqj/6-2.png"
+    ],
   },
   {
     id: 46,
@@ -1294,8 +1311,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Um modelo essencial para o uso diário, combinando a versatilidade intemporal do preto brilhante com um formato retangular suave que favorece e equilibra a maioria dos rostos. Leves, ergonómicos e discretos, são a escolha perfeita para quem procura um estilo clássico e prático sem abdicar do conforto.",
-    image: "SUBSTITUIR_PELA_FOTO_46",
-    gallery: [],
+    image: "https://i.postimg.cc/0r60ySwM/7.png",
+    gallery: [
+      "https://i.postimg.cc/YGPNxrJx/7-1.png",
+      "https://i.postimg.cc/CB2C4hWm/7-2.png"
+    ],
   },
   {
     id: 47,
@@ -1312,8 +1332,11 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "Inspirados na forte tendência retro, estes óculos redondos destacam-se pela sua ousada ponte dupla em metal. A estrutura fina que mistura os tons prateado e preto cria um visual alternativo e cheio de personalidade. Ideais para quem quer marcar a diferença com um acessório leve e de forte atitude urbana.",
-    image: "SUBSTITUIR_PELA_FOTO_47",
-    gallery: [],
+    image: "https://i.postimg.cc/hhJ1tmdr/8.png",
+    gallery: [
+      "https://i.postimg.cc/7bCnZz2z/8-1.png",
+      "https://i.postimg.cc/qgtxvK3x/8-2.png"
+    ],
   },
   {
     id: 48,
@@ -1330,8 +1353,11 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "O modelo Carrera redefine a elegância contemporânea com este formato redondo e uma sofisticada ponte dupla em metal. A combinação premium da frente em preto matte com as hastes em tons dourado e bege, finalizada por lentes em azul degradé, confere um look luxuoso e inconfundível. Perfeitos para quem valoriza um design requintado com um toque marcadamente moderno.",
-    image: "SUBSTITUIR_PELA_FOTO_48",
-    gallery: [],
+    image: "https://i.postimg.cc/ykchFznZ/9.png",
+    gallery: [
+      "https://i.postimg.cc/LhrBYsks/9-1.png",
+      "https://i.postimg.cc/F73bjQGk/9-2.png"
+    ],
   },
   {
     id: 49,
@@ -1348,8 +1374,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Este modelo clássico de formato navegador combina uma elegante estrutura fina em metal dourado com ponteiras contrastantes em preto para máximo conforto. As lentes em tom castanho suave oferecem um look polido e intemporal, sendo o acessório perfeito e versátil para elevar qualquer visual do dia a dia.",
-    image: "SUBSTITUIR_PELA_FOTO_49",
-    gallery: [],
+    image: "https://i.postimg.cc/w1zX2bbX/10.png",
+    gallery: [
+      "https://i.postimg.cc/kBKNxdwS/10-1.png",
+      "https://i.postimg.cc/F73bjQGp/10-2.png"
+    ],
   },
   {
     id: 50,
@@ -1366,8 +1395,11 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "Uma verdadeira obra de arte com estética vintage. Este modelo redondo de ponte dupla destaca-se pelos seus detalhes minuciosamente gravados no metal e pelas icónicas ponteiras circulares, uma assinatura da marca. Perfeitos para os amantes de design premium que procuram uma peça de luxo com pormenores únicos e refinados.",
-    image: "SUBSTITUIR_PELA_FOTO_50",
-    gallery: [],
+    image: "https://i.postimg.cc/VJwqgHHH/11.png",
+    gallery: [
+      "https://i.postimg.cc/21YQGXXF/11-1.png",
+      "https://i.postimg.cc/yDKmjrrL/11-2.png"
+    ],
   },
   {
     id: 51,
@@ -1384,8 +1416,11 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "O equilíbrio ideal entre o estilo desportivo e a elegância urbana. Este modelo destaca-se pela sua armação contemporânea em azul marinho com acabamento matte, perfeitamente contrastada por uma moderna ponte dupla metálica. As lentes em azul degradé completam este design arrojado, garantindo um look marcante e cheio de atitude.",
-    image: "SUBSTITUIR_PELA_FOTO_51",
-    gallery: [],
+    image: "https://i.postimg.cc/68hdmLkw/12.png",
+    gallery: [
+      "https://i.postimg.cc/18SGBYjQ/12-1.png",
+      "https://i.postimg.cc/rD9SPCB2/12-2.png"
+    ],
   },
   {
     id: 52,
@@ -1402,8 +1437,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Um clássico descontraído e reinventado para o dia a dia. Com uma armação leve em acabamento azul matte, este modelo garante um visual moderno e fácil de combinar. O seu design ergonómico proporciona um ajuste confortável, sendo a escolha ideal para quem procura praticidade com um toque subtil de cor.",
-    image: "SUBSTITUIR_PELA_FOTO_52",
-    gallery: [],
+    image: "https://i.postimg.cc/KKvnS3bR/13.png",
+    gallery: [
+      "https://i.postimg.cc/18Kpjckf/13-1.png",
+      "https://i.postimg.cc/68hdmLk8/13-2.png"
+    ],
   },
   {
     id: 53,
@@ -1420,8 +1458,11 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "A fusão perfeita entre a estética vintage e o design contemporâneo. Este modelo redondo destaca-se pelo seu padrão tartaruga clássico, contrastado por uma arrojada barra superior reta que confere forte personalidade ao rosto. Uma peça de luxo cheia de atitude, desenhada para elevar qualquer look urbano e sofisticado.",
-    image: "SUBSTITUIR_PELA_FOTO_53",
-    gallery: [],
+    image: "https://i.postimg.cc/CZPbFMMC/14.png",
+    gallery: [
+      "https://i.postimg.cc/VSLjQ0wq/14-1.png",
+      "https://i.postimg.cc/675dJ4KV/14-2.png"
+    ],
   },
   {
     id: 54,
@@ -1438,8 +1479,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "mid",
     description: "Para quem não tem medo de assumir o protagonismo, este modelo cat-eye em vermelho vibrante é a derradeira declaração de estilo. A sua silhueta feminina, espessa e arrojada, tem o poder de elevar qualquer visual básico a um nível de puro glamour. Uma peça statement irresistível que combina atitude inconfundível com a máxima proteção.",
-    image: "SUBSTITUIR_PELA_FOTO_54",
-    gallery: [],
+    image: "https://i.postimg.cc/1n8w4xfS/15.png",
+    gallery: [
+      "https://i.postimg.cc/FfW09FFV/15-1.png",
+      "https://i.postimg.cc/v1q5Q88K/15-2.png"
+    ],
   },
   {
     id: 55,
@@ -1456,8 +1500,11 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "Uma peça de puro statement que capta a essência irreverente dos anos 60. Com uma armação preta de design ondulado único e lentes rosa translúcidas, o modelo \"The Janis\" não passa despercebido. É perfeito para festivais, looks criativos ou para quem adora expressar a sua individualidade através de um acessório extravagante e icónico.",
-    image: "SUBSTITUIR_PELA_FOTO_55",
-    gallery: [],
+    image: "https://i.postimg.cc/r0Dxz6Kx/16.png",
+    gallery: [
+      "https://i.postimg.cc/YGvYjch2/16-1.png",
+      "https://i.postimg.cc/Kk1B4XR4/16-2.png"
+    ],
   },
   {
     id: 56,
@@ -1474,8 +1521,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "mid",
     description: "A quintessência do charme feminino num formato inconfundível. Esta armação cat-eye robusta em preto brilhante oferece um look misterioso e sofisticado, ideal para estruturar o rosto e proporcionar um efeito lifting ao olhar. Um verdadeiro clássico de elegância, extremamente versátil e essencial em qualquer coleção.",
-    image: "SUBSTITUIR_PELA_FOTO_56",
-    gallery: [],
+    image: "https://i.postimg.cc/YGTgWXWX/17.png",
+    gallery: [
+      "https://i.postimg.cc/BLRDKhK8/17-1.png",
+      "https://i.postimg.cc/YGTgWXWf/17-2.png"
+    ],
   },
   {
     id: 57,
@@ -1492,8 +1542,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "high",
     description: "A definição de luxo contemporâneo com a assinatura inconfundível de Victoria Beckham. Este modelo em formato borboleta destaca-se pelo seu acetato maciço em padrão tartaruga rico e acabamentos de altíssima qualidade. Uma silhueta elegante e poderosa que adiciona um toque imediato de glamour e sofisticação a qualquer look.",
-    image: "SUBSTITUIR_PELA_FOTO_57",
-    gallery: [],
+    image: "https://i.postimg.cc/CnD8HjGJ/18.png",
+    gallery: [
+      "https://i.postimg.cc/k6L8bjbH/18-1.png",
+      "https://i.postimg.cc/jwBN787m/18-2.png"
+    ],
   },
   {
     id: 58,
@@ -1510,8 +1563,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "high",
     description: "A essência do luxo e sofisticação. Este modelo Victoria Beckham em formato borboleta destaca-se pelo elegante acetato padrão tartaruga e requintados acabamentos texturizados em dourado nas charneiras. Uma peça de alta costura que confere um olhar poderoso, feminino e inegavelmente glamoroso.",
-    image: "SUBSTITUIR_PELA_FOTO_58",
-    gallery: [],
+    image: "https://i.postimg.cc/zHWhSnwV/19.png",
+    gallery: [
+      "https://i.postimg.cc/ctY3MQ7C/19-1.png",
+      "https://i.postimg.cc/XBF5cwKv/19-2.png"
+    ],
   },
   {
     id: 59,
@@ -1528,8 +1584,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "high",
     description: "Um design refinado que combina formas femininas com um toque contemporâneo. A armação em acetato translúcido com subtis padrões raiados, complementada por detalhes luxuosos nas hastes, oferece uma elegância leve e moderna. É a peça premium ideal para iluminar e estruturar o rosto com máxima classe.",
-    image: "SUBSTITUIR_PELA_FOTO_59",
-    gallery: [],
+    image: "https://i.postimg.cc/fk0YNhGq/20.png",
+    gallery: [
+      "https://i.postimg.cc/CnD8HjCd/20-1.png",
+      "https://i.postimg.cc/CdfbgV3J/20-2.png"
+    ],
   },
   {
     id: 60,
@@ -1546,8 +1605,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "high",
     description: "O verdadeiro estilo retro encontra-se neste modelo oval da Ray-Ban. Com a sua armação fina em metal dourado e as icónicas lentes verdes, este é um clássico absoluto dos anos 70 que regressou para dominar o street style. Uma peça unissexo, extremamente leve e cheia de personalidade para quem respira cultura pop.",
-    image: "SUBSTITUIR_PELA_FOTO_60",
-    gallery: [],
+    image: "https://i.postimg.cc/4nhpgTDq/21.png",
+    gallery: [
+      "https://i.postimg.cc/hh7VBqkw/21-1.png"
+    ],
   },
   {
     id: 61,
@@ -1564,8 +1625,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Puro glamour num formato oversized. Esta armação preta brilhante de curvas femininas, acentuada por um subtil detalhe dourado na haste, garante uma presença marcante e sofisticada. Oferecendo a máxima cobertura e um estilo \"estrela de cinema\", é o acessório perfeito para elevar qualquer visual de forma acessível.",
-    image: "SUBSTITUIR_PELA_FOTO_61",
-    gallery: [],
+    image: "https://i.postimg.cc/BX9HZVss/22.png",
+    gallery: [
+      "https://i.postimg.cc/kDtWmmr3/22-1.png",
+      "https://i.postimg.cc/jL0PqFTG/22-2.png"
+    ],
   },
   {
     id: 62,
@@ -1582,8 +1646,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "mid",
     description: "Este modelo cat-eye feminino da Havaianas traz a energia e a leveza do verão para qualquer estação. Com uma armação preta marcante e hastes texturizadas inspiradas no famoso padrão das solas da marca, oferece um look descontraído mas cheio de atitude. As lentes em degradé completam esta peça versátil e essencial para os dias de sol.",
-    image: "SUBSTITUIR_PELA_FOTO_62",
-    gallery: [],
+    image: "https://i.postimg.cc/RN5KCD9W/23.png",
+    gallery: [
+      "https://i.postimg.cc/nCbBVPZn/23-1.png",
+      "https://i.postimg.cc/LnKL4bRH/23-2.png"
+    ],
   },
   {
     id: 63,
@@ -1600,8 +1667,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "mid",
     description: "A elegância encontra a funcionalidade absoluta neste modelo Polaroid num sofisticado tom azul marinho. A sua silhueta feminina em formato borboleta é complementada por hastes finas em metal, garantindo um visual requintado e extremamente leve. Uma escolha perfeita para o uso diário, oferecendo proteção e um design que combina com qualquer look.",
-    image: "SUBSTITUIR_PELA_FOTO_63",
-    gallery: [],
+    image: "https://i.postimg.cc/bsxbZ9NS/24-1.png",
+    gallery: [
+      "https://i.postimg.cc/rK1WDNF9/24-2.png"
+    ],
   },
   {
     id: 64,
@@ -1618,8 +1687,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "mid",
     description: "Dê um toque de cor e ousadia ao seu visual com este modelo vibrante em tom magenta/berry. Com um formato quadrado de linhas ascendentes que alongam o olhar e elegantes detalhes dourados nos cantos, esta armação alia feminilidade a uma estética moderna. Um acessório cheio de personalidade que destaca o rosto e garante o conforto visual característico da Polaroid.",
-    image: "SUBSTITUIR_PELA_FOTO_64",
-    gallery: [],
+    image: "https://i.postimg.cc/PCdDYvP4/25.png",
+    gallery: [
+      "https://i.postimg.cc/7f375nYm/25-1.png",
+      "https://i.postimg.cc/vcr94tHS/25-2.png"
+    ],
   },
   {
     id: 65,
@@ -1636,8 +1708,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Uma verdadeira afirmação de estilo. Este modelo Polaroid destaca-se pela sua armação chunky (grossa) num elegante tom creme, perfeitamente realçada por luxuosos detalhes dourados nas charneiras. Com o seu formato quadrado oversized, é a peça ideal para quem procura um look fashionista, moderno e cheio de atitude.",
-    image: "SUBSTITUIR_PELA_FOTO_65",
-    gallery: [],
+    image: "https://i.postimg.cc/Xrn5dBrb/27.png",
+    gallery: [
+      "https://i.postimg.cc/nXnmB9Cd/27-1.png",
+      "https://i.postimg.cc/NKQXm253/27-2.png"
+    ],
   },
   {
     id: 66,
@@ -1654,8 +1729,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "mid",
     description: "A personificação da elegância feminina num design contemporâneo. Com uma belíssima armação em acetato translúcido cor-de-rosa blush e hastes elegantemente trabalhadas, este modelo ilumina o rosto e confere um toque de romance moderno. O formato borboleta suave garante um ajuste lisonjeiro, tornando-o num acessório de luxo perfeito para qualquer ocasião.",
-    image: "SUBSTITUIR_PELA_FOTO_66",
-    gallery: [],
+    image: "https://i.postimg.cc/68BZn486/28.png",
+    gallery: [
+      "https://i.postimg.cc/pmPjz5mx/28-1.png",
+      "https://i.postimg.cc/ts96Wnsp/28-2.png"
+    ],
   },
   {
     id: 67,
@@ -1672,8 +1750,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Uma abordagem moderna e estruturada ao formato quadrado clássico. Este modelo em preto brilhante apresenta uma armação espessa de linhas arrojadas, acentuada por um detalhe metálico discreto nas hastes. É um acessório indispensável, extremamente versátil e de forte atitude urbana, que complementa com facilidade qualquer guarda-roupa.",
-    image: "SUBSTITUIR_PELA_FOTO_67",
-    gallery: [],
+    image: "https://i.postimg.cc/nXTDkVmn/29.png",
+    gallery: [
+      "https://i.postimg.cc/zypgjDh5/29-1.png"
+    ],
   },
   {
     id: 68,
@@ -1690,8 +1770,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "high",
     description: "A personificação do luxo contemporâneo com o inconfundível detalhe metálico em \"T\" nas charneiras. Esta elegante armação em formato borboleta funde a frente em preto clássico com hastes ricas em padrão tartaruga, criando um contraste perfeito. Uma peça de alta-costura que confere um olhar poderoso, feminino e extremamente glamoroso.",
-    image: "SUBSTITUIR_PELA_FOTO_68",
-    gallery: [],
+    image: "https://i.postimg.cc/FYGLZFSK/30.png",
+    gallery: [
+      "https://i.postimg.cc/sMKhcfWD/30-1.png"
+    ],
   },
   {
     id: 69,
@@ -1708,8 +1790,11 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval", "heart"],
     budget: "high",
     description: "Uma verdadeira afirmação de estilo avant-garde e exclusividade. Este arrojado modelo Prada destaca-se pela imponente frente preta em formato cat-eye e pelas icónicas hastes em color block com o logotipo clássico da marca em destaque. O acessório perfeito para mulheres que procuram uma peça arrojada, luxuosa e que definitivamente não passa despercebida.",
-    image: "SUBSTITUIR_PELA_FOTO_69",
-    gallery: [],
+    image: "https://i.postimg.cc/LqXZ0dkT/31.png",
+    gallery: [
+      "https://i.postimg.cc/TKQD92bq/31-1.png",
+      "https://i.postimg.cc/TywWH8jJ/31-2.png"
+    ],
   },
 ];
 
