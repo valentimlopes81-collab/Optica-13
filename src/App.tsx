@@ -1161,6 +1161,57 @@ const PRODUCTS = {
     
   ],
 };
+
+/* ── OUTLET ─────────────────────────────────────────────────────
+   Coleção Outlet: cada óculo pode ter "originalPrice" (preço antes do
+   desconto) além de "price" (preço final, já com desconto). Quando
+   originalPrice existir e for maior que price, o cartão e o modal
+   mostram o preço antigo riscado + o preço com desconto + a etiqueta
+   de poupança.
+   Estes 2 são exemplos-placeholder — substituir pelos 30 óculos reais. */
+PRODUCTS.outlet = [
+  {
+    id: 40,
+    name: "Exemplo Outlet 1",
+    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY",
+    rating: 4.8,
+    reviews: 0,
+    badge: "Outlet",
+    brand: "MindTheLook by Vera Velosa",
+    price: 79,
+    originalPrice: 139,
+    material: "Acetato",
+    color: "Preto",
+    style: "Clássico",
+    shape: "Retangular",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Modelo de exemplo do Outlet — substituir por uma descrição real.",
+    image: "https://i.postimg.cc/Z0kfQyS1/P1023073.jpg",
+    gallery: [],
+  },
+  {
+    id: 41,
+    name: "Exemplo Outlet 2",
+    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY",
+    rating: 4.7,
+    reviews: 0,
+    badge: "Outlet",
+    brand: "MindTheLook by Vera Velosa",
+    price: 89,
+    originalPrice: 149,
+    material: "Metal",
+    color: "Dourado",
+    style: "Moderno",
+    shape: "Aviador",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Modelo de exemplo do Outlet — substituir por uma descrição real.",
+    image: "https://i.postimg.cc/vBzjTwjZ/P1023115.jpg",
+    gallery: [],
+  },
+];
+
 /* Cores usadas na bolinha do cartão de produto e nos swatches do filtro */
 const COLOR_SWATCHES = {
   "Preto": "#1a1a1a",
@@ -1716,10 +1767,23 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
             </div>
 
             <p
-              className="font-display text-4xl md:text-5xl font-light mb-6"
+              className="font-display text-4xl md:text-5xl font-light mb-6 flex items-baseline gap-3 flex-wrap"
               style={{ color: "var(--forest)" }}
             >
-              €{product.price}
+              <span>€{product.price}</span>
+              {product.originalPrice && product.originalPrice > product.price && (
+                <>
+                  <span className="text-xl font-normal line-through" style={{ color: "#aaa" }}>
+                    €{product.originalPrice}
+                  </span>
+                  <span
+                    className="text-xs font-bold uppercase tracking-wide px-2.5 py-1 rounded-full text-white"
+                    style={{ background: "#dc2626" }}
+                  >
+                    -{Math.round(100 - (product.price / product.originalPrice) * 100)}%
+                  </span>
+                </>
+              )}
             </p>
 
             <p
@@ -2047,6 +2111,7 @@ function BookingModal({ isOpen, onClose, service }) {
               ["Vantagens", "vantagens"],
               ["Homem", "men"],
               ["Mulher", "women"],
+              ["Outlet", "outlet"],
               ["Sobre Nós", "about"],
               ["Contactos", "contact"],
             ].map(([label, p]) => (
@@ -2099,6 +2164,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["Homem", "men"],
                 ["Mulher", "women"],
+                ["Outlet", "outlet"],
                 ["Sobre Nós", "about"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
@@ -2185,6 +2251,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["vantagens", "Vantagens"],
                 ["men", "Coleção Homem"],
                 ["women", "Coleção Mulher"],
+                ["outlet", "Outlet"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
               ].map(([p, l]) => (
@@ -3264,7 +3331,7 @@ function BookingModal({ isOpen, onClose, service }) {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ gender, setSelectedProduct }) => {
+  const CollectionPage = ({ gender, products: productsProp, title, eyebrow, showDiscount, setSelectedProduct }) => {
     const [filters, setFilters] = useState({
       material: "",
       color: "",
@@ -3274,7 +3341,7 @@ function BookingModal({ isOpen, onClose, service }) {
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
 
-    const products = PRODUCTS[gender];
+    const products = productsProp || PRODUCTS[gender];
  const filtered = useMemo(() => {
       return products.filter((p) => {
         if (search && !p.name.toLowerCase().includes(search.toLowerCase()) && !p.brand.toLowerCase().includes(search.toLowerCase())) return false;
@@ -3422,7 +3489,7 @@ function BookingModal({ isOpen, onClose, service }) {
               className="text-xs font-semibold tracking-widest uppercase mb-3"
               style={{ color: "var(--gold)" }}
             >
-              Coleção {gender === "men" ? "Homem" : "Mulher"}
+              {eyebrow || `Coleção ${gender === "men" ? "Homem" : "Mulher"}`}
             </p>
             <h1
               className="font-display mb-6"
@@ -3431,7 +3498,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 color: "var(--forest)",
               }}
             >
-              Óculos <em>Premium</em>
+              {title || <>Óculos <em>Premium</em></>}
             </h1>
 
             {/* Search & Filter Toggle */}
@@ -3550,6 +3617,14 @@ function BookingModal({ isOpen, onClose, service }) {
                           {p.badge}
                         </div>
                       )}
+                      {showDiscount && p.originalPrice && p.originalPrice > p.price && (
+                        <div
+                          className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-md"
+                          style={{ background: "#dc2626" }}
+                        >
+                          -{Math.round(100 - (p.price / p.originalPrice) * 100)}%
+                        </div>
+                      )}
                       <div
                         className="aspect-square overflow-hidden img-zoom"
                         style={{ background: "#f5f4f0" }}
@@ -3599,7 +3674,16 @@ function BookingModal({ isOpen, onClose, service }) {
                         className="font-display text-2xl font-semibold"
                         style={{ color: "var(--forest)" }}
                       >
-                        €{p.price}
+                        {showDiscount && p.originalPrice && p.originalPrice > p.price ? (
+                          <span className="inline-flex items-baseline gap-2">
+                            <span>€{p.price}</span>
+                            <span className="text-sm font-normal line-through" style={{ color: "#aaa" }}>
+                              €{p.originalPrice}
+                            </span>
+                          </span>
+                        ) : (
+                          <>€{p.price}</>
+                        )}
                         {p.rating && (
                           <div className="flex items-center gap-1.5 mb-1 mt-1">
                             <div className="flex gap-0.5">
@@ -4964,6 +5048,10 @@ const PAGE_META = {
     title: "Coleção Mulher | Óptica 13",
     description: "Descubra a coleção de óculos premium para mulher na Óptica 13. Armações e óculos de sol das melhores marcas.",
   },
+  outlet: {
+    title: "Outlet | Óptica 13",
+    description: "Óculos premium com desconto na Óptica 13. Modelos de coleções anteriores com preços de saldo, por tempo limitado.",
+  },
   quiz: {
     title: "Quiz de Estilo | Óptica 13",
     description: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra o seu par perfeito em minutos.",
@@ -5129,6 +5217,18 @@ const openBook = (service = "Consulta Geral") => {
             <Route path="/vantagens" element={<VantagensPage />} />
             <Route path="/men" element={<CollectionPage gender="men" setSelectedProduct={setSelectedProduct} />} />
             <Route path="/women" element={<CollectionPage gender="women" setSelectedProduct={setSelectedProduct} />} />
+            <Route
+              path="/outlet"
+              element={
+                <CollectionPage
+                  products={PRODUCTS.outlet}
+                  title="Outlet"
+                  eyebrow="Saldos"
+                  showDiscount={true}
+                  setSelectedProduct={setSelectedProduct}
+                />
+              }
+            />
             <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
             <Route path="/about" element={<AboutPage setPage={setPage} />} />
             <Route path="/contact" element={<ContactPage openBook={openBook} />} />
