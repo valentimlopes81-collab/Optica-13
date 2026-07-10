@@ -1174,7 +1174,7 @@ PRODUCTS.outlet = [
   {
     id: 40,
     name: "Polaroid Classic Aviator",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_40",
+    shopifyId: "15802921189750",
     badge: "Outlet",
     brand: "Polaroid",
     price: 29,
@@ -1195,7 +1195,7 @@ PRODUCTS.outlet = [
   {
     id: 41,
     name: "Oakley Urban Mirror",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_41",
+    shopifyId: "15803057799542",
     badge: "Outlet",
     brand: "Oakley",
     price: 49,
@@ -1213,7 +1213,7 @@ PRODUCTS.outlet = [
   {
     id: 42,
     name: "INVU Geometric Blue",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_42",
+    shopifyId: "15803058159990",
     badge: "Outlet",
     brand: "INVU",
     price: 29,
@@ -1231,7 +1231,7 @@ PRODUCTS.outlet = [
   {
     id: 43,
     name: "Nike EVO Aviator",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_43",
+    shopifyId: "15803059274102",
     badge: "Outlet",
     brand: "Nike",
     price: 39,
@@ -1249,7 +1249,7 @@ PRODUCTS.outlet = [
   {
     id: 44,
     name: "Gant Classic Navigator",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_44",
+    shopifyId: "15803059700086",
     badge: "Outlet",
     brand: "Gant",
     price: 43,
@@ -1267,7 +1267,7 @@ PRODUCTS.outlet = [
   {
     id: 45,
     name: "Polaroid Geometric Silver",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_45",
+    shopifyId: "15803060519286",
     badge: "Outlet",
     brand: "Polaroid",
     price: 29,
@@ -1285,7 +1285,7 @@ PRODUCTS.outlet = [
   {
     id: 46,
     name: "Cierzo Classic Square",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_46",
+    shopifyId: "15803061961078",
     badge: "Outlet",
     brand: "Cierzo",
     price: 29,
@@ -1303,7 +1303,7 @@ PRODUCTS.outlet = [
   {
     id: 47,
     name: "ONE Retro Double Bridge",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_47",
+    shopifyId: "15803062878582",
     badge: "Outlet",
     brand: "ONE",
     price: 19,
@@ -1321,7 +1321,7 @@ PRODUCTS.outlet = [
   {
     id: 48,
     name: "Carrera Pantos Elegance",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_48",
+    shopifyId: "15803063501174",
     badge: "Outlet",
     brand: "Carrera",
     price: 39,
@@ -1339,7 +1339,7 @@ PRODUCTS.outlet = [
   {
     id: 49,
     name: "Polaroid Gold Navigator",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_49",
+    shopifyId: "15803064680822",
     badge: "Outlet",
     brand: "Polaroid",
     price: 29,
@@ -1360,7 +1360,7 @@ PRODUCTS.outlet = [
   {
     id: 50,
     name: "Hally & Son Artisan Round",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_50",
+    shopifyId: "15803065467254",
     badge: "Outlet",
     brand: "Hally & Son",
     price: 49,
@@ -1381,7 +1381,7 @@ PRODUCTS.outlet = [
   {
     id: 51,
     name: "Carrera Matte Navy Pantos",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_51",
+    shopifyId: "15803065893238",
     badge: "Outlet",
     brand: "Carrera",
     price: 33,
@@ -1402,7 +1402,7 @@ PRODUCTS.outlet = [
   {
     id: 52,
     name: "INVU Matte Ocean Square",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_52",
+    shopifyId: "15803066286454",
     badge: "Outlet",
     brand: "INVU",
     price: 19,
@@ -1420,7 +1420,7 @@ PRODUCTS.outlet = [
   {
     id: 53,
     name: "Carrera Havana Retro Pantos",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_53",
+    shopifyId: "15803066581366",
     badge: "Outlet",
     brand: "Carrera",
     price: 39,
@@ -1438,7 +1438,7 @@ PRODUCTS.outlet = [
   {
     id: 54,
     name: "INVU Scarlet Cat-Eye",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_54",
+    shopifyId: "15803067105654",
     badge: "Outlet",
     brand: "INVU",
     price: 19,
@@ -1456,7 +1456,7 @@ PRODUCTS.outlet = [
   {
     id: 55,
     name: "Hally & Son The Janis",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_55",
+    shopifyId: "15803067597174",
     badge: "Outlet",
     brand: "Hally & Son",
     price: 59,
@@ -1474,7 +1474,7 @@ PRODUCTS.outlet = [
   {
     id: 56,
     name: "INVU Bold Cat-Eye",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_56",
+    shopifyId: "15803068481910",
     badge: "Outlet",
     brand: "INVU",
     price: 19,
@@ -1492,7 +1492,7 @@ PRODUCTS.outlet = [
   {
     id: 57,
     name: "Victoria Beckham Havana Butterfly",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_57",
+    shopifyId: "15803069006198",
     badge: "Outlet",
     brand: "Victoria Beckham",
     price: 83,
@@ -1510,7 +1510,7 @@ PRODUCTS.outlet = [
   {
     id: 58,
     name: "Victoria Beckham Tortoise Butterfly",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_58",
+    shopifyId: "15803069432182",
     badge: "Outlet",
     brand: "Victoria Beckham",
     price: 83,
@@ -1528,7 +1528,7 @@ PRODUCTS.outlet = [
   {
     id: 59,
     name: "Victoria Beckham Soft Gradient Cat-Eye",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_59",
+    shopifyId: "15803069956470",
     badge: "Outlet",
     brand: "Victoria Beckham",
     price: 73,
@@ -1546,7 +1546,7 @@ PRODUCTS.outlet = [
   {
     id: 60,
     name: "Ray-Ban Oval Classic",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_60",
+    shopifyId: "15803070808438",
     badge: "Outlet",
     brand: "Ray-Ban",
     price: 89,
@@ -1564,7 +1564,7 @@ PRODUCTS.outlet = [
   {
     id: 61,
     name: "INVU Oversized Glam",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_61",
+    shopifyId: "15803071562102",
     badge: "Outlet",
     brand: "INVU",
     price: 23,
@@ -1582,7 +1582,7 @@ PRODUCTS.outlet = [
   {
     id: 62,
     name: "Havaianas Bold Cat-Eye",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_62",
+    shopifyId: "15803072643446",
     badge: "Outlet",
     brand: "Havaianas",
     price: 29,
@@ -1600,7 +1600,7 @@ PRODUCTS.outlet = [
   {
     id: 63,
     name: "Polaroid Navy Butterfly",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_63",
+    shopifyId: "15803073298806",
     badge: "Outlet",
     brand: "Polaroid",
     price: 39,
@@ -1618,7 +1618,7 @@ PRODUCTS.outlet = [
   {
     id: 64,
     name: "Polaroid Berry Glam",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_64",
+    shopifyId: "15803074937206",
     badge: "Outlet",
     brand: "Polaroid",
     price: 31,
@@ -1636,7 +1636,7 @@ PRODUCTS.outlet = [
   {
     id: 65,
     name: "Polaroid Chunky Cream",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_65",
+    shopifyId: "15803077067126",
     badge: "Outlet",
     brand: "Polaroid",
     price: 39,
@@ -1654,7 +1654,7 @@ PRODUCTS.outlet = [
   {
     id: 66,
     name: "Ana Hickmann Blush Butterfly",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_66",
+    shopifyId: "15803078771062",
     badge: "Outlet",
     brand: "Ana Hickmann",
     price: 59,
@@ -1672,7 +1672,7 @@ PRODUCTS.outlet = [
   {
     id: 67,
     name: "Polaroid Bold Square",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_67",
+    shopifyId: "15803080868214",
     badge: "Outlet",
     brand: "Polaroid",
     price: 39,
@@ -1690,7 +1690,7 @@ PRODUCTS.outlet = [
   {
     id: 68,
     name: "Tom Ford Elegant Butterfly",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_68",
+    shopifyId: "15803082408310",
     badge: "Outlet",
     brand: "Tom Ford",
     price: 79,
@@ -1708,7 +1708,7 @@ PRODUCTS.outlet = [
   {
     id: 69,
     name: "Prada Color Block Cat-Eye",
-    shopifyId: "SUBSTITUIR_PELO_ID_SHOPIFY_69",
+    shopifyId: "15803084243318",
     badge: "Outlet",
     brand: "Prada",
     price: 59,
