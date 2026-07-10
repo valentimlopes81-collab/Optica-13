@@ -1764,6 +1764,17 @@ ALL_PRODUCTS.forEach(p => {
   else p.gender = "Feminino";
 });
 
+// Outlet: género atribuído por id (peças clássicas/unissexo vs. femininas -
+// cat-eye, borboleta e outras formas claramente femininas na descrição)
+const outletFeminineIds = new Set([54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 68, 69]);
+PRODUCTS.outlet.forEach(p => {
+  p.gender = outletFeminineIds.has(p.id) ? "Feminino" : "Unisexo";
+});
+
+// Lista usada pelo Quiz: inclui Homem + Mulher + Outlet, para os saldos
+// entrarem nas recomendações finais
+const QUIZ_PRODUCTS = [...ALL_PRODUCTS, ...PRODUCTS.outlet];
+
 /* ── ICONS ──────────────────────────────────────────────────── */
 const OptometryIcon = () => (
   <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
@@ -4337,7 +4348,7 @@ function BookingModal({ isOpen, onClose, service }) {
 
     setTimeout(() => {
       try {
-        const scoredProducts = ALL_PRODUCTS.map(p => {
+        const scoredProducts = QUIZ_PRODUCTS.map(p => {
           let score = 0;
           
           const pName = normalizeText(p.name);
@@ -4403,7 +4414,7 @@ function BookingModal({ isOpen, onClose, service }) {
           .sort((a, b) => b.score - a.score);
         
         // Fallback super seguro: se algo falhar, dá pelo menos a categoria certa (Sol ou Graduado)
-        const fallbackMatches = ALL_PRODUCTS.filter(p => {
+        const fallbackMatches = QUIZ_PRODUCTS.filter(p => {
             const pName = normalizeText(p.name);
             const pDesc = normalizeText(p.description);
             const isSun = pName.includes("sun") || pName.includes("2-in-1") || pDesc.includes("oculos de sol") || normalizeText(p.color).includes("lentes");
@@ -4549,9 +4560,21 @@ function BookingModal({ isOpen, onClose, service }) {
           className="bg-white p-4 rounded-xl border cursor-pointer hover:border-black transition-all" 
           onClick={() => onSelectProduct(p)}
         >
-          <Img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
+          <div className="relative">
+            <Img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
+            {p.originalPrice > p.price && (
+              <span className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded-full">Outlet</span>
+            )}
+          </div>
           <p className="font-bold">{p.name}</p>
-          <p className="text-sm font-semibold">{p.price}€</p>
+          {p.originalPrice > p.price ? (
+            <p className="text-sm font-semibold">
+              <span className="line-through text-gray-400 mr-2">{p.originalPrice}€</span>
+              <span style={{ color: "#c0392b" }}>{p.price}€</span>
+            </p>
+          ) : (
+            <p className="text-sm font-semibold">{p.price}€</p>
+          )}
         </div>
       ))}
     </div>
