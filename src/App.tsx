@@ -1186,10 +1186,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Um verdadeiro ícone que nunca sai de moda. Esta armação estilo aviador em metal dourado combina leveza e durabilidade, garantindo um visual polido e versátil. Perfeitos para qualquer ocasião, elevam instantaneamente desde um look mais casual até um visual sofisticado.",
-    image: "https://i.postimg.cc/QBXq8nQX/1.png",
+    image: "https://i.postimg.cc/TPbNczhW/1.png",
     gallery: [
-      "https://i.postimg.cc/HJptYPwY/1-1.png",
-      "https://i.postimg.cc/QBXq8nQj/1-2.png"
+      "https://i.postimg.cc/0NSXCTrw/1-1.png",
+      "https://i.postimg.cc/zfh2ks3H/1-2.png"
     ],
   },
   {
@@ -1374,10 +1374,10 @@ PRODUCTS.outlet = [
     faceShape: ["round", "oval"],
     budget: "mid",
     description: "Este modelo clássico de formato navegador combina uma elegante estrutura fina em metal dourado com ponteiras contrastantes em preto para máximo conforto. As lentes em tom castanho suave oferecem um look polido e intemporal, sendo o acessório perfeito e versátil para elevar qualquer visual do dia a dia.",
-    image: "https://i.postimg.cc/w1zX2bbX/10.png",
+    image: "https://i.postimg.cc/sgQTVkYN/10.png",
     gallery: [
-      "https://i.postimg.cc/kBKNxdwS/10-1.png",
-      "https://i.postimg.cc/F73bjQGp/10-2.png"
+      "https://i.postimg.cc/YqyXBrWd/10-1.png",
+      "https://i.postimg.cc/X7D26jCR/10-2.png"
     ],
   },
   {
@@ -1395,10 +1395,10 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "Uma verdadeira obra de arte com estética vintage. Este modelo redondo de ponte dupla destaca-se pelos seus detalhes minuciosamente gravados no metal e pelas icónicas ponteiras circulares, uma assinatura da marca. Perfeitos para os amantes de design premium que procuram uma peça de luxo com pormenores únicos e refinados.",
-    image: "https://i.postimg.cc/VJwqgHHH/11.png",
+    image: "https://i.postimg.cc/DwJx29QF/11.png",
     gallery: [
-      "https://i.postimg.cc/21YQGXXF/11-1.png",
-      "https://i.postimg.cc/yDKmjrrL/11-2.png"
+      "https://i.postimg.cc/htz2SkLw/11-1.png",
+      "https://i.postimg.cc/6p2M9kVx/11-2.png"
     ],
   },
   {
@@ -1416,10 +1416,10 @@ PRODUCTS.outlet = [
     faceShape: ["square", "oval"],
     budget: "mid",
     description: "O equilíbrio ideal entre o estilo desportivo e a elegância urbana. Este modelo destaca-se pela sua armação contemporânea em azul marinho com acabamento matte, perfeitamente contrastada por uma moderna ponte dupla metálica. As lentes em azul degradé completam este design arrojado, garantindo um look marcante e cheio de atitude.",
-    image: "https://i.postimg.cc/68hdmLkw/12.png",
+    image: "https://i.postimg.cc/8z2tsZwF/12.png",
     gallery: [
-      "https://i.postimg.cc/18SGBYjQ/12-1.png",
-      "https://i.postimg.cc/rD9SPCB2/12-2.png"
+      "https://i.postimg.cc/L8YxHckn/12-1.png",
+      "https://i.postimg.cc/Dw9Bmx50/12-2.png"
     ],
   },
   {
