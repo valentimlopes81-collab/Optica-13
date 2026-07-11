@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useRef, useMemo } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Analytics } from '@vercel/analytics/react';
 import './global.css';
 import {
@@ -2638,8 +2638,7 @@ function BookingModal({ isOpen, onClose, service }) {
             {[
               ["Serviços", "services"],
               ["Vantagens", "vantagens"],
-              ["Homem", "men"],
-              ["Mulher", "women"],
+              ["MindTheLook", "mindthelook"],
               ["Outlet", "outlet"],
               ["Sobre Nós", "about"],
               ["Contactos", "contact"],
@@ -2691,8 +2690,7 @@ function BookingModal({ isOpen, onClose, service }) {
               {[
                 ["Serviços", "services"],
                 ["Vantagens", "vantagens"],
-                ["Homem", "men"],
-                ["Mulher", "women"],
+                ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
                 ["Sobre Nós", "about"],
                 ["Contactos", "contact"],
@@ -2778,8 +2776,7 @@ function BookingModal({ isOpen, onClose, service }) {
               {[
                 ["services", "Serviços"],
                 ["vantagens", "Vantagens"],
-                ["men", "Coleção Homem"],
-                ["women", "Coleção Mulher"],
+                ["mindthelook", "MindTheLook"],
                 ["outlet", "Outlet"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
@@ -3017,25 +3014,25 @@ function BookingModal({ isOpen, onClose, service }) {
       },
       {
         id: 2,
-        tag: "Nova Coleção Primavera",
-        titlePt1: "O estilo que",
-        titlePt2: "marca a ",
-        titleHighlight: "diferença",
-        desc: "Descubra as novas tendências de 2026. Óculos de sol e armações das melhores marcas internacionais.",
-        btn1Text: "Ver Coleção Mulher",
-        btn1Action: () => setPage("women"),
+        tag: "Coleção MindTheLook",
+        titlePt1: "A coleção que",
+        titlePt2: "veste o seu ",
+        titleHighlight: "estilo",
+        desc: "Armações e óculos de sol premium, para homem e mulher. Descubra o modelo perfeito na nossa coleção MindTheLook.",
+        btn1Text: "Ver Coleção MindTheLook",
+        btn1Action: () => setPage("mindthelook"),
         img: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=800&h=800&fit=crop",
       },
       {
         id: 3,
-        tag: "Exclusivo Online",
-        titlePt1: "Encontre o seu",
-        titlePt2: "par ",
-        titleHighlight: "perfeito",
-        desc: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra em 2 minutos.",
-        btn1Text: "Fazer Quiz Virtual",
-        btn1Action: () => setPage("quiz"),
-        img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&h=800&fit=crop",
+        tag: "Outlet: até 70% de desconto",
+        titlePt1: "Estilo premium,",
+        titlePt2: "a preços ",
+        titleHighlight: "imperdíveis",
+        desc: "30 modelos exclusivos com desconto direto. Stock limitado — não perca a sua oportunidade.",
+        btn1Text: "Ver Outlet",
+        btn1Action: () => setPage("outlet"),
+        img: "https://i.postimg.cc/TPbNczhW/1.png",
       }
     ];
 
@@ -3097,7 +3094,7 @@ function BookingModal({ isOpen, onClose, service }) {
                     {slides[currentSlide].btn1Text}
                   </button>
                   <button
-                    onClick={() => setPage("men")}
+                    onClick={() => setPage("mindthelook")}
                     className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
                   >
                     Ver Coleções
@@ -3381,13 +3378,13 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
               <div className="hidden sm:flex gap-3">
                 <button
-                  onClick={() => setPage("men")}
+                  onClick={() => setPage("mindthelook?genero=homem")}
                   className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
                 >
                   Homem
                 </button>
                 <button
-                  onClick={() => setPage("women")}
+                  onClick={() => setPage("mindthelook?genero=mulher")}
                   className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
                 >
                   Mulher
@@ -3860,7 +3857,7 @@ function BookingModal({ isOpen, onClose, service }) {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ gender, products: productsProp, title, eyebrow, showDiscount, setSelectedProduct }) => {
+  const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, setSelectedProduct }) => {
     const [filters, setFilters] = useState({
       material: "",
       color: "",
@@ -3869,14 +3866,25 @@ function BookingModal({ isOpen, onClose, service }) {
     });
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const genderFilter = searchParams.get("genero") || "";
+    const setGenderFilter = (value) => {
+      const next = new URLSearchParams(searchParams);
+      if (value) next.set("genero", value);
+      else next.delete("genero");
+      setSearchParams(next, { replace: true });
+    };
 
-    const products = productsProp || PRODUCTS[gender];
- const filtered = useMemo(() => {
+    const products = productsProp;
+    const filtered = useMemo(() => {
       return products.filter((p) => {
         if (search && !p.name.toLowerCase().includes(search.toLowerCase()) && !p.brand.toLowerCase().includes(search.toLowerCase())) return false;
         if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
         if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
-        
+
+        if (genderFilter === "homem" && !(p.gender === "Masculino" || p.gender === "Unisexo")) return false;
+        if (genderFilter === "mulher" && !(p.gender === "Feminino" || p.gender === "Unisexo")) return false;
+
         if (filters.color) {
           const c = filters.color.toLowerCase();
           const pc = p.color.toLowerCase();
@@ -3894,11 +3902,12 @@ function BookingModal({ isOpen, onClose, service }) {
         }
         return true;
       });
-    }, [products, search, filters]);
+    }, [products, search, filters, genderFilter]);
 
     const activeFilterCount = [filters.material, filters.color, filters.style, filters.shape].filter(Boolean).length;
     const activeChips = [
       ...(search ? [{ key: "search", label: `"${search}"`, clear: () => setSearch("") }] : []),
+      ...(genderFilter ? [{ key: "genero", label: genderFilter === "homem" ? "Homem" : "Mulher", clear: () => setGenderFilter("") }] : []),
       ...(filters.material ? [{ key: "material", label: filters.material, clear: () => setFilters({ ...filters, material: "" }) }] : []),
       ...(filters.color ? [{ key: "color", label: filters.color, clear: () => setFilters({ ...filters, color: "" }) }] : []),
       ...(filters.style ? [{ key: "style", label: filters.style, clear: () => setFilters({ ...filters, style: "" }) }] : []),
@@ -4018,7 +4027,7 @@ function BookingModal({ isOpen, onClose, service }) {
               className="text-xs font-semibold tracking-widest uppercase mb-3"
               style={{ color: "var(--gold)" }}
             >
-              {eyebrow || `Coleção ${gender === "men" ? "Homem" : "Mulher"}`}
+              {eyebrow || "Coleção"}
             </p>
             <h1
               className="font-display mb-6"
@@ -4029,6 +4038,30 @@ function BookingModal({ isOpen, onClose, service }) {
             >
               {title || <>Óculos <em>Premium</em></>}
             </h1>
+
+            {/* Filtro de Género — em destaque, porque muitos modelos servem para ambos */}
+            {showGenderFilter && (
+              <div className="flex gap-2 mb-5">
+                {[["", "Todos"], ["homem", "Homem"], ["mulher", "Mulher"]].map(([value, label]) => {
+                  const active = genderFilter === value;
+                  return (
+                    <button
+                      key={value || "todos"}
+                      type="button"
+                      onClick={() => setGenderFilter(value)}
+                      className="px-5 py-2.5 rounded-full text-sm font-semibold border-2 transition-all hover:-translate-y-0.5"
+                      style={{
+                        borderColor: active ? "var(--forest)" : "var(--mist)",
+                        background: active ? "var(--forest)" : "white",
+                        color: active ? "white" : "#555",
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Search & Filter Toggle */}
             <div className="flex gap-4">
@@ -4085,7 +4118,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ))}
                 <button
                   type="button"
-                  onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); }}
+                  onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); }}
                   className="text-xs font-semibold underline"
                   style={{ color: "#888" }}
                 >
@@ -4248,7 +4281,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   <p className="text-sm" style={{ color: "#888" }}>
                     Nenhum modelo encontrado com essa combinação exata de filtros.
                   </p>
-                  <button onClick={() => setFilters({ material: "", color: "", style: "", shape: "" })} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
+                  <button onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
                     Limpar Filtros
                   </button>
                 </div>
@@ -5581,13 +5614,9 @@ const PAGE_META = {
     title: "Vantagens e Benefícios | Óptica 13",
     description: "Seguros, pagamentos facilitados, ótica ao domicílio e outras vantagens exclusivas para os clientes da Óptica 13.",
   },
-  men: {
-    title: "Coleção Homem | Óptica 13",
-    description: "Descubra a coleção de óculos premium para homem na Óptica 13. Armações e óculos de sol das melhores marcas.",
-  },
-  women: {
-    title: "Coleção Mulher | Óptica 13",
-    description: "Descubra a coleção de óculos premium para mulher na Óptica 13. Armações e óculos de sol das melhores marcas.",
+  mindthelook: {
+    title: "Coleção MindTheLook | Óptica 13",
+    description: "Descubra a coleção MindTheLook na Óptica 13. Armações e óculos de sol premium para homem e mulher, das melhores marcas.",
   },
   outlet: {
     title: "Outlet | Óptica 13",
@@ -5756,8 +5785,18 @@ const openBook = (service = "Consulta Geral") => {
             <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
             <Route path="/services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
             <Route path="/vantagens" element={<VantagensPage />} />
-            <Route path="/men" element={<CollectionPage gender="men" setSelectedProduct={setSelectedProduct} />} />
-            <Route path="/women" element={<CollectionPage gender="women" setSelectedProduct={setSelectedProduct} />} />
+            <Route
+              path="/mindthelook"
+              element={
+                <CollectionPage
+                  products={ALL_PRODUCTS}
+                  title={<>Coleção <em>MindTheLook</em></>}
+                  eyebrow="Coleção Assinatura"
+                  showGenderFilter={true}
+                  setSelectedProduct={setSelectedProduct}
+                />
+              }
+            />
             <Route
               path="/outlet"
               element={
@@ -5766,10 +5805,13 @@ const openBook = (service = "Consulta Geral") => {
                   title="Outlet"
                   eyebrow="Saldos"
                   showDiscount={true}
+                  showGenderFilter={true}
                   setSelectedProduct={setSelectedProduct}
                 />
               }
             />
+            <Route path="/men" element={<Navigate to="/mindthelook?genero=homem" replace />} />
+            <Route path="/women" element={<Navigate to="/mindthelook?genero=mulher" replace />} />
             <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
             <Route path="/about" element={<AboutPage setPage={setPage} />} />
             <Route path="/contact" element={<ContactPage openBook={openBook} />} />
