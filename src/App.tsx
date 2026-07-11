@@ -2216,7 +2216,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
   return (
     <div
-      className="modal-backdrop fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6"
+      className="modal-backdrop fixed inset-0 z-[350] flex items-end sm:items-center justify-center p-0 sm:p-6"
       style={{ background: "rgba(10,20,15,0.75)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
@@ -2284,6 +2284,14 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                 >
                   {product.name}
                 </h2>
+                {product.originalPrice && product.originalPrice > product.price && (
+                  <p
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide mt-3 px-3 py-1.5 rounded-full"
+                    style={{ background: "#fef2f2", color: "#b91c1c" }}
+                  >
+                    🔥 Edição limitada · sem reposição de stock
+                  </p>
+                )}
               </div>
               {/* Botão de Fechar no PC */}
               <button
@@ -2314,6 +2322,11 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                 </>
               )}
             </p>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <p className="text-sm font-bold mb-6 -mt-4" style={{ color: "#16a34a" }}>
+                Poupa €{product.originalPrice - product.price} nesta compra
+              </p>
+            )}
 
             <p
               className="text-base leading-relaxed mb-8"
@@ -2378,7 +2391,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
             </div>
 
             {/* Trust Section */}
-            <div className="mb-8 grid grid-cols-2 gap-4">
+            <div className="mb-4 grid grid-cols-2 gap-4">
               <div className="flex items-center gap-3 p-4 rounded-xl border bg-gray-50 border-gray-100">
                 <Award size={20} style={{ color: "var(--gold)" }} />
                 <p
@@ -2402,10 +2415,21 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               </div>
             </div>
 
-            <div className="mt-auto space-y-3">
+            {/* Consulta gratuita — o maior diferenciador de comprar óculos graduados na Óptica 13 */}
+            <div
+              className="mb-8 flex items-center gap-3 p-4 rounded-xl border"
+              style={{ background: "#eff6ff", borderColor: "#bfdbfe" }}
+            >
+              <Sparkles size={20} className="flex-shrink-0" style={{ color: "var(--gold)" }} />
+              <p className="text-xs font-semibold leading-snug" style={{ color: "#1e3a8a" }}>
+                Precisa de lentes graduadas? A consulta de optometria é <strong>gratuita</strong> ao fazer os seus óculos na Óptica 13.
+              </p>
+            </div>
+
+            <div className="mt-auto sticky bottom-0 bg-white pt-3 pb-1 space-y-3">
               {/* Botão Oficial do Shopify */}
               <ShopifyBuyButton productId={product.shopifyId} />
-              
+
               <button
                 onClick={onBook}
                 className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
@@ -4237,12 +4261,17 @@ function BookingModal({ isOpen, onClose, service }) {
                         style={{ color: "var(--forest)" }}
                       >
                         {showDiscount && p.originalPrice && p.originalPrice > p.price ? (
-                          <span className="inline-flex items-baseline gap-2">
-                            <span>€{p.price}</span>
-                            <span className="text-sm font-normal line-through" style={{ color: "#aaa" }}>
-                              €{p.originalPrice}
+                          <>
+                            <span className="inline-flex items-baseline gap-2">
+                              <span>€{p.price}</span>
+                              <span className="text-sm font-normal line-through" style={{ color: "#aaa" }}>
+                                €{p.originalPrice}
+                              </span>
                             </span>
-                          </span>
+                            <p className="text-xs font-bold mt-0.5" style={{ color: "#16a34a" }}>
+                              Poupa €{p.originalPrice - p.price}
+                            </p>
+                          </>
                         ) : (
                           <>€{p.price}</>
                         )}
@@ -5829,8 +5858,9 @@ const openBook = (service = "Consulta Geral") => {
             onClose={() => setSelectedProduct(null)}
             onAdd={addToCart}
             onBook={() => {
+              const productName = selectedProduct.name;
               setSelectedProduct(null);
-              openBook();
+              openBook(`Reserva de "${productName}" na Loja`);
             }}
           />
         )}
