@@ -3032,7 +3032,7 @@ function BookingModal({ isOpen, onClose, service }) {
         desc: "30 modelos exclusivos com desconto direto. Stock limitado — não perca a sua oportunidade.",
         btn1Text: "Ver Outlet",
         btn1Action: () => setPage("outlet"),
-        img: "https://i.postimg.cc/TPbNczhW/1.png",
+        img: "https://i.postimg.cc/QMgkChHR/31.png",
       }
     ];
 
