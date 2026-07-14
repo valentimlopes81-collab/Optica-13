@@ -4379,8 +4379,10 @@ function BookingModal({ isOpen, onClose, service }) {
     setAnswers(newAnswers); 
 
     setTimeout(() => {
-      if (step === 7) {
-        finishQuiz(newAnswers); 
+      // A pergunta 7 (rotina diária) só faz sentido para óculos graduados —
+      // para óculos de sol salta-se diretamente para os resultados.
+      if (step === 7 || (step === 6 && newAnswers.type === "Óculos de sol")) {
+        finishQuiz(newAnswers);
       } else {
         setStep(step + 1);
         window.scrollTo(0, 0);
@@ -4425,7 +4427,7 @@ function BookingModal({ isOpen, onClose, service }) {
           if (activeAnswers.type === "Óculos de sol") {
               if (isSunglass) score += 50; // Super bónus se for de sol
               else score -= 1000; // Elimina imediatamente armações normais
-          } else if (activeAnswers.type === "Óculos de graduados") {
+          } else if (activeAnswers.type === "Óculos graduados") {
               if (!isSunglass || is2in1) score += 50; // Super bónus para graduados normais ou 2-em-1
               else score -= 1000; // Elimina imediatamente óculos de sol puros
           }
@@ -4534,13 +4536,15 @@ function BookingModal({ isOpen, onClose, service }) {
     }
   };
 
+    const totalSteps = answers.type === "Óculos de sol" ? 6 : 7;
+
     return (
       <div className="pt-28 pb-24 min-h-screen" style={{ background: "#f8f9fa" }}>
         <div className="max-w-4xl mx-auto px-6">
-          {step <= 7 && (
+          {step <= totalSteps && (
             <div className="text-center mb-10 fade-up">
-              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de 7</p>
-              
+              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de {totalSteps}</p>
+
               {step === 1 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que tipo de óculos procura?</h1>}
               {step === 2 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Para quem são os óculos?</h1>}
               {step === 3 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que imagem pretende transmitir?</h1>}
@@ -4554,7 +4558,7 @@ function BookingModal({ isOpen, onClose, service }) {
           <div className="max-w-2xl mx-auto fade-up-1">
             {step === 1 && (
               <div className="grid gap-4">
-                {["Óculos de graduados", "Óculos de sol"].map(v => (
+                {["Óculos graduados", "Óculos de sol"].map(v => (
                   <button key={v} onClick={() => answerSingle("type", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
                 ))}
               </div>
@@ -4581,7 +4585,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 {["Preto", "Tartaruga", "Azul", "Dourado", "Transparente"].map(v => (
                   <button key={v} onClick={() => toggleMulti("colors", v)} className={`p-6 rounded-2xl border text-center font-semibold transition-all ${answers.colors.includes(v) ? 'bg-black text-white' : 'bg-white'}`}>{v}</button>
                 ))}
-                <button onClick={nextStep} className="col-span-2 mt-4 underline text-sm">Passar à frente</button>
+                <button onClick={nextStep} className="btn-forest col-span-2 mt-4 py-4 rounded-xl font-bold text-base tracking-wide">Continuar</button>
               </div>
             )}
 
