@@ -2670,12 +2670,20 @@ function BookingModal({ isOpen, onClose, service }) {
               <button
                 key={p}
                 onClick={() => setPage(p)}
-                className={`font-medium transition-all hover:opacity-100 ${
+                className={`relative font-medium transition-all hover:opacity-100 ${
                   page === p ? "opacity-100" : "opacity-60"
                 }`}
                 style={{ color: page === p ? "var(--gold)" : "var(--forest)" }}
               >
                 {label}
+                {p === "outlet" && (
+                  <span
+                    className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
+                    style={{ background: "#dc2626", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
+                  >
+                    até -70%
+                  </span>
+                )}
               </button>
             ))}
             <button
@@ -2725,13 +2733,21 @@ function BookingModal({ isOpen, onClose, service }) {
                     setPage(p);
                     setMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-2 rounded-xl font-medium transition-all"
+                  className="flex items-center gap-2 w-full text-left px-4 py-2 rounded-xl font-medium transition-all"
                   style={{
                     background: page === p ? "var(--mist)" : "transparent",
                     color: page === p ? "var(--gold)" : "var(--forest)",
                   }}
                 >
                   {label}
+                  {p === "outlet" && (
+                    <span
+                      className="px-1.5 py-0.5 rounded-full text-white whitespace-nowrap"
+                      style={{ background: "#dc2626", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
+                    >
+                      até -70%
+                    </span>
+                  )}
                 </button>
               ))}
               <button
