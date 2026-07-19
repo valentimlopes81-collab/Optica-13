@@ -946,29 +946,6 @@ const PRODUCTS = {
       ],
 },
     {
-      id: 31, // Confirma se é o 33 na tua lista
-      gender: "", 
-      shopifyId: "15751454851446", // Atualizar depois
-      name: "Gold Empire Sun",
-      rating: 4.9,
-      reviews: 195,
-      badge: "Luxo",
-      brand: "MindTheLook by Vera Velosa",
-      price: 139, 
-      material: "Acetato Bold e Metal Dourado",
-      color: "Preto / Dourado",
-      style: "Glamour / Oversize",
-      shape: "Quadrado Oversize",
-      faceShape: ["round", "oval"],
-      budget: "mid",
-      description: "Uma afirmação de luxo absoluto. Os óculos de sol Gold Empire Sun apresentam uma imponente frente oversize em preto brilhante, contrastando com hastes largas em metal dourado polido. Rematados com o icónico 'V' nas ponteiras, são perfeitos para afinar rostos redondos ou ovais e elevar qualquer look a um patamar de alta sofisticação.",
-      image: "https://i.postimg.cc/vB21TYRw/12.png", // Substituir pelos teus links reais
-      gallery: [
-        "https://i.postimg.cc/wv4tMqKd/12-1.png",
-        "https://i.postimg.cc/nzSsrF88/12-2.png"
-      ],
-},
-    {
       id: 32, // Confirma se é o 34 na tua lista
       gender: "", 
       shopifyId: "15751458914678", // Atualizar depois com o ID do Shopify
@@ -1263,24 +1240,6 @@ PRODUCTS.outlet = [
     description: "A sofisticação intemporal da Gant encontra o design vintage neste modelo estilo navegador. A elegante armação em metal dourado é realçada por uma barra superior marcante e lentes escuras, conferindo um ar refinado e estruturado ao rosto. Uma peça versátil e cheia de classe que complementa perfeitamente qualquer guarda-roupa, do casual ao formal.",
     image: "https://i.postimg.cc/fLjHGYcX/5.png",
     gallery: ["https://i.postimg.cc/V6B7xXqd/5-1.png", "https://i.postimg.cc/V6B7xXqr/5-2.png"],
-  },
-  {
-    id: 45,
-    name: "Polaroid Geometric Silver",
-    shopifyId: "15803060519286",
-    badge: "Outlet",
-    brand: "Polaroid",
-    price: 29,
-    originalPrice: 97,
-    material: "Metal",
-    color: "Prateado (Lentes Cinza-escuro)",
-    style: "Clássico / Funcional",
-    shape: "Navegador / Aviador Geométrico",
-    faceShape: ["round", "oval"],
-    budget: "mid",
-    description: "O estilo funcional da Polaroid ganha uma nova dimensão com este formato aviador mais reto e geométrico. A estrutura em metal prateado garante máxima leveza para uso prolongado, oferecendo um look discreto, polido e super moderno. Um óculo de sol essencial e extremamente versátil para te acompanhar no dia a dia.",
-    image: "https://i.postimg.cc/WzN9Tt8n/6.png",
-    gallery: ["https://i.postimg.cc/0QdtT7Y7/6-1.png", "https://i.postimg.cc/HnYSdjz4/6-2.png"],
   },
   {
     id: 46,
@@ -1748,7 +1707,7 @@ PRODUCTS.men = ALL_PRODUCTS.filter(p =>
 
 // Mulher (Exclusivos + Unissexo)
 PRODUCTS.women = ALL_PRODUCTS.filter(p => 
-  [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 38].includes(p.id)
+  [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 32, 33, 34, 35, 36, 38].includes(p.id)
 );
 
 // Garantir que os produtos têm a tag de género para o Quiz funcionar
