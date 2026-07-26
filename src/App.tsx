@@ -190,14 +190,7 @@ function ShopifyBuyButton({ productId }) {
               }
             },
             toggle: {
-              styles: {
-                toggle: {
-                  'background-color': '#000000',
-                  ':hover': {
-                    'background-color': '#333333'
-                  }
-                }
-              }
+              iframe: false
             }
           }
         });
@@ -3059,91 +3052,82 @@ function BookingModal({ isOpen, onClose, service }) {
 
     return (
       <div>
-        {/* Hero Carrossel */}
-        <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 relative z-10">
-            
-            {/* O Contentor do Slide Ativo */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[500px]">
-              
-              {/* Lado Esquerdo (Texto) */}
-              <div className="text-white" key={`text-${currentSlide}`}>
-                <button 
-                  onClick={slides[currentSlide].btn1Action}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
-                  style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}
-                >
-                  <span className="text-base">✨</span>
-                  <span className="text-xs font-bold tracking-wide uppercase" style={{ color: "var(--gold)" }}>
-                    {slides[currentSlide].tag}
-                  </span>
-                </button>
+        {/* Hero Carrossel — fotografia a sangue-total, no espírito editorial das grandes maisons */}
+        <section className="relative overflow-hidden" style={{ height: "88vh", minHeight: 560 }}>
+          {/* Fotografia de fundo */}
+          <div className="absolute inset-0" key={`img-${currentSlide}`}>
+            <Img
+              src={slides[currentSlide].img}
+              alt={slides[currentSlide].tag}
+              className="w-full h-full object-cover fade-up"
+              priority={true}
+            />
+            {/* Sombra subtil só para garantir legibilidade do texto, não um painel escuro */}
+            <div
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0) 65%)" }}
+            />
+          </div>
+
+          {/* Conteúdo sobreposto, alinhado em baixo à esquerda */}
+          <div className="absolute inset-x-0 bottom-0 z-10">
+            <div className="max-w-7xl mx-auto px-6 pb-14 md:pb-20">
+              <div className="text-white max-w-xl" key={`text-${currentSlide}`}>
+                <p className="uc-label text-xs font-semibold mb-4 fade-up" style={{ color: "rgba(255,255,255,0.85)" }}>
+                  {slides[currentSlide].tag}
+                </p>
                 <h1
-                  className="font-display mb-6 fade-up-1"
-                  style={{ fontSize: "clamp(2.5rem,6vw,5rem)", lineHeight: 1.1 }}
+                  className="font-display mb-5 fade-up-1"
+                  style={{ fontSize: "clamp(2.25rem,5vw,4rem)", lineHeight: 1.08, fontWeight: 600 }}
                 >
                   {slides[currentSlide].titlePt1}
-                  <br />{slides[currentSlide].titlePt2} <em style={{ color: "var(--gold)" }}>{slides[currentSlide].titleHighlight}</em>
+                  <br />{slides[currentSlide].titlePt2} <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
                 </h1>
                 <p
-                  className="text-lg mb-8 opacity-90 fade-up-2"
-                  style={{ maxWidth: 480 }}
+                  className="text-base mb-8 fade-up-2"
+                  style={{ maxWidth: 440, color: "rgba(255,255,255,0.85)" }}
                 >
                   {slides[currentSlide].desc}
                 </p>
-                <div className="flex flex-wrap gap-4 fade-up-3">
+                <div className="flex flex-wrap items-center gap-5 fade-up-3">
                   <button
                     onClick={slides[currentSlide].btn1Action}
-                    className="bg-white px-8 py-4 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all hover:scale-105"
+                    className="bg-white px-8 py-3.5 text-sm font-medium uppercase tracking-widest transition-all hover:bg-black hover:text-white"
                     style={{ color: "var(--forest)" }}
                   >
                     {slides[currentSlide].btn1Text}
                   </button>
                   <button
                     onClick={() => setPage("mindthelook")}
-                    className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
+                    className="text-sm font-medium uppercase tracking-widest text-white border-b border-white/70 pb-0.5 transition-opacity hover:opacity-70"
                   >
                     Ver Coleções
                   </button>
                 </div>
               </div>
 
-              {/* Lado Direito (Imagem) - SEM O SELO DOS 15% */}
-              <div className="relative fade-up-2" key={`img-${currentSlide}`}>
-                <div className="aspect-square rounded-3xl overflow-hidden img-zoom">
-                  <Img
-                    src={slides[currentSlide].img}
-                    alt="Slide"
-                    className="w-full h-full object-cover"
-                    priority={true} 
-                  />
-                </div>
-              </div>
-
-            </div>
-
-            {/* Controlos do Carrossel (Setas e Bolinhas) */}
-            <div className="flex items-center gap-6 mt-12">
-              <div className="flex gap-2">
-                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
-                  <ChevronRight size={18} className="rotate-180" />
-                </button>
-                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-              <div className="flex gap-2">
+              {/* Controlos do Carrossel — discretos, ao estilo editorial */}
+              <div className="flex items-center gap-3 mt-12">
                 {slides.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/50"}`}
+                    aria-label={`Slide ${idx + 1}`}
+                    className="h-px transition-all"
+                    style={{ width: currentSlide === idx ? 40 : 18, background: currentSlide === idx ? "#fff" : "rgba(255,255,255,0.4)" }}
                   />
                 ))}
               </div>
             </div>
-
           </div>
+
+          {/* Setas de navegação */}
+          <button onClick={prevSlide} aria-label="Slide anterior" className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-white/80 hover:text-white transition-colors">
+            <ChevronRight size={22} className="rotate-180" />
+          </button>
+          <button onClick={nextSlide} aria-label="Próximo slide" className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-white/80 hover:text-white transition-colors">
+            <ChevronRight size={22} />
+          </button>
         </section>
 
         {/* ... Restante código da HomePage (Services, etc) ... */}
