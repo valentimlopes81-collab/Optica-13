@@ -2245,10 +2245,10 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                 </h2>
                 {product.originalPrice && product.originalPrice > product.price && (
                   <p
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide mt-3 px-3 py-1.5 rounded-full"
-                    style={{ background: "#fef2f2", color: "#b91c1c" }}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide mt-3 px-3 py-1.5"
+                    style={{ background: "var(--wine-soft)", color: "var(--wine)" }}
                   >
-                    🔥 Edição limitada · sem reposição de stock
+                    Edição limitada · sem reposição de stock
                   </p>
                 )}
               </div>
@@ -2273,8 +2273,8 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                     €{product.originalPrice}
                   </span>
                   <span
-                    className="text-xs font-bold uppercase tracking-wide px-2.5 py-1 rounded-full text-white"
-                    style={{ background: "#dc2626" }}
+                    className="text-xs font-semibold uppercase tracking-wide px-2.5 py-1 text-white"
+                    style={{ background: "var(--wine)" }}
                   >
                     -{Math.round(100 - (product.price / product.originalPrice) * 100)}%
                   </span>
@@ -2282,7 +2282,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               )}
             </p>
             {product.originalPrice && product.originalPrice > product.price && (
-              <p className="text-sm font-bold mb-6 -mt-4" style={{ color: "#16a34a" }}>
+              <p className="text-sm font-semibold mb-6 -mt-4" style={{ color: "var(--wine)" }}>
                 Poupa €{product.originalPrice - product.price} nesta compra
               </p>
             )}
@@ -2638,7 +2638,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 {p === "outlet" && (
                   <span
                     className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
-                    style={{ background: "#dc2626", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
+                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
                   >
                     até -70%
                   </span>
@@ -2702,7 +2702,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   {p === "outlet" && (
                     <span
                       className="px-1.5 py-0.5 rounded-full text-white whitespace-nowrap"
-                      style={{ background: "#dc2626", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
+                      style={{ background: "var(--wine)", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
                     >
                       até -70%
                     </span>
@@ -4151,28 +4151,16 @@ function BookingModal({ isOpen, onClose, service }) {
                     <div className="relative">
                       {p.badge && (
                         <div
-                          className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-md"
-                          style={{
-                            background:
-                              p.badge === "Best Seller"
-                                ? "#0056b3"
-                                : p.badge === "Novo" || p.badge === "Nova Coleção"
-                                ? "#7c3aed"
-                                : "#16a34a",
-                          }}
+                          className="absolute top-3 left-3 z-10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-white"
+                          style={{ background: "var(--forest)" }}
                         >
-                          {p.badge === "Best Seller"
-                            ? "⭐ "
-                            : p.badge === "Novo" || p.badge === "Nova Coleção"
-                            ? "✦ "
-                            : "🔥 "}
                           {p.badge}
                         </div>
                       )}
                       {showDiscount && p.originalPrice && p.originalPrice > p.price && (
                         <div
-                          className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-md"
-                          style={{ background: "#dc2626" }}
+                          className="absolute top-3 right-3 z-10 px-2.5 py-1 text-xs font-semibold text-white"
+                          style={{ background: "var(--wine)" }}
                         >
                           -{Math.round(100 - (p.price / p.originalPrice) * 100)}%
                         </div>
@@ -4234,7 +4222,7 @@ function BookingModal({ isOpen, onClose, service }) {
                                 €{p.originalPrice}
                               </span>
                             </span>
-                            <p className="text-xs font-bold mt-0.5" style={{ color: "#16a34a" }}>
+                            <p className="text-xs font-semibold mt-0.5" style={{ color: "var(--wine)" }}>
                               Poupa €{p.originalPrice - p.price}
                             </p>
                           </>
@@ -4595,14 +4583,14 @@ function BookingModal({ isOpen, onClose, service }) {
           <div className="relative">
             <Img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
             {p.originalPrice > p.price && (
-              <span className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded-full">Outlet</span>
+              <span className="absolute top-2 left-2 text-white text-[10px] font-semibold uppercase tracking-wide px-2 py-1" style={{ background: "var(--wine)" }}>Outlet</span>
             )}
           </div>
           <p className="font-bold">{p.name}</p>
           {p.originalPrice > p.price ? (
             <p className="text-sm font-semibold">
               <span className="line-through text-gray-400 mr-2">{p.originalPrice}€</span>
-              <span style={{ color: "#c0392b" }}>{p.price}€</span>
+              <span style={{ color: "var(--wine)" }}>{p.price}€</span>
             </p>
           ) : (
             <p className="text-sm font-semibold">{p.price}€</p>
