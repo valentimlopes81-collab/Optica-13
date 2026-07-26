@@ -6,19 +6,20 @@
 
 :root {
   --cream: #ffffff;
-  --cream-dark: #f8f9fa;
-  --forest: #000000;
-  --forest-light: #333333;
-  --gold: #0056b3;
-  --gold-light: #3385ff;
-  --slate: #0f172a;
-  --mist: #e2e8f0;
-  --text: #1e293b;
+  --cream-dark: #f6f6f4;
+  --forest: #111111;
+  --forest-light: #4a4a4a;
+  --gold: #6b6b6b;
+  --gold-light: #9a9a9a;
+  --slate: #111111;
+  --mist: #e4e4e2;
+  --text: #2a2a2a;
 }
 
 * { box-sizing: border-box; }
 body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
 .font-display { font-family: 'Jost', sans-serif; letter-spacing: -0.02em; }
+.uc-label { text-transform: uppercase; letter-spacing: 0.14em; }
 .bg-cream { background-color: var(--cream); }
 .bg-forest { background-color: var(--forest); }
 .text-forest { color: var(--forest); }
@@ -30,7 +31,7 @@ body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--t
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes slideInRight { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes pulse-gold { 0%,100% { box-shadow: 0 0 0 0 rgba(0,86,179,0.4); } 50% { box-shadow: 0 0 0 12px rgba(0,86,179,0); } }
+@keyframes pulse-gold { 0%,100% { box-shadow: 0 0 0 0 rgba(17,17,17,0.35); } 50% { box-shadow: 0 0 0 12px rgba(17,17,17,0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* Scroll-reveal: hidden until MainLayout's IntersectionObserver adds .in-view */
@@ -66,22 +67,34 @@ body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--t
 .animate-spin-slow { animation: spin 1s linear infinite; }
 .pulse-gold { animation: pulse-gold 2s infinite; }
 
-.hero-bg { background: linear-gradient(135deg, #000000 0%, #1a1a1a 40%, #002244 100%); }
+.hero-bg { background: linear-gradient(135deg, #000000 0%, #1a1a1a 45%, #2b2b2b 100%); }
 .gold-gradient { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); background-size: 200% 100%; }
-.card-hover { transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
-.card-hover:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0,0,0,0.08); }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold) !important; }
+.card-hover { transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.06); border-color: var(--forest) !important; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--forest) !important; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .drawer-open { transform: translateX(0) !important; }
 .img-zoom { overflow: hidden; }
 .img-zoom img { transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
-.img-zoom:hover img { transform: scale(1.08); }
-.btn-forest { background: var(--forest); color: white; border: 2px solid var(--forest); transition: all 0.3s; }
+.img-zoom:hover img { transform: scale(1.05); }
+
+/* Botões: cantos rectos, versaletes, mais rasto — no espírito das referências */
+.btn-forest, .btn-gold, .btn-outline-forest {
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.btn-forest { background: var(--forest); color: white; border: 1px solid var(--forest); transition: all 0.3s; }
 .btn-forest:hover { background: transparent; color: var(--forest); }
-.btn-gold { background: var(--gold); color: white; border: 2px solid var(--gold); transition: all 0.3s; }
-.btn-gold:hover { background: transparent; color: var(--gold); }
-.btn-outline-forest { background: transparent; color: var(--forest); border: 2px solid var(--forest); transition: all 0.3s; }
+.btn-gold { background: var(--forest); color: white; border: 1px solid var(--forest); transition: all 0.3s; }
+.btn-gold:hover { background: transparent; color: var(--forest); }
+.btn-outline-forest { background: transparent; color: var(--forest); border: 1px solid var(--forest); transition: all 0.3s; }
 .btn-outline-forest:hover { background: var(--forest); color: white; }
+
+/* Cartões, painéis e modais: cantos rectos em vez de arredondados */
+.rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-t-3xl, .rounded-t-xl, .rounded-t-2xl {
+  border-radius: 0 !important;
+}
 
 .shopify-buy-frame, .shopify-buy-frame iframe {
   width: 100% !important;

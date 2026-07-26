@@ -2195,16 +2195,23 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto scrollbar-hide">
           {/* Lado da Imagem com Galeria */}
-          <div className="w-full md:w-1/2 flex flex-col" style={{ background: "var(--mist)" }}>
-            {/* Foto Grande Ativa */}
-            <div className="relative img-zoom flex-1 h-[350px] md:h-auto min-h-[300px]">
+          <div className="w-full md:w-1/2 flex flex-col" style={{ background: "#fafafa" }}>
+            {/* Foto Grande Ativa, com o nome do modelo em marca de água por trás */}
+            <div className="relative img-zoom flex-1 h-[350px] md:h-auto min-h-[300px] overflow-hidden flex items-center justify-center p-8">
+              <p
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center justify-center text-center font-display font-bold uppercase pointer-events-none select-none"
+                style={{ color: "#111111", opacity: 0.08, fontSize: "clamp(2.5rem, 9vw, 5.5rem)", lineHeight: 0.9, letterSpacing: "-0.02em", padding: "0 12px" }}
+              >
+                {product.name}
+              </p>
               <Img
                 src={activeImage}
                 alt={product.name}
-                className={`w-full h-full object-cover absolute inset-0 transition-all duration-500 ease-in-out ${plainPhoto ? "" : "mix-blend-multiply"}`}
+                className={`w-full h-full object-contain transition-all duration-500 ease-in-out ${plainPhoto ? "" : "mix-blend-multiply"}`}
               />
             </div>
-            
+
             {/* Barra de Miniaturas (Com Scroll Ativo) */}
             {allImages.length > 1 && (
               <div 
@@ -2617,7 +2624,7 @@ function BookingModal({ isOpen, onClose, service }) {
           </button>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm">
+          <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest">
             {[
               ["Serviços", "services"],
               ["Vantagens", "vantagens"],
@@ -2632,7 +2639,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 className={`relative font-medium transition-all hover:opacity-100 ${
                   page === p ? "opacity-100" : "opacity-60"
                 }`}
-                style={{ color: page === p ? "var(--gold)" : "var(--forest)" }}
+                style={{ color: "var(--forest)" }}
               >
                 {label}
                 {p === "outlet" && (
