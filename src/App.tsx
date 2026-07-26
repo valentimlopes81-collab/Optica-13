@@ -2596,12 +2596,17 @@ function BookingModal({ isOpen, onClose, service }) {
       return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
+    // Só na home, e só antes de fazer scroll, a nav fica transparente
+    // sobre a fotografia da hero — em todas as outras páginas mantém-se
+    // sólida para não comprometer a navegação.
+    const transparent = page === "home" && !scrolled;
+
     return (
       <header
-        className={`header-shell fixed top-0 left-0 right-0 z-50 backdrop-blur-xl ${scrolled ? "header-scrolled" : ""}`}
+        className={`header-shell fixed top-0 left-0 right-0 z-50 ${transparent ? "" : "backdrop-blur-xl"} ${scrolled ? "header-scrolled" : ""}`}
         style={{
-          background: "rgba(255,255,255,0.92)",
-          borderBottom: "1px solid var(--mist)",
+          background: transparent ? "transparent" : "rgba(255,255,255,0.92)",
+          borderBottom: transparent ? "1px solid transparent" : "1px solid var(--mist)",
         }}
       >
         <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
@@ -2612,7 +2617,8 @@ function BookingModal({ isOpen, onClose, service }) {
             <img
               src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png"
               alt="Logo Óptica 13"
-              className="h-10 w-auto"
+              className="h-10 w-auto transition-all"
+              style={transparent ? { filter: "brightness(0) invert(1)" } : undefined}
             />
           </button>
 
@@ -2630,9 +2636,9 @@ function BookingModal({ isOpen, onClose, service }) {
                 key={p}
                 onClick={() => setPage(p)}
                 className={`relative font-medium transition-all hover:opacity-100 ${
-                  page === p ? "opacity-100" : "opacity-60"
+                  page === p ? "opacity-100" : transparent ? "opacity-80" : "opacity-60"
                 }`}
-                style={{ color: "var(--forest)" }}
+                style={{ color: transparent ? "#ffffff" : "var(--forest)" }}
               >
                 {label}
                 {p === "outlet" && (
@@ -2647,10 +2653,10 @@ function BookingModal({ isOpen, onClose, service }) {
             ))}
             <button
               onClick={() => setPage("quiz")}
-              className="flex items-center gap-1 font-medium transition-all hover:opacity-100 opacity-60"
-              style={{ color: "var(--forest)" }}
+              className={`flex items-center gap-1 font-medium transition-all hover:opacity-100 ${transparent ? "opacity-80" : "opacity-60"}`}
+              style={{ color: transparent ? "#ffffff" : "var(--forest)" }}
             >
-              <Sparkles size={14} style={{ color: "var(--gold)" }} /> Quiz de
+              <Sparkles size={14} style={{ color: transparent ? "#ffffff" : "var(--gold)" }} /> Quiz de
               Estilo
             </button>
           </nav>
@@ -2658,13 +2664,18 @@ function BookingModal({ isOpen, onClose, service }) {
           <div className="flex items-center gap-3">
             <button
              onClick={() => openBook("Consulta de Optometria")}
-              className="hidden sm:flex btn-forest px-5 py-2.5 rounded-xl text-sm font-semibold items-center gap-2"
+              className={`hidden sm:flex px-5 py-2.5 text-sm font-semibold items-center gap-2 uppercase tracking-wide transition-all ${
+                transparent
+                  ? "border border-white text-white hover:bg-white hover:text-black"
+                  : "btn-forest"
+              }`}
             >
               <Calendar size={14} /> Agendar Exame
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-all"
+              className={`lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all ${transparent ? "hover:bg-white/10" : "hover:bg-gray-100"}`}
+              style={{ color: transparent ? "#ffffff" : undefined }}
             >
               {mobileMenuOpen ? <X size={18} /> : <Filter size={18} />}
             </button>
@@ -3089,19 +3100,13 @@ function BookingModal({ isOpen, onClose, service }) {
                 >
                   {slides[currentSlide].desc}
                 </p>
-                <div className="flex flex-wrap items-center gap-5 fade-up-3">
+                <div className="fade-up-3">
                   <button
                     onClick={slides[currentSlide].btn1Action}
                     className="bg-white px-8 py-3.5 text-sm font-medium uppercase tracking-widest transition-all hover:bg-black hover:text-white"
                     style={{ color: "var(--forest)" }}
                   >
                     {slides[currentSlide].btn1Text}
-                  </button>
-                  <button
-                    onClick={() => setPage("mindthelook")}
-                    className="text-sm font-medium uppercase tracking-widest text-white border-b border-white/70 pb-0.5 transition-opacity hover:opacity-70"
-                  >
-                    Ver Coleções
                   </button>
                 </div>
               </div>
