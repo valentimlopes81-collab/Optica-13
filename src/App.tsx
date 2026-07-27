@@ -2596,10 +2596,9 @@ function BookingModal({ isOpen, onClose, service }) {
       return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Só na home, e só antes de fazer scroll, a nav fica transparente
-    // sobre a fotografia da hero — em todas as outras páginas mantém-se
-    // sólida para não comprometer a navegação.
-    const transparent = page === "home" && !scrolled;
+    // Barra de navegação sempre sólida (barra branca ao estilo das grandes
+    // maisons de ótica). Mantido como constante para a estilização abaixo.
+    const transparent = false;
 
     return (
       <header
@@ -3013,6 +3012,18 @@ function BookingModal({ isOpen, onClose, service }) {
     const slides = [
       {
         id: 1,
+        tag: "Coleção MindTheLook",
+        titlePt1: "A coleção que",
+        titlePt2: "veste o seu ",
+        titleHighlight: "estilo",
+        desc: "Armações e óculos de sol premium, para homem e mulher. Descubra o modelo perfeito na nossa coleção MindTheLook.",
+        btn1Text: "Ver Coleção",
+        btn1Action: () => setPage("mindthelook"),
+        img: "https://i.postimg.cc/Z0kfQyS1/P1023073.jpg",
+        plainPhoto: false,
+      },
+      {
+        id: 2,
         tag: "Oferta: Consulta Gratuita esta semana",
         titlePt1: "A sua visão,",
         titlePt2: "a nossa ",
@@ -3020,22 +3031,12 @@ function BookingModal({ isOpen, onClose, service }) {
         desc: "Exames de optometria gratuitos. Marcas premium. Tecnologia de ponta. Tudo num só lugar.",
         btn1Text: "Marcar Exame Gratuito",
         btn1Action: () => openBook("Consulta de Optometria"),
-        img: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=800&fit=crop",
-      },
-      {
-        id: 2,
-        tag: "Coleção MindTheLook",
-        titlePt1: "A coleção que",
-        titlePt2: "veste o seu ",
-        titleHighlight: "estilo",
-        desc: "Armações e óculos de sol premium, para homem e mulher. Descubra o modelo perfeito na nossa coleção MindTheLook.",
-        btn1Text: "Ver Coleção MindTheLook",
-        btn1Action: () => setPage("mindthelook"),
-        img: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=800&h=800&fit=crop",
+        img: "https://i.postimg.cc/vBzjTwjZ/P1023115.jpg",
+        plainPhoto: false,
       },
       {
         id: 3,
-        tag: "Outlet: até 70% de desconto",
+        tag: "Outlet · até 70% de desconto",
         titlePt1: "Estilo premium,",
         titlePt2: "a preços ",
         titleHighlight: "imperdíveis",
@@ -3043,6 +3044,7 @@ function BookingModal({ isOpen, onClose, service }) {
         btn1Text: "Ver Outlet",
         btn1Action: () => setPage("outlet"),
         img: "https://i.postimg.cc/QMgkChHR/31.png",
+        plainPhoto: true,
       }
     ];
 
@@ -3057,82 +3059,66 @@ function BookingModal({ isOpen, onClose, service }) {
       return () => clearInterval(timer);
     }, [slides.length]);
 
-    // Funções para os botões manuais
-    const nextSlide = () => setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
     return (
       <div>
-        {/* Hero Carrossel — fotografia a sangue-total, no espírito editorial das grandes maisons */}
-        <section className="relative overflow-hidden" style={{ height: "88vh", minHeight: 560 }}>
-          {/* Fotografia de fundo */}
-          <div className="absolute inset-0" key={`img-${currentSlide}`}>
-            <Img
-              src={slides[currentSlide].img}
-              alt={slides[currentSlide].tag}
-              className="w-full h-full object-cover fade-up"
-              priority={true}
-            />
-            {/* Sombra subtil só para garantir legibilidade do texto, não um painel escuro */}
-            <div
-              className="absolute inset-0"
-              style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0) 65%)" }}
-            />
-          </div>
+        {/* Hero — apresentação editorial do produto: texto sóbrio à esquerda,
+            um par de óculos em destaque à direita, sobre fundo claro */}
+        <section className="relative pt-16" style={{ background: "var(--cream-dark)" }}>
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 items-stretch" style={{ minHeight: "82vh" }}>
 
-          {/* Conteúdo sobreposto, alinhado em baixo à esquerda */}
-          <div className="absolute inset-x-0 bottom-0 z-10">
-            <div className="max-w-7xl mx-auto px-6 pb-14 md:pb-20">
-              <div className="text-white max-w-xl" key={`text-${currentSlide}`}>
-                <p className="uc-label text-xs font-semibold mb-4 fade-up" style={{ color: "rgba(255,255,255,0.85)" }}>
+            {/* Coluna da Imagem (primeiro em mobile) */}
+            <div className="order-1 lg:order-2 relative overflow-hidden" style={{ background: "#f0efec", minHeight: "44vh" }}>
+              <Img
+                key={`img-${currentSlide}`}
+                src={slides[currentSlide].img}
+                alt={slides[currentSlide].tag}
+                priority={true}
+                className={`w-full h-full object-cover fade-up ${slides[currentSlide].plainPhoto ? "" : "mix-blend-multiply"}`}
+              />
+            </div>
+
+            {/* Coluna do Texto */}
+            <div className="order-2 lg:order-1 flex flex-col justify-center px-6 md:px-12 lg:px-14 py-16 lg:py-20">
+              <div className="max-w-lg" key={`text-${currentSlide}`}>
+                <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
                   {slides[currentSlide].tag}
                 </p>
                 <h1
-                  className="font-display mb-5 fade-up-1"
-                  style={{ fontSize: "clamp(2.25rem,5vw,4rem)", lineHeight: 1.08, fontWeight: 600 }}
+                  className="font-display mb-6 fade-up-1"
+                  style={{ fontSize: "clamp(2.5rem,4.4vw,3.9rem)", lineHeight: 1.06, fontWeight: 600, color: "var(--forest)" }}
                 >
                   {slides[currentSlide].titlePt1}
-                  <br />{slides[currentSlide].titlePt2} <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
+                  <br />{slides[currentSlide].titlePt2}
+                  <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
                 </h1>
-                <p
-                  className="text-base mb-8 fade-up-2"
-                  style={{ maxWidth: 440, color: "rgba(255,255,255,0.85)" }}
-                >
+                <p className="text-base leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 420, color: "var(--forest-light)" }}>
                   {slides[currentSlide].desc}
                 </p>
                 <div className="fade-up-3">
                   <button
                     onClick={slides[currentSlide].btn1Action}
-                    className="bg-white px-8 py-3.5 text-sm font-medium uppercase tracking-widest transition-all hover:bg-black hover:text-white"
-                    style={{ color: "var(--forest)" }}
+                    className="bg-black text-white px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:opacity-80"
                   >
                     {slides[currentSlide].btn1Text}
                   </button>
                 </div>
-              </div>
 
-              {/* Controlos do Carrossel — discretos, ao estilo editorial */}
-              <div className="flex items-center gap-3 mt-12">
-                {slides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    aria-label={`Slide ${idx + 1}`}
-                    className="h-px transition-all"
-                    style={{ width: currentSlide === idx ? 40 : 18, background: currentSlide === idx ? "#fff" : "rgba(255,255,255,0.4)" }}
-                  />
-                ))}
+                {/* Indicadores do Carrossel */}
+                <div className="flex items-center gap-3 mt-14">
+                  {slides.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentSlide(idx)}
+                      aria-label={`Slide ${idx + 1}`}
+                      className="h-px transition-all"
+                      style={{ width: currentSlide === idx ? 42 : 20, background: currentSlide === idx ? "var(--forest)" : "rgba(17,17,17,0.25)" }}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Setas de navegação */}
-          <button onClick={prevSlide} aria-label="Slide anterior" className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-white/80 hover:text-white transition-colors">
-            <ChevronRight size={22} className="rotate-180" />
-          </button>
-          <button onClick={nextSlide} aria-label="Próximo slide" className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-white/80 hover:text-white transition-colors">
-            <ChevronRight size={22} />
-          </button>
         </section>
 
         {/* ... Restante código da HomePage (Services, etc) ... */}
