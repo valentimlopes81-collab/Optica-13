@@ -3065,16 +3065,16 @@ function BookingModal({ isOpen, onClose, service }) {
         {/* Hero — apresentação editorial do produto: texto sóbrio à esquerda,
             um par de óculos em destaque à direita, sobre fundo claro */}
         <section className="relative pt-16" style={{ background: "var(--cream-dark)" }}>
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 items-stretch" style={{ minHeight: "82vh" }}>
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 items-stretch" style={{ minHeight: "86vh" }}>
 
-            {/* Coluna da Imagem (primeiro em mobile) */}
-            <div className="order-1 lg:order-2 relative overflow-hidden" style={{ background: "#f0efec", minHeight: "44vh" }}>
+            {/* Coluna da Imagem (primeiro em mobile) — o par de óculos em destaque */}
+            <div className="order-1 lg:order-2 relative overflow-hidden flex items-center justify-center p-8 md:p-14" style={{ background: "var(--cream-dark)", minHeight: "46vh" }}>
               <Img
                 key={`img-${currentSlide}`}
                 src={slides[currentSlide].img}
                 alt={slides[currentSlide].tag}
                 priority={true}
-                className={`w-full h-full object-cover fade-up ${slides[currentSlide].plainPhoto ? "" : "mix-blend-multiply"}`}
+                className={`w-full h-full fade-up ${slides[currentSlide].plainPhoto ? "object-cover" : "object-contain mix-blend-multiply"}`}
               />
             </div>
 
@@ -3121,224 +3121,6 @@ function BookingModal({ isOpen, onClose, service }) {
           </div>
         </section>
 
-        {/* ... Restante código da HomePage (Services, etc) ... */}
-        
-        {/* Services */}
-        <section className="py-24" style={{ background: "var(--cream)" }}>
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-3"
-                style={{ color: "var(--gold)" }}
-              >
-                Serviços Premium
-              </p>
-              <h2
-                className="font-display mb-4"
-                style={{
-                  fontSize: "clamp(2rem,4vw,3rem)",
-                  color: "var(--forest)",
-                }}
-              >
-                Tudo o que precisa para <em>ver melhor</em>
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  Icon: OptometryIcon,
-                  title: "Optometria",
-                  desc: "Exames completos com tecnologia de última geração. Gratuitos na compra de óculos.",
-                },
-                {
-                  Icon: LensIcon,
-                  title: "Contactologia",
-                  desc: "Adaptação personalizada de lentes de contacto para o seu conforto máximo.",
-                },
-                {
-                  Icon: CardIcon,
-                  title: "Certificados de Condução",
-                  desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
-                },
-              ].map(({ Icon, title, desc }, i) => (
-                <div
-                  key={i}
-                  className={`card-hover p-8 rounded-2xl bg-white border fade-up-${
-                    i + 1
-                  }`}
-                  style={{ borderColor: "var(--mist)" }}
-                >
-                  <div
-                    className="w-16 h-16 mb-6"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    <Icon />
-                  </div>
-                  <h3
-                    className="font-display text-2xl font-semibold mb-3"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    {title}
-                  </h3>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "#666" }}
-                  >
-                    {desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CONSULTORIA DE IMAGEM */}
-        <section className="py-24" style={{ background: "var(--cream)" }}>
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* Lado da Imagem */}
-              <div
-                className="order-2 lg:order-1 rounded-3xl overflow-hidden img-zoom shadow-2xl relative"
-                style={{ height: "550px" }}
-              >
-                <Img
-                  src="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?w=800&h=1000&fit=crop"
-                  alt="Consultoria de Imagem"
-                  className="w-full h-full object-cover"
-                />
-                {/* Etiqueta flutuante na imagem */}
-                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white/50 max-w-[250px] fade-up-2">
-                  <div className="flex gap-1 mb-2">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        size={12}
-                        fill="var(--gold)"
-                        style={{ color: "var(--gold)" }}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-xs font-medium italic text-gray-700">
-                    "Ajudaram-me a descobrir as cores e formatos que realmente me
-                    favorecem. Serviço 5 estrelas!"
-                  </p>
-                </div>
-              </div>
-
-              {/* Lado do Texto */}
-              <div className="order-1 lg:order-2 fade-up-1">
-                <span
-                  className="inline-block text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6"
-                  style={{
-                    background: "rgba(201,168,76,0.15)",
-                    color: "var(--gold)",
-                  }}
-                >
-                  Atendimento Premium
-                </span>
-                <h2
-                  className="font-display text-4xl md:text-5xl font-semibold mb-6 leading-tight"
-                  style={{ color: "var(--forest)" }}
-                >
-                  Consultoria de <br />
-                  <em style={{ color: "var(--gold)" }}>Imagem Especializada</em>
-                </h2>
-                <p
-                  className="text-base leading-relaxed mb-10"
-                  style={{ color: "#666" }}
-                >
-                  Não vendemos apenas óculos. Acreditamos que a sua armação é a
-                  moldura do seu rosto. A nossa equipa utiliza técnicas de
-                  visagismo para identificar os modelos que melhor harmonizam com
-                  os seus traços, tom de pele e estilo de vida.
-                </p>
-
-                <div className="space-y-6 mb-10">
-                  {[
-                    {
-                      icon: Eye,
-                      title: "Análise Facial",
-                      text: "Estudo detalhado do formato e proporções do seu rosto.",
-                    },
-                    {
-                      icon: Sparkles,
-                      title: "Coloração Pessoal",
-                      text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar.",
-                    },
-                    {
-                      icon: Award,
-                      title: "Curadoria de Marcas",
-                      text: "Seleção personalizada dentro do nosso portefólio premium.",
-                    },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
-                        style={{
-                          background: "var(--cream-dark)",
-                          border: "1px solid var(--mist)",
-                        }}
-                      >
-                        <item.icon size={20} style={{ color: "var(--gold)" }} />
-                      </div>
-                      <div>
-                        <p
-                          className="font-semibold text-sm mb-1"
-                          style={{ color: "var(--forest)" }}
-                        >
-                          {item.title}
-                        </p>
-                        <p className="text-xs" style={{ color: "#888" }}>
-                          {item.text}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={() => openBook("Consultoria de Imagem")}
-                    className="btn-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
-                  >
-                    <Calendar size={16} /> Agendar Consultoria
-                  </button>
-                  <button
-                    onClick={() => setPage("quiz")}
-                    className="btn-outline-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:-translate-y-1 transition-transform"
-                  >
-                    <Glasses size={16} /> Fazer Quiz Virtual
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* CTA */}
-        <section className="py-20" style={{ background: "var(--cream-dark)" }}>
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <Award
-              size={48}
-              className="mx-auto mb-6"
-              style={{ color: "var(--gold)" }}
-            />
-            <h2
-              className="font-display mb-4"
-              style={{ fontSize: "clamp(2rem,4vw,3rem)", color: "var(--forest)" }}
-            >
-              Exame de Vista <em style={{ color: "var(--gold)" }}>Gratuito</em>
-            </h2>
-            <p className="text-lg mb-8" style={{ color: "#666" }}>
-             Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
-            </p>
-            <button
-              onClick={() => openBook("Consulta de Optometria")}
-              className="btn-forest px-10 py-4 rounded-xl font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-lg"
-            >
-              <Calendar size={16} /> Marcar Agora
-            </button>
-          </div>
-        </section>
         {/* MAIS VENDIDOS */}
         <section className="py-20" style={{ background: "white" }}>
           <div className="max-w-7xl mx-auto px-6">
@@ -3415,6 +3197,191 @@ function BookingModal({ isOpen, onClose, service }) {
             </div>
           </div>
         </section>
+
+        {/* Services */}
+        <section className="py-24" style={{ background: "var(--cream)" }}>
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <p
+                className="text-xs font-semibold tracking-widest uppercase mb-3"
+                style={{ color: "var(--gold)" }}
+              >
+                Serviços Premium
+              </p>
+              <h2
+                className="font-display mb-4"
+                style={{
+                  fontSize: "clamp(2rem,4vw,3rem)",
+                  color: "var(--forest)",
+                }}
+              >
+                Tudo o que precisa para <em>ver melhor</em>
+              </h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  Icon: OptometryIcon,
+                  title: "Optometria",
+                  desc: "Exames completos com tecnologia de última geração. Gratuitos na compra de óculos.",
+                },
+                {
+                  Icon: LensIcon,
+                  title: "Contactologia",
+                  desc: "Adaptação personalizada de lentes de contacto para o seu conforto máximo.",
+                },
+                {
+                  Icon: CardIcon,
+                  title: "Certificados de Condução",
+                  desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
+                },
+              ].map(({ Icon, title, desc }, i) => (
+                <div
+                  key={i}
+                  className={`card-hover p-8 rounded-2xl bg-white border fade-up-${
+                    i + 1
+                  }`}
+                  style={{ borderColor: "var(--mist)" }}
+                >
+                  <div
+                    className="w-16 h-16 mb-6"
+                    style={{ color: "var(--forest)" }}
+                  >
+                    <Icon />
+                  </div>
+                  <h3
+                    className="font-display text-2xl font-semibold mb-3"
+                    style={{ color: "var(--forest)" }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "#666" }}
+                  >
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONSULTA GRATUITA — faixa imersiva com fotografia de consulta */}
+        <section className="relative overflow-hidden" style={{ minHeight: "72vh" }}>
+          <div className="absolute inset-0">
+            <Img
+              src="https://i.postimg.cc/xd7WzbXY/maximilianovich-doctor-5710159-1920.jpg"
+              alt="Consulta de optometria na Óptica 13"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0" style={{ background: "rgba(12,14,16,0.6)" }} />
+          </div>
+          <div className="relative z-10 max-w-3xl mx-auto px-6 py-28 md:py-36 flex flex-col items-center text-center text-white">
+            <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "rgba(255,255,255,0.8)" }}>
+              Cuidado Visual
+            </p>
+            <h2 className="font-display mb-6 fade-up-1" style={{ fontSize: "clamp(2.2rem,4.4vw,3.4rem)", lineHeight: 1.08, fontWeight: 600 }}>
+              Exame de vista <em style={{ fontStyle: "italic", fontWeight: 400 }}>gratuito</em>
+            </h2>
+            <p className="text-base md:text-lg leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 540, color: "rgba(255,255,255,0.85)" }}>
+              Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
+            </p>
+            <button
+              onClick={() => openBook("Consulta de Optometria")}
+              className="fade-up-3 bg-white text-black px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:bg-black hover:text-white"
+            >
+              Marcar Exame Gratuito
+            </button>
+          </div>
+        </section>
+
+        {/* CONSULTORIA DE IMAGEM — editorial, sem imagem de stock externa */}
+        <section className="py-24 md:py-32" style={{ background: "var(--cream)" }}>
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
+              Atendimento Premium
+            </p>
+            <h2 className="font-display mb-6 fade-up-1" style={{ fontSize: "clamp(2.2rem,4.4vw,3.4rem)", lineHeight: 1.1, fontWeight: 600, color: "var(--forest)" }}>
+              Consultoria de <em style={{ fontStyle: "italic", fontWeight: 400 }}>Imagem</em> Especializada
+            </h2>
+            <p className="text-base leading-relaxed mb-16 mx-auto fade-up-2" style={{ maxWidth: 560, color: "var(--forest-light)" }}>
+              Não vendemos apenas óculos. Acreditamos que a sua armação é a moldura do seu rosto. A nossa equipa utiliza técnicas de visagismo para identificar os modelos que melhor harmonizam com os seus traços, tom de pele e estilo de vida.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-12 mb-16">
+              {[
+                { icon: Eye, title: "Análise Facial", text: "Estudo detalhado do formato e proporções do seu rosto." },
+                { icon: Sparkles, title: "Coloração Pessoal", text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar." },
+                { icon: Award, title: "Curadoria de Marcas", text: "Seleção personalizada dentro do nosso portefólio premium." },
+              ].map((item, i) => (
+                <div key={i} className={`flex flex-col items-center text-center fade-up-${i + 1}`}>
+                  <div className="w-12 h-12 flex items-center justify-center mb-5" style={{ border: "1px solid var(--forest)" }}>
+                    <item.icon size={20} style={{ color: "var(--forest)" }} />
+                  </div>
+                  <p className="font-semibold text-sm mb-2" style={{ color: "var(--forest)" }}>{item.title}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--forest-light)", maxWidth: 220 }}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => openBook("Consultoria de Imagem")}
+                className="btn-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
+              >
+                <Calendar size={16} /> Agendar Consultoria
+              </button>
+              <button
+                onClick={() => setPage("quiz")}
+                className="btn-outline-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
+              >
+                <Glasses size={16} /> Fazer Quiz Virtual
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* SOBRE / CONFIANÇA — fotografia real da equipa */}
+        <section className="py-24 md:py-28" style={{ background: "var(--cream-dark)" }}>
+          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+            <div className="order-1 overflow-hidden img-zoom fade-up" style={{ height: 460 }}>
+              <Img
+                src="https://i.postimg.cc/vmz3kPmW/Equipa-Optica13-r2p8lpvixuoy0zmplkvnvhdg2jia66ckxheqrzn9tc.jpg"
+                alt="Equipa da Óptica 13"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="order-2 fade-up-1">
+              <p className="uc-label text-[11px] font-semibold mb-5" style={{ color: "var(--forest-light)" }}>
+                Na Parede desde 1986
+              </p>
+              <h2 className="font-display mb-6" style={{ fontSize: "clamp(2.1rem,4vw,3.2rem)", lineHeight: 1.1, fontWeight: 600, color: "var(--forest)" }}>
+                Uma vida dedicada <br /><em style={{ fontStyle: "italic", fontWeight: 400 }}>à sua visão</em>
+              </h2>
+              <p className="text-base leading-relaxed mb-9" style={{ maxWidth: 460, color: "var(--forest-light)" }}>
+                Há mais de 38 anos que cuidamos da visão das famílias da Parede, com o rigor de uma equipa credenciada e a proximidade de quem conhece os seus clientes pelo nome. Tecnologia de ponta, marcas premium e um atendimento que faz a diferença.
+              </p>
+              <div className="flex flex-wrap gap-x-12 gap-y-5 mb-10">
+                {[
+                  ["38", "anos de experiência"],
+                  ["+15", "entidades parceiras"],
+                  ["ERS", "registo E131391"],
+                ].map(([n, l]) => (
+                  <div key={l}>
+                    <p className="font-display text-3xl font-semibold" style={{ color: "var(--forest)" }}>{n}</p>
+                    <p className="text-xs uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>{l}</p>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => setPage("about")}
+                className="btn-outline-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest"
+              >
+                Conhecer a Óptica 13
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Testemunhos */}
         <TestimonialsSection />
       </div>
