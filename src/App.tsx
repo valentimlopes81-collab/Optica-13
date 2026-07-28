@@ -3062,70 +3062,58 @@ function BookingModal({ isOpen, onClose, service }) {
 
     return (
       <div>
-        {/* Hero — fotografia a sangrar até à margem do ecrã (natural, sem caixa),
-            com o texto alinhado à grelha da página */}
-        <section className="relative lg:min-h-[88vh]" style={{ background: "var(--cream)" }}>
+        {/* Hero — fotografia a preencher o ecrã inteiro, texto centrado em baixo */}
+        <section className="relative overflow-hidden" style={{ height: "100vh", minHeight: 600, background: "#eae8e3" }}>
 
-          {/* Imagem em mobile — largura total, no topo */}
-          <div className="lg:hidden w-full overflow-hidden" style={{ height: "50vh" }}>
+          {/* Fotografia do óculo, a sangue-total */}
+          <div className="absolute inset-0" key={`img-${currentSlide}`}>
             <Img
-              key={`img-m-${currentSlide}`}
               src={slides[currentSlide].img}
               alt={slides[currentSlide].tag}
               priority={true}
               className="w-full h-full object-cover fade-up"
+              style={{ objectPosition: "center 38%" }}
+            />
+            {/* Véu claro em baixo, para o texto respirar sem esconder a foto */}
+            <div
+              className="absolute inset-x-0 bottom-0 pointer-events-none"
+              style={{ height: "50%", background: "linear-gradient(0deg, rgba(234,232,227,0.94) 0%, rgba(234,232,227,0.55) 34%, rgba(234,232,227,0) 100%)" }}
             />
           </div>
 
-          {/* Imagem em desktop — absoluta, sangra até à margem direita do ecrã */}
-          <div className="hidden lg:block absolute inset-y-0 right-0 overflow-hidden" style={{ width: "50vw" }}>
-            <Img
-              key={`img-d-${currentSlide}`}
-              src={slides[currentSlide].img}
-              alt={slides[currentSlide].tag}
-              priority={true}
-              className="w-full h-full object-cover fade-up"
-            />
-          </div>
+          {/* Texto centrado em baixo */}
+          <div
+            className="absolute inset-x-0 bottom-0 z-10 pb-16 md:pb-24 px-6 flex flex-col items-center text-center"
+            key={`text-${currentSlide}`}
+          >
+            <p className="uc-label text-[11px] font-semibold mb-4 fade-up" style={{ color: "var(--forest-light)" }}>
+              {slides[currentSlide].tag}
+            </p>
+            <h1
+              className="font-display mb-8 fade-up-1"
+              style={{ fontSize: "clamp(2rem,4.6vw,3.6rem)", lineHeight: 1.05, fontWeight: 600, color: "var(--forest)", maxWidth: 720 }}
+            >
+              {slides[currentSlide].titlePt1} {slides[currentSlide].titlePt2}
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
+            </h1>
+            <button
+              onClick={slides[currentSlide].btn1Action}
+              className="bg-black text-white px-10 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:opacity-80 fade-up-2"
+            >
+              {slides[currentSlide].btn1Text}
+            </button>
 
-          {/* Texto — dentro do contentor da página, para alinhar com o resto do site */}
-          <div className="relative max-w-7xl mx-auto px-6">
-            <div className="lg:w-[46%] flex flex-col justify-center py-16 lg:py-0 lg:min-h-[88vh]" key={`text-${currentSlide}`}>
-              <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
-                {slides[currentSlide].tag}
-              </p>
-              <h1
-                className="font-display mb-6 fade-up-1"
-                style={{ fontSize: "clamp(2.5rem,4.4vw,3.9rem)", lineHeight: 1.06, fontWeight: 600, color: "var(--forest)" }}
-              >
-                {slides[currentSlide].titlePt1}
-                <br />{slides[currentSlide].titlePt2}
-                <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
-              </h1>
-              <p className="text-base leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 420, color: "var(--forest-light)" }}>
-                {slides[currentSlide].desc}
-              </p>
-              <div className="fade-up-3">
+            {/* Indicadores do Carrossel */}
+            <div className="flex items-center gap-3 mt-10">
+              {slides.map((_, idx) => (
                 <button
-                  onClick={slides[currentSlide].btn1Action}
-                  className="bg-black text-white px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:opacity-80"
-                >
-                  {slides[currentSlide].btn1Text}
-                </button>
-              </div>
-
-              {/* Indicadores do Carrossel */}
-              <div className="flex items-center gap-3 mt-14">
-                {slides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    aria-label={`Slide ${idx + 1}`}
-                    className="h-px transition-all"
-                    style={{ width: currentSlide === idx ? 42 : 20, background: currentSlide === idx ? "var(--forest)" : "rgba(17,17,17,0.25)" }}
-                  />
-                ))}
-              </div>
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  aria-label={`Slide ${idx + 1}`}
+                  className="h-px transition-all"
+                  style={{ width: currentSlide === idx ? 42 : 20, background: currentSlide === idx ? "var(--forest)" : "rgba(17,17,17,0.3)" }}
+                />
+              ))}
             </div>
           </div>
         </section>
