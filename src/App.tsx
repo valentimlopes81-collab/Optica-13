@@ -3062,60 +3062,69 @@ function BookingModal({ isOpen, onClose, service }) {
 
     return (
       <div>
-        {/* Hero — apresentação editorial do produto: texto sóbrio à esquerda,
-            um par de óculos em destaque à direita, sobre fundo claro */}
-        <section className="relative pt-16" style={{ background: "var(--cream-dark)" }}>
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 items-stretch" style={{ minHeight: "86vh" }}>
+        {/* Hero — fotografia a sangrar até à margem do ecrã (natural, sem caixa),
+            com o texto alinhado à grelha da página */}
+        <section className="relative lg:min-h-[88vh]" style={{ background: "var(--cream)" }}>
 
-            {/* Coluna da Imagem (primeiro em mobile) — o par de óculos em destaque */}
-            <div className="order-1 lg:order-2 relative overflow-hidden flex items-center justify-center p-8 md:p-14" style={{ background: "var(--cream-dark)", minHeight: "46vh" }}>
-              <Img
-                key={`img-${currentSlide}`}
-                src={slides[currentSlide].img}
-                alt={slides[currentSlide].tag}
-                priority={true}
-                className={`w-full h-full fade-up ${slides[currentSlide].plainPhoto ? "object-cover" : "object-contain mix-blend-multiply"}`}
-              />
-            </div>
+          {/* Imagem em mobile — largura total, no topo */}
+          <div className="lg:hidden w-full overflow-hidden" style={{ height: "50vh" }}>
+            <Img
+              key={`img-m-${currentSlide}`}
+              src={slides[currentSlide].img}
+              alt={slides[currentSlide].tag}
+              priority={true}
+              className="w-full h-full object-cover fade-up"
+            />
+          </div>
 
-            {/* Coluna do Texto */}
-            <div className="order-2 lg:order-1 flex flex-col justify-center px-6 md:px-12 lg:px-14 py-16 lg:py-20">
-              <div className="max-w-lg" key={`text-${currentSlide}`}>
-                <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
-                  {slides[currentSlide].tag}
-                </p>
-                <h1
-                  className="font-display mb-6 fade-up-1"
-                  style={{ fontSize: "clamp(2.5rem,4.4vw,3.9rem)", lineHeight: 1.06, fontWeight: 600, color: "var(--forest)" }}
+          {/* Imagem em desktop — absoluta, sangra até à margem direita do ecrã */}
+          <div className="hidden lg:block absolute inset-y-0 right-0 overflow-hidden" style={{ width: "50vw" }}>
+            <Img
+              key={`img-d-${currentSlide}`}
+              src={slides[currentSlide].img}
+              alt={slides[currentSlide].tag}
+              priority={true}
+              className="w-full h-full object-cover fade-up"
+            />
+          </div>
+
+          {/* Texto — dentro do contentor da página, para alinhar com o resto do site */}
+          <div className="relative max-w-7xl mx-auto px-6">
+            <div className="lg:w-[46%] flex flex-col justify-center py-16 lg:py-0 lg:min-h-[88vh]" key={`text-${currentSlide}`}>
+              <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
+                {slides[currentSlide].tag}
+              </p>
+              <h1
+                className="font-display mb-6 fade-up-1"
+                style={{ fontSize: "clamp(2.5rem,4.4vw,3.9rem)", lineHeight: 1.06, fontWeight: 600, color: "var(--forest)" }}
+              >
+                {slides[currentSlide].titlePt1}
+                <br />{slides[currentSlide].titlePt2}
+                <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
+              </h1>
+              <p className="text-base leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 420, color: "var(--forest-light)" }}>
+                {slides[currentSlide].desc}
+              </p>
+              <div className="fade-up-3">
+                <button
+                  onClick={slides[currentSlide].btn1Action}
+                  className="bg-black text-white px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:opacity-80"
                 >
-                  {slides[currentSlide].titlePt1}
-                  <br />{slides[currentSlide].titlePt2}
-                  <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
-                </h1>
-                <p className="text-base leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 420, color: "var(--forest-light)" }}>
-                  {slides[currentSlide].desc}
-                </p>
-                <div className="fade-up-3">
-                  <button
-                    onClick={slides[currentSlide].btn1Action}
-                    className="bg-black text-white px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:opacity-80"
-                  >
-                    {slides[currentSlide].btn1Text}
-                  </button>
-                </div>
+                  {slides[currentSlide].btn1Text}
+                </button>
+              </div>
 
-                {/* Indicadores do Carrossel */}
-                <div className="flex items-center gap-3 mt-14">
-                  {slides.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentSlide(idx)}
-                      aria-label={`Slide ${idx + 1}`}
-                      className="h-px transition-all"
-                      style={{ width: currentSlide === idx ? 42 : 20, background: currentSlide === idx ? "var(--forest)" : "rgba(17,17,17,0.25)" }}
-                    />
-                  ))}
-                </div>
+              {/* Indicadores do Carrossel */}
+              <div className="flex items-center gap-3 mt-14">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlide(idx)}
+                    aria-label={`Slide ${idx + 1}`}
+                    className="h-px transition-all"
+                    style={{ width: currentSlide === idx ? 42 : 20, background: currentSlide === idx ? "var(--forest)" : "rgba(17,17,17,0.25)" }}
+                  />
+                ))}
               </div>
             </div>
           </div>
