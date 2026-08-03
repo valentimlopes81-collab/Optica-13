@@ -35,7 +35,11 @@
 }
 
 * { box-sizing: border-box; }
-body { font-family: 'Nord', 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
+body { font-family: 'Nord', 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; text-transform: uppercase; }
+/* A Nord só tem maiúsculas e não inclui letras acentuadas. Ao forçar
+   maiúsculas, as letras acentuadas (Ç, Ã, Õ, Á…) vêm da fonte de reserva
+   em CAIXA ALTA, com a mesma altura, em vez de minúsculas que destoavam. */
+input, textarea, select, .shopify-buy-frame, .shopify-buy-frame * { text-transform: none; }
 .font-display { font-family: 'Nord', 'Jost', sans-serif; letter-spacing: -0.01em; }
 .uc-label { text-transform: uppercase; letter-spacing: 0.14em; }
 .bg-cream { background-color: var(--cream); }
