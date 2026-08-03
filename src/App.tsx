@@ -26,14 +26,10 @@ import {
   ChevronDown,
   Minus,
   Plus,
-  User,
   Heart,
   ZoomIn,
   Shield,
-  Facebook,
-  Twitter,
   Instagram,
-  Youtube,
 } from "lucide-react";
 
 /* ── HELPERS ────────────────────────────────────────────────── */
@@ -218,7 +214,7 @@ function ShopifyBuyButton({ productId }) {
     return () => { cancelled = true; };
   }, [productId]);
 
-  return <div ref={buttonRef} className="w-full"></div>;
+  return <div ref={buttonRef} className="w-full shopify-product-embed"></div>;
 }
 
 /* ── FAVORITOS (guardados no navegador via localStorage) ───────── */
@@ -2767,7 +2763,7 @@ function BookingModal({ isOpen, onClose, service }) {
           borderBottom: transparent ? "1px solid transparent" : "1px solid var(--mist)",
         }}
       >
-        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
+        <div className={`relative max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
           <button
             onClick={() => setPage("home")}
             className="flex items-center transition-transform hover:scale-105"
@@ -2780,8 +2776,8 @@ function BookingModal({ isOpen, onClose, service }) {
             />
           </button>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest">
+          {/* Desktop Nav — centrado no cabeçalho */}
+          <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {[
               ["Serviços", "services"],
               ["Vantagens", "vantagens"],
@@ -2837,9 +2833,6 @@ function BookingModal({ isOpen, onClose, service }) {
                     {favoritesCount}
                   </span>
                 )}
-              </button>
-              <button onClick={() => openBook("Consulta de Optometria")} aria-label="Conta" className="p-0.5 transition-opacity hover:opacity-60">
-                <User size={19} strokeWidth={1.6} />
               </button>
               <button onClick={onOpenCart} aria-label="Carrinho" className="p-0.5 transition-opacity hover:opacity-60">
                 <ShoppingBag size={19} strokeWidth={1.6} />
@@ -3042,12 +3035,14 @@ function BookingModal({ isOpen, onClose, service }) {
               href="https://www.livroreclamacoes.pt/"
               target="_blank"
               rel="noreferrer"
-              className="inline-block mt-4 transition-transform hover:scale-105"
+              className="inline-block mt-4 bg-white p-2 transition-transform hover:scale-105"
+              style={{ maxWidth: "100%" }}
             >
               <img
                 src="https://www.livroreclamacoes.pt/Autenticacao_CC/img/logo-livro-reclamacoes.svg"
                 alt="Livro de Reclamações Eletrónico"
-                className="h-8 bg-white p-1 rounded"
+                className="block h-auto"
+                style={{ width: 210, maxWidth: "100%" }}
               />
             </a>
           </div>
@@ -3246,7 +3241,7 @@ function BookingModal({ isOpen, onClose, service }) {
             />
 
             {/* Botão (o elemento que faltava nos layouts) */}
-            <div className="absolute inset-x-0 bottom-[6%] flex justify-center px-6 z-10">
+            <div className="absolute inset-x-0 bottom-[5%] md:bottom-[15%] flex justify-center px-6 z-10">
               <button
                 onClick={slides[currentSlide].btnAction}
                 className="btn-rose px-9 py-3.5 text-xs font-semibold uppercase tracking-widest"
@@ -3255,13 +3250,21 @@ function BookingModal({ isOpen, onClose, service }) {
               </button>
             </div>
 
-            {/* Redes sociais — canto inferior esquerdo (como no exemplo) */}
-            <div className="hidden md:flex items-center gap-4 absolute bottom-6 left-8 z-10" style={{ color: "var(--forest)" }}>
-              <a href="https://www.facebook.com/optica13parede" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="transition-opacity hover:opacity-60"><Facebook size={15} strokeWidth={1.6} /></a>
-              <a href="https://www.instagram.com/optica13" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition-opacity hover:opacity-60"><Instagram size={15} strokeWidth={1.6} /></a>
-              <Twitter size={15} strokeWidth={1.6} className="opacity-70" />
-              <Youtube size={15} strokeWidth={1.6} className="opacity-70" />
+            {/* Instagram — canto inferior esquerdo */}
+            <div className="hidden md:flex items-center absolute bottom-6 left-8 z-10" style={{ color: "var(--forest)" }}>
+              <a href="https://www.instagram.com/optica13" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition-opacity hover:opacity-60"><Instagram size={17} strokeWidth={1.6} /></a>
             </div>
+
+            {/* Indicador de scroll — leva à secção das coleções */}
+            <button
+              onClick={() => document.getElementById("colecoes")?.scrollIntoView({ behavior: "smooth" })}
+              aria-label="Descer"
+              className="hidden md:flex flex-col items-center gap-1 absolute bottom-4 left-1/2 -translate-x-1/2 z-10 transition-opacity hover:opacity-60"
+              style={{ color: "var(--forest)" }}
+            >
+              <span className="uc-label text-[9px] font-semibold">Descer</span>
+              <ChevronDown size={20} strokeWidth={1.8} className="animate-bounce" />
+            </button>
 
             {/* Pontos do carrossel — canto inferior direito */}
             <div className="flex items-center gap-2.5 absolute bottom-7 right-6 md:right-8 z-10">
@@ -3283,7 +3286,7 @@ function BookingModal({ isOpen, onClose, service }) {
         </section>
 
         {/* COLEÇÕES — bloco promocional (estilo Optopia), com os 3 quadrados */}
-        <section className="py-16 md:py-20" style={{ background: "#f9e2d7" }}>
+        <section id="colecoes" className="py-16 md:py-20" style={{ background: "#f9e2d7" }}>
           <div className="max-w-7xl mx-auto px-6">
             <div className="mb-8 md:mb-10 fade-up">
               <p className="uc-label text-[11px] font-semibold mb-2" style={{ color: "var(--wine)" }}>A Óptica 13</p>
@@ -3313,33 +3316,36 @@ function BookingModal({ isOpen, onClose, service }) {
                 </div>
               </button>
 
-              {/* Coluna direita: MindTheLook + Exame */}
+              {/* Coluna direita: MindTheLook + Exame — imagem ao lado do texto
+                  (área menor => sem o recorte exagerado de antes) */}
               <div className="grid grid-rows-2 gap-5">
                 <button
                   onClick={() => setPage("mindthelook")}
-                  className="relative overflow-hidden text-left group fade-up-2"
-                  style={{ borderRadius: 18, minHeight: 200 }}
+                  className="flex items-stretch overflow-hidden text-left group fade-up-2"
+                  style={{ borderRadius: 18, minHeight: 200, background: "#ffffff" }}
                 >
-                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.55) 46%, rgba(255,255,255,0) 100%)" }} />
-                  <div className="relative z-10 h-full flex flex-col justify-center p-8">
+                  <div className="flex-1 flex flex-col justify-center p-7 md:p-8">
                     <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid var(--forest)", color: "var(--forest)" }}>Coleção</span>
                     <p className="font-display" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1 }}>MindTheLook</p>
                     <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mt-4" style={{ color: "var(--forest)" }}>Ver Coleção <ArrowRight size={13} /></span>
+                  </div>
+                  <div className="relative overflow-hidden flex-shrink-0" style={{ width: "42%" }}>
+                    <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
                 </button>
 
                 <button
                   onClick={() => openBook("Consulta de Optometria")}
-                  className="relative overflow-hidden text-left group fade-up-3"
-                  style={{ borderRadius: 18, minHeight: 200 }}
+                  className="flex items-stretch overflow-hidden text-left group fade-up-3"
+                  style={{ borderRadius: 18, minHeight: 200, background: "#ffffff" }}
                 >
-                  <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.55) 46%, rgba(255,255,255,0) 100%)" }} />
-                  <div className="relative z-10 h-full flex flex-col justify-center p-8">
+                  <div className="flex-1 flex flex-col justify-center p-7 md:p-8">
                     <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid var(--forest)", color: "var(--forest)" }}>Consulta</span>
                     <p className="font-display" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1 }}>Exame gratuito</p>
                     <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mt-4" style={{ color: "var(--forest)" }}>Marcar Exame <ArrowRight size={13} /></span>
+                  </div>
+                  <div className="relative overflow-hidden flex-shrink-0" style={{ width: "42%" }}>
+                    <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
                 </button>
               </div>
