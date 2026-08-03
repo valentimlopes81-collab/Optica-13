@@ -2764,22 +2764,22 @@ function BookingModal({ isOpen, onClose, service }) {
           borderBottom: transparent ? "1px solid transparent" : "1px solid var(--mist)",
         }}
       >
-        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
-          {/* Esquerda: logo + menu + Agendar Exame (o Agendar Exame conta como uma página, separado dos ícones) */}
-          <div className="flex items-center gap-6 xl:gap-10">
-            <button
-              onClick={() => setPage("home")}
-              className="flex items-center transition-transform hover:scale-105"
-            >
-              <img
-                src="/fotos/logo-optica13.png"
-                alt="Logo Óptica 13"
-                className="h-10 w-auto transition-all"
-              />
-            </button>
+        <div className={`relative max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
+          {/* Esquerda: logo */}
+          <button
+            onClick={() => setPage("home")}
+            className="flex items-center transition-transform hover:scale-105"
+          >
+            <img
+              src="/fotos/logo-optica13.png"
+              alt="Logo Óptica 13"
+              className="h-10 w-auto transition-all"
+            />
+          </button>
 
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest">
+          {/* Centro: menu + Agendar Exame, centrados no cabeçalho */}
+          <div className="hidden lg:flex items-center gap-7 w-max absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <nav className="flex items-center gap-7 text-xs uppercase tracking-widest">
               {[
                 ["Serviços", "services"],
                 ["Vantagens", "vantagens"],
@@ -2811,7 +2811,7 @@ function BookingModal({ isOpen, onClose, service }) {
             {/* Agendar Exame — tratado como um item do menu */}
             <button
               onClick={() => openBook("Consulta de Optometria")}
-              className="hidden lg:flex btn-forest px-5 py-2.5 text-xs font-semibold items-center gap-2 uppercase tracking-widest transition-all"
+              className="btn-forest px-5 py-2.5 text-xs font-semibold flex items-center gap-2 uppercase tracking-widest whitespace-nowrap transition-all"
             >
               <Calendar size={14} /> Agendar Exame
             </button>
@@ -3344,7 +3344,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   className="relative overflow-hidden text-left group fade-up-2"
                   style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style={{ objectPosition: "50% 70%" }} />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
                     <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
