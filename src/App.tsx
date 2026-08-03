@@ -199,9 +199,9 @@ function ShopifyBuyButton({ productId }) {
                 'border-radius': '0',
                 'font-family': 'Jost, sans-serif',
                 'font-weight': '600',
-                'font-size': '14px',
-                'line-height': '20px',
-                'padding': '20px 24px',
+                'font-size': '15px',
+                'line-height': '22px',
+                'padding': '24px 28px',
                 'width': '100%',
                 'max-width': '100%',
                 'letter-spacing': '0.025em',
@@ -3354,7 +3354,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   className="relative overflow-hidden text-left group fade-up-2"
                   style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style={{ objectPosition: "50% 34%" }} />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
                     <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
