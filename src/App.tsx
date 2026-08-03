@@ -2557,7 +2557,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
 
               <button
                 onClick={onBook}
-                className="btn-outline-forest w-full py-5 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                className="btn-outline-forest w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
               >
                 <Calendar size={18} /> Reservar na Loja
               </button>
@@ -3354,7 +3354,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   className="relative overflow-hidden text-left group fade-up-2"
                   style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style={{ objectPosition: "50% 34%" }} />
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
                     <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
