@@ -1,20 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Nord (fonte da marca) ─────────────────────────────── */
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 300; font-display: swap;
+  src: url('./fonts/Nord-Light.woff2') format('woff2'), url('./fonts/Nord-Light.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('./fonts/Nord-Regular.woff2') format('woff2'), url('./fonts/Nord-Regular.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('./fonts/Nord-Medium.woff2') format('woff2'), url('./fonts/Nord-Medium.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('./fonts/Nord-Bold.woff2') format('woff2'), url('./fonts/Nord-Bold.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 900; font-display: swap;
+  src: url('./fonts/Nord-Black.woff2') format('woff2'), url('./fonts/Nord-Black.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url('./fonts/Nord-Italic.woff2') format('woff2'), url('./fonts/Nord-Italic.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: italic; font-weight: 700; font-display: swap;
+  src: url('./fonts/Nord-BoldItalic.woff2') format('woff2'), url('./fonts/Nord-BoldItalic.woff') format('woff'); }
+
 :root {
   --cream: #ffffff;
-  --cream-dark: #f8f9fa;
-  --forest: #000000;
-  --forest-light: #333333;
-  --gold: #0056b3;
-  --gold-light: #3385ff;
-  --slate: #0f172a;
-  --mist: #e2e8f0;
-  --text: #1e293b;
+  --cream-dark: #f6f6f4;
+  --forest: #111111;
+  --forest-light: #4a4a4a;
+  --gold: #6b6b6b;
+  --gold-light: #9a9a9a;
+  --slate: #111111;
+  --mist: #e4e4e2;
+  --text: #2a2a2a;
+  --wine: #7d2a34;
+  --wine-soft: #f6ecec;
 }
 
 * { box-sizing: border-box; }
-body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
-.font-display { font-family: 'Jost', sans-serif; letter-spacing: -0.02em; }
+body { font-family: 'Nord', 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; text-transform: uppercase; }
+/* A Nord só tem maiúsculas e não inclui letras acentuadas. Ao forçar
+   maiúsculas, as letras acentuadas (Ç, Ã, Õ, Á…) vêm da fonte de reserva
+   em CAIXA ALTA, com a mesma altura, em vez de minúsculas que destoavam. */
+/* O Tailwind faz reset de `button, select` para text-transform:none, o que
+   deixava o "ç" minúsculo nos botões (ex.: SERVIÇOS no menu) — reforçamos. */
+button { text-transform: uppercase; }
+input, textarea, select, .shopify-buy-frame, .shopify-buy-frame * { text-transform: none; }
+.font-display { font-family: 'Nord', 'Jost', sans-serif; letter-spacing: -0.01em; }
+.uc-label { text-transform: uppercase; letter-spacing: 0.14em; }
 .bg-cream { background-color: var(--cream); }
 .bg-forest { background-color: var(--forest); }
 .text-forest { color: var(--forest); }
@@ -26,38 +56,89 @@ body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--t
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes slideInRight { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes pulse-gold { 0%,100% { box-shadow: 0 0 0 0 rgba(0,86,179,0.4); } 50% { box-shadow: 0 0 0 12px rgba(0,86,179,0); } }
+@keyframes pulse-gold { 0%,100% { box-shadow: 0 0 0 0 rgba(17,17,17,0.35); } 50% { box-shadow: 0 0 0 12px rgba(17,17,17,0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.fade-up { animation: fadeUp 0.7s ease forwards; }
-.fade-up-1 { animation: fadeUp 0.7s 0.1s ease both; }
-.fade-up-2 { animation: fadeUp 0.7s 0.25s ease both; }
-.fade-up-3 { animation: fadeUp 0.7s 0.4s ease both; }
-.fade-up-4 { animation: fadeUp 0.7s 0.55s ease both; }
+/* Scroll-reveal: hidden until MainLayout's IntersectionObserver adds .in-view */
+.fade-up, .fade-up-1, .fade-up-2, .fade-up-3, .fade-up-4 { opacity: 0; transform: translateY(24px); }
+.fade-up.in-view { animation: fadeUp 0.7s ease forwards; }
+.fade-up-1.in-view { animation: fadeUp 0.7s 0.1s ease both; }
+.fade-up-2.in-view { animation: fadeUp 0.7s 0.25s ease both; }
+.fade-up-3.in-view { animation: fadeUp 0.7s 0.4s ease both; }
+.fade-up-4.in-view { animation: fadeUp 0.7s 0.55s ease both; }
 .slide-right { animation: slideInRight 0.5s ease forwards; }
+
+.page-transition { animation: fadeIn 0.35s ease; }
+
+.header-shell { transition: box-shadow 0.3s ease, padding 0.3s ease; }
+.header-scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+.testimonial-fade { transition: opacity 0.35s ease; }
+.testimonial-fade.testimonial-fading { opacity: 0; }
+
+.modal-backdrop { animation: fadeIn 0.25s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop { animation: none !important; }
+  .fade-up, .fade-up-1, .fade-up-2, .fade-up-3, .fade-up-4 {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+  .page-transition { animation: none !important; }
+  .testimonial-fade { transition: none !important; }
+}
 .animate-marquee { animation: marquee 28s linear infinite; }
 .animate-spin-slow { animation: spin 1s linear infinite; }
 .pulse-gold { animation: pulse-gold 2s infinite; }
 
-.hero-bg { background: linear-gradient(135deg, #000000 0%, #1a1a1a 40%, #002244 100%); }
+.hero-bg { background: linear-gradient(135deg, #000000 0%, #1a1a1a 45%, #2b2b2b 100%); }
 .gold-gradient { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); background-size: 200% 100%; }
-.card-hover { transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
-.card-hover:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0,0,0,0.08); }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold) !important; }
+.card-hover { transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.06); border-color: var(--forest) !important; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--forest) !important; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .drawer-open { transform: translateX(0) !important; }
 .img-zoom { overflow: hidden; }
 .img-zoom img { transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
-.img-zoom:hover img { transform: scale(1.08); }
-.btn-forest { background: var(--forest); color: white; border: 2px solid var(--forest); transition: all 0.3s; }
+.img-zoom:hover img { transform: scale(1.05); }
+
+/* Botões: cantos rectos, versaletes, mais rasto — no espírito das referências */
+.btn-forest, .btn-gold, .btn-outline-forest {
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.btn-forest { background: var(--forest); color: white; border: 1px solid var(--forest); transition: all 0.3s; }
 .btn-forest:hover { background: transparent; color: var(--forest); }
-.btn-gold { background: var(--gold); color: white; border: 2px solid var(--gold); transition: all 0.3s; }
-.btn-gold:hover { background: transparent; color: var(--gold); }
-.btn-outline-forest { background: transparent; color: var(--forest); border: 2px solid var(--forest); transition: all 0.3s; }
+.btn-gold { background: var(--forest); color: white; border: 1px solid var(--forest); transition: all 0.3s; }
+.btn-gold:hover { background: transparent; color: var(--forest); }
+.btn-outline-forest { background: transparent; color: var(--forest); border: 1px solid var(--forest); transition: all 0.3s; }
 .btn-outline-forest:hover { background: var(--forest); color: white; }
 
-.shopify-buy-frame, .shopify-buy-frame iframe {
+/* Botão rosa do carrossel da homepage (estilo Glasshop) */
+.btn-rose { background: #d29aa0; color: #ffffff; border: 1px solid #d29aa0; transition: all 0.3s; letter-spacing: 0.08em; }
+.btn-rose:hover { background: var(--wine); border-color: var(--wine); color: #ffffff; }
+
+/* Cartões, painéis e modais: cantos rectos em vez de arredondados */
+.rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-t-3xl, .rounded-t-xl, .rounded-t-2xl {
+  border-radius: 0 !important;
+}
+
+/* Só o BOTÃO de produto ocupa 100% da largura. Antes esta regra apanhava
+   TODOS os .shopify-buy-frame — incluindo o carrinho —, forçando o
+   carrinho (que é uma gaveta lateral de largura fixa) a width:100% e
+   display:block, o que o partia (nada aparecia ao clicar no ícone). */
+.shopify-product-embed .shopify-buy-frame,
+.shopify-product-embed .shopify-buy-frame iframe {
   width: 100% !important;
   max-width: 100% !important;
   display: block !important;
+}
+
+/* Esconde o botão flutuante do carrinho da Shopify — o carrinho é aberto
+   pelo ícone do carrinho no cabeçalho. */
+.shopify-buy-frame--toggle,
+#optica13-cart-node .shopify-buy-frame--toggle {
+  display: none !important;
 }

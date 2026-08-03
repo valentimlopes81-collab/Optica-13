@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useState, useEffect, useRef, useMemo } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Analytics } from '@vercel/analytics/react';
 import './global.css';
 import {
@@ -10,6 +10,7 @@ import {
   Mail,
   MapPin,
   ChevronRight,
+  ChevronLeft,
   Calendar,
   Award,
   Clock,
@@ -29,6 +30,7 @@ import {
   Heart,
   ZoomIn,
   Shield,
+  Instagram,
 } from "lucide-react";
 
 /* ── HELPERS ────────────────────────────────────────────────── */
@@ -55,113 +57,295 @@ function Img({ src, alt, className, style, priority = false }) {
     />
   );
 }
+
+/* Anima um número a contar a partir de 0 quando entra no viewport */
+function CountUp({ end, duration = 1500, className, style }) {
+  const ref = useRef(null);
+  const [value, setValue] = useState(0);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setValue(end);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !started.current) {
+            started.current = true;
+            const start = performance.now();
+            const tick = (now) => {
+              const progress = Math.min((now - start) / duration, 1);
+              setValue(Math.floor(progress * end));
+              if (progress < 1) requestAnimationFrame(tick);
+              else setValue(end);
+            };
+            requestAnimationFrame(tick);
+            io.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [end, duration]);
+
+  return (
+    <span ref={ref} className={className} style={style}>
+      {value}
+    </span>
+  );
+}
 /* ── SHOPIFY INTEGRATION ────────────────────────────────────── */
+
+/* ── SHOPIFY (carrinho único partilhado, aberto pelo ícone do header) ──
+   Uma só instância do SDK/cliente para todos os produtos, para que o
+   "Adicionar ao Carrinho" acumule tudo NUM carrinho, que depois é aberto
+   pelo ícone do carrinho no header (openShopifyCart). */
+const SHOPIFY_DOMAIN = 'dqih6f-80.myshopify.com';
+const SHOPIFY_TOKEN = 'a9c7a2f027b84643f7ede12707d4e285';
+let _shopifyReady = null;
+let _shopifyUI = null;
+let _shopifyCart = null;
+
+function ensureShopify() {
+  if (_shopifyReady) return _shopifyReady;
+  _shopifyReady = new Promise((resolve) => {
+    const build = () => {
+      const client = window.ShopifyBuy.buildClient({
+        domain: SHOPIFY_DOMAIN,
+        storefrontAccessToken: SHOPIFY_TOKEN,
+      });
+      window.ShopifyBuy.UI.onReady(client).then((ui) => {
+        _shopifyUI = ui;
+        let cartNode = document.getElementById('optica13-cart-node');
+        if (!cartNode) {
+          cartNode = document.createElement('div');
+          cartNode.id = 'optica13-cart-node';
+          document.body.appendChild(cartNode);
+        }
+        // Cria um carrinho persistente. O botão flutuante (toggle) é
+        // escondido por CSS; o carrinho é aberto pelo ícone do header.
+        const created = ui.createComponent('cart', {
+          node: cartNode,
+          options: {
+            cart: {
+              startImmediately: false,
+              text: { title: 'O seu carrinho', empty: 'O carrinho está vazio.', button: 'Finalizar Compra', total: 'Total' },
+              styles: { button: { 'background-color': '#111111', 'border-radius': '0', ':hover': { 'background-color': '#333333' } } },
+            },
+            toggle: { styles: { toggle: { display: 'none' } } },
+          },
+        });
+        Promise.resolve(created).then((cart) => {
+          _shopifyCart = cart || (ui.components && ui.components.cart && ui.components.cart[0]);
+          resolve(ui);
+        });
+      });
+    };
+    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+      build();
+    } else {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      script.onload = build;
+      document.head.appendChild(script);
+    }
+  });
+  return _shopifyReady;
+}
+
+function openShopifyCart() {
+  ensureShopify().then((ui) => {
+    const cart = _shopifyCart || (ui && ui.components && ui.components.cart && ui.components.cart[0]);
+    if (cart && typeof cart.open === 'function') cart.open();
+  });
+}
 
 function ShopifyBuyButton({ productId }) {
   const buttonRef = useRef(null);
 
   useEffect(() => {
-    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
-      initShopify();
-    } else {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-      document.head.appendChild(script);
-      script.onload = initShopify;
-    }
-
-    function initShopify() {
-      if (buttonRef.current) {
-         buttonRef.current.innerHTML = '';
-      }
-
-      // CRIAMOS O CLIENTE AQUI DENTRO (Resolve o erro do Console!)
-      const client = window.ShopifyBuy.buildClient({
-        domain: 'dqih6f-80.myshopify.com',
-        storefrontAccessToken: 'a9c7a2f027b84643f7ede12707d4e285'
-      });
-
-      window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-        ui.createComponent('product', {
-          id: productId,
-          node: buttonRef.current,
-          moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
-          options: {
-            product: {
-              buttonDestination: 'checkout',
-              contents: {
-                img: false,
-                title: false,
-                price: false,
-                options: true,
-                quantity: false,
-                button: true
+    let cancelled = false;
+    ensureShopify().then((ui) => {
+      if (cancelled || !buttonRef.current) return;
+      buttonRef.current.innerHTML = '';
+      ui.createComponent('product', {
+        id: productId,
+        node: buttonRef.current,
+        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
+        options: {
+          product: {
+            // Adiciona ao carrinho (em vez de ir direto ao checkout);
+            // o checkout faz-se depois pelo ícone do carrinho no header.
+            buttonDestination: 'cart',
+            contents: { img: false, title: false, price: false, options: true, quantity: false, button: true },
+            text: { button: 'Adicionar ao Carrinho' },
+            styles: {
+              product: {
+                '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0', 'margin-bottom': '0' },
+                'width': '100%', 'max-width': '100%',
               },
-             text: {
-                button: 'Adicionar ao Carrinho',
+              button: {
+                'background-color': '#111111',
+                'color': '#ffffff',
+                'border-radius': '0',
+                'font-family': 'Jost, sans-serif',
+                'font-weight': '600',
+                'font-size': '15px',
+                'line-height': '22px',
+                'padding': '24px 28px',
+                'width': '100%',
+                'max-width': '100%',
+                'letter-spacing': '0.025em',
+                'text-transform': 'uppercase',
+                ':hover': { 'background-color': '#333333' },
               },
-              styles: {
-                product: {
-                  '@media (min-width: 601px)': {
-                    'max-width': '100%',
-                    'margin-left': '0',
-                    'margin-bottom': '0'
-                  },
-                  'width': '100%',
-                  'max-width': '100%'
-                },
-                button: {
-                  'background-color': '#0056b3',
-                  'color': '#ffffff',
-                  'border-radius': '12px',
-                  'font-family': 'Jost, sans-serif',
-                  'font-weight': '600',
-                  'font-size': '14px',
-                  'padding': '16px 24px',
-                  'width': '100%',
-                  'max-width': '100%',
-                  'letter-spacing': '0.025em',
-                  ':hover': {
-                    'background-color': '#004494'
-                  }
-                }
-              }
             },
-            cart: {
-              text: {
-                title: 'O seu carrinho',
-                empty: 'O carrinho está vazio.',
-                button: 'Finalizar Compra',
-                total: 'Total'
-              },
-              styles: {
-                button: {
-                  'background-color': '#000000',
-                  'border-radius': '12px',
-                  'font-family': 'Jost, sans-serif',
-                  'font-weight': '600'
-                }
-              }
-            },
-            toggle: {
-              styles: {
-                toggle: {
-                  'background-color': '#000000',
-                  ':hover': {
-                    'background-color': '#333333'
-                  }
-                }
-              }
-            }
-          }
-        });
+          },
+        },
       });
-    }
+    });
+    return () => { cancelled = true; };
   }, [productId]);
 
-  return <div ref={buttonRef} className="w-full"></div>;
+  return <div ref={buttonRef} className="w-full shopify-product-embed"></div>;
 }
+
+/* ── FAVORITOS (guardados no navegador via localStorage) ───────── */
+const FAV_KEY = "optica13_favoritos";
+function loadFavorites() {
+  try {
+    const raw = localStorage.getItem(FAV_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+function findProductById(id) {
+  return QUIZ_PRODUCTS.find((p) => p.id === id) || null;
+}
+
+/* ── DRAWER DE FAVORITOS ──────────────────────────────────────── */
+function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavorite }) {
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+
+  const items = favorites.map(findProductById).filter(Boolean);
+
+  const sendByEmail = async () => {
+    if (!email || items.length === 0) return;
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: "service_jd2hmsh",
+          template_id: "template_5wkk8d9",
+          user_id: "r1iXXbQSD6eraiqvx",
+          template_params: {
+            name: email,
+            email: email,
+            service: `Os meus Favoritos — Óptica 13: ${items.map((p) => `${p.name} (€${p.price})`).join(", ")}`,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(`EmailJS ${res.status}`);
+      setSent(true);
+    } catch (e) {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <div
+        className="modal-backdrop fixed inset-0 z-[120]"
+        style={{ background: "rgba(10,12,14,0.5)", backdropFilter: "blur(4px)" }}
+        onClick={onClose}
+      />
+      <div
+        className="fixed top-0 right-0 h-full w-full sm:w-[420px] z-[130] bg-white flex flex-col slide-right"
+        style={{ boxShadow: "-10px 0 40px rgba(0,0,0,0.12)" }}
+      >
+        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: "var(--mist)" }}>
+          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>Favoritos ({items.length})</p>
+          <button onClick={onClose} className="p-2 hover:opacity-60" aria-label="Fechar"><X size={18} /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {items.length === 0 ? (
+            <div className="p-10 text-center text-sm leading-relaxed" style={{ color: "var(--forest-light)" }}>
+              Ainda não guardou favoritos.<br />Toque no coração de um modelo para o guardar aqui.
+            </div>
+          ) : (
+            <ul>
+              {items.map((p) => (
+                <li key={p.id} className="flex items-center gap-4 px-6 py-4 border-b" style={{ borderColor: "var(--mist)" }}>
+                  <div className="w-16 h-16 flex-shrink-0 overflow-hidden" style={{ background: "#f2f1ee" }}>
+                    <Img src={p.image} alt={p.name} className={`w-full h-full object-cover ${p.originalPrice ? "" : "mix-blend-multiply"}`} />
+                  </div>
+                  <button onClick={() => { onOpenProduct(p); onClose(); }} className="flex-1 text-left">
+                    <p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>{p.brand}</p>
+                    <p className="font-semibold text-sm" style={{ color: "var(--forest)" }}>{p.name}</p>
+                    <p className="text-sm" style={{ color: "var(--forest)" }}>€{p.price}</p>
+                  </button>
+                  <button onClick={() => onToggleFavorite(p.id)} aria-label="Remover dos favoritos" className="p-2 hover:opacity-60">
+                    <Heart size={18} fill="var(--wine)" style={{ color: "var(--wine)" }} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {items.length > 0 && (
+          <div className="px-6 py-5 border-t" style={{ borderColor: "var(--mist)" }}>
+            {sent ? (
+              <p className="text-sm text-center" style={{ color: "var(--forest)" }}>Enviámos os seus favoritos para {email}.</p>
+            ) : (
+              <>
+                <p className="text-xs mb-2" style={{ color: "var(--forest-light)" }}>Receber os meus favoritos por email:</p>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="O seu email"
+                    className="flex-1 px-3 py-2.5 border text-sm outline-none"
+                    style={{ borderColor: "var(--mist)" }}
+                  />
+                  <button
+                    onClick={sendByEmail}
+                    disabled={sending || !email}
+                    className="btn-forest px-4 py-2.5 text-xs font-semibold uppercase tracking-widest disabled:opacity-50"
+                  >
+                    {sending ? "..." : "Enviar"}
+                  </button>
+                </div>
+                {error && <p className="text-xs mt-2" style={{ color: "var(--wine)" }}>Não foi possível enviar. Tente novamente.</p>}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 /* ── DATA ───────────────────────────────────────────────────── */
 const PRODUCTS = {
   men: [
@@ -901,29 +1085,6 @@ const PRODUCTS = {
       ],
 },
     {
-      id: 31, // Confirma se é o 33 na tua lista
-      gender: "", 
-      shopifyId: "15751454851446", // Atualizar depois
-      name: "Gold Empire Sun",
-      rating: 4.9,
-      reviews: 195,
-      badge: "Luxo",
-      brand: "MindTheLook by Vera Velosa",
-      price: 139, 
-      material: "Acetato Bold e Metal Dourado",
-      color: "Preto / Dourado",
-      style: "Glamour / Oversize",
-      shape: "Quadrado Oversize",
-      faceShape: ["round", "oval"],
-      budget: "mid",
-      description: "Uma afirmação de luxo absoluto. Os óculos de sol Gold Empire Sun apresentam uma imponente frente oversize em preto brilhante, contrastando com hastes largas em metal dourado polido. Rematados com o icónico 'V' nas ponteiras, são perfeitos para afinar rostos redondos ou ovais e elevar qualquer look a um patamar de alta sofisticação.",
-      image: "https://i.postimg.cc/vB21TYRw/12.png", // Substituir pelos teus links reais
-      gallery: [
-        "https://i.postimg.cc/wv4tMqKd/12-1.png",
-        "https://i.postimg.cc/nzSsrF88/12-2.png"
-      ],
-},
-    {
       id: 32, // Confirma se é o 34 na tua lista
       gender: "", 
       shopifyId: "15751458914678", // Atualizar depois com o ID do Shopify
@@ -1116,6 +1277,565 @@ const PRODUCTS = {
     
   ],
 };
+
+/* ── OUTLET ─────────────────────────────────────────────────────
+   Coleção Outlet: cada óculo pode ter "originalPrice" (preço antes do
+   desconto) além de "price" (preço final, já com desconto). Quando
+   originalPrice existir e for maior que price, o cartão e o modal
+   mostram o preço antigo riscado + o preço com desconto + a etiqueta
+   de poupança.
+   "shopifyId" e "image"/"gallery" ainda têm marcadores SUBSTITUIR_* —
+   atualizar assim que os produtos forem criados no Shopify. */
+PRODUCTS.outlet = [
+  {
+    id: 40,
+    name: "Polaroid Classic Aviator",
+    shopifyId: "15802921189750",
+    badge: "Outlet",
+    brand: "Polaroid",
+    price: 29,
+    originalPrice: 97,
+    material: "Metal",
+    color: "Dourado (Lentes verde-escuras)",
+    style: "Clássico / Intemporal",
+    shape: "Aviador",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Um verdadeiro ícone que nunca sai de moda. Esta armação estilo aviador em metal dourado combina leveza e durabilidade, garantindo um visual polido e versátil. Perfeitos para qualquer ocasião, elevam instantaneamente desde um look mais casual até um visual sofisticado.",
+    image: "https://i.postimg.cc/TPbNczhW/1.png",
+    gallery: [
+      "https://i.postimg.cc/0NSXCTrw/1-1.png",
+      "https://i.postimg.cc/zfh2ks3H/1-2.png"
+    ],
+  },
+  {
+    id: 41,
+    name: "Oakley Urban Mirror",
+    shopifyId: "15803057799542",
+    badge: "Outlet",
+    brand: "Oakley",
+    price: 49,
+    originalPrice: 140,
+    material: "Injetado/Plástico",
+    color: "Cinza Translúcido (Lentes espelhadas amarelas/douradas)",
+    style: "Desportivo / Urbano",
+    shape: "Retangular Suave",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "A fusão perfeita entre a performance desportiva e a estética urbana de streetwear. Com uma armação leve em cinza translúcido e lentes espelhadas vibrantes, estes óculos garantem um visual arrojado e moderno. Ideais para quem procura um conforto extremo sem abdicar de um estilo de alto impacto.",
+    image: "https://i.postimg.cc/j5rg3MJ1/2.png",
+    gallery: ["https://i.postimg.cc/mr9pSvhz/2-1.png", "https://i.postimg.cc/bvnVR7dV/2-2.png"],
+  },
+  {
+    id: 42,
+    name: "INVU Geometric Blue",
+    shopifyId: "15803058159990",
+    badge: "Outlet",
+    brand: "INVU",
+    price: 29,
+    originalPrice: 72,
+    material: "Metal",
+    color: "Prateado (Lentes azuis lisas)",
+    style: "Moderno / Ousado",
+    shape: "Aviador Geométrico",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Uma reinvenção moderna do clássico modelo aviador, destacando-se pelas suas linhas mais retas e angulares. A estrutura fina em metal prateado contrasta na perfeição com o tom vibrante das lentes azuis. Uma peça extremamente leve e cheia de personalidade para quem gosta de marcar a diferença nos dias de sol.",
+    image: "https://i.postimg.cc/XJ0H1sym/3.png",
+    gallery: ["https://i.postimg.cc/wBN4kC7K/3-1.png"],
+  },
+  {
+    id: 43,
+    name: "Nike EVO Aviator",
+    shopifyId: "15803059274102",
+    badge: "Outlet",
+    brand: "Nike",
+    price: 39,
+    originalPrice: 129,
+    material: "Metal e Injetado",
+    color: "Gunmetal (Cinza Escuro) com detalhes Bege",
+    style: "Desportivo / Urbano",
+    shape: "Aviador Desportivo",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "O modelo Nike EVO funde a performance desportiva com o estilo do dia a dia. A sua armação leve em metal com formato aviador destaca-se pela barra superior contrastante e hastes ergonómicas, garantindo um ajuste seguro e confortável. É o acessório perfeito para quem tem um estilo de vida ativo mas não abdica de um visual urbano e moderno.",
+    image: "https://i.postimg.cc/hjbCkVLP/4.png",
+    gallery: ["https://i.postimg.cc/ZRh7swdC/4-1.png", "https://i.postimg.cc/ydXfM0m6/4-2.png"],
+  },
+  {
+    id: 44,
+    name: "Gant Classic Navigator",
+    shopifyId: "15803059700086",
+    badge: "Outlet",
+    brand: "Gant",
+    price: 43,
+    originalPrice: 153,
+    material: "Metal",
+    color: "Dourado com acabamentos Bege/Azul escuro",
+    style: "Casual Chic / Vintage",
+    shape: "Navegador (Aviador Quadrado)",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "A sofisticação intemporal da Gant encontra o design vintage neste modelo estilo navegador. A elegante armação em metal dourado é realçada por uma barra superior marcante e lentes escuras, conferindo um ar refinado e estruturado ao rosto. Uma peça versátil e cheia de classe que complementa perfeitamente qualquer guarda-roupa, do casual ao formal.",
+    image: "https://i.postimg.cc/fLjHGYcX/5.png",
+    gallery: ["https://i.postimg.cc/V6B7xXqd/5-1.png", "https://i.postimg.cc/V6B7xXqr/5-2.png"],
+  },
+  {
+    id: 46,
+    name: "Cierzo Classic Square",
+    shopifyId: "15803061961078",
+    badge: "Outlet",
+    brand: "Cierzo",
+    price: 29,
+    originalPrice: 99,
+    material: "Injetado/Acetato",
+    color: "Preto Brilhante (Lentes escuras)",
+    style: "Clássico / Casual",
+    shape: "Retangular Suave / Estilo Wayfarer",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Um modelo essencial para o uso diário, combinando a versatilidade intemporal do preto brilhante com um formato retangular suave que favorece e equilibra a maioria dos rostos. Leves, ergonómicos e discretos, são a escolha perfeita para quem procura um estilo clássico e prático sem abdicar do conforto.",
+    image: "https://i.postimg.cc/xj5xgyjR/7.png",
+    gallery: ["https://i.postimg.cc/wMqWg32n/7-1.png", "https://i.postimg.cc/sxjns1Kd/7-2.png"],
+  },
+  {
+    id: 47,
+    name: "ONE Retro Double Bridge",
+    shopifyId: "15803062878582",
+    badge: "Outlet",
+    brand: "ONE",
+    price: 19,
+    originalPrice: 69,
+    material: "Metal",
+    color: "Prateado e Preto (Lentes cinza-escuro)",
+    style: "Retro / Alternativo",
+    shape: "Redondo com Ponte Dupla",
+    faceShape: ["square", "oval"],
+    budget: "mid",
+    description: "Inspirados na forte tendência retro, estes óculos redondos destacam-se pela sua ousada ponte dupla em metal. A estrutura fina que mistura os tons prateado e preto cria um visual alternativo e cheio de personalidade. Ideais para quem quer marcar a diferença com um acessório leve e de forte atitude urbana.",
+    image: "https://i.postimg.cc/jqcgvQqG/8.png",
+    gallery: ["https://i.postimg.cc/h4syMb42/8-1.png", "https://i.postimg.cc/tRkSDtRw/8-2.png"],
+  },
+  {
+    id: 48,
+    name: "Carrera Pantos Elegance",
+    shopifyId: "15803063501174",
+    badge: "Outlet",
+    brand: "Carrera",
+    price: 39,
+    originalPrice: 140,
+    material: "Metal e Injetado",
+    color: "Preto Matte e Dourado (Lentes azul degradé)",
+    style: "Sofisticado / Moderno",
+    shape: "Redondo (Pantos) com Ponte Dupla",
+    faceShape: ["square", "oval"],
+    budget: "mid",
+    description: "O modelo Carrera redefine a elegância contemporânea com este formato redondo e uma sofisticada ponte dupla em metal. A combinação premium da frente em preto matte com as hastes em tons dourado e bege, finalizada por lentes em azul degradé, confere um look luxuoso e inconfundível. Perfeitos para quem valoriza um design requintado com um toque marcadamente moderno.",
+    image: "https://i.postimg.cc/HsPS1YyB/9.png",
+    gallery: ["https://i.postimg.cc/8PCyYJjL/9-1.png", "https://i.postimg.cc/qMZmHJ3w/9-2.png"],
+  },
+  {
+    id: 49,
+    name: "Polaroid Gold Navigator",
+    shopifyId: "15803064680822",
+    badge: "Outlet",
+    brand: "Polaroid",
+    price: 29,
+    originalPrice: 97,
+    material: "Metal",
+    color: "Dourado com ponteiras em Preto (Lentes castanhas)",
+    style: "Clássico / Elegante",
+    shape: "Navegador / Aviador",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Este modelo clássico de formato navegador combina uma elegante estrutura fina em metal dourado com ponteiras contrastantes em preto para máximo conforto. As lentes em tom castanho suave oferecem um look polido e intemporal, sendo o acessório perfeito e versátil para elevar qualquer visual do dia a dia.",
+    image: "https://i.postimg.cc/sgQTVkYN/10.png",
+    gallery: [
+      "https://i.postimg.cc/YqyXBrWd/10-1.png",
+      "https://i.postimg.cc/X7D26jCR/10-2.png"
+    ],
+  },
+  {
+    id: 50,
+    name: "Hally & Son Artisan Round",
+    shopifyId: "15803065467254",
+    badge: "Outlet",
+    brand: "Hally & Son",
+    price: 49,
+    originalPrice: 149,
+    material: "Metal trabalhado",
+    color: "Dourado Envelhecido / Bronze (Lentes verde-suave)",
+    style: "Vintage / Artesanal",
+    shape: "Redondo com Ponte Dupla",
+    faceShape: ["square", "oval"],
+    budget: "mid",
+    description: "Uma verdadeira obra de arte com estética vintage. Este modelo redondo de ponte dupla destaca-se pelos seus detalhes minuciosamente gravados no metal e pelas icónicas ponteiras circulares, uma assinatura da marca. Perfeitos para os amantes de design premium que procuram uma peça de luxo com pormenores únicos e refinados.",
+    image: "https://i.postimg.cc/DwJx29QF/11.png",
+    gallery: [
+      "https://i.postimg.cc/htz2SkLw/11-1.png",
+      "https://i.postimg.cc/6p2M9kVx/11-2.png"
+    ],
+  },
+  {
+    id: 51,
+    name: "Carrera Matte Navy Pantos",
+    shopifyId: "15803065893238",
+    badge: "Outlet",
+    brand: "Carrera",
+    price: 33,
+    originalPrice: 109,
+    material: "Injetado e Metal",
+    color: "Azul Marinho Matte (Lentes azul degradé)",
+    style: "Desportivo Chic / Moderno",
+    shape: "Redondo (Pantos) com Ponte Dupla",
+    faceShape: ["square", "oval"],
+    budget: "mid",
+    description: "O equilíbrio ideal entre o estilo desportivo e a elegância urbana. Este modelo destaca-se pela sua armação contemporânea em azul marinho com acabamento matte, perfeitamente contrastada por uma moderna ponte dupla metálica. As lentes em azul degradé completam este design arrojado, garantindo um look marcante e cheio de atitude.",
+    image: "https://i.postimg.cc/8z2tsZwF/12.png",
+    gallery: [
+      "https://i.postimg.cc/L8YxHckn/12-1.png",
+      "https://i.postimg.cc/Dw9Bmx50/12-2.png"
+    ],
+  },
+  {
+    id: 52,
+    name: "INVU Matte Ocean Square",
+    shopifyId: "15803066286454",
+    badge: "Outlet",
+    brand: "INVU",
+    price: 19,
+    originalPrice: 59,
+    material: "Injetado",
+    color: "Azul Matte (Lentes cinza/azuladas)",
+    style: "Casual / Desportivo",
+    shape: "Retangular Suave / Estilo Wayfarer",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Um clássico descontraído e reinventado para o dia a dia. Com uma armação leve em acabamento azul matte, este modelo garante um visual moderno e fácil de combinar. O seu design ergonómico proporciona um ajuste confortável, sendo a escolha ideal para quem procura praticidade com um toque subtil de cor.",
+    image: "https://i.postimg.cc/bv1Ln1FH/13.png",
+    gallery: ["https://i.postimg.cc/SxBDjgV7/13-1.png", "https://i.postimg.cc/sgkw1TK4/13-2.png"],
+  },
+  {
+    id: 53,
+    name: "Carrera Havana Retro Pantos",
+    shopifyId: "15803066581366",
+    badge: "Outlet",
+    brand: "Carrera",
+    price: 39,
+    originalPrice: 139,
+    material: "Acetato e Metal",
+    color: "Tartaruga (Havana) com Barra Superior Preta (Lentes escuras)",
+    style: "Retro / Sofisticado",
+    shape: "Redondo (Pantos) com Ponte Dupla",
+    faceShape: ["square", "oval"],
+    budget: "mid",
+    description: "A fusão perfeita entre a estética vintage e o design contemporâneo. Este modelo redondo destaca-se pelo seu padrão tartaruga clássico, contrastado por uma arrojada barra superior reta que confere forte personalidade ao rosto. Uma peça de luxo cheia de atitude, desenhada para elevar qualquer look urbano e sofisticado.",
+    image: "https://i.postimg.cc/26mG73Pt/14.png",
+    gallery: ["https://i.postimg.cc/R0wGtwbD/14-1.png", "https://i.postimg.cc/wBDFNDbr/14-2.png"],
+  },
+  {
+    id: 54,
+    name: "INVU Scarlet Cat-Eye",
+    shopifyId: "15803067105654",
+    badge: "Outlet",
+    brand: "INVU",
+    price: 19,
+    originalPrice: 57,
+    material: "Injetado",
+    color: "Vermelho Brilhante (Lentes escuras)",
+    style: "Arrojado / Feminino",
+    shape: "Cat-Eye (Olho de Gato)",
+    faceShape: ["round", "oval", "heart"],
+    budget: "mid",
+    description: "Para quem não tem medo de assumir o protagonismo, este modelo cat-eye em vermelho vibrante é a derradeira declaração de estilo. A sua silhueta feminina, espessa e arrojada, tem o poder de elevar qualquer visual básico a um nível de puro glamour. Uma peça statement irresistível que combina atitude inconfundível com a máxima proteção.",
+    image: "https://i.postimg.cc/wvVVfgz1/15.png",
+    gallery: ["https://i.postimg.cc/26mG73PM/15-1.png", "https://i.postimg.cc/NMYDkL3Q/15-2.png"],
+  },
+  {
+    id: 55,
+    name: "Hally & Son The Janis",
+    shopifyId: "15803067597174",
+    badge: "Outlet",
+    brand: "Hally & Son",
+    price: 59,
+    originalPrice: 149,
+    material: "Acetato",
+    color: "Preto Brilhante (Lentes rosa translúcido)",
+    style: "Retro / Extravagante",
+    shape: "Redondo Ondulado (Formato Flor)",
+    faceShape: ["square", "oval"],
+    budget: "mid",
+    description: "Uma peça de puro statement que capta a essência irreverente dos anos 60. Com uma armação preta de design ondulado único e lentes rosa translúcidas, o modelo \"The Janis\" não passa despercebido. É perfeito para festivais, looks criativos ou para quem adora expressar a sua individualidade através de um acessório extravagante e icónico.",
+    image: "https://i.postimg.cc/1tHHCsSC/16.png",
+    gallery: ["https://i.postimg.cc/wvVVfgzN/16-1.png", "https://i.postimg.cc/bJTTCpP0/16-2.png"],
+  },
+  {
+    id: 56,
+    name: "INVU Bold Cat-Eye",
+    shopifyId: "15803068481910",
+    badge: "Outlet",
+    brand: "INVU",
+    price: 19,
+    originalPrice: 59,
+    material: "Injetado",
+    color: "Preto Brilhante (Lentes cinza-escuro)",
+    style: "Feminino / Elegante",
+    shape: "Cat-Eye (Olho de Gato) Grosso",
+    faceShape: ["round", "oval", "heart"],
+    budget: "mid",
+    description: "A quintessência do charme feminino num formato inconfundível. Esta armação cat-eye robusta em preto brilhante oferece um look misterioso e sofisticado, ideal para estruturar o rosto e proporcionar um efeito lifting ao olhar. Um verdadeiro clássico de elegância, extremamente versátil e essencial em qualquer coleção.",
+    image: "https://i.postimg.cc/qqvGWSMd/17.png",
+    gallery: ["https://i.postimg.cc/PJ5M09fM/17-1.png", "https://i.postimg.cc/Zn5LX2Yg/17-2.png"],
+  },
+  {
+    id: 57,
+    name: "Victoria Beckham Havana Butterfly",
+    shopifyId: "15803069006198",
+    badge: "Outlet",
+    brand: "Victoria Beckham",
+    price: 83,
+    originalPrice: 279,
+    material: "Acetato Premium",
+    color: "Tartaruga / Havana (Lentes castanho degradé)",
+    style: "Luxo / Sofisticado",
+    shape: "Borboleta / Cat-Eye Suave",
+    faceShape: ["round", "oval", "heart"],
+    budget: "high",
+    description: "A definição de luxo contemporâneo com a assinatura inconfundível de Victoria Beckham. Este modelo em formato borboleta destaca-se pelo seu acetato maciço em padrão tartaruga rico e acabamentos de altíssima qualidade. Uma silhueta elegante e poderosa que adiciona um toque imediato de glamour e sofisticação a qualquer look.",
+    image: "https://i.postimg.cc/d3N9F6LM/18.png",
+    gallery: ["https://i.postimg.cc/nrh1Ngcn/18-1.png", "https://i.postimg.cc/d3V9gpts/18-2.png"],
+  },
+  {
+    id: 58,
+    name: "Victoria Beckham Tortoise Butterfly",
+    shopifyId: "15803069432182",
+    badge: "Outlet",
+    brand: "Victoria Beckham",
+    price: 83,
+    originalPrice: 269,
+    material: "Acetato",
+    color: "Tartaruga (Havana) com detalhes Dourados (Lentes cinza degradé)",
+    style: "Luxo / Elegante",
+    shape: "Borboleta / Cat-Eye",
+    faceShape: ["round", "oval", "heart"],
+    budget: "high",
+    description: "A essência do luxo e sofisticação. Este modelo Victoria Beckham em formato borboleta destaca-se pelo elegante acetato padrão tartaruga e requintados acabamentos texturizados em dourado nas charneiras. Uma peça de alta costura que confere um olhar poderoso, feminino e inegavelmente glamoroso.",
+    image: "https://i.postimg.cc/Y0Dx7Rhf/19.png",
+    gallery: ["https://i.postimg.cc/L5QVSDnt/19-1.png", "https://i.postimg.cc/rsZ9TjK5/19-2.png"],
+  },
+  {
+    id: 59,
+    name: "Victoria Beckham Soft Gradient Cat-Eye",
+    shopifyId: "15803069956470",
+    badge: "Outlet",
+    brand: "Victoria Beckham",
+    price: 73,
+    originalPrice: 245,
+    material: "Acetato",
+    color: "Cinza/Toupeira Translúcido e Raiado (Lentes cinza degradé)",
+    style: "Elegante / Contemporâneo",
+    shape: "Cat-Eye Suave / Borboleta",
+    faceShape: ["round", "oval", "heart"],
+    budget: "high",
+    description: "Um design refinado que combina formas femininas com um toque contemporâneo. A armação em acetato translúcido com subtis padrões raiados, complementada por detalhes luxuosos nas hastes, oferece uma elegância leve e moderna. É a peça premium ideal para iluminar e estruturar o rosto com máxima classe.",
+    image: "https://i.postimg.cc/VsKgXfDw/20.png",
+    gallery: ["https://i.postimg.cc/8cXbG4jd/20-1.png", "https://i.postimg.cc/L4xDj9Nd/20-2.png"],
+  },
+  {
+    id: 60,
+    name: "Ray-Ban Oval Classic",
+    shopifyId: "15803070808438",
+    badge: "Outlet",
+    brand: "Ray-Ban",
+    price: 89,
+    originalPrice: 199,
+    material: "Metal",
+    color: "Dourado (Lentes verde clássico G-15)",
+    style: "Vintage / Ícone",
+    shape: "Oval",
+    faceShape: ["round", "oval"],
+    budget: "high",
+    description: "O verdadeiro estilo retro encontra-se neste modelo oval da Ray-Ban. Com a sua armação fina em metal dourado e as icónicas lentes verdes, este é um clássico absoluto dos anos 70 que regressou para dominar o street style. Uma peça unissexo, extremamente leve e cheia de personalidade para quem respira cultura pop.",
+    image: "https://i.postimg.cc/HW6zbYBY/21.png",
+    gallery: ["https://i.postimg.cc/MZ9516dW/21-1.png"],
+  },
+  {
+    id: 61,
+    name: "INVU Oversized Glam",
+    shopifyId: "15803071562102",
+    badge: "Outlet",
+    brand: "INVU",
+    price: 23,
+    originalPrice: 79,
+    material: "Injetado",
+    color: "Preto Brilhante com detalhe Dourado (Lentes cinza degradé)",
+    style: "Glamour / Dia a Dia",
+    shape: "Quadrado Oversized / Borboleta",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Puro glamour num formato oversized. Esta armação preta brilhante de curvas femininas, acentuada por um subtil detalhe dourado na haste, garante uma presença marcante e sofisticada. Oferecendo a máxima cobertura e um estilo \"estrela de cinema\", é o acessório perfeito para elevar qualquer visual de forma acessível.",
+    image: "https://i.postimg.cc/Hsj22qhJ/22.png",
+    gallery: ["https://i.postimg.cc/2j0Gnk26/22-1.png", "https://i.postimg.cc/Gh9QQW5h/22-2.png"],
+  },
+  {
+    id: 62,
+    name: "Havaianas Bold Cat-Eye",
+    shopifyId: "15803072643446",
+    badge: "Outlet",
+    brand: "Havaianas",
+    price: 29,
+    originalPrice: 75,
+    material: "Injetado (com textura em relevo)",
+    color: "Preto (Lentes cinza degradé)",
+    style: "Descontraído / Tropical Chic",
+    shape: "Cat-Eye / Borboleta",
+    faceShape: ["round", "oval", "heart"],
+    budget: "mid",
+    description: "Este modelo cat-eye feminino da Havaianas traz a energia e a leveza do verão para qualquer estação. Com uma armação preta marcante e hastes texturizadas inspiradas no famoso padrão das solas da marca, oferece um look descontraído mas cheio de atitude. As lentes em degradé completam esta peça versátil e essencial para os dias de sol.",
+    image: "https://i.postimg.cc/sD1cckN4/23.png",
+    gallery: ["https://i.postimg.cc/xTqRRw4N/23-1.png", "https://i.postimg.cc/65T00kmG/23-2.png"],
+  },
+  {
+    id: 63,
+    name: "Polaroid Navy Butterfly",
+    shopifyId: "15803073298806",
+    badge: "Outlet",
+    brand: "Polaroid",
+    price: 39,
+    originalPrice: 97,
+    material: "Injetado e Metal",
+    color: "Azul Marinho (Lentes cinza-escuro)",
+    style: "Elegante / Dia a Dia",
+    shape: "Borboleta / Cat-Eye Suave",
+    faceShape: ["round", "oval", "heart"],
+    budget: "mid",
+    description: "A elegância encontra a funcionalidade absoluta neste modelo Polaroid num sofisticado tom azul marinho. A sua silhueta feminina em formato borboleta é complementada por hastes finas em metal, garantindo um visual requintado e extremamente leve. Uma escolha perfeita para o uso diário, oferecendo proteção e um design que combina com qualquer look.",
+    image: "https://i.postimg.cc/fTFvg8GC/24-1.png",
+    gallery: ["https://i.postimg.cc/gk5KBgC1/24-2.png"],
+  },
+  {
+    id: 64,
+    name: "Polaroid Berry Glam",
+    shopifyId: "15803074937206",
+    badge: "Outlet",
+    brand: "Polaroid",
+    price: 31,
+    originalPrice: 79,
+    material: "Injetado",
+    color: "Magenta / Berry (Lentes cinza-escuro)",
+    style: "Vibrante / Moderno",
+    shape: "Quadrado Suave / Cat-Eye",
+    faceShape: ["round", "oval", "heart"],
+    budget: "mid",
+    description: "Dê um toque de cor e ousadia ao seu visual com este modelo vibrante em tom magenta/berry. Com um formato quadrado de linhas ascendentes que alongam o olhar e elegantes detalhes dourados nos cantos, esta armação alia feminilidade a uma estética moderna. Um acessório cheio de personalidade que destaca o rosto e garante o conforto visual característico da Polaroid.",
+    image: "https://i.postimg.cc/Z5dLkrm1/25.png",
+    gallery: ["https://i.postimg.cc/ZKgLDfkt/25-1.png", "https://i.postimg.cc/5NGmkPc1/25-2.png"],
+  },
+  {
+    id: 65,
+    name: "Polaroid Chunky Cream",
+    shopifyId: "15803077067126",
+    badge: "Outlet",
+    brand: "Polaroid",
+    price: 39,
+    originalPrice: 109,
+    material: "Injetado/Acetato",
+    color: "Creme / Bege com detalhes Dourados (Lentes castanhas)",
+    style: "Fashion / Audaz",
+    shape: "Quadrado Oversized / Chunky",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Uma verdadeira afirmação de estilo. Este modelo Polaroid destaca-se pela sua armação chunky (grossa) num elegante tom creme, perfeitamente realçada por luxuosos detalhes dourados nas charneiras. Com o seu formato quadrado oversized, é a peça ideal para quem procura um look fashionista, moderno e cheio de atitude.",
+    image: "https://i.postimg.cc/dVy9M8vL/27.png",
+    gallery: ["https://i.postimg.cc/dVy9M8vK/27-1.png", "https://i.postimg.cc/qv3Gf80v/27-2.png"],
+  },
+  {
+    id: 66,
+    name: "Ana Hickmann Blush Butterfly",
+    shopifyId: "15803078771062",
+    badge: "Outlet",
+    brand: "Ana Hickmann",
+    price: 59,
+    originalPrice: 137,
+    material: "Acetato Translúcido",
+    color: "Rosa Blush / Nude (Lentes castanhas degradé)",
+    style: "Elegante / Feminino",
+    shape: "Quadrado Suave / Borboleta",
+    faceShape: ["round", "oval", "heart"],
+    budget: "mid",
+    description: "A personificação da elegância feminina num design contemporâneo. Com uma belíssima armação em acetato translúcido cor-de-rosa blush e hastes elegantemente trabalhadas, este modelo ilumina o rosto e confere um toque de romance moderno. O formato borboleta suave garante um ajuste lisonjeiro, tornando-o num acessório de luxo perfeito para qualquer ocasião.",
+    image: "https://i.postimg.cc/2SZxp4mW/28.png",
+    gallery: ["https://i.postimg.cc/JzkQwbmy/28-1.png", "https://i.postimg.cc/T3Dc8rGL/28-2.png"],
+  },
+  {
+    id: 67,
+    name: "Polaroid Bold Square",
+    shopifyId: "15803080868214",
+    badge: "Outlet",
+    brand: "Polaroid",
+    price: 39,
+    originalPrice: 97,
+    material: "Injetado",
+    color: "Preto Brilhante com detalhe Prateado (Lentes cinza-escuro)",
+    style: "Moderno / Urbano",
+    shape: "Quadrado / Retangular Bold",
+    faceShape: ["round", "oval"],
+    budget: "mid",
+    description: "Uma abordagem moderna e estruturada ao formato quadrado clássico. Este modelo em preto brilhante apresenta uma armação espessa de linhas arrojadas, acentuada por um detalhe metálico discreto nas hastes. É um acessório indispensável, extremamente versátil e de forte atitude urbana, que complementa com facilidade qualquer guarda-roupa.",
+    image: "https://i.postimg.cc/W4cwshbq/29.png",
+    gallery: ["https://i.postimg.cc/wBYQ97Tt/29-1.png"],
+  },
+  {
+    id: 68,
+    name: "Tom Ford Elegant Butterfly",
+    shopifyId: "15803082408310",
+    badge: "Outlet",
+    brand: "Tom Ford",
+    price: 79,
+    originalPrice: 263,
+    material: "Acetato",
+    color: "Preto com hastes em Tartaruga (Lentes degradé)",
+    style: "Luxo / Sofisticado",
+    shape: "Borboleta / Cat-Eye",
+    faceShape: ["round", "oval", "heart"],
+    budget: "high",
+    description: "A personificação do luxo contemporâneo com o inconfundível detalhe metálico em \"T\" nas charneiras. Esta elegante armação em formato borboleta funde a frente em preto clássico com hastes ricas em padrão tartaruga, criando um contraste perfeito. Uma peça de alta-costura que confere um olhar poderoso, feminino e extremamente glamoroso.",
+    image: "https://i.postimg.cc/25N7CV8n/30.png",
+    gallery: ["https://i.postimg.cc/JhC5RG4J/30-1.png"],
+  },
+  {
+    id: 69,
+    name: "Prada Color Block Cat-Eye",
+    shopifyId: "15803084243318",
+    badge: "Outlet",
+    brand: "Prada",
+    price: 59,
+    originalPrice: 221,
+    material: "Acetato",
+    color: "Preto com hastes Azul Marinho e Vermelho (Lentes cinza degradé)",
+    style: "Alta Moda / Statement",
+    shape: "Cat-Eye Oversized",
+    faceShape: ["round", "oval", "heart"],
+    budget: "high",
+    description: "Uma verdadeira afirmação de estilo avant-garde e exclusividade. Este arrojado modelo Prada destaca-se pela imponente frente preta em formato cat-eye e pelas icónicas hastes em color block com o logotipo clássico da marca em destaque. O acessório perfeito para mulheres que procuram uma peça arrojada, luxuosa e que definitivamente não passa despercebida.",
+    image: "https://i.postimg.cc/QMgkChHR/31.png",
+    gallery: ["https://i.postimg.cc/mrWyTt2q/31-1.png", "https://i.postimg.cc/FKbgzN78/31-2.png"],
+  },
+];
+
+/* Cores usadas na bolinha do cartão de produto e nos swatches do filtro */
+const COLOR_SWATCHES = {
+  "Preto": "#1a1a1a",
+  "Tartaruga": "#92400e",
+  "Azul": "#1e3a8a",
+  "Dourado": "#c9a84c",
+  "Prateado": "#9ca3af",
+  "Transparente": "#dbeafe",
+  "Vermelho": "#dc2626",
+  "Burgundy": "#681329",
+  "Cristal": "#f0f9ff",
+};
+
 /* === ORGANIZADOR DE PRODUTOS AUTOMÁTICO (ATUALIZADO) === */
 const ALL_PRODUCTS = [...PRODUCTS.men, ...PRODUCTS.women];
 
@@ -1126,18 +1846,32 @@ PRODUCTS.men = ALL_PRODUCTS.filter(p =>
 
 // Mulher (Exclusivos + Unissexo)
 PRODUCTS.women = ALL_PRODUCTS.filter(p => 
-  [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 38].includes(p.id)
+  [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 32, 33, 34, 35, 36, 38].includes(p.id)
 );
 
 // Garantir que os produtos têm a tag de género para o Quiz funcionar
+// (derivado das próprias listas Homem/Mulher acima, para nunca desalinhar)
+const menIds = new Set(PRODUCTS.men.map(p => p.id));
+const womenIds = new Set(PRODUCTS.women.map(p => p.id));
 ALL_PRODUCTS.forEach(p => {
-  const isMan = [1, 6, 7, 10, 11, 12, 15, 18, 20, 27, 29, 30, 33, 34, 35, 37, 39].includes(p.id);
-  const isWoman = [2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 38].includes(p.id);
-  
+  const isMan = menIds.has(p.id);
+  const isWoman = womenIds.has(p.id);
+
   if (isMan && isWoman) p.gender = "Unisexo";
   else if (isMan) p.gender = "Masculino";
   else p.gender = "Feminino";
 });
+
+// Outlet: género atribuído por id (peças clássicas/unissexo vs. femininas -
+// cat-eye, borboleta e outras formas claramente femininas na descrição)
+const outletFeminineIds = new Set([54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 68, 69]);
+PRODUCTS.outlet.forEach(p => {
+  p.gender = outletFeminineIds.has(p.id) ? "Feminino" : "Unisexo";
+});
+
+// Lista usada pelo Quiz: inclui Homem + Mulher + Outlet, para os saldos
+// entrarem nas recomendações finais
+const QUIZ_PRODUCTS = [...ALL_PRODUCTS, ...PRODUCTS.outlet];
 
 /* ── ICONS ──────────────────────────────────────────────────── */
 const OptometryIcon = () => (
@@ -1354,11 +2088,15 @@ function WhatsAppBtn({ product }) {
 function ExitPopup({ onClose }) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribeError, setSubscribeError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
 
+    setSubmitting(true);
+    setSubscribeError(false);
     try {
       const options = {
         method: 'POST',
@@ -1374,18 +2112,21 @@ function ExitPopup({ onClose }) {
         })
       };
 
-      await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
+      const res = await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', options);
+      if (!res.ok) throw new Error(`Klaviyo respondeu ${res.status}`);
       setSubscribed(true);
       setEmail("");
     } catch (error) {
       console.error("Erro ao subscrever:", error);
-      setSubscribed(true); 
+      setSubscribeError(true);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      className="modal-backdrop fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
       style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }}
     >
       <div
@@ -1465,12 +2206,18 @@ function ExitPopup({ onClose }) {
                 />
                 <button
                   type="submit"
-                  className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg"
+                  disabled={submitting}
+                  className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
                 >
-                  Quero os meus 20% <ArrowRight size={16} />
+                  {submitting ? "A processar..." : <>Quero os meus 20% <ArrowRight size={16} /></>}
                 </button>
+                {subscribeError && (
+                  <p className="text-xs text-center" style={{ color: "#c0392b" }}>
+                    Não foi possível registar o seu e-mail agora. Tente novamente.
+                  </p>
+                )}
               </form>
-              
+
               <button
                 onClick={onClose}
                 className="mt-6 text-xs w-full text-center block underline"
@@ -1532,8 +2279,13 @@ function CookieBanner() {
 }
 
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
-function ProductModal({ product, onClose, onAdd, onBook }) {
+function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavorite, onToggleFavorite }) {
   const [activeImage, setActiveImage] = useState(product?.image);
+
+  // Fotos do Outlet têm fundo cinza (não branco puro), por isso o
+  // truque do mix-blend-multiply (que "corta" fundos brancos) fica
+  // enevoado nelas — desativa-se para produtos com originalPrice.
+  const plainPhoto = !!product?.originalPrice;
 
   // Junta a foto de capa com as fotos extra
   const allImages = product?.gallery ? [product.image, ...product.gallery] : [product?.image];
@@ -1562,7 +2314,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
   return (
     <div
-      className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6"
+      className="modal-backdrop fixed inset-0 z-[350] flex items-end sm:items-center justify-center p-0 sm:p-6"
       style={{ background: "rgba(10,20,15,0.75)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
@@ -1582,16 +2334,23 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto scrollbar-hide">
           {/* Lado da Imagem com Galeria */}
-          <div className="w-full md:w-1/2 flex flex-col" style={{ background: "var(--mist)" }}>
-            {/* Foto Grande Ativa */}
-            <div className="relative img-zoom flex-1 h-[350px] md:h-auto min-h-[300px]">
+          <div className="w-full md:w-1/2 flex flex-col" style={{ background: "#fafafa" }}>
+            {/* Foto Grande Ativa, com o nome do modelo em marca de água por trás */}
+            <div className="relative img-zoom flex-1 h-[350px] md:h-auto min-h-[300px] overflow-hidden flex items-center justify-center p-8">
+              <p
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center justify-center text-center font-display font-bold uppercase pointer-events-none select-none"
+                style={{ color: "#111111", opacity: 0.08, fontSize: "clamp(2.5rem, 9vw, 5.5rem)", lineHeight: 0.9, letterSpacing: "-0.02em", padding: "0 12px" }}
+              >
+                {product.name}
+              </p>
               <Img
                 src={activeImage}
                 alt={product.name}
-                className="w-full h-full object-cover absolute inset-0 mix-blend-multiply transition-all duration-500 ease-in-out"
+                className={`w-full h-full object-contain transition-all duration-500 ease-in-out ${plainPhoto ? "" : "mix-blend-multiply"}`}
               />
             </div>
-            
+
             {/* Barra de Miniaturas (Com Scroll Ativo) */}
             {allImages.length > 1 && (
               <div 
@@ -1607,7 +2366,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                     }`}
                     style={{ background: "var(--mist)" }}
                   >
-                    <Img src={img} alt={`Galeria ${idx + 1}`} className="w-full h-full object-cover mix-blend-multiply" />
+                    <Img src={img} alt={`Galeria ${idx + 1}`} className={`w-full h-full object-cover ${plainPhoto ? "" : "mix-blend-multiply"}`} />
                   </button>
                 ))}
               </div>
@@ -1630,23 +2389,60 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                 >
                   {product.name}
                 </h2>
+                {product.originalPrice && product.originalPrice > product.price && (
+                  <p
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide mt-3 px-3 py-1.5"
+                    style={{ background: "var(--wine-soft)", color: "var(--wine)" }}
+                  >
+                    Edição limitada · sem reposição de stock
+                  </p>
+                )}
               </div>
-              {/* Botão de Fechar no PC */}
-              <button
-                onClick={onClose}
-                className="hidden md:flex w-11 h-11 rounded-full items-center justify-center flex-shrink-0 ml-4 transition-colors hover:bg-gray-100"
-                style={{ background: "var(--mist)", color: "var(--forest)" }}
-              >
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                {/* Favorito */}
+                <button
+                  onClick={onToggleFavorite}
+                  aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                  className="w-11 h-11 flex items-center justify-center transition-colors hover:bg-gray-100"
+                  style={{ border: "1px solid var(--mist)", color: isFavorite ? "var(--wine)" : "var(--forest)" }}
+                >
+                  <Heart size={18} fill={isFavorite ? "var(--wine)" : "none"} />
+                </button>
+                {/* Botão de Fechar no PC */}
+                <button
+                  onClick={onClose}
+                  className="hidden md:flex w-11 h-11 items-center justify-center transition-colors hover:bg-gray-100"
+                  style={{ background: "var(--mist)", color: "var(--forest)" }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
             <p
-              className="font-display text-4xl md:text-5xl font-light mb-6"
+              className="font-display text-4xl md:text-5xl font-light mb-6 flex items-baseline gap-3 flex-wrap"
               style={{ color: "var(--forest)" }}
             >
-              €{product.price}
+              <span>€{product.price}</span>
+              {product.originalPrice && product.originalPrice > product.price && (
+                <>
+                  <span className="text-xl font-normal line-through" style={{ color: "#aaa" }}>
+                    €{product.originalPrice}
+                  </span>
+                  <span
+                    className="text-xs font-semibold uppercase tracking-wide px-2.5 py-1 text-white"
+                    style={{ background: "var(--wine)" }}
+                  >
+                    -{Math.round(100 - (product.price / product.originalPrice) * 100)}%
+                  </span>
+                </>
+              )}
             </p>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <p className="text-sm font-semibold mb-6 -mt-4" style={{ color: "var(--wine)" }}>
+                Poupa €{product.originalPrice - product.price} nesta compra
+              </p>
+            )}
 
             <p
               className="text-base leading-relaxed mb-8"
@@ -1711,7 +2507,7 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
             </div>
 
             {/* Trust Section */}
-            <div className="mb-8 grid grid-cols-2 gap-4">
+            <div className="mb-4 grid grid-cols-2 gap-4">
               <div className="flex items-center gap-3 p-4 rounded-xl border bg-gray-50 border-gray-100">
                 <Award size={20} style={{ color: "var(--gold)" }} />
                 <p
@@ -1735,13 +2531,33 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
               </div>
             </div>
 
-            <div className="mt-auto space-y-3">
+            {/* Consulta gratuita — o maior diferenciador de comprar óculos graduados na Óptica 13 */}
+            <div
+              className="mb-8 p-4 rounded-xl border"
+              style={{ background: "#eff6ff", borderColor: "#bfdbfe" }}
+            >
+              <div className="flex items-center gap-3">
+                <Sparkles size={20} className="flex-shrink-0" style={{ color: "var(--gold)" }} />
+                <p className="text-xs font-semibold leading-snug" style={{ color: "#1e3a8a" }}>
+                  Precisa de lentes graduadas? A consulta de optometria é <strong>gratuita</strong> ao fazer os seus óculos na Óptica 13.
+                </p>
+              </div>
+              <button
+                onClick={onBookConsulta}
+                className="mt-3 w-full py-2.5 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
+                style={{ background: "#1e3a8a", color: "#ffffff" }}
+              >
+                <Calendar size={14} /> Marcar consulta
+              </button>
+            </div>
+
+            <div className="mt-auto sticky bottom-0 bg-white pt-3 pb-1 space-y-3">
               {/* Botão Oficial do Shopify */}
               <ShopifyBuyButton productId={product.shopifyId} />
-              
+
               <button
                 onClick={onBook}
-                className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                className="btn-outline-forest w-full py-5 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
               >
                 <Calendar size={18} /> Reservar na Loja
               </button>
@@ -1763,15 +2579,17 @@ function BookingModal({ isOpen, onClose, service }) {
   const [month, setMonth] = useState(new Date());
   const [confirmed, setConfirmed] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [sendError, setSendError] = useState(false);
 
   // CONFIGURAÇÃO EMAILJS (Já preenchido com os teus dados)
-  const SERVICE_ID = "service_jd2hmsh"; 
+  const SERVICE_ID = "service_jd2hmsh";
   const TEMPLATE_ID = "template_5wkk8d9";
   const PUBLIC_KEY = "r1iXXbQSD6eraiqvx";
 
   const handleFinalConfirm = async () => {
     setIsSending(true);
-    
+    setSendError(false);
+
     const templateParams = {
       name: clientData.name,
       phone: clientData.phone,
@@ -1782,7 +2600,7 @@ function BookingModal({ isOpen, onClose, service }) {
     };
 
     try {
-      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1792,10 +2610,11 @@ function BookingModal({ isOpen, onClose, service }) {
           template_params: templateParams
         })
       });
+      if (!res.ok) throw new Error(`EmailJS respondeu ${res.status}`);
       setConfirmed(true);
     } catch (error) {
       console.error("Erro ao enviar email:", error);
-      setConfirmed(true); // Mostramos sucesso na mesma para o cliente não se assustar
+      setSendError(true);
     } finally {
       setIsSending(false);
     }
@@ -1819,14 +2638,14 @@ function BookingModal({ isOpen, onClose, service }) {
   const currentSlots = selectedDate && selectedDate.getDay() === 6 ? slotsSabado : slotsSemana;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }} onClick={onClose}>
+    <div className="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,20,15,0.85)", backdropFilter: "blur(8px)" }} onClick={onClose}>
       <div className="relative rounded-2xl overflow-hidden max-w-3xl w-full fade-up flex flex-col shadow-2xl" style={{ background: "var(--cream)", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
         
         {/* Header */}
         <div className="p-6 border-b flex items-center justify-between" style={{ borderColor: "var(--mist)" }}>
           <div>
             <p className="font-display text-2xl font-semibold" style={{ color: "var(--forest)" }}>
-              {confirmed ? "Marcação Confirmada" : "Agendar Consulta de Optometria"}
+              {confirmed ? "Marcação Confirmada" : `Agendar ${service}`}
             </p>
             {!confirmed && <p className="text-xs mt-1 text-gray-400">Passo {step} de 4</p>}
           </div>
@@ -1906,14 +2725,19 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setStep(3)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
-                <button 
-                  onClick={handleFinalConfirm} 
+                <button
+                  onClick={handleFinalConfirm}
                   disabled={isSending}
                   className="btn-forest flex-1 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg"
                 >
                   {isSending ? "A enviar..." : <><CheckCircle size={18} /> Confirmar Marcação</>}
                 </button>
               </div>
+              {sendError && (
+                <p className="text-xs mt-4 text-center" style={{ color: "#c0392b" }}>
+                  Não foi possível enviar o pedido de marcação. Ligue-nos para 934 421 310 ou tente novamente.
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -1923,143 +2747,111 @@ function BookingModal({ isOpen, onClose, service }) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MAIN APP COMPONENT
+   PAGE COMPONENTS (Header, Footer, and routed pages)
+   Module-scope so identities stay stable across MainLayout re-renders
    ══════════════════════════════════════════════════════════════ */
-export default function App() {
-  return (
-    <Router>
-      <MainLayout />
-    </Router>
-  );
-}
-
-function MainLayout() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const page = location.pathname.replace("/", "") || "home";
-  const setPage = (newPage) => {
-    navigate(newPage === "home" ? "/" : "/" + newPage);
-  };
-
-  const [booking, setBooking] = useState(false);
-  const [bookingService, setBookingService] = useState("Consulta Geral");
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [exitIntent, setExitIntent] = useState(false);
-  const exitShown = useRef(false);
-
-  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
-
- useEffect(() => {
-    // 1. Gatilho de Saída (Para Computador)
-    const h = (e) => {
-      if (e.clientY <= 10 && !exitShown.current) {
-        exitShown.current = true;
-        setExitIntent(true);
-      }
-    };
-    document.addEventListener("mouseout", h);
-
-    // 2. Gatilho de Tempo - 12 Segundos (Para Telemóvel e Computador)
-    const timer = setTimeout(() => {
-      if (!exitShown.current) {
-        exitShown.current = true;
-        setExitIntent(true);
-      }
-    }, 12000);
-
-    // 3. Limpeza de memória do React
-    return () => {
-      document.removeEventListener("mouseout", h);
-      clearTimeout(timer);
-    };
-  }, []);
-
-const openBook = (service = "Consulta Geral") => {
-    setBookingService(service); // O site guarda o nome do serviço
-    setBooking(true);
-    setExitIntent(false);
-  };
-  const addToCart = (p) => {
-    const ex = cart.find((x) => x.id === p.id);
-    if (ex)
-      setCart(cart.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
-    else setCart([...cart, { ...p, qty: 1 }]);
-  };
-  const removeFromCart = (id) => setCart(cart.filter((x) => x.id !== id));
-  const updateQty = (id, q) => {
-    if (q < 1) removeFromCart(id);
-    else setCart(cart.map((x) => (x.id === id ? { ...x, qty: q } : x)));
-  };
-
   /* HEADER */
-  const Header = () => {
+  const Header = ({ page, setPage, openBook, favoritesCount = 0, onOpenFavorites, onOpenCart }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+      const onScroll = () => setScrolled(window.scrollY > 12);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
+    // Barra de navegação sempre sólida (barra branca ao estilo das grandes
+    // maisons de ótica). Mantido como constante para a estilização abaixo.
+    const transparent = false;
+
     return (
       <header
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl"
+        className={`header-shell fixed top-0 left-0 right-0 z-50 ${transparent ? "" : "backdrop-blur-xl"} ${scrolled ? "header-scrolled" : ""}`}
         style={{
-          background: "rgba(255,255,255,0.92)",
-          borderBottom: "1px solid var(--mist)",
+          background: transparent ? "transparent" : "rgba(255,255,255,0.92)",
+          borderBottom: transparent ? "1px solid transparent" : "1px solid var(--mist)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className={`relative max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
+          {/* Esquerda: logo */}
           <button
             onClick={() => setPage("home")}
             className="flex items-center transition-transform hover:scale-105"
           >
-            <img 
-              src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
-              alt="Logo Óptica 13" 
-              className="h-10 w-auto" 
+            <img
+              src="/fotos/logo-optica13.png"
+              alt="Logo Óptica 13"
+              className="h-10 w-auto transition-all"
             />
           </button>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm">
-            {[
-              ["Serviços", "services"],
-              ["Vantagens", "vantagens"],
-              ["Homem", "men"],
-              ["Mulher", "women"],
-              ["Sobre Nós", "about"],
-              ["Contactos", "contact"],
-            ].map(([label, p]) => (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                className={`font-medium transition-all hover:opacity-100 ${
-                  page === p ? "opacity-100" : "opacity-60"
-                }`}
-                style={{ color: page === p ? "var(--gold)" : "var(--forest)" }}
-              >
-                {label}
-              </button>
-            ))}
-            <button
-              onClick={() => setPage("quiz")}
-              className="flex items-center gap-1 font-medium transition-all hover:opacity-100 opacity-60"
-              style={{ color: "var(--forest)" }}
-            >
-              <Sparkles size={14} style={{ color: "var(--gold)" }} /> Quiz de
-              Estilo
-            </button>
-          </nav>
+          {/* Centro: menu + Agendar Exame, centrados no cabeçalho */}
+          <div className="hidden lg:flex items-center gap-7 w-max absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <nav className="flex items-center gap-7 text-xs uppercase tracking-widest">
+              {[
+                ["Serviços", "services"],
+                ["Vantagens", "vantagens"],
+                ["MindTheLook", "mindthelook"],
+                ["Outlet", "outlet"],
+                ["Contactos", "contact"],
+              ].map(([label, p]) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`relative font-medium transition-all hover:opacity-100 ${
+                    page === p ? "opacity-100" : "opacity-60"
+                  }`}
+                  style={{ color: "var(--forest)" }}
+                >
+                  {label}
+                  {p === "outlet" && (
+                    <span
+                      className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
+                      style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
+                    >
+                      até -70%
+                    </span>
+                  )}
+                </button>
+              ))}
+            </nav>
 
-          <div className="flex items-center gap-3">
+            {/* Agendar Exame — tratado como um item do menu */}
             <button
-             onClick={() => openBook("Consulta de Optometria")}
-              className="hidden sm:flex btn-forest px-5 py-2.5 rounded-xl text-sm font-semibold items-center gap-2"
+              onClick={() => openBook("Consulta de Optometria")}
+              className="btn-forest px-5 py-2.5 text-xs font-semibold flex items-center gap-2 uppercase tracking-widest whitespace-nowrap transition-all"
             >
               <Calendar size={14} /> Agendar Exame
             </button>
+          </div>
+
+          {/* Direita: apenas ícones utilitários + menu mobile */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="hidden sm:flex items-center gap-3.5" style={{ color: "var(--forest)" }}>
+              <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar coleção" className="p-0.5 transition-opacity hover:opacity-60">
+                <Search size={19} strokeWidth={1.6} />
+              </button>
+              <button onClick={onOpenFavorites} aria-label="Favoritos" className="relative p-0.5 transition-opacity hover:opacity-60">
+                <Heart size={19} strokeWidth={1.6} />
+                {favoritesCount > 0 && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
+                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
+                  >
+                    {favoritesCount}
+                  </span>
+                )}
+              </button>
+              <button onClick={onOpenCart} aria-label="Carrinho" className="p-0.5 transition-opacity hover:opacity-60">
+                <ShoppingBag size={19} strokeWidth={1.6} />
+              </button>
+            </div>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-all"
+              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-gray-100"
             >
               {mobileMenuOpen ? <X size={18} /> : <Filter size={18} />}
             </button>
@@ -2076,8 +2868,8 @@ const openBook = (service = "Consulta Geral") => {
               {[
                 ["Serviços", "services"],
                 ["Vantagens", "vantagens"],
-                ["Homem", "men"],
-                ["Mulher", "women"],
+                ["MindTheLook", "mindthelook"],
+                ["Outlet", "outlet"],
                 ["Sobre Nós", "about"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
@@ -2087,13 +2879,21 @@ const openBook = (service = "Consulta Geral") => {
                     setPage(p);
                     setMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-2 rounded-xl font-medium transition-all"
+                  className="flex items-center gap-2 w-full text-left px-4 py-2 rounded-xl font-medium transition-all"
                   style={{
                     background: page === p ? "var(--mist)" : "transparent",
                     color: page === p ? "var(--gold)" : "var(--forest)",
                   }}
                 >
                   {label}
+                  {p === "outlet" && (
+                    <span
+                      className="px-1.5 py-0.5 rounded-full text-white whitespace-nowrap"
+                      style={{ background: "var(--wine)", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
+                    >
+                      até -70%
+                    </span>
+                  )}
                 </button>
               ))}
               <button
@@ -2123,7 +2923,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* FOOTER */
-  const Footer = () => (
+  const Footer = ({ setPage }) => (
     <footer className="py-16" style={{ background: "var(--slate)" }}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Usamos 5 colunas para caber tudo bem */}
@@ -2133,7 +2933,7 @@ const openBook = (service = "Consulta Geral") => {
 <div className="lg:col-span-2">
   <div className="flex items-center gap-3 mb-5">
     <img 
-      src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
+      src="/fotos/logo-optica13.png" 
       alt="Logo Óptica 13" 
       className="h-10 w-auto" 
       style={{ filter: "brightness(0) invert(1)" }} // <--- A MAGIA PARA O TORNAR BRANCO
@@ -2162,8 +2962,8 @@ const openBook = (service = "Consulta Geral") => {
               {[
                 ["services", "Serviços"],
                 ["vantagens", "Vantagens"],
-                ["men", "Coleção Homem"],
-                ["women", "Coleção Mulher"],
+                ["mindthelook", "MindTheLook"],
+                ["outlet", "Outlet"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
               ].map(([p, l]) => (
@@ -2244,12 +3044,14 @@ const openBook = (service = "Consulta Geral") => {
               href="https://www.livroreclamacoes.pt/"
               target="_blank"
               rel="noreferrer"
-              className="inline-block mt-4 transition-transform hover:scale-105"
+              className="inline-block mt-4 bg-white p-2 transition-transform hover:scale-105"
+              style={{ maxWidth: "100%" }}
             >
               <img
                 src="https://www.livroreclamacoes.pt/Autenticacao_CC/img/logo-livro-reclamacoes.svg"
                 alt="Livro de Reclamações Eletrónico"
-                className="h-8 bg-white p-1 rounded"
+                className="block h-auto"
+                style={{ width: 210, maxWidth: "100%" }}
               />
             </a>
           </div>
@@ -2271,6 +3073,15 @@ const openBook = (service = "Consulta Geral") => {
   /* TESTIMONIALS CAROUSEL */
   const TestimonialsSection = () => {
     const [active, setActive] = useState(0);
+    const [fading, setFading] = useState(false);
+    const goToTestimonial = (i) => {
+      if (i === active) return;
+      setFading(true);
+      setTimeout(() => {
+        setActive(i);
+        setFading(false);
+      }, 300);
+    };
     const testimonials = [
       {
         name: "Luís Correia Tavares",
@@ -2315,9 +3126,9 @@ const openBook = (service = "Consulta Geral") => {
               ))}
             </div>
 
-            <div className="min-h-[220px] sm:min-h-[160px] flex items-center">
+            <div className={`min-h-[220px] sm:min-h-[160px] flex items-center testimonial-fade ${fading ? "testimonial-fading" : ""}`}>
               <p
-                className="text-base md:text-lg leading-relaxed transition-opacity duration-500"
+                className="text-base md:text-lg leading-relaxed"
                 style={{ color: "#666" }}
               >
                 {testimonials[active].text}
@@ -2326,7 +3137,7 @@ const openBook = (service = "Consulta Geral") => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mt-10">
               {/* Nome e Avatar */}
               <div
-                className="flex items-center gap-4 bg-gray-50 pr-6 rounded-full border w-fit"
+                className={`flex items-center gap-4 bg-gray-50 pr-6 rounded-full border w-fit testimonial-fade ${fading ? "testimonial-fading" : ""}`}
                 style={{ borderColor: "var(--mist)" }}
               >
                 <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center flex-shrink-0 border-4 border-white shadow-sm">
@@ -2354,19 +3165,19 @@ const openBook = (service = "Consulta Geral") => {
 
               {/* Bolinhas / Controlos */}
               <div className="flex items-center gap-2">
-                {testimonials.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActive(i)}
-                    className={`h-3 transition-all ${
-                      active === i
-                        ? "w-8 rounded-full border-2 border-black"
-                        : "w-3 rounded-full bg-gray-600 hover:bg-black"
-                    }`}
-                    style={{ background: active === i ? "transparent" : "" }}
-                    aria-label={`Ver testemunho ${i + 1}`}
-                  />
-                ))}
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goToTestimonial(i)}
+                  className={`h-3 transition-all ${
+                    active === i
+                      ? "w-8 rounded-full border-2 border-black"
+                      : "w-3 rounded-full bg-gray-600 hover:bg-black"
+                  }`}
+                  style={{ background: active === i ? "transparent" : "" }}
+                  aria-label={`Ver testemunho ${i + 1}`}
+                />
+              ))}
               </div>
             </div>
           </div>
@@ -2375,42 +3186,30 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
  /* HOME PAGE (COM CARROSSEL) */
-  const HomePage = () => {
+  const HomePage = ({ setPage, openBook, setSelectedProduct }) => {
     // 1. Definir os Slides do Carrossel
     const slides = [
       {
         id: 1,
-        tag: "Oferta: Consulta Gratuita esta semana",
-        titlePt1: "A sua visão,",
-        titlePt2: "a nossa ",
-        titleHighlight: "missão",
-        desc: "Exames de optometria gratuitos. Marcas premium. Tecnologia de ponta. Tudo num só lugar.",
-        btn1Text: "Marcar Exame Gratuito",
-        btn1Action: () => openBook("Consulta de Optometria"),
-        img: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=800&fit=crop",
+        img: "/fotos/front-mindthelook.webp",
+        alt: "Coleção MindTheLook — Mind the Look",
+        btnText: "Ver Coleção",
+        btnAction: () => setPage("mindthelook"),
       },
       {
         id: 2,
-        tag: "Nova Coleção Primavera",
-        titlePt1: "O estilo que",
-        titlePt2: "marca a ",
-        titleHighlight: "diferença",
-        desc: "Descubra as novas tendências de 2026. Óculos de sol e armações das melhores marcas internacionais.",
-        btn1Text: "Ver Coleção Mulher",
-        btn1Action: () => setPage("women"),
-        img: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=800&h=800&fit=crop",
+        img: "/fotos/front-outlet.webp",
+        alt: "Outlet — óculos premium com desconto",
+        btnText: "Ver Outlet",
+        btnAction: () => setPage("outlet"),
       },
       {
         id: 3,
-        tag: "Exclusivo Online",
-        titlePt1: "Encontre o seu",
-        titlePt2: "par ",
-        titleHighlight: "perfeito",
-        desc: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra em 2 minutos.",
-        btn1Text: "Fazer Quiz Virtual",
-        btn1Action: () => setPage("quiz"),
-        img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&h=800&fit=crop",
-      }
+        img: "/fotos/front-cuidado.webp",
+        alt: "Exame de vista gratuito",
+        btnText: "Marcar Exame",
+        btnAction: () => openBook("Consulta de Optometria"),
+      },
     ];
 
     // 2. Estado para controlar o slide ativo
@@ -2424,101 +3223,241 @@ const openBook = (service = "Consulta Geral") => {
       return () => clearInterval(timer);
     }, [slides.length]);
 
-    // Funções para os botões manuais
-    const nextSlide = () => setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    // 4. Navegação frente/trás (botões de seta)
+    const goRelative = (dir) =>
+      setCurrentSlide((prev) => (prev + dir + slides.length) % slides.length);
 
     return (
       <div>
-        {/* Hero Carrossel */}
-        <section className="relative hero-bg pt-32 pb-24 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 relative z-10">
-            
-            {/* O Contentor do Slide Ativo */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[500px]">
-              
-              {/* Lado Esquerdo (Texto) */}
-              <div className="text-white" key={`text-${currentSlide}`}>
-                <button 
-                  onClick={slides[currentSlide].btn1Action}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 fade-up transition-all hover:scale-105 cursor-pointer" 
-                  style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}
-                >
-                  <span className="text-base">✨</span>
-                  <span className="text-xs font-bold tracking-wide uppercase" style={{ color: "var(--gold)" }}>
-                    {slides[currentSlide].tag}
-                  </span>
-                </button>
-                <h1
-                  className="font-display mb-6 fade-up-1"
-                  style={{ fontSize: "clamp(2.5rem,6vw,5rem)", lineHeight: 1.1 }}
-                >
-                  {slides[currentSlide].titlePt1}
-                  <br />{slides[currentSlide].titlePt2} <em style={{ color: "var(--gold)" }}>{slides[currentSlide].titleHighlight}</em>
-                </h1>
-                <p
-                  className="text-lg mb-8 opacity-90 fade-up-2"
-                  style={{ maxWidth: 480 }}
-                >
-                  {slides[currentSlide].desc}
-                </p>
-                <div className="flex flex-wrap gap-4 fade-up-3">
-                  <button
-                    onClick={slides[currentSlide].btn1Action}
-                    className="bg-white px-8 py-4 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all hover:scale-105"
-                    style={{ color: "var(--forest)" }}
-                  >
-                    {slides[currentSlide].btn1Text}
-                  </button>
-                  <button
-                    onClick={() => setPage("men")}
-                    className="border-2 border-white px-8 py-4 rounded-xl font-semibold text-sm text-white transition-all hover:bg-white hover:text-black"
-                  >
-                    Ver Coleções
-                  </button>
-                </div>
-              </div>
+        {/* Hero — carrossel de layouts (estilo Glasshop: rosa/branco dividido) */}
+        <section
+          className="relative pt-16 md:pt-0"
+          style={{ background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)" }}
+        >
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              aspectRatio: "2 / 1",
+              maxHeight: 760,
+              /* Fundo dividido igual ao dos layouts — para nunca cortar a palavra:
+                 a imagem entra em object-contain e qualquer margem confunde-se com este fundo. */
+              background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)",
+            }}
+          >
+            <Img
+              key={`slide-${currentSlide}`}
+              src={slides[currentSlide].img}
+              alt={slides[currentSlide].alt}
+              priority={true}
+              className="w-full h-full object-contain fade-in"
+            />
 
-              {/* Lado Direito (Imagem) - SEM O SELO DOS 15% */}
-              <div className="relative fade-up-2" key={`img-${currentSlide}`}>
-                <div className="aspect-square rounded-3xl overflow-hidden img-zoom">
-                  <Img
-                    src={slides[currentSlide].img}
-                    alt="Slide"
-                    className="w-full h-full object-cover"
-                    priority={true} 
-                  />
-                </div>
-              </div>
+            {/* Setas de navegação frente/trás */}
+            <button
+              onClick={() => goRelative(-1)}
+              aria-label="Anterior"
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-all hover:scale-105"
+              style={{ background: "rgba(255,255,255,0.7)", color: "var(--forest)", backdropFilter: "blur(4px)" }}
+            >
+              <ChevronLeft size={20} strokeWidth={1.8} />
+            </button>
+            <button
+              onClick={() => goRelative(1)}
+              aria-label="Seguinte"
+              className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-all hover:scale-105"
+              style={{ background: "rgba(255,255,255,0.7)", color: "var(--forest)", backdropFilter: "blur(4px)" }}
+            >
+              <ChevronRight size={20} strokeWidth={1.8} />
+            </button>
 
+            {/* Botão (o elemento que faltava nos layouts) */}
+            <div className="absolute inset-x-0 bottom-[5%] md:bottom-[15%] flex justify-center px-6 z-10">
+              <button
+                onClick={slides[currentSlide].btnAction}
+                className="btn-rose px-9 py-3.5 text-xs font-semibold uppercase tracking-widest"
+              >
+                {slides[currentSlide].btnText}
+              </button>
             </div>
 
-            {/* Controlos do Carrossel (Setas e Bolinhas) */}
-            <div className="flex items-center gap-6 mt-12">
-              <div className="flex gap-2">
-                <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
-                  <ChevronRight size={18} className="rotate-180" />
-                </button>
-                <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-              <div className="flex gap-2">
-                {slides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 transition-all rounded-full ${currentSlide === idx ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/50"}`}
-                  />
-                ))}
-              </div>
+            {/* Instagram — canto inferior esquerdo */}
+            <div className="hidden md:flex items-center absolute bottom-6 left-8 z-10" style={{ color: "var(--forest)" }}>
+              <a href="https://www.instagram.com/optica13" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition-opacity hover:opacity-60"><Instagram size={17} strokeWidth={1.6} /></a>
             </div>
 
+            {/* Indicador de scroll — leva à secção das coleções */}
+            <button
+              onClick={() => document.getElementById("colecoes")?.scrollIntoView({ behavior: "smooth" })}
+              aria-label="Descer"
+              className="hidden md:flex flex-col items-center gap-1 absolute bottom-4 left-1/2 -translate-x-1/2 z-10 transition-opacity hover:opacity-60"
+              style={{ color: "var(--forest)" }}
+            >
+              <span className="uc-label text-[9px] font-semibold">Descer</span>
+              <ChevronDown size={20} strokeWidth={1.8} className="animate-bounce" />
+            </button>
+
+            {/* Pontos do carrossel — canto inferior direito */}
+            <div className="flex items-center gap-2.5 absolute bottom-7 right-6 md:right-8 z-10">
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  aria-label={`Slide ${idx + 1}`}
+                  className="rounded-full transition-all"
+                  style={{
+                    width: currentSlide === idx ? 9 : 7,
+                    height: currentSlide === idx ? 9 : 7,
+                    background: currentSlide === idx ? "var(--wine)" : "rgba(125,42,52,0.3)",
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* ... Restante código da HomePage (Services, etc) ... */}
-        
+        {/* COLEÇÕES — bloco promocional (estilo Optopia), com os 3 quadrados */}
+        <section id="colecoes" className="py-16 md:py-20" style={{ background: "#f9e2d7" }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-8 md:mb-10 fade-up">
+              <p className="uc-label text-[11px] font-semibold mb-2" style={{ color: "var(--wine)" }}>A Óptica 13</p>
+              <h2 className="font-display" style={{ fontSize: "clamp(1.8rem,3.6vw,2.8rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}>
+                Explore as nossas coleções
+              </h2>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-5">
+              {/* Card grande — OUTLET */}
+              <button
+                onClick={() => setPage("outlet")}
+                className="relative overflow-hidden text-left group fade-up-1"
+                style={{ borderRadius: 18, minHeight: 420 }}
+              >
+                <Img src="/fotos/scroll-outlet.webp" alt="Outlet Óptica 13" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0) 100%)" }} />
+                <div className="relative z-10 h-full flex flex-col justify-end p-8 md:p-10" style={{ minHeight: 420 }}>
+                  <p className="uc-label text-[11px] font-semibold text-white/85 mb-2">Outlet · Stock limitado</p>
+                  <p className="font-display text-white" style={{ fontSize: "clamp(2.6rem,6vw,4.2rem)", fontWeight: 700, lineHeight: 0.95 }}>até -70%</p>
+                  <p className="text-white/90 text-sm leading-relaxed mt-4 mb-6" style={{ maxWidth: 380 }}>
+                    Óculos premium de coleções anteriores a preços de saldo. Por tempo limitado.
+                  </p>
+                  <span className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 text-xs font-semibold uppercase tracking-widest w-fit" style={{ borderRadius: 999 }}>
+                    Ver Outlet <ArrowRight size={14} />
+                  </span>
+                </div>
+              </button>
+
+              {/* Coluna direita: MindTheLook + Exame — foto a preencher o
+                  cartão e texto por cima (mesmo estilo do card do Outlet) */}
+              <div className="grid grid-rows-2 gap-5">
+                <button
+                  onClick={() => setPage("mindthelook")}
+                  className="relative overflow-hidden text-left group fade-up-2"
+                  style={{ borderRadius: 18, minHeight: 200 }}
+                >
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style={{ objectPosition: "50% 34%" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
+                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>MindTheLook</p>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Ver Coleção <ArrowRight size={13} /></span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => openBook("Consulta de Optometria")}
+                  className="relative overflow-hidden text-left group fade-up-3"
+                  style={{ borderRadius: 18, minHeight: 200 }}
+                >
+                  <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Consulta</span>
+                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>Exame gratuito</p>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Marcar Exame <ArrowRight size={13} /></span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* MAIS VENDIDOS */}
+        <section className="py-20" style={{ background: "white" }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <p
+                  className="text-xs font-semibold tracking-widest uppercase mb-2"
+                  style={{ color: "var(--gold)" }}
+                >
+                  Coleção
+                </p>
+                <h2
+                  className="font-display text-4xl font-medium"
+                  style={{ color: "var(--forest)" }}
+                >
+                  Os <em>Mais Vendidos</em>
+                </h2>
+              </div>
+              <div className="hidden sm:flex gap-3">
+                <button
+                  onClick={() => setPage("mindthelook?genero=homem")}
+                  className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+                  Homem
+                </button>
+                <button
+                  onClick={() => setPage("mindthelook?genero=mulher")}
+                  className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
+                >
+                  Mulher
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+              {[
+                PRODUCTS.men[0],
+                PRODUCTS.men[3],
+                PRODUCTS.women[0],
+                PRODUCTS.women[2],
+              ].map((p) => (
+                <div
+                  key={p.id}
+                  onClick={() => setSelectedProduct(p)}
+                  className="cursor-pointer card-hover rounded-2xl overflow-hidden group"
+                  style={{ border: "1px solid var(--mist)" }}
+                >
+                  <div
+                    className="aspect-square img-zoom"
+                    style={{ background: "#f5f4f0" }}
+                  >
+                    <Img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full h-full object-cover mix-blend-multiply"
+                    />
+                  </div>
+                  <div className="p-4 bg-white">
+                    <p
+                      className="text-xs font-semibold tracking-wide mb-0.5"
+                      style={{ color: "var(--gold)" }}
+                    >
+                      {p.brand}
+                    </p>
+                    <p className="font-semibold text-sm mb-1">{p.name}</p>
+                    <p
+                      className="font-display text-lg font-semibold"
+                      style={{ color: "var(--forest)" }}
+                    >
+                      €{p.price}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Services */}
         <section className="py-24" style={{ background: "var(--cream)" }}>
           <div className="max-w-6xl mx-auto px-6">
@@ -2588,236 +3527,128 @@ const openBook = (service = "Consulta Geral") => {
           </div>
         </section>
 
-        {/* CONSULTORIA DE IMAGEM */}
-        <section className="py-24" style={{ background: "var(--cream)" }}>
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* Lado da Imagem */}
-              <div
-                className="order-2 lg:order-1 rounded-3xl overflow-hidden img-zoom shadow-2xl relative"
-                style={{ height: "550px" }}
-              >
-                <Img
-                  src="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?w=800&h=1000&fit=crop"
-                  alt="Consultoria de Imagem"
-                  className="w-full h-full object-cover"
-                />
-                {/* Etiqueta flutuante na imagem */}
-                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white/50 max-w-[250px] fade-up-2">
-                  <div className="flex gap-1 mb-2">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        size={12}
-                        fill="var(--gold)"
-                        style={{ color: "var(--gold)" }}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-xs font-medium italic text-gray-700">
-                    "Ajudaram-me a descobrir as cores e formatos que realmente me
-                    favorecem. Serviço 5 estrelas!"
-                  </p>
-                </div>
-              </div>
-
-              {/* Lado do Texto */}
-              <div className="order-1 lg:order-2 fade-up-1">
-                <span
-                  className="inline-block text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6"
-                  style={{
-                    background: "rgba(201,168,76,0.15)",
-                    color: "var(--gold)",
-                  }}
-                >
-                  Atendimento Premium
-                </span>
-                <h2
-                  className="font-display text-4xl md:text-5xl font-semibold mb-6 leading-tight"
-                  style={{ color: "var(--forest)" }}
-                >
-                  Consultoria de <br />
-                  <em style={{ color: "var(--gold)" }}>Imagem Especializada</em>
-                </h2>
-                <p
-                  className="text-base leading-relaxed mb-10"
-                  style={{ color: "#666" }}
-                >
-                  Não vendemos apenas óculos. Acreditamos que a sua armação é a
-                  moldura do seu rosto. A nossa equipa utiliza técnicas de
-                  visagismo para identificar os modelos que melhor harmonizam com
-                  os seus traços, tom de pele e estilo de vida.
-                </p>
-
-                <div className="space-y-6 mb-10">
-                  {[
-                    {
-                      icon: Eye,
-                      title: "Análise Facial",
-                      text: "Estudo detalhado do formato e proporções do seu rosto.",
-                    },
-                    {
-                      icon: Sparkles,
-                      title: "Coloração Pessoal",
-                      text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar.",
-                    },
-                    {
-                      icon: Award,
-                      title: "Curadoria de Marcas",
-                      text: "Seleção personalizada dentro do nosso portefólio premium.",
-                    },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
-                        style={{
-                          background: "var(--cream-dark)",
-                          border: "1px solid var(--mist)",
-                        }}
-                      >
-                        <item.icon size={20} style={{ color: "var(--gold)" }} />
-                      </div>
-                      <div>
-                        <p
-                          className="font-semibold text-sm mb-1"
-                          style={{ color: "var(--forest)" }}
-                        >
-                          {item.title}
-                        </p>
-                        <p className="text-xs" style={{ color: "#888" }}>
-                          {item.text}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={() => openBook("Consultoria de Imagem")}
-                    className="btn-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-transform"
-                  >
-                    <Calendar size={16} /> Agendar Consultoria
-                  </button>
-                  <button
-                    onClick={() => setPage("quiz")}
-                    className="btn-outline-forest px-8 py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:-translate-y-1 transition-transform"
-                  >
-                    <Glasses size={16} /> Fazer Quiz Virtual
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* CTA */}
-        <section className="py-20" style={{ background: "var(--cream-dark)" }}>
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <Award
-              size={48}
-              className="mx-auto mb-6"
-              style={{ color: "var(--gold)" }}
+        {/* CONSULTA GRATUITA — faixa imersiva com fotografia de consulta */}
+        <section className="relative overflow-hidden" style={{ minHeight: "72vh" }}>
+          <div className="absolute inset-0">
+            <Img
+              src="https://i.postimg.cc/xd7WzbXY/maximilianovich-doctor-5710159-1920.jpg"
+              alt="Consulta de optometria na Óptica 13"
+              className="w-full h-full object-cover"
             />
-            <h2
-              className="font-display mb-4"
-              style={{ fontSize: "clamp(2rem,4vw,3rem)", color: "var(--forest)" }}
-            >
-              Exame de Vista <em style={{ color: "var(--gold)" }}>Gratuito</em>
+            <div className="absolute inset-0" style={{ background: "rgba(12,14,16,0.6)" }} />
+          </div>
+          <div className="relative z-10 max-w-3xl mx-auto px-6 py-28 md:py-36 flex flex-col items-center text-center text-white">
+            <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "rgba(255,255,255,0.8)" }}>
+              Cuidado Visual
+            </p>
+            <h2 className="font-display mb-6 fade-up-1" style={{ fontSize: "clamp(2.2rem,4.4vw,3.4rem)", lineHeight: 1.08, fontWeight: 600 }}>
+              Exame de vista <em style={{ fontStyle: "italic", fontWeight: 400 }}>gratuito</em>
             </h2>
-            <p className="text-lg mb-8" style={{ color: "#666" }}>
-             Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
+            <p className="text-base md:text-lg leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 540, color: "rgba(255,255,255,0.85)" }}>
+              Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
             </p>
             <button
-              onClick={openBook}
-              className="btn-forest px-10 py-4 rounded-xl font-semibold text-sm tracking-wide inline-flex items-center gap-2 shadow-lg"
+              onClick={() => openBook("Consulta de Optometria")}
+              className="fade-up-3 bg-white text-black px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:bg-black hover:text-white"
             >
-              <Calendar size={16} /> Marcar Agora
+              Marcar Exame Gratuito
             </button>
           </div>
         </section>
-        {/* MAIS VENDIDOS */}
-        <section className="py-20" style={{ background: "white" }}>
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <p
-                  className="text-xs font-semibold tracking-widest uppercase mb-2"
-                  style={{ color: "var(--gold)" }}
-                >
-                  Coleção
-                </p>
-                <h2
-                  className="font-display text-4xl font-medium"
-                  style={{ color: "var(--forest)" }}
-                >
-                  Os <em>Mais Vendidos</em>
-                </h2>
-              </div>
-              <div className="hidden sm:flex gap-3">
-                <button
-                  onClick={() => setPage("men")}
-                  className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
-                >
-                  Homem
-                </button>
-                <button
-                  onClick={() => setPage("women")}
-                  className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
-                >
-                  Mulher
-                </button>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+
+        {/* CONSULTORIA DE IMAGEM — editorial, sem imagem de stock externa */}
+        <section className="py-24 md:py-32" style={{ background: "var(--cream)" }}>
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
+              Atendimento Premium
+            </p>
+            <h2 className="font-display mb-6 fade-up-1" style={{ fontSize: "clamp(2.2rem,4.4vw,3.4rem)", lineHeight: 1.1, fontWeight: 600, color: "var(--forest)" }}>
+              Consultoria de <em style={{ fontStyle: "italic", fontWeight: 400 }}>Imagem</em> Especializada
+            </h2>
+            <p className="text-base leading-relaxed mb-16 mx-auto fade-up-2" style={{ maxWidth: 560, color: "var(--forest-light)" }}>
+              Não vendemos apenas óculos. Acreditamos que a sua armação é a moldura do seu rosto. A nossa equipa utiliza técnicas de visagismo para identificar os modelos que melhor harmonizam com os seus traços, tom de pele e estilo de vida.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-12 mb-16">
               {[
-                PRODUCTS.men[0],
-                PRODUCTS.men[3],
-                PRODUCTS.women[0],
-                PRODUCTS.women[2],
-              ].map((p) => (
-                <div
-                  key={p.id}
-                  onClick={() => setSelectedProduct(p)}
-                  className="cursor-pointer card-hover rounded-2xl overflow-hidden group"
-                  style={{ border: "1px solid var(--mist)" }}
-                >
-                  <div
-                    className="aspect-square img-zoom"
-                    style={{ background: "#f5f4f0" }}
-                  >
-                    <Img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-full h-full object-cover mix-blend-multiply"
-                    />
+                { icon: Eye, title: "Análise Facial", text: "Estudo detalhado do formato e proporções do seu rosto." },
+                { icon: Sparkles, title: "Coloração Pessoal", text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar." },
+                { icon: Award, title: "Curadoria de Marcas", text: "Seleção personalizada dentro do nosso portefólio premium." },
+              ].map((item, i) => (
+                <div key={i} className={`flex flex-col items-center text-center fade-up-${i + 1}`}>
+                  <div className="w-12 h-12 flex items-center justify-center mb-5" style={{ border: "1px solid var(--forest)" }}>
+                    <item.icon size={20} style={{ color: "var(--forest)" }} />
                   </div>
-                  <div className="p-4 bg-white">
-                    <p
-                      className="text-xs font-semibold tracking-wide mb-0.5"
-                      style={{ color: "var(--gold)" }}
-                    >
-                      {p.brand}
-                    </p>
-                    <p className="font-semibold text-sm mb-1">{p.name}</p>
-                    <p
-                      className="font-display text-lg font-semibold"
-                      style={{ color: "var(--forest)" }}
-                    >
-                      €{p.price}
-                    </p>
-                  </div>
+                  <p className="font-semibold text-sm mb-2" style={{ color: "var(--forest)" }}>{item.title}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--forest-light)", maxWidth: 220 }}>{item.text}</p>
                 </div>
               ))}
             </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => openBook("Consultoria de Imagem")}
+                className="btn-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
+              >
+                <Calendar size={16} /> Agendar Consultoria
+              </button>
+              <button
+                onClick={() => setPage("quiz")}
+                className="btn-outline-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
+              >
+                <Glasses size={16} /> Fazer Quiz Virtual
+              </button>
+            </div>
           </div>
         </section>
+
+        {/* SOBRE / CONFIANÇA — fotografia real da equipa */}
+        <section className="py-24 md:py-28" style={{ background: "var(--cream-dark)" }}>
+          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+            <div className="order-1 overflow-hidden img-zoom fade-up" style={{ height: 460 }}>
+              <Img
+                src="https://i.postimg.cc/vmz3kPmW/Equipa-Optica13-r2p8lpvixuoy0zmplkvnvhdg2jia66ckxheqrzn9tc.jpg"
+                alt="Equipa da Óptica 13"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="order-2 fade-up-1">
+              <p className="uc-label text-[11px] font-semibold mb-5" style={{ color: "var(--forest-light)" }}>
+                Na Parede desde 1986
+              </p>
+              <h2 className="font-display mb-6" style={{ fontSize: "clamp(2.1rem,4vw,3.2rem)", lineHeight: 1.1, fontWeight: 600, color: "var(--forest)" }}>
+                Uma vida dedicada <br /><em style={{ fontStyle: "italic", fontWeight: 400 }}>à sua visão</em>
+              </h2>
+              <p className="text-base leading-relaxed mb-9" style={{ maxWidth: 460, color: "var(--forest-light)" }}>
+                Há mais de 38 anos que cuidamos da visão das famílias da Parede, com o rigor de uma equipa credenciada e a proximidade de quem conhece os seus clientes pelo nome. Tecnologia de ponta, marcas premium e um atendimento que faz a diferença.
+              </p>
+              <div className="flex flex-wrap gap-x-12 gap-y-5 mb-10">
+                {[
+                  ["38", "anos de experiência"],
+                  ["+15", "entidades parceiras"],
+                  ["ERS", "registo E131391"],
+                ].map(([n, l]) => (
+                  <div key={l}>
+                    <p className="font-display text-3xl font-semibold" style={{ color: "var(--forest)" }}>{n}</p>
+                    <p className="text-xs uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>{l}</p>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => setPage("about")}
+                className="btn-outline-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest"
+              >
+                Conhecer a Óptica 13
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Testemunhos */}
         <TestimonialsSection />
       </div>
     );
   };
   /* SERVICES PAGE */
-  const ServicesPage = () => {
+  const ServicesPage = ({ openBook, setPage }) => {
     const servicesData = [
       {
         title: "Consultas de Optometria",
@@ -2888,7 +3719,7 @@ const openBook = (service = "Consulta Geral") => {
         ),
        img: "https://i.postimg.cc/KjLFzDfn/newarta-eye-care-5016078-1920.jpg",
         actionLabel: "Agendar Consulta",
-        actionFn: openBook,
+        actionFn: () => openBook("Consulta de Optometria"),
       },
       {
         title: "Atestado Médico (Cartas de Condução)",
@@ -3008,7 +3839,7 @@ const openBook = (service = "Consulta Geral") => {
         ),
         img: "https://i.postimg.cc/MZySsB2x/Contactologia-1-300x300.png",
         actionLabel: "Agendar Consulta",
-        actionFn: openBook,
+        actionFn: () => openBook("Consulta de Contactologia"),
       },
       {
         title: "Aconselhamento Personalizado",
@@ -3234,7 +4065,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ gender }) => {
+  const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, setSelectedProduct, favorites = [], onToggleFavorite }) => {
     const [filters, setFilters] = useState({
       material: "",
       color: "",
@@ -3243,14 +4074,25 @@ const openBook = (service = "Consulta Geral") => {
     });
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const genderFilter = searchParams.get("genero") || "";
+    const setGenderFilter = (value) => {
+      const next = new URLSearchParams(searchParams);
+      if (value) next.set("genero", value);
+      else next.delete("genero");
+      setSearchParams(next, { replace: true });
+    };
 
-    const products = PRODUCTS[gender];
- const filtered = useMemo(() => {
+    const products = productsProp;
+    const filtered = useMemo(() => {
       return products.filter((p) => {
         if (search && !p.name.toLowerCase().includes(search.toLowerCase()) && !p.brand.toLowerCase().includes(search.toLowerCase())) return false;
         if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
         if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
-        
+
+        if (genderFilter === "homem" && !(p.gender === "Masculino" || p.gender === "Unisexo")) return false;
+        if (genderFilter === "mulher" && !(p.gender === "Feminino" || p.gender === "Unisexo")) return false;
+
         if (filters.color) {
           const c = filters.color.toLowerCase();
           const pc = p.color.toLowerCase();
@@ -3268,169 +4110,118 @@ const openBook = (service = "Consulta Geral") => {
         }
         return true;
       });
-    }, [products, search, filters]);
+    }, [products, search, filters, genderFilter]);
 
-    const FilterPanel = ({ isMobile }) => (
-      <div className={isMobile ? "p-6" : ""}>
-        <div className="space-y-6">
-          {/* Material */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Material
-            </p>
-            <div className="space-y-2">
-              {["", "Acetato", "Metal", "Ultem"].map((m) => (
-                <label
-                  key={m}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
+    const activeFilterCount = [filters.material, filters.color, filters.style, filters.shape].filter(Boolean).length;
+    const activeChips = [
+      ...(search ? [{ key: "search", label: `"${search}"`, clear: () => setSearch("") }] : []),
+      ...(genderFilter ? [{ key: "genero", label: genderFilter === "homem" ? "Homem" : "Mulher", clear: () => setGenderFilter("") }] : []),
+      ...(filters.material ? [{ key: "material", label: filters.material, clear: () => setFilters({ ...filters, material: "" }) }] : []),
+      ...(filters.color ? [{ key: "color", label: filters.color, clear: () => setFilters({ ...filters, color: "" }) }] : []),
+      ...(filters.style ? [{ key: "style", label: filters.style, clear: () => setFilters({ ...filters, style: "" }) }] : []),
+      ...(filters.shape ? [{ key: "shape", label: filters.shape, clear: () => setFilters({ ...filters, shape: "" }) }] : []),
+    ];
+
+    const FilterPanel = ({ isMobile }) => {
+      const pillGroup = (label, field, options) => (
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide mb-3" style={{ color: "#888" }}>
+            {label}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {options.map((opt) => {
+              const active = filters[field] === opt;
+              return (
+                <button
+                  key={opt || "all"}
+                  type="button"
+                  onClick={() => setFilters({ ...filters, [field]: opt })}
+                  className="px-4 py-2 rounded-full text-xs font-semibold border-2 transition-all hover:-translate-y-0.5"
+                  style={{
+                    borderColor: active ? "var(--forest)" : "var(--mist)",
+                    background: active ? "var(--forest)" : "white",
+                    color: active ? "white" : "#555",
+                  }}
                 >
-                  <input
-                    type="radio"
-                    name={isMobile ? "material-mobile" : "material"}
-                    checked={filters.material === m}
-                    onChange={() => setFilters({ ...filters, material: m })}
-                    className="w-4 h-4"
-                    style={{ accentColor: "var(--gold)" }}
-                  />
-                  <span className="text-sm font-medium" style={{ color: filters.material === m ? "var(--forest)" : "#555" }}>
-                    {m || "Todos"}
-                  </span>
-                </label>
-              ))}
-            </div>
+                  {opt || "Todos"}
+                </button>
+              );
+            })}
           </div>
-
-          {/* Cor Dominante */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Cor Dominante
-            </p>
-            <div className="space-y-2">
-              {[
-                "",
-                "Preto",
-                "Tartaruga",
-                "Azul",
-                "Dourado",
-                "Prateado",
-                "Transparente",
-                "Vermelho"
-              ].map((c) => (
-                <label
-                  key={c}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
-                >
-                  <input
-                    type="radio"
-                    name={isMobile ? "color-mobile" : "color"}
-                    checked={filters.color === c}
-                    onChange={() => setFilters({ ...filters, color: c })}
-                    className="w-4 h-4"
-                    style={{ accentColor: "var(--gold)" }}
-                  />
-                  <span className="text-sm font-medium" style={{ color: filters.color === c ? "var(--forest)" : "#555" }}>
-                    {c || "Todas"}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Estilo */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Estilo
-            </p>
-            <div className="space-y-2">
-              {[
-                "",
-                "Clássico",
-                "Moderno",
-                "Intelectual",
-                "Arrojado",
-                "Glamour",
-                "Casual"
-              ].map(
-                (s) => (
-                  <label
-                    key={s}
-                    className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
-                  >
-                    <input
-                      type="radio"
-                      name={isMobile ? "style-mobile" : "style"}
-                      checked={filters.style === s}
-                      onChange={() => setFilters({ ...filters, style: s })}
-                      className="w-4 h-4"
-                      style={{ accentColor: "var(--gold)" }}
-                    />
-                    <span className="text-sm font-medium" style={{ color: filters.style === s ? "var(--forest)" : "#555" }}>
-                      {s || "Todos"}
-                    </span>
-                  </label>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Formato */}
-          <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-wide mb-3"
-              style={{ color: "#888" }}
-            >
-              Formato
-            </p>
-            <div className="space-y-2">
-              {[
-                "",
-                "Retangular",
-                "Quadrado",
-                "Redondo",
-                "Cat-Eye",
-                "Aviador",
-                "Geométrico"
-              ].map((sh) => (
-                <label
-                  key={sh}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity"
-                >
-                  <input
-                    type="radio"
-                    name={isMobile ? "shape-mobile" : "shape"}
-                    checked={filters.shape === sh}
-                    onChange={() => setFilters({ ...filters, shape: sh })}
-                    className="w-4 h-4"
-                    style={{ accentColor: "var(--gold)" }}
-                  />
-                  <span className="text-sm font-medium" style={{ color: filters.shape === sh ? "var(--forest)" : "#555" }}>
-                    {sh || "Todos"}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {isMobile && (
-            <button
-              onClick={() => setDrawerOpen(false)}
-              className="btn-forest w-full py-3 rounded-xl font-semibold text-sm"
-            >
-              Aplicar Filtros
-            </button>
-          )}
         </div>
-      </div>
-    );
+      );
+
+      const colorOptions = ["Preto", "Tartaruga", "Azul", "Dourado", "Prateado", "Transparente", "Vermelho"];
+
+      return (
+        <div className={isMobile ? "p-6" : ""}>
+          <div className="space-y-7">
+            {pillGroup("Material", "material", ["", "Acetato", "Metal", "Ultem"])}
+
+            {/* Cor Dominante — swatches com a cor real, em vez de uma lista de texto */}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide mb-3" style={{ color: "#888" }}>
+                Cor Dominante
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFilters({ ...filters, color: "" })}
+                  className="px-4 py-2 rounded-full text-xs font-semibold border-2 transition-all hover:-translate-y-0.5"
+                  style={{
+                    borderColor: filters.color === "" ? "var(--forest)" : "var(--mist)",
+                    background: filters.color === "" ? "var(--forest)" : "white",
+                    color: filters.color === "" ? "white" : "#555",
+                  }}
+                >
+                  Todas
+                </button>
+                {colorOptions.map((c) => {
+                  const active = filters.color === c;
+                  const isLight = ["Transparente", "Prateado"].includes(c);
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setFilters({ ...filters, color: c })}
+                      title={c}
+                      aria-label={c}
+                      className="relative w-9 h-9 rounded-full transition-transform hover:scale-110 flex-shrink-0"
+                      style={{
+                        background: COLOR_SWATCHES[c],
+                        boxShadow: active
+                          ? "0 0 0 2px white, 0 0 0 4px var(--forest)"
+                          : "0 0 0 2px white, 0 0 0 1px var(--mist)",
+                      }}
+                    >
+                      {active && (
+                        <CheckCircle
+                          size={16}
+                          className="absolute inset-0 m-auto"
+                          style={{ color: isLight ? "var(--forest)" : "white" }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {pillGroup("Estilo", "style", ["", "Clássico", "Moderno", "Intelectual", "Arrojado", "Glamour", "Casual"])}
+            {pillGroup("Formato", "shape", ["", "Retangular", "Quadrado", "Redondo", "Cat-Eye", "Aviador", "Geométrico"])}
+
+            {isMobile && (
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="btn-forest w-full py-3 rounded-xl font-semibold text-sm"
+              >
+                Aplicar Filtros
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    };
 
     return (
       <div
@@ -3444,7 +4235,7 @@ const openBook = (service = "Consulta Geral") => {
               className="text-xs font-semibold tracking-widest uppercase mb-3"
               style={{ color: "var(--gold)" }}
             >
-              Coleção {gender === "men" ? "Homem" : "Mulher"}
+              {eyebrow || "Coleção"}
             </p>
             <h1
               className="font-display mb-6"
@@ -3453,8 +4244,32 @@ const openBook = (service = "Consulta Geral") => {
                 color: "var(--forest)",
               }}
             >
-              Óculos <em>Premium</em>
+              {title || <>Óculos <em>Premium</em></>}
             </h1>
+
+            {/* Filtro de Género — em destaque, porque muitos modelos servem para ambos */}
+            {showGenderFilter && (
+              <div className="flex gap-2 mb-5">
+                {[["", "Todos"], ["homem", "Homem"], ["mulher", "Mulher"]].map(([value, label]) => {
+                  const active = genderFilter === value;
+                  return (
+                    <button
+                      key={value || "todos"}
+                      type="button"
+                      onClick={() => setGenderFilter(value)}
+                      className="px-5 py-2.5 rounded-full text-sm font-semibold border-2 transition-all hover:-translate-y-0.5"
+                      style={{
+                        borderColor: active ? "var(--forest)" : "var(--mist)",
+                        background: active ? "var(--forest)" : "white",
+                        color: active ? "white" : "#555",
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Search & Filter Toggle */}
             <div className="flex gap-4">
@@ -3475,19 +4290,62 @@ const openBook = (service = "Consulta Geral") => {
               </div>
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="lg:hidden btn-outline-forest px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2"
+                className="lg:hidden btn-outline-forest px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 relative"
               >
                 <Filter size={16} /> Filtros
+                {activeFilterCount > 0 && (
+                  <span
+                    className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+                    style={{ background: "var(--gold)" }}
+                  >
+                    {activeFilterCount}
+                  </span>
+                )}
               </button>
             </div>
+
+            {/* Filtros ativos */}
+            {activeChips.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mt-4">
+                {activeChips.map((chip) => (
+                  <span
+                    key={chip.key}
+                    className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full text-xs font-semibold"
+                    style={{ background: "var(--cream-dark)", border: "1px solid var(--mist)", color: "var(--forest)" }}
+                  >
+                    {chip.label}
+                    <button
+                      type="button"
+                      onClick={chip.clear}
+                      className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors"
+                      aria-label={`Remover filtro ${chip.label}`}
+                    >
+                      <X size={11} />
+                    </button>
+                  </span>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); }}
+                  className="text-xs font-semibold underline"
+                  style={{ color: "#888" }}
+                >
+                  Limpar tudo
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex gap-8">
             {/* Desktop Sidebar */}
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div
-                className="sticky top-28 p-6 rounded-2xl border"
-                style={{ background: "white", borderColor: "var(--mist)" }}
+                className="sticky top-28 p-6 rounded-2xl border overflow-y-auto"
+                style={{
+                  background: "white",
+                  borderColor: "var(--mist)",
+                  maxHeight: "calc(100vh - 8rem)",
+                }}
               >
                 <p className="font-display text-xl font-semibold mb-6" style={{ color: "var(--forest)" }}>Filtros</p>
                 <FilterPanel isMobile={false} />
@@ -3511,23 +4369,29 @@ const openBook = (service = "Consulta Geral") => {
                     <div className="relative">
                       {p.badge && (
                         <div
-                          className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-md"
-                          style={{
-                            background:
-                              p.badge === "Best Seller"
-                                ? "#0056b3"
-                                : p.badge === "Novo" || p.badge === "Nova Coleção"
-                                ? "#7c3aed"
-                                : "#16a34a",
-                          }}
+                          className="absolute top-3 left-3 z-10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-white"
+                          style={{ background: "var(--forest)" }}
                         >
-                          {p.badge === "Best Seller"
-                            ? "⭐ "
-                            : p.badge === "Novo" || p.badge === "Nova Coleção"
-                            ? "✦ "
-                            : "🔥 "}
                           {p.badge}
                         </div>
+                      )}
+                      {showDiscount && p.originalPrice && p.originalPrice > p.price && (
+                        <div
+                          className="absolute top-3 right-3 z-10 px-2.5 py-1 text-xs font-semibold text-white"
+                          style={{ background: "var(--wine)" }}
+                        >
+                          -{Math.round(100 - (p.price / p.originalPrice) * 100)}%
+                        </div>
+                      )}
+                      {onToggleFavorite && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onToggleFavorite(p.id); }}
+                          aria-label={favorites.includes(p.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                          className="absolute bottom-3 right-3 z-10 w-9 h-9 flex items-center justify-center bg-white/90 backdrop-blur transition-transform hover:scale-110"
+                          style={{ color: favorites.includes(p.id) ? "var(--wine)" : "var(--forest)", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
+                        >
+                          <Heart size={16} fill={favorites.includes(p.id) ? "var(--wine)" : "none"} />
+                        </button>
                       )}
                       <div
                         className="aspect-square overflow-hidden img-zoom"
@@ -3536,7 +4400,7 @@ const openBook = (service = "Consulta Geral") => {
                         <Img
                           src={p.image}
                           alt={p.name}
-                          className="w-full h-full object-cover mix-blend-multiply"
+                          className={`w-full h-full object-cover ${showDiscount ? "" : "mix-blend-multiply"}`}
                         />
                       </div>
                     </div>
@@ -3551,22 +4415,10 @@ const openBook = (service = "Consulta Geral") => {
                       <p className="font-semibold mb-1 truncate">{p.name}</p>
                       <div className="flex items-center gap-2 mb-3">
                         {(() => {
-                          const colorMap = {
-                            "Preto": "#1a1a1a",
-                            "Dourado": "#c9a84c",
-                            "Prateado": "#9ca3af",
-                            "Transparente": "#dbeafe",
-                            "Tartaruga": "#92400e",
-                            "Burgundy": "#681329",
-                            "Vermelho": "#dc2626",
-                            "Azul": "#1e3a8a",
-                            "Cristal": "#f0f9ff"
-                          };
-                          
                           // Procura a cor que mais se aproxima no mapa para a bolinha
                           let dotColor = "#ccc";
-                          Object.keys(colorMap).forEach(key => {
-                            if (p.color.toLowerCase().includes(key.toLowerCase())) dotColor = colorMap[key];
+                          Object.keys(COLOR_SWATCHES).forEach(key => {
+                            if (p.color.toLowerCase().includes(key.toLowerCase())) dotColor = COLOR_SWATCHES[key];
                           });
 
                           return (
@@ -3586,11 +4438,25 @@ const openBook = (service = "Consulta Geral") => {
                           );
                         })()}
                       </div>
-                      <p
+                      <div
                         className="font-display text-2xl font-semibold"
                         style={{ color: "var(--forest)" }}
                       >
-                        €{p.price}
+                        {showDiscount && p.originalPrice && p.originalPrice > p.price ? (
+                          <>
+                            <span className="inline-flex items-baseline gap-2">
+                              <span>€{p.price}</span>
+                              <span className="text-sm font-normal line-through" style={{ color: "#aaa" }}>
+                                €{p.originalPrice}
+                              </span>
+                            </span>
+                            <p className="text-xs font-semibold mt-0.5" style={{ color: "var(--wine)" }}>
+                              Poupa €{p.originalPrice - p.price}
+                            </p>
+                          </>
+                        ) : (
+                          <>€{p.price}</>
+                        )}
                         {p.rating && (
                           <div className="flex items-center gap-1.5 mb-1 mt-1">
                             <div className="flex gap-0.5">
@@ -3614,7 +4480,7 @@ const openBook = (service = "Consulta Geral") => {
                             </span>
                           </div>
                         )}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -3626,7 +4492,7 @@ const openBook = (service = "Consulta Geral") => {
                   <p className="text-sm" style={{ color: "#888" }}>
                     Nenhum modelo encontrado com essa combinação exata de filtros.
                   </p>
-                  <button onClick={() => setFilters({ material: "", color: "", style: "", shape: "" })} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
+                  <button onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
                     Limpar Filtros
                   </button>
                 </div>
@@ -3639,7 +4505,7 @@ const openBook = (service = "Consulta Geral") => {
         {drawerOpen && (
           <>
             <div
-              className="fixed inset-0 z-[80] lg:hidden transition-opacity"
+              className="modal-backdrop fixed inset-0 z-[80] lg:hidden"
               style={{
                 background: "rgba(10,20,15,0.5)",
                 backdropFilter: "blur(4px)",
@@ -3677,11 +4543,13 @@ const openBook = (service = "Consulta Geral") => {
       materials: [],
       size: "",
       usage: "",      // Novo: Rotina
-      email: "",
-      optIn: true,
     });
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState([]);
+    const [resultEmail, setResultEmail] = useState("");
+    const [sendingResults, setSendingResults] = useState(false);
+    const [resultsSent, setResultsSent] = useState(false);
+    const [resultsSendError, setResultsSendError] = useState(false);
 
   const normalizeText = (text) => {
     if (!text) return "";
@@ -3693,8 +4561,10 @@ const openBook = (service = "Consulta Geral") => {
     setAnswers(newAnswers); 
 
     setTimeout(() => {
-      if (step === 7) {
-        finishQuiz(newAnswers); 
+      // A pergunta 7 (rotina diária) só faz sentido para óculos graduados —
+      // para óculos de sol salta-se diretamente para os resultados.
+      if (step === 7 || (step === 6 && newAnswers.type === "Óculos de sol")) {
+        finishQuiz(newAnswers);
       } else {
         setStep(step + 1);
         window.scrollTo(0, 0);
@@ -3724,7 +4594,7 @@ const openBook = (service = "Consulta Geral") => {
 
     setTimeout(() => {
       try {
-        const scoredProducts = ALL_PRODUCTS.map(p => {
+        const scoredProducts = QUIZ_PRODUCTS.map(p => {
           let score = 0;
           
           const pName = normalizeText(p.name);
@@ -3739,7 +4609,7 @@ const openBook = (service = "Consulta Geral") => {
           if (activeAnswers.type === "Óculos de sol") {
               if (isSunglass) score += 50; // Super bónus se for de sol
               else score -= 1000; // Elimina imediatamente armações normais
-          } else if (activeAnswers.type === "Óculos de graduados") {
+          } else if (activeAnswers.type === "Óculos graduados") {
               if (!isSunglass || is2in1) score += 50; // Super bónus para graduados normais ou 2-em-1
               else score -= 1000; // Elimina imediatamente óculos de sol puros
           }
@@ -3790,7 +4660,7 @@ const openBook = (service = "Consulta Geral") => {
           .sort((a, b) => b.score - a.score);
         
         // Fallback super seguro: se algo falhar, dá pelo menos a categoria certa (Sol ou Graduado)
-        const fallbackMatches = ALL_PRODUCTS.filter(p => {
+        const fallbackMatches = QUIZ_PRODUCTS.filter(p => {
             const pName = normalizeText(p.name);
             const pDesc = normalizeText(p.description);
             const isSun = pName.includes("sun") || pName.includes("2-in-1") || pDesc.includes("oculos de sol") || normalizeText(p.color).includes("lentes");
@@ -3811,18 +4681,52 @@ const openBook = (service = "Consulta Geral") => {
   };
   const reset = () => {
     setStep(1);
-    setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "", email: "", optIn: true });
+    setAnswers({ type: "", gender: "", style: "", colors: [], materials: [], size: "", usage: "" });
     setResults([]);
+    setResultEmail("");
+    setResultsSent(false);
+    setResultsSendError(false);
     window.scrollTo(0, 0);
   };
+
+  const handleSendResults = async () => {
+    if (!resultEmail) return;
+    setSendingResults(true);
+    setResultsSendError(false);
+    try {
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: 'service_jd2hmsh',
+          template_id: 'template_5wkk8d9',
+          user_id: 'r1iXXbQSD6eraiqvx',
+          template_params: {
+            name: resultEmail,
+            email: resultEmail,
+            service: `Resultados do Quiz de Estilo: ${results.map(p => `${p.name} (€${p.price})`).join(', ')}`,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(`EmailJS respondeu ${res.status}`);
+      setResultsSent(true);
+    } catch (err) {
+      console.error("Erro ao enviar resultados do quiz:", err);
+      setResultsSendError(true);
+    } finally {
+      setSendingResults(false);
+    }
+  };
+
+    const totalSteps = answers.type === "Óculos de sol" ? 6 : 7;
 
     return (
       <div className="pt-28 pb-24 min-h-screen" style={{ background: "#f8f9fa" }}>
         <div className="max-w-4xl mx-auto px-6">
-          {step <= 8 && (
+          {step <= totalSteps && (
             <div className="text-center mb-10 fade-up">
-              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de 7</p>
-              
+              <p className="text-xs font-bold mb-4" style={{ color: "#888" }}>{step} de {totalSteps}</p>
+
               {step === 1 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que tipo de óculos procura?</h1>}
               {step === 2 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Para quem são os óculos?</h1>}
               {step === 3 && <h1 className="font-display text-4xl font-medium" style={{ color: "var(--forest)" }}>Que imagem pretende transmitir?</h1>}
@@ -3836,7 +4740,7 @@ const openBook = (service = "Consulta Geral") => {
           <div className="max-w-2xl mx-auto fade-up-1">
             {step === 1 && (
               <div className="grid gap-4">
-                {["Óculos de graduados", "Óculos de sol"].map(v => (
+                {["Óculos graduados", "Óculos de sol"].map(v => (
                   <button key={v} onClick={() => answerSingle("type", v)} className="bg-white p-6 rounded-2xl border text-left font-semibold hover:border-black transition-all">{v}</button>
                 ))}
               </div>
@@ -3863,7 +4767,7 @@ const openBook = (service = "Consulta Geral") => {
                 {["Preto", "Tartaruga", "Azul", "Dourado", "Transparente"].map(v => (
                   <button key={v} onClick={() => toggleMulti("colors", v)} className={`p-6 rounded-2xl border text-center font-semibold transition-all ${answers.colors.includes(v) ? 'bg-black text-white' : 'bg-white'}`}>{v}</button>
                 ))}
-                <button onClick={nextStep} className="col-span-2 mt-4 underline text-sm">Passar à frente</button>
+                <button onClick={nextStep} className="btn-forest col-span-2 mt-4 py-4 rounded-xl font-bold text-base tracking-wide">Continuar</button>
               </div>
             )}
 
@@ -3891,13 +4795,6 @@ const openBook = (service = "Consulta Geral") => {
               </div>
             )}
 
-            {step === 8 && (
-              <form onSubmit={finishQuiz} className="space-y-4">
-                <input type="email" placeholder="O seu e-mail" required className="w-full p-4 rounded-xl border" onChange={(e) => setAnswers({...answers, email: e.target.value})} />
-                <button type="submit" className="w-full bg-black text-white py-4 rounded-xl font-bold">Ver Recomendações</button>
-              </form>
-            )}
-
             {step === 9 && <div className="text-center py-20 font-display text-2xl">A analisar o seu perfil...</div>}
 
       {step === 10 && (
@@ -3911,9 +4808,21 @@ const openBook = (service = "Consulta Geral") => {
           className="bg-white p-4 rounded-xl border cursor-pointer hover:border-black transition-all" 
           onClick={() => onSelectProduct(p)}
         >
-          <Img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
+          <div className="relative">
+            <Img src={p.image} className="w-full h-40 object-cover mb-4 rounded-lg" />
+            {p.originalPrice > p.price && (
+              <span className="absolute top-2 left-2 text-white text-[10px] font-semibold uppercase tracking-wide px-2 py-1" style={{ background: "var(--wine)" }}>Outlet</span>
+            )}
+          </div>
           <p className="font-bold">{p.name}</p>
-          <p className="text-sm font-semibold">{p.price}€</p>
+          {p.originalPrice > p.price ? (
+            <p className="text-sm font-semibold">
+              <span className="line-through text-gray-400 mr-2">{p.originalPrice}€</span>
+              <span style={{ color: "var(--wine)" }}>{p.price}€</span>
+            </p>
+          ) : (
+            <p className="text-sm font-semibold">{p.price}€</p>
+          )}
         </div>
       ))}
     </div>
@@ -3921,14 +4830,33 @@ const openBook = (service = "Consulta Geral") => {
     {/* E-mail opcional - Removido o "required" */}
     <div className="bg-gray-50 p-6 rounded-2xl border max-w-sm mx-auto">
       <p className="font-semibold mb-3 text-sm">Guardar estes resultados por e-mail (opcional):</p>
-      <div className="flex gap-2">
-        <input 
-            type="email" 
-            placeholder="O seu e-mail" 
-            className="p-3 border rounded-xl flex-1 outline-none" 
-        />
-        <button className="bg-black text-white px-4 py-3 rounded-xl font-bold text-sm">Enviar</button>
-      </div>
+      {resultsSent ? (
+        <p className="text-sm font-semibold" style={{ color: "var(--forest)" }}>Resultados enviados! Verifique o seu e-mail.</p>
+      ) : (
+        <>
+          <div className="flex gap-2">
+            <input
+              type="email"
+              placeholder="O seu e-mail"
+              value={resultEmail}
+              onChange={(e) => setResultEmail(e.target.value)}
+              className="p-3 border rounded-xl flex-1 outline-none"
+            />
+            <button
+              onClick={handleSendResults}
+              disabled={sendingResults || !resultEmail}
+              className="bg-black text-white px-4 py-3 rounded-xl font-bold text-sm disabled:opacity-50"
+            >
+              {sendingResults ? "..." : "Enviar"}
+            </button>
+          </div>
+          {resultsSendError && (
+            <p className="text-xs mt-2" style={{ color: "#c0392b" }}>
+              Não foi possível enviar agora. Tente novamente.
+            </p>
+          )}
+        </>
+      )}
     </div>
     
     <button onClick={reset} className="mt-8 underline text-sm text-gray-500">Refazer Quiz</button>
@@ -4146,7 +5074,7 @@ const openBook = (service = "Consulta Geral") => {
         {/* MODAL DE SEGUROS E PROTOCOLOS */}
         {showSeguros && (
           <div
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+            className="modal-backdrop fixed inset-0 z-[200] flex items-center justify-center p-4"
             style={{
               background: "rgba(10,20,15,0.85)",
               backdropFilter: "blur(8px)",
@@ -4337,7 +5265,7 @@ const openBook = (service = "Consulta Geral") => {
     );
   };
   /* ABOUT PAGE */
-  const AboutPage = () => (
+  const AboutPage = ({ setPage }) => (
     <div
       className="pt-28 pb-24 min-h-screen"
       style={{ background: "var(--cream)" }}
@@ -4392,7 +5320,7 @@ const openBook = (service = "Consulta Geral") => {
               <span className="text-xs font-semibold uppercase tracking-widest opacity-90 mb-1">
                 Desde
               </span>
-              <span className="font-display text-4xl font-bold">1986</span>
+              <CountUp end={1986} className="font-display text-4xl font-bold" />
             </div>
           </div>
 
@@ -4542,7 +5470,7 @@ const openBook = (service = "Consulta Geral") => {
             className="font-display text-3xl md:text-4xl font-semibold mb-10 max-w-3xl mx-auto relative z-10"
             style={{ color: "var(--forest)", lineHeight: 1.3 }}
           >
-            Temos 38 anos de especialização na ótica, totalmente focados em
+            Temos <CountUp end={38} /> anos de especialização na ótica, totalmente focados em
             satisfazer as suas necessidades.
           </h2>
 
@@ -4573,7 +5501,7 @@ const openBook = (service = "Consulta Geral") => {
   );
 
   /* CONTACT */
-  const ContactPage = () => {
+  const ContactPage = ({ openBook }) => {
     const [form, setForm] = useState({
       name: "",
       email: "",
@@ -4581,6 +5509,38 @@ const openBook = (service = "Consulta Geral") => {
       msg: "",
     });
     const [sent, setSent] = useState(false);
+    const [sending, setSending] = useState(false);
+    const [sendError, setSendError] = useState(false);
+
+    const handleSend = async () => {
+      if (!form.name || !form.email || !form.msg) return;
+      setSending(true);
+      setSendError(false);
+      try {
+        const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service_id: 'service_jd2hmsh',
+            template_id: 'template_5wkk8d9',
+            user_id: 'r1iXXbQSD6eraiqvx',
+            template_params: {
+              name: form.name,
+              email: form.email,
+              phone: form.phone,
+              service: `Mensagem de contacto do site: ${form.msg}`,
+            },
+          }),
+        });
+        if (!res.ok) throw new Error(`EmailJS respondeu ${res.status}`);
+        setSent(true);
+      } catch (err) {
+        console.error("Erro ao enviar mensagem de contacto:", err);
+        setSendError(true);
+      } finally {
+        setSending(false);
+      }
+    };
 
     return (
       <div
@@ -4653,7 +5613,7 @@ const openBook = (service = "Consulta Geral") => {
                 ))}
               </div>
               <button
-                onClick={openBook}
+                onClick={() => openBook("Consulta de Optometria")}
                 className="btn-forest w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
               >
                 <Calendar size={15} /> Agendar Consulta Gratuita
@@ -4705,7 +5665,7 @@ const openBook = (service = "Consulta Geral") => {
                         className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
                         style={{
                           borderColor: "var(--mist)",
-                          fontFamily: "Jost,sans-serif",
+                          fontFamily: "Nord, Jost, sans-serif",
                         }}
                       />
                     ))}
@@ -4719,15 +5679,21 @@ const openBook = (service = "Consulta Geral") => {
                       className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all resize-none"
                       style={{
                         borderColor: "var(--mist)",
-                        fontFamily: "Jost,sans-serif",
+                        fontFamily: "Nord, Jost, sans-serif",
                       }}
                     />
                     <button
-                      onClick={() => setSent(true)}
-                      className="btn-forest w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
+                      onClick={handleSend}
+                      disabled={sending || !form.name || !form.email || !form.msg}
+                      className="btn-forest w-full py-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
                     >
-                      <Send size={15} /> Enviar Mensagem
+                      <Send size={15} /> {sending ? "A enviar..." : "Enviar Mensagem"}
                     </button>
+                    {sendError && (
+                      <p className="text-xs mt-3 text-center" style={{ color: "#c0392b" }}>
+                        Não foi possível enviar agora. Ligue-nos para 934 421 310 ou tente novamente.
+                      </p>
+                    )}
                   </div>
                 </>
               )}
@@ -4848,25 +5814,241 @@ const openBook = (service = "Consulta Geral") => {
       </div>
     </div>
   );
+
+/* ── SEO: título e meta description por página ─────────────── */
+const PAGE_META = {
+  home: {
+    title: "Óptica 13 | Especialistas na sua Visão",
+    description: "Na Óptica 13 na Parede cuidamos da sua visão. Marque a sua consulta gratuita, descubra a nossa coleção premium e aproveite os nossos descontos exclusivos.",
+  },
+  services: {
+    title: "Serviços | Óptica 13",
+    description: "Optometria, contactologia, certificados de condução e mais. Conheça os serviços especializados da Óptica 13 na Parede.",
+  },
+  vantagens: {
+    title: "Vantagens e Benefícios | Óptica 13",
+    description: "Seguros, pagamentos facilitados, ótica ao domicílio e outras vantagens exclusivas para os clientes da Óptica 13.",
+  },
+  mindthelook: {
+    title: "Coleção MindTheLook | Óptica 13",
+    description: "Descubra a coleção MindTheLook na Óptica 13. Armações e óculos de sol premium para homem e mulher, das melhores marcas.",
+  },
+  outlet: {
+    title: "Outlet | Óptica 13",
+    description: "Óculos premium com desconto na Óptica 13. Modelos de coleções anteriores com preços de saldo, por tempo limitado.",
+  },
+  quiz: {
+    title: "Quiz de Estilo | Óptica 13",
+    description: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra o seu par perfeito em minutos.",
+  },
+  about: {
+    title: "Sobre Nós | Óptica 13",
+    description: "Conheça a Óptica 13, na vila da Parede desde 1986. A nossa história, missão e equipa dedicada à sua visão.",
+  },
+  contact: {
+    title: "Contactos | Óptica 13",
+    description: "Contacte a Óptica 13 na Parede. Telefone, morada, horário e formulário de contacto.",
+  },
+  terms: {
+    title: "Termos e Privacidade | Óptica 13",
+    description: "Termos e condições, política de privacidade, envios e devoluções da Óptica 13.",
+  },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN APP COMPONENT
+   ══════════════════════════════════════════════════════════════ */
+export default function App() {
+  return (
+    <Router>
+      <MainLayout />
+    </Router>
+  );
+}
+
+function MainLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const page = location.pathname.replace("/", "") || "home";
+  const setPage = (newPage) => {
+    navigate(newPage === "home" ? "/" : "/" + newPage);
+  };
+
+  const [booking, setBooking] = useState(false);
+  const [bookingService, setBookingService] = useState("Consulta Geral");
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [exitIntent, setExitIntent] = useState(false);
+  const exitShown = useRef(false);
+
+  // Favoritos (guardados no navegador)
+  const [favorites, setFavorites] = useState(loadFavorites);
+  const [favoritesOpen, setFavoritesOpen] = useState(false);
+  useEffect(() => {
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch (e) {}
+  }, [favorites]);
+  const toggleFavorite = (id) =>
+    setFavorites((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  // Pré-carrega o carrinho Shopify para o ícone do header funcionar sempre
+  useEffect(() => { ensureShopify(); }, []);
+
+  // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Atualiza o <title> e a meta description por página, para SEO e partilhas
+  useEffect(() => {
+    const meta = PAGE_META[page] || PAGE_META.home;
+    document.title = meta.title;
+    const descTag = document.querySelector('meta[name="description"]');
+    if (descTag) descTag.setAttribute("content", meta.description);
+  }, [page]);
+
+  // Scroll-reveal: anima .fade-up/.fade-up-1..4 só quando entram no viewport,
+  // em vez de na montagem (o que os fazia "gastar-se" fora de vista).
+  // Um MutationObserver apanha elementos que aparecem depois (troca de página, modais).
+  useEffect(() => {
+    const REVEAL_SELECTOR = ".fade-up, .fade-up-1, .fade-up-2, .fade-up-3, .fade-up-4";
+    const observed = new WeakSet();
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    const observeWithin = (root) => {
+      root.querySelectorAll?.(REVEAL_SELECTOR).forEach((el) => {
+        if (!observed.has(el)) {
+          observed.add(el);
+          io.observe(el);
+        }
+      });
+    };
+
+    observeWithin(document);
+
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if (node.nodeType !== 1) return;
+          if (node.matches?.(REVEAL_SELECTOR) && !observed.has(node)) {
+            observed.add(node);
+            io.observe(node);
+          }
+          observeWithin(node);
+        });
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+
+ useEffect(() => {
+    // 1. Gatilho de Saída (Para Computador)
+    const h = (e) => {
+      if (e.clientY <= 10 && !exitShown.current) {
+        exitShown.current = true;
+        setExitIntent(true);
+      }
+    };
+    document.addEventListener("mouseout", h);
+
+    // 2. Gatilho de Tempo - 12 Segundos (Para Telemóvel e Computador)
+    const timer = setTimeout(() => {
+      if (!exitShown.current) {
+        exitShown.current = true;
+        setExitIntent(true);
+      }
+    }, 12000);
+
+    // 3. Limpeza de memória do React
+    return () => {
+      document.removeEventListener("mouseout", h);
+      clearTimeout(timer);
+    };
+  }, []);
+
+const openBook = (service = "Consulta Geral") => {
+    setBookingService(service); // O site guarda o nome do serviço
+    setBooking(true);
+    setExitIntent(false);
+  };
+  const addToCart = (p) => {
+    const ex = cart.find((x) => x.id === p.id);
+    if (ex)
+      setCart(cart.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x)));
+    else setCart([...cart, { ...p, qty: 1 }]);
+  };
+  const removeFromCart = (id) => setCart(cart.filter((x) => x.id !== id));
+  const updateQty = (id, q) => {
+    if (q < 1) removeFromCart(id);
+    else setCart(cart.map((x) => (x.id === id ? { ...x, qty: q } : x)));
+  };
+
   return (
     <>
       <div
         className="min-h-screen"
-        style={{ background: "var(--cream)", fontFamily: "Jost, sans-serif" }}
+        style={{ background: "var(--cream)", fontFamily: "Nord, Jost, sans-serif" }}
       >
        
-        <Header />
-<Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/vantagens" element={<VantagensPage />} />
-          <Route path="/men" element={<CollectionPage gender="men" />} />
-          <Route path="/women" element={<CollectionPage gender="women" />} />
-          <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-        </Routes>
+        <Header page={page} setPage={setPage} openBook={openBook} favoritesCount={favorites.length} onOpenFavorites={() => setFavoritesOpen(true)} onOpenCart={openShopifyCart} />
+        <div key={location.pathname} className="page-transition">
+          <Routes>
+            <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
+            <Route path="/services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
+            <Route path="/vantagens" element={<VantagensPage />} />
+            <Route
+              path="/mindthelook"
+              element={
+                <CollectionPage
+                  products={[...ALL_PRODUCTS].reverse()}
+                  title={<>Coleção <em>MindTheLook</em></>}
+                  eyebrow="Coleção Assinatura"
+                  showGenderFilter={true}
+                  setSelectedProduct={setSelectedProduct}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                />
+              }
+            />
+            <Route
+              path="/outlet"
+              element={
+                <CollectionPage
+                  products={PRODUCTS.outlet}
+                  title="Outlet"
+                  eyebrow="Saldos"
+                  showDiscount={true}
+                  showGenderFilter={true}
+                  setSelectedProduct={setSelectedProduct}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                />
+              }
+            />
+            <Route path="/men" element={<Navigate to="/mindthelook?genero=homem" replace />} />
+            <Route path="/women" element={<Navigate to="/mindthelook?genero=mulher" replace />} />
+            <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
+            <Route path="/about" element={<AboutPage setPage={setPage} />} />
+            <Route path="/contact" element={<ContactPage openBook={openBook} />} />
+            <Route path="/terms" element={<TermsPage />} />
+          </Routes>
+        </div>
         <BookingModal 
           isOpen={booking} 
           onClose={() => setBooking(false)} 
@@ -4877,12 +6059,26 @@ const openBook = (service = "Consulta Geral") => {
             product={selectedProduct}
             onClose={() => setSelectedProduct(null)}
             onAdd={addToCart}
+            isFavorite={favorites.includes(selectedProduct.id)}
+            onToggleFavorite={() => toggleFavorite(selectedProduct.id)}
             onBook={() => {
+              const productName = selectedProduct.name;
               setSelectedProduct(null);
-              openBook();
+              openBook(`Reserva de "${productName}" na Loja`);
+            }}
+            onBookConsulta={() => {
+              setSelectedProduct(null);
+              openBook("Consulta de Optometria");
             }}
           />
         )}
+        <FavoritesDrawer
+          open={favoritesOpen}
+          onClose={() => setFavoritesOpen(false)}
+          favorites={favorites}
+          onOpenProduct={(p) => setSelectedProduct(p)}
+          onToggleFavorite={toggleFavorite}
+        />
         {exitIntent && (
           <ExitPopup
             onBook={() => {
@@ -4893,7 +6089,7 @@ const openBook = (service = "Consulta Geral") => {
           />
         )}
 
-        <Footer />
+        <Footer setPage={setPage} />
         <WhatsAppBtn />
         <CookieBanner />
         <Analytics />
