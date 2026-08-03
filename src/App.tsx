@@ -103,104 +103,247 @@ function CountUp({ end, duration = 1500, className, style }) {
 }
 /* ── SHOPIFY INTEGRATION ────────────────────────────────────── */
 
-function ShopifyBuyButton({ productId }) {
-  const buttonRef = useRef(null);
+/* ── SHOPIFY (carrinho único partilhado, aberto pelo ícone do header) ──
+   Uma só instância do SDK/cliente para todos os produtos, para que o
+   "Adicionar ao Carrinho" acumule tudo NUM carrinho, que depois é aberto
+   pelo ícone do carrinho no header (openShopifyCart). */
+const SHOPIFY_DOMAIN = 'dqih6f-80.myshopify.com';
+const SHOPIFY_TOKEN = 'a9c7a2f027b84643f7ede12707d4e285';
+let _shopifyReady = null;
+let _shopifyUI = null;
+let _shopifyCart = null;
 
-  useEffect(() => {
+function ensureShopify() {
+  if (_shopifyReady) return _shopifyReady;
+  _shopifyReady = new Promise((resolve) => {
+    const build = () => {
+      const client = window.ShopifyBuy.buildClient({
+        domain: SHOPIFY_DOMAIN,
+        storefrontAccessToken: SHOPIFY_TOKEN,
+      });
+      window.ShopifyBuy.UI.onReady(client).then((ui) => {
+        _shopifyUI = ui;
+        let cartNode = document.getElementById('optica13-cart-node');
+        if (!cartNode) {
+          cartNode = document.createElement('div');
+          cartNode.id = 'optica13-cart-node';
+          document.body.appendChild(cartNode);
+        }
+        // Cria um carrinho persistente. O botão flutuante (toggle) é
+        // escondido por CSS; o carrinho é aberto pelo ícone do header.
+        const created = ui.createComponent('cart', {
+          node: cartNode,
+          options: {
+            cart: {
+              startImmediately: false,
+              text: { title: 'O seu carrinho', empty: 'O carrinho está vazio.', button: 'Finalizar Compra', total: 'Total' },
+              styles: { button: { 'background-color': '#111111', 'border-radius': '0', ':hover': { 'background-color': '#333333' } } },
+            },
+            toggle: { styles: { toggle: { display: 'none' } } },
+          },
+        });
+        Promise.resolve(created).then((cart) => {
+          _shopifyCart = cart || (ui.components && ui.components.cart && ui.components.cart[0]);
+          resolve(ui);
+        });
+      });
+    };
     if (window.ShopifyBuy && window.ShopifyBuy.UI) {
-      initShopify();
+      build();
     } else {
       const script = document.createElement('script');
       script.async = true;
       script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      script.onload = build;
       document.head.appendChild(script);
-      script.onload = initShopify;
     }
+  });
+  return _shopifyReady;
+}
 
-    function initShopify() {
-      if (buttonRef.current) {
-         buttonRef.current.innerHTML = '';
-      }
+function openShopifyCart() {
+  ensureShopify().then((ui) => {
+    const cart = _shopifyCart || (ui && ui.components && ui.components.cart && ui.components.cart[0]);
+    if (cart && typeof cart.open === 'function') cart.open();
+  });
+}
 
-      // CRIAMOS O CLIENTE AQUI DENTRO (Resolve o erro do Console!)
-      const client = window.ShopifyBuy.buildClient({
-        domain: 'dqih6f-80.myshopify.com',
-        storefrontAccessToken: 'a9c7a2f027b84643f7ede12707d4e285'
-      });
+function ShopifyBuyButton({ productId }) {
+  const buttonRef = useRef(null);
 
-      window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-        ui.createComponent('product', {
-          id: productId,
-          node: buttonRef.current,
-          moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
-          options: {
-            product: {
-              buttonDestination: 'checkout',
-              contents: {
-                img: false,
-                title: false,
-                price: false,
-                options: true,
-                quantity: false,
-                button: true
+  useEffect(() => {
+    let cancelled = false;
+    ensureShopify().then((ui) => {
+      if (cancelled || !buttonRef.current) return;
+      buttonRef.current.innerHTML = '';
+      ui.createComponent('product', {
+        id: productId,
+        node: buttonRef.current,
+        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
+        options: {
+          product: {
+            // Adiciona ao carrinho (em vez de ir direto ao checkout);
+            // o checkout faz-se depois pelo ícone do carrinho no header.
+            buttonDestination: 'cart',
+            contents: { img: false, title: false, price: false, options: true, quantity: false, button: true },
+            text: { button: 'Adicionar ao Carrinho' },
+            styles: {
+              product: {
+                '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0', 'margin-bottom': '0' },
+                'width': '100%', 'max-width': '100%',
               },
-             text: {
-                button: 'Adicionar ao Carrinho',
+              button: {
+                'background-color': '#111111',
+                'color': '#ffffff',
+                'border-radius': '0',
+                'font-family': 'Jost, sans-serif',
+                'font-weight': '600',
+                'font-size': '13px',
+                'padding': '16px 24px',
+                'width': '100%',
+                'max-width': '100%',
+                'letter-spacing': '0.08em',
+                'text-transform': 'uppercase',
+                ':hover': { 'background-color': '#333333' },
               },
-              styles: {
-                product: {
-                  '@media (min-width: 601px)': {
-                    'max-width': '100%',
-                    'margin-left': '0',
-                    'margin-bottom': '0'
-                  },
-                  'width': '100%',
-                  'max-width': '100%'
-                },
-                button: {
-                  'background-color': '#0056b3',
-                  'color': '#ffffff',
-                  'border-radius': '12px',
-                  'font-family': 'Jost, sans-serif',
-                  'font-weight': '600',
-                  'font-size': '14px',
-                  'padding': '16px 24px',
-                  'width': '100%',
-                  'max-width': '100%',
-                  'letter-spacing': '0.025em',
-                  ':hover': {
-                    'background-color': '#004494'
-                  }
-                }
-              }
             },
-            cart: {
-              text: {
-                title: 'O seu carrinho',
-                empty: 'O carrinho está vazio.',
-                button: 'Finalizar Compra',
-                total: 'Total'
-              },
-              styles: {
-                button: {
-                  'background-color': '#000000',
-                  'border-radius': '12px',
-                  'font-family': 'Jost, sans-serif',
-                  'font-weight': '600'
-                }
-              }
-            },
-            toggle: {
-              iframe: false
-            }
-          }
-        });
+          },
+        },
       });
-    }
+    });
+    return () => { cancelled = true; };
   }, [productId]);
 
   return <div ref={buttonRef} className="w-full"></div>;
 }
+
+/* ── FAVORITOS (guardados no navegador via localStorage) ───────── */
+const FAV_KEY = "optica13_favoritos";
+function loadFavorites() {
+  try {
+    const raw = localStorage.getItem(FAV_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+function findProductById(id) {
+  return QUIZ_PRODUCTS.find((p) => p.id === id) || null;
+}
+
+/* ── DRAWER DE FAVORITOS ──────────────────────────────────────── */
+function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavorite }) {
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+
+  const items = favorites.map(findProductById).filter(Boolean);
+
+  const sendByEmail = async () => {
+    if (!email || items.length === 0) return;
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: "service_jd2hmsh",
+          template_id: "template_5wkk8d9",
+          user_id: "r1iXXbQSD6eraiqvx",
+          template_params: {
+            name: email,
+            email: email,
+            service: `Os meus Favoritos — Óptica 13: ${items.map((p) => `${p.name} (€${p.price})`).join(", ")}`,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(`EmailJS ${res.status}`);
+      setSent(true);
+    } catch (e) {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <div
+        className="modal-backdrop fixed inset-0 z-[120]"
+        style={{ background: "rgba(10,12,14,0.5)", backdropFilter: "blur(4px)" }}
+        onClick={onClose}
+      />
+      <div
+        className="fixed top-0 right-0 h-full w-full sm:w-[420px] z-[130] bg-white flex flex-col slide-right"
+        style={{ boxShadow: "-10px 0 40px rgba(0,0,0,0.12)" }}
+      >
+        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: "var(--mist)" }}>
+          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>Favoritos ({items.length})</p>
+          <button onClick={onClose} className="p-2 hover:opacity-60" aria-label="Fechar"><X size={18} /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {items.length === 0 ? (
+            <div className="p-10 text-center text-sm leading-relaxed" style={{ color: "var(--forest-light)" }}>
+              Ainda não guardou favoritos.<br />Toque no coração de um modelo para o guardar aqui.
+            </div>
+          ) : (
+            <ul>
+              {items.map((p) => (
+                <li key={p.id} className="flex items-center gap-4 px-6 py-4 border-b" style={{ borderColor: "var(--mist)" }}>
+                  <div className="w-16 h-16 flex-shrink-0 overflow-hidden" style={{ background: "#f2f1ee" }}>
+                    <Img src={p.image} alt={p.name} className={`w-full h-full object-cover ${p.originalPrice ? "" : "mix-blend-multiply"}`} />
+                  </div>
+                  <button onClick={() => { onOpenProduct(p); onClose(); }} className="flex-1 text-left">
+                    <p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>{p.brand}</p>
+                    <p className="font-semibold text-sm" style={{ color: "var(--forest)" }}>{p.name}</p>
+                    <p className="text-sm" style={{ color: "var(--forest)" }}>€{p.price}</p>
+                  </button>
+                  <button onClick={() => onToggleFavorite(p.id)} aria-label="Remover dos favoritos" className="p-2 hover:opacity-60">
+                    <Heart size={18} fill="var(--wine)" style={{ color: "var(--wine)" }} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {items.length > 0 && (
+          <div className="px-6 py-5 border-t" style={{ borderColor: "var(--mist)" }}>
+            {sent ? (
+              <p className="text-sm text-center" style={{ color: "var(--forest)" }}>Enviámos os seus favoritos para {email}.</p>
+            ) : (
+              <>
+                <p className="text-xs mb-2" style={{ color: "var(--forest-light)" }}>Receber os meus favoritos por email:</p>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="O seu email"
+                    className="flex-1 px-3 py-2.5 border text-sm outline-none"
+                    style={{ borderColor: "var(--mist)" }}
+                  />
+                  <button
+                    onClick={sendByEmail}
+                    disabled={sending || !email}
+                    className="btn-forest px-4 py-2.5 text-xs font-semibold uppercase tracking-widest disabled:opacity-50"
+                  >
+                    {sending ? "..." : "Enviar"}
+                  </button>
+                </div>
+                {error && <p className="text-xs mt-2" style={{ color: "var(--wine)" }}>Não foi possível enviar. Tente novamente.</p>}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 /* ── DATA ───────────────────────────────────────────────────── */
 const PRODUCTS = {
   men: [
@@ -2134,7 +2277,7 @@ function CookieBanner() {
 }
 
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
-function ProductModal({ product, onClose, onAdd, onBook }) {
+function ProductModal({ product, onClose, onAdd, onBook, isFavorite, onToggleFavorite }) {
   const [activeImage, setActiveImage] = useState(product?.image);
 
   // Fotos do Outlet têm fundo cinza (não branco puro), por isso o
@@ -2253,14 +2396,25 @@ function ProductModal({ product, onClose, onAdd, onBook }) {
                   </p>
                 )}
               </div>
-              {/* Botão de Fechar no PC */}
-              <button
-                onClick={onClose}
-                className="hidden md:flex w-11 h-11 rounded-full items-center justify-center flex-shrink-0 ml-4 transition-colors hover:bg-gray-100"
-                style={{ background: "var(--mist)", color: "var(--forest)" }}
-              >
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                {/* Favorito */}
+                <button
+                  onClick={onToggleFavorite}
+                  aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                  className="w-11 h-11 flex items-center justify-center transition-colors hover:bg-gray-100"
+                  style={{ border: "1px solid var(--mist)", color: isFavorite ? "var(--wine)" : "var(--forest)" }}
+                >
+                  <Heart size={18} fill={isFavorite ? "var(--wine)" : "none"} />
+                </button>
+                {/* Botão de Fechar no PC */}
+                <button
+                  onClick={onClose}
+                  className="hidden md:flex w-11 h-11 items-center justify-center transition-colors hover:bg-gray-100"
+                  style={{ background: "var(--mist)", color: "var(--forest)" }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
             <p
@@ -2586,7 +2740,7 @@ function BookingModal({ isOpen, onClose, service }) {
    Module-scope so identities stay stable across MainLayout re-renders
    ══════════════════════════════════════════════════════════════ */
   /* HEADER */
-  const Header = ({ page, setPage, openBook }) => {
+  const Header = ({ page, setPage, openBook, favoritesCount = 0, onOpenFavorites, onOpenCart }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -2664,18 +2818,26 @@ function BookingModal({ isOpen, onClose, service }) {
               <Calendar size={14} /> Agendar Exame
             </button>
 
-            {/* Ícones utilitários (pesquisa, favoritos/quiz, conta, loja) */}
+            {/* Ícones utilitários (pesquisa, favoritos, conta, carrinho) */}
             <div className="hidden sm:flex items-center gap-3.5" style={{ color: transparent ? "#ffffff" : "var(--forest)" }}>
-              <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar" className="p-0.5 transition-opacity hover:opacity-60">
+              <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar coleção" className="p-0.5 transition-opacity hover:opacity-60">
                 <Search size={19} strokeWidth={1.6} />
               </button>
-              <button onClick={() => setPage("quiz")} aria-label="Quiz de Estilo" className="p-0.5 transition-opacity hover:opacity-60">
+              <button onClick={onOpenFavorites} aria-label="Favoritos" className="relative p-0.5 transition-opacity hover:opacity-60">
                 <Heart size={19} strokeWidth={1.6} />
+                {favoritesCount > 0 && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
+                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
+                  >
+                    {favoritesCount}
+                  </span>
+                )}
               </button>
               <button onClick={() => openBook("Consulta de Optometria")} aria-label="Conta" className="p-0.5 transition-opacity hover:opacity-60">
                 <User size={19} strokeWidth={1.6} />
               </button>
-              <button onClick={() => setPage("outlet")} aria-label="Loja" className="p-0.5 transition-opacity hover:opacity-60">
+              <button onClick={onOpenCart} aria-label="Carrinho" className="p-0.5 transition-opacity hover:opacity-60">
                 <ShoppingBag size={19} strokeWidth={1.6} />
               </button>
             </div>
@@ -3811,7 +3973,7 @@ function BookingModal({ isOpen, onClose, service }) {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, setSelectedProduct }) => {
+  const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, setSelectedProduct, favorites = [], onToggleFavorite }) => {
     const [filters, setFilters] = useState({
       material: "",
       color: "",
@@ -4128,6 +4290,16 @@ function BookingModal({ isOpen, onClose, service }) {
                         >
                           -{Math.round(100 - (p.price / p.originalPrice) * 100)}%
                         </div>
+                      )}
+                      {onToggleFavorite && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onToggleFavorite(p.id); }}
+                          aria-label={favorites.includes(p.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                          className="absolute bottom-3 right-3 z-10 w-9 h-9 flex items-center justify-center bg-white/90 backdrop-blur transition-transform hover:scale-110"
+                          style={{ color: favorites.includes(p.id) ? "var(--wine)" : "var(--forest)", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
+                        >
+                          <Heart size={16} fill={favorites.includes(p.id) ? "var(--wine)" : "none"} />
+                        </button>
                       )}
                       <div
                         className="aspect-square overflow-hidden img-zoom"
@@ -5618,6 +5790,18 @@ function MainLayout() {
   const [exitIntent, setExitIntent] = useState(false);
   const exitShown = useRef(false);
 
+  // Favoritos (guardados no navegador)
+  const [favorites, setFavorites] = useState(loadFavorites);
+  const [favoritesOpen, setFavoritesOpen] = useState(false);
+  useEffect(() => {
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch (e) {}
+  }, [favorites]);
+  const toggleFavorite = (id) =>
+    setFavorites((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  // Pré-carrega o carrinho Shopify para o ícone do header funcionar sempre
+  useEffect(() => { ensureShopify(); }, []);
+
   // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -5730,7 +5914,7 @@ const openBook = (service = "Consulta Geral") => {
         style={{ background: "var(--cream)", fontFamily: "Nord, Jost, sans-serif" }}
       >
        
-        <Header page={page} setPage={setPage} openBook={openBook} />
+        <Header page={page} setPage={setPage} openBook={openBook} favoritesCount={favorites.length} onOpenFavorites={() => setFavoritesOpen(true)} onOpenCart={openShopifyCart} />
         <div key={location.pathname} className="page-transition">
           <Routes>
             <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
@@ -5745,6 +5929,8 @@ const openBook = (service = "Consulta Geral") => {
                   eyebrow="Coleção Assinatura"
                   showGenderFilter={true}
                   setSelectedProduct={setSelectedProduct}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
                 />
               }
             />
@@ -5758,6 +5944,8 @@ const openBook = (service = "Consulta Geral") => {
                   showDiscount={true}
                   showGenderFilter={true}
                   setSelectedProduct={setSelectedProduct}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
                 />
               }
             />
@@ -5779,6 +5967,8 @@ const openBook = (service = "Consulta Geral") => {
             product={selectedProduct}
             onClose={() => setSelectedProduct(null)}
             onAdd={addToCart}
+            isFavorite={favorites.includes(selectedProduct.id)}
+            onToggleFavorite={() => toggleFavorite(selectedProduct.id)}
             onBook={() => {
               const productName = selectedProduct.name;
               setSelectedProduct(null);
@@ -5786,6 +5976,13 @@ const openBook = (service = "Consulta Geral") => {
             }}
           />
         )}
+        <FavoritesDrawer
+          open={favoritesOpen}
+          onClose={() => setFavoritesOpen(false)}
+          favorites={favorites}
+          onOpenProduct={(p) => setSelectedProduct(p)}
+          onToggleFavorite={toggleFavorite}
+        />
         {exitIntent && (
           <ExitPopup
             onBook={() => {

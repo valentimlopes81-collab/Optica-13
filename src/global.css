@@ -119,3 +119,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--f
   max-width: 100% !important;
   display: block !important;
 }
+
+/* Esconde o botão flutuante do carrinho da Shopify — o carrinho é aberto
+   pelo ícone do carrinho no cabeçalho. */
+.shopify-buy-frame--toggle,
+#optica13-cart-node .shopify-buy-frame--toggle {
+  display: none !important;
+}
