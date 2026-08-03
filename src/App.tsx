@@ -199,11 +199,12 @@ function ShopifyBuyButton({ productId }) {
                 'border-radius': '0',
                 'font-family': 'Jost, sans-serif',
                 'font-weight': '600',
-                'font-size': '13px',
+                'font-size': '14px',
+                'line-height': '20px',
                 'padding': '16px 24px',
                 'width': '100%',
                 'max-width': '100%',
-                'letter-spacing': '0.08em',
+                'letter-spacing': '0.025em',
                 'text-transform': 'uppercase',
                 ':hover': { 'background-color': '#333333' },
               },
@@ -2532,13 +2533,22 @@ function ProductModal({ product, onClose, onAdd, onBook, isFavorite, onToggleFav
 
             {/* Consulta gratuita — o maior diferenciador de comprar óculos graduados na Óptica 13 */}
             <div
-              className="mb-8 flex items-center gap-3 p-4 rounded-xl border"
+              className="mb-8 p-4 rounded-xl border"
               style={{ background: "#eff6ff", borderColor: "#bfdbfe" }}
             >
-              <Sparkles size={20} className="flex-shrink-0" style={{ color: "var(--gold)" }} />
-              <p className="text-xs font-semibold leading-snug" style={{ color: "#1e3a8a" }}>
-                Precisa de lentes graduadas? A consulta de optometria é <strong>gratuita</strong> ao fazer os seus óculos na Óptica 13.
-              </p>
+              <div className="flex items-center gap-3">
+                <Sparkles size={20} className="flex-shrink-0" style={{ color: "var(--gold)" }} />
+                <p className="text-xs font-semibold leading-snug" style={{ color: "#1e3a8a" }}>
+                  Precisa de lentes graduadas? A consulta de optometria é <strong>gratuita</strong> ao fazer os seus óculos na Óptica 13.
+                </p>
+              </div>
+              <button
+                onClick={onBook}
+                className="mt-3 w-full py-2.5 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
+                style={{ background: "#1e3a8a", color: "#ffffff" }}
+              >
+                <Calendar size={14} /> Marcar consulta
+              </button>
             </div>
 
             <div className="mt-auto sticky bottom-0 bg-white pt-3 pb-1 space-y-3">
@@ -3344,7 +3354,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   className="relative overflow-hidden text-left group fade-up-2"
                   style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style={{ objectPosition: "50% 70%" }} />
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
                     <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
@@ -6006,7 +6016,7 @@ const openBook = (service = "Consulta Geral") => {
               path="/mindthelook"
               element={
                 <CollectionPage
-                  products={ALL_PRODUCTS}
+                  products={[...ALL_PRODUCTS].reverse()}
                   title={<>Coleção <em>MindTheLook</em></>}
                   eyebrow="Coleção Assinatura"
                   showGenderFilter={true}
