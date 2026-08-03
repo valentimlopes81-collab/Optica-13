@@ -10,6 +10,7 @@ import {
   Mail,
   MapPin,
   ChevronRight,
+  ChevronLeft,
   Calendar,
   Award,
   Clock,
@@ -3214,17 +3215,9 @@ function BookingModal({ isOpen, onClose, service }) {
       return () => clearInterval(timer);
     }, [slides.length]);
 
-    // 4. Navegação por "scroll para o lado" (arrastar/deslizar)
-    const dragX = useRef(null);
+    // 4. Navegação frente/trás (botões de seta)
     const goRelative = (dir) =>
       setCurrentSlide((prev) => (prev + dir + slides.length) % slides.length);
-    const onSwipeStart = (x) => { dragX.current = x; };
-    const onSwipeEnd = (x) => {
-      if (dragX.current == null) return;
-      const dx = x - dragX.current;
-      dragX.current = null;
-      if (Math.abs(dx) > 45) goRelative(dx < 0 ? 1 : -1);
-    };
 
     return (
       <div>
@@ -3234,27 +3227,40 @@ function BookingModal({ isOpen, onClose, service }) {
           style={{ background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)" }}
         >
           <div
-            className="relative w-full overflow-hidden select-none cursor-grab active:cursor-grabbing"
+            className="relative w-full overflow-hidden"
             style={{
               aspectRatio: "2 / 1",
               maxHeight: 760,
-              touchAction: "pan-y",
               /* Fundo dividido igual ao dos layouts — para nunca cortar a palavra:
                  a imagem entra em object-contain e qualquer margem confunde-se com este fundo. */
               background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)",
             }}
-            onTouchStart={(e) => onSwipeStart(e.touches[0].clientX)}
-            onTouchEnd={(e) => onSwipeEnd(e.changedTouches[0].clientX)}
-            onPointerDown={(e) => onSwipeStart(e.clientX)}
-            onPointerUp={(e) => onSwipeEnd(e.clientX)}
           >
             <Img
               key={`slide-${currentSlide}`}
               src={slides[currentSlide].img}
               alt={slides[currentSlide].alt}
               priority={true}
-              className="w-full h-full object-contain fade-in pointer-events-none"
+              className="w-full h-full object-contain fade-in"
             />
+
+            {/* Setas de navegação frente/trás */}
+            <button
+              onClick={() => goRelative(-1)}
+              aria-label="Anterior"
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-all hover:scale-105"
+              style={{ background: "rgba(255,255,255,0.7)", color: "var(--forest)", backdropFilter: "blur(4px)" }}
+            >
+              <ChevronLeft size={20} strokeWidth={1.8} />
+            </button>
+            <button
+              onClick={() => goRelative(1)}
+              aria-label="Seguinte"
+              className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-all hover:scale-105"
+              style={{ background: "rgba(255,255,255,0.7)", color: "var(--forest)", backdropFilter: "blur(4px)" }}
+            >
+              <ChevronRight size={20} strokeWidth={1.8} />
+            </button>
 
             {/* Botão (o elemento que faltava nos layouts) */}
             <div className="absolute inset-x-0 bottom-[5%] md:bottom-[15%] flex justify-center px-6 z-10">
