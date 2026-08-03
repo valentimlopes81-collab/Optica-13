@@ -201,7 +201,7 @@ function ShopifyBuyButton({ productId }) {
                 'font-weight': '600',
                 'font-size': '14px',
                 'line-height': '20px',
-                'padding': '16px 24px',
+                'padding': '20px 24px',
                 'width': '100%',
                 'max-width': '100%',
                 'letter-spacing': '0.025em',
@@ -2279,7 +2279,7 @@ function CookieBanner() {
 }
 
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
-function ProductModal({ product, onClose, onAdd, onBook, isFavorite, onToggleFavorite }) {
+function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavorite, onToggleFavorite }) {
   const [activeImage, setActiveImage] = useState(product?.image);
 
   // Fotos do Outlet têm fundo cinza (não branco puro), por isso o
@@ -2543,7 +2543,7 @@ function ProductModal({ product, onClose, onAdd, onBook, isFavorite, onToggleFav
                 </p>
               </div>
               <button
-                onClick={onBook}
+                onClick={onBookConsulta}
                 className="mt-3 w-full py-2.5 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
                 style={{ background: "#1e3a8a", color: "#ffffff" }}
               >
@@ -2557,7 +2557,7 @@ function ProductModal({ product, onClose, onAdd, onBook, isFavorite, onToggleFav
 
               <button
                 onClick={onBook}
-                className="btn-outline-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                className="btn-outline-forest w-full py-5 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
               >
                 <Calendar size={18} /> Reservar na Loja
               </button>
@@ -6065,6 +6065,10 @@ const openBook = (service = "Consulta Geral") => {
               const productName = selectedProduct.name;
               setSelectedProduct(null);
               openBook(`Reserva de "${productName}" na Loja`);
+            }}
+            onBookConsulta={() => {
+              setSelectedProduct(null);
+              openBook("Consulta de Optometria");
             }}
           />
         )}
