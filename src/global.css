@@ -4,6 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Nord (fonte da marca) ─────────────────────────────── */
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 300; font-display: swap;
+  src: url('./fonts/Nord-Light.woff2') format('woff2'), url('./fonts/Nord-Light.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('./fonts/Nord-Regular.woff2') format('woff2'), url('./fonts/Nord-Regular.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('./fonts/Nord-Medium.woff2') format('woff2'), url('./fonts/Nord-Medium.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('./fonts/Nord-Bold.woff2') format('woff2'), url('./fonts/Nord-Bold.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: normal; font-weight: 900; font-display: swap;
+  src: url('./fonts/Nord-Black.woff2') format('woff2'), url('./fonts/Nord-Black.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url('./fonts/Nord-Italic.woff2') format('woff2'), url('./fonts/Nord-Italic.woff') format('woff'); }
+@font-face { font-family: 'Nord'; font-style: italic; font-weight: 700; font-display: swap;
+  src: url('./fonts/Nord-BoldItalic.woff2') format('woff2'), url('./fonts/Nord-BoldItalic.woff') format('woff'); }
+
 :root {
   --cream: #ffffff;
   --cream-dark: #f6f6f4;
@@ -19,8 +35,8 @@
 }
 
 * { box-sizing: border-box; }
-body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
-.font-display { font-family: 'Jost', sans-serif; letter-spacing: -0.02em; }
+body { font-family: 'Nord', 'Jost', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
+.font-display { font-family: 'Nord', 'Jost', sans-serif; letter-spacing: -0.01em; }
 .uc-label { text-transform: uppercase; letter-spacing: 0.14em; }
 .bg-cream { background-color: var(--cream); }
 .bg-forest { background-color: var(--forest); }

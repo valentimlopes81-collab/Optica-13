@@ -26,6 +26,7 @@ import {
   ChevronDown,
   Minus,
   Plus,
+  User,
   Heart,
   ZoomIn,
   Shield,
@@ -2628,7 +2629,6 @@ function BookingModal({ isOpen, onClose, service }) {
               ["Vantagens", "vantagens"],
               ["MindTheLook", "mindthelook"],
               ["Outlet", "outlet"],
-              ["Sobre Nós", "about"],
               ["Contactos", "contact"],
             ].map(([label, p]) => (
               <button
@@ -2650,20 +2650,12 @@ function BookingModal({ isOpen, onClose, service }) {
                 )}
               </button>
             ))}
-            <button
-              onClick={() => setPage("quiz")}
-              className={`flex items-center gap-1 font-medium transition-all hover:opacity-100 ${transparent ? "opacity-80" : "opacity-60"}`}
-              style={{ color: transparent ? "#ffffff" : "var(--forest)" }}
-            >
-              <Sparkles size={14} style={{ color: transparent ? "#ffffff" : "var(--gold)" }} /> Quiz de
-              Estilo
-            </button>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
              onClick={() => openBook("Consulta de Optometria")}
-              className={`hidden sm:flex px-5 py-2.5 text-sm font-semibold items-center gap-2 uppercase tracking-wide transition-all ${
+              className={`hidden sm:flex px-5 py-2.5 text-xs font-semibold items-center gap-2 uppercase tracking-widest transition-all ${
                 transparent
                   ? "border border-white text-white hover:bg-white hover:text-black"
                   : "btn-forest"
@@ -2671,6 +2663,23 @@ function BookingModal({ isOpen, onClose, service }) {
             >
               <Calendar size={14} /> Agendar Exame
             </button>
+
+            {/* Ícones utilitários (pesquisa, favoritos/quiz, conta, loja) */}
+            <div className="hidden sm:flex items-center gap-3.5" style={{ color: transparent ? "#ffffff" : "var(--forest)" }}>
+              <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar" className="p-0.5 transition-opacity hover:opacity-60">
+                <Search size={19} strokeWidth={1.6} />
+              </button>
+              <button onClick={() => setPage("quiz")} aria-label="Quiz de Estilo" className="p-0.5 transition-opacity hover:opacity-60">
+                <Heart size={19} strokeWidth={1.6} />
+              </button>
+              <button onClick={() => openBook("Consulta de Optometria")} aria-label="Conta" className="p-0.5 transition-opacity hover:opacity-60">
+                <User size={19} strokeWidth={1.6} />
+              </button>
+              <button onClick={() => setPage("outlet")} aria-label="Loja" className="p-0.5 transition-opacity hover:opacity-60">
+                <ShoppingBag size={19} strokeWidth={1.6} />
+              </button>
+            </div>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all ${transparent ? "hover:bg-white/10" : "hover:bg-gray-100"}`}
@@ -5392,7 +5401,7 @@ function BookingModal({ isOpen, onClose, service }) {
                         className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all"
                         style={{
                           borderColor: "var(--mist)",
-                          fontFamily: "Jost,sans-serif",
+                          fontFamily: "Nord, Jost, sans-serif",
                         }}
                       />
                     ))}
@@ -5406,7 +5415,7 @@ function BookingModal({ isOpen, onClose, service }) {
                       className="w-full px-4 py-3.5 rounded-xl text-sm border-2 transition-all resize-none"
                       style={{
                         borderColor: "var(--mist)",
-                        fontFamily: "Jost,sans-serif",
+                        fontFamily: "Nord, Jost, sans-serif",
                       }}
                     />
                     <button
@@ -5718,7 +5727,7 @@ const openBook = (service = "Consulta Geral") => {
     <>
       <div
         className="min-h-screen"
-        style={{ background: "var(--cream)", fontFamily: "Jost, sans-serif" }}
+        style={{ background: "var(--cream)", fontFamily: "Nord, Jost, sans-serif" }}
       >
        
         <Header page={page} setPage={setPage} openBook={openBook} />
