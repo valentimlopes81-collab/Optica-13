@@ -116,6 +116,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--f
 .btn-outline-forest { background: transparent; color: var(--forest); border: 1px solid var(--forest); transition: all 0.3s; }
 .btn-outline-forest:hover { background: var(--forest); color: white; }
 
+/* Botão rosa do carrossel da homepage (estilo Glasshop) */
+.btn-rose { background: #d29aa0; color: #ffffff; border: 1px solid #d29aa0; transition: all 0.3s; letter-spacing: 0.08em; }
+.btn-rose:hover { background: var(--wine); border-color: var(--wine); color: #ffffff; }
+
 /* Cartões, painéis e modais: cantos rectos em vez de arredondados */
 .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-t-3xl, .rounded-t-xl, .rounded-t-2xl {
   border-radius: 0 !important;

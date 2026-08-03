@@ -30,6 +30,10 @@ import {
   Heart,
   ZoomIn,
   Shield,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
 } from "lucide-react";
 
 /* ── HELPERS ────────────────────────────────────────────────── */
@@ -2769,7 +2773,7 @@ function BookingModal({ isOpen, onClose, service }) {
             className="flex items-center transition-transform hover:scale-105"
           >
             <img
-              src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png"
+              src="/fotos/logo-optica13.png"
               alt="Logo Óptica 13"
               className="h-10 w-auto transition-all"
               style={transparent ? { filter: "brightness(0) invert(1)" } : undefined}
@@ -2927,7 +2931,7 @@ function BookingModal({ isOpen, onClose, service }) {
 <div className="lg:col-span-2">
   <div className="flex items-center gap-3 mb-5">
     <img 
-      src="https://i.postimg.cc/266k26gS/Logo-Optica13-preto-1.png" 
+      src="/fotos/logo-optica13.png" 
       alt="Logo Óptica 13" 
       className="h-10 w-auto" 
       style={{ filter: "brightness(0) invert(1)" }} // <--- A MAGIA PARA O TORNAR BRANCO
@@ -3183,40 +3187,25 @@ function BookingModal({ isOpen, onClose, service }) {
     const slides = [
       {
         id: 1,
-        tag: "Coleção MindTheLook",
-        titlePt1: "A coleção que",
-        titlePt2: "veste o seu ",
-        titleHighlight: "estilo",
-        desc: "Armações e óculos de sol premium, para homem e mulher. Descubra o modelo perfeito na nossa coleção MindTheLook.",
-        btn1Text: "Ver Coleção",
-        btn1Action: () => setPage("mindthelook"),
-        img: "https://i.postimg.cc/Z0kfQyS1/P1023073.jpg",
-        plainPhoto: false,
+        img: "/fotos/front-mindthelook.webp",
+        alt: "Coleção MindTheLook — Mind the Look",
+        btnText: "Ver Coleção",
+        btnAction: () => setPage("mindthelook"),
       },
       {
         id: 2,
-        tag: "Oferta: Consulta Gratuita esta semana",
-        titlePt1: "A sua visão,",
-        titlePt2: "a nossa ",
-        titleHighlight: "missão",
-        desc: "Exames de optometria gratuitos. Marcas premium. Tecnologia de ponta. Tudo num só lugar.",
-        btn1Text: "Marcar Exame Gratuito",
-        btn1Action: () => openBook("Consulta de Optometria"),
-        img: "https://i.postimg.cc/vBzjTwjZ/P1023115.jpg",
-        plainPhoto: false,
+        img: "/fotos/front-outlet.webp",
+        alt: "Outlet — óculos premium com desconto",
+        btnText: "Ver Outlet",
+        btnAction: () => setPage("outlet"),
       },
       {
         id: 3,
-        tag: "Outlet · até 70% de desconto",
-        titlePt1: "Estilo premium,",
-        titlePt2: "a preços ",
-        titleHighlight: "imperdíveis",
-        desc: "30 modelos exclusivos com desconto direto. Stock limitado — não perca a sua oportunidade.",
-        btn1Text: "Ver Outlet",
-        btn1Action: () => setPage("outlet"),
-        img: "https://i.postimg.cc/QMgkChHR/31.png",
-        plainPhoto: true,
-      }
+        img: "/fotos/front-cuidado.webp",
+        alt: "Exame de vista gratuito",
+        btnText: "Marcar Exame",
+        btnAction: () => openBook("Consulta de Optometria"),
+      },
     ];
 
     // 2. Estado para controlar o slide ativo
@@ -3233,58 +3222,127 @@ function BookingModal({ isOpen, onClose, service }) {
 
     return (
       <div>
-        {/* Hero — fotografia a preencher o ecrã inteiro, texto centrado em baixo */}
-        <section className="relative overflow-hidden" style={{ height: "100vh", minHeight: 600, background: "#eae8e3" }}>
-
-          {/* Fotografia do óculo, a sangue-total */}
-          <div className="absolute inset-0" key={`img-${currentSlide}`}>
-            <Img
-              src={slides[currentSlide].img}
-              alt={slides[currentSlide].tag}
-              priority={true}
-              className="w-full h-full object-cover fade-up"
-              style={{ objectPosition: "center 38%" }}
-            />
-            {/* Véu claro em baixo, para o texto respirar sem esconder a foto */}
-            <div
-              className="absolute inset-x-0 bottom-0 pointer-events-none"
-              style={{ height: "50%", background: "linear-gradient(0deg, rgba(234,232,227,0.94) 0%, rgba(234,232,227,0.55) 34%, rgba(234,232,227,0) 100%)" }}
-            />
-          </div>
-
-          {/* Texto centrado em baixo */}
+        {/* Hero — carrossel de layouts (estilo Glasshop: rosa/branco dividido) */}
+        <section
+          className="relative pt-16 md:pt-0"
+          style={{ background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)" }}
+        >
           <div
-            className="absolute inset-x-0 bottom-0 z-10 pb-16 md:pb-24 px-6 flex flex-col items-center text-center"
-            key={`text-${currentSlide}`}
+            className="relative w-full overflow-hidden"
+            style={{
+              aspectRatio: "2 / 1",
+              maxHeight: 760,
+              /* Fundo dividido igual ao dos layouts — para nunca cortar a palavra:
+                 a imagem entra em object-contain e qualquer margem confunde-se com este fundo. */
+              background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)",
+            }}
           >
-            <p className="uc-label text-[11px] font-semibold mb-4 fade-up" style={{ color: "var(--forest-light)" }}>
-              {slides[currentSlide].tag}
-            </p>
-            <h1
-              className="font-display mb-8 fade-up-1"
-              style={{ fontSize: "clamp(2rem,4.6vw,3.6rem)", lineHeight: 1.05, fontWeight: 600, color: "var(--forest)", maxWidth: 720 }}
-            >
-              {slides[currentSlide].titlePt1} {slides[currentSlide].titlePt2}
-              <em style={{ fontStyle: "italic", fontWeight: 400 }}>{slides[currentSlide].titleHighlight}</em>
-            </h1>
-            <button
-              onClick={slides[currentSlide].btn1Action}
-              className="bg-black text-white px-10 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:opacity-80 fade-up-2"
-            >
-              {slides[currentSlide].btn1Text}
-            </button>
+            <Img
+              key={`slide-${currentSlide}`}
+              src={slides[currentSlide].img}
+              alt={slides[currentSlide].alt}
+              priority={true}
+              className="w-full h-full object-contain fade-in"
+            />
 
-            {/* Indicadores do Carrossel */}
-            <div className="flex items-center gap-3 mt-10">
+            {/* Botão (o elemento que faltava nos layouts) */}
+            <div className="absolute inset-x-0 bottom-[6%] flex justify-center px-6 z-10">
+              <button
+                onClick={slides[currentSlide].btnAction}
+                className="btn-rose px-9 py-3.5 text-xs font-semibold uppercase tracking-widest"
+              >
+                {slides[currentSlide].btnText}
+              </button>
+            </div>
+
+            {/* Redes sociais — canto inferior esquerdo (como no exemplo) */}
+            <div className="hidden md:flex items-center gap-4 absolute bottom-6 left-8 z-10" style={{ color: "var(--forest)" }}>
+              <a href="https://www.facebook.com/optica13parede" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="transition-opacity hover:opacity-60"><Facebook size={15} strokeWidth={1.6} /></a>
+              <a href="https://www.instagram.com/optica13" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition-opacity hover:opacity-60"><Instagram size={15} strokeWidth={1.6} /></a>
+              <Twitter size={15} strokeWidth={1.6} className="opacity-70" />
+              <Youtube size={15} strokeWidth={1.6} className="opacity-70" />
+            </div>
+
+            {/* Pontos do carrossel — canto inferior direito */}
+            <div className="flex items-center gap-2.5 absolute bottom-7 right-6 md:right-8 z-10">
               {slides.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentSlide(idx)}
                   aria-label={`Slide ${idx + 1}`}
-                  className="h-px transition-all"
-                  style={{ width: currentSlide === idx ? 42 : 20, background: currentSlide === idx ? "var(--forest)" : "rgba(17,17,17,0.3)" }}
+                  className="rounded-full transition-all"
+                  style={{
+                    width: currentSlide === idx ? 9 : 7,
+                    height: currentSlide === idx ? 9 : 7,
+                    background: currentSlide === idx ? "var(--wine)" : "rgba(125,42,52,0.3)",
+                  }}
                 />
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* COLEÇÕES — bloco promocional (estilo Optopia), com os 3 quadrados */}
+        <section className="py-16 md:py-20" style={{ background: "#f9e2d7" }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-8 md:mb-10 fade-up">
+              <p className="uc-label text-[11px] font-semibold mb-2" style={{ color: "var(--wine)" }}>A Óptica 13</p>
+              <h2 className="font-display" style={{ fontSize: "clamp(1.8rem,3.6vw,2.8rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}>
+                Explore as nossas coleções
+              </h2>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-5">
+              {/* Card grande — OUTLET */}
+              <button
+                onClick={() => setPage("outlet")}
+                className="relative overflow-hidden text-left group fade-up-1"
+                style={{ borderRadius: 18, minHeight: 420 }}
+              >
+                <Img src="/fotos/scroll-outlet.webp" alt="Outlet Óptica 13" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0) 100%)" }} />
+                <div className="relative z-10 h-full flex flex-col justify-end p-8 md:p-10" style={{ minHeight: 420 }}>
+                  <p className="uc-label text-[11px] font-semibold text-white/85 mb-2">Outlet · Stock limitado</p>
+                  <p className="font-display text-white" style={{ fontSize: "clamp(2.6rem,6vw,4.2rem)", fontWeight: 700, lineHeight: 0.95 }}>até -70%</p>
+                  <p className="text-white/90 text-sm leading-relaxed mt-4 mb-6" style={{ maxWidth: 380 }}>
+                    Óculos premium de coleções anteriores a preços de saldo. Por tempo limitado.
+                  </p>
+                  <span className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 text-xs font-semibold uppercase tracking-widest w-fit" style={{ borderRadius: 999 }}>
+                    Ver Outlet <ArrowRight size={14} />
+                  </span>
+                </div>
+              </button>
+
+              {/* Coluna direita: MindTheLook + Exame */}
+              <div className="grid grid-rows-2 gap-5">
+                <button
+                  onClick={() => setPage("mindthelook")}
+                  className="relative overflow-hidden text-left group fade-up-2"
+                  style={{ borderRadius: 18, minHeight: 200 }}
+                >
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.55) 46%, rgba(255,255,255,0) 100%)" }} />
+                  <div className="relative z-10 h-full flex flex-col justify-center p-8">
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid var(--forest)", color: "var(--forest)" }}>Coleção</span>
+                    <p className="font-display" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1 }}>MindTheLook</p>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mt-4" style={{ color: "var(--forest)" }}>Ver Coleção <ArrowRight size={13} /></span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => openBook("Consulta de Optometria")}
+                  className="relative overflow-hidden text-left group fade-up-3"
+                  style={{ borderRadius: 18, minHeight: 200 }}
+                >
+                  <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.55) 46%, rgba(255,255,255,0) 100%)" }} />
+                  <div className="relative z-10 h-full flex flex-col justify-center p-8">
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid var(--forest)", color: "var(--forest)" }}>Consulta</span>
+                    <p className="font-display" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1 }}>Exame gratuito</p>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mt-4" style={{ color: "var(--forest)" }}>Marcar Exame <ArrowRight size={13} /></span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </section>
