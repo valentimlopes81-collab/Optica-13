@@ -2764,63 +2764,62 @@ function BookingModal({ isOpen, onClose, service }) {
           borderBottom: transparent ? "1px solid transparent" : "1px solid var(--mist)",
         }}
       >
-        <div className={`relative max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
-          <button
-            onClick={() => setPage("home")}
-            className="flex items-center transition-transform hover:scale-105"
-          >
-            <img
-              src="/fotos/logo-optica13.png"
-              alt="Logo Óptica 13"
-              className="h-10 w-auto transition-all"
-              style={transparent ? { filter: "brightness(0) invert(1)" } : undefined}
-            />
-          </button>
-
-          {/* Desktop Nav — centrado no cabeçalho */}
-          <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            {[
-              ["Serviços", "services"],
-              ["Vantagens", "vantagens"],
-              ["MindTheLook", "mindthelook"],
-              ["Outlet", "outlet"],
-              ["Contactos", "contact"],
-            ].map(([label, p]) => (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                className={`relative font-medium transition-all hover:opacity-100 ${
-                  page === p ? "opacity-100" : transparent ? "opacity-80" : "opacity-60"
-                }`}
-                style={{ color: transparent ? "#ffffff" : "var(--forest)" }}
-              >
-                {label}
-                {p === "outlet" && (
-                  <span
-                    className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
-                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
-                  >
-                    até -70%
-                  </span>
-                )}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3 sm:gap-4">
+        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
+          {/* Esquerda: logo + menu + Agendar Exame (o Agendar Exame conta como uma página, separado dos ícones) */}
+          <div className="flex items-center gap-6 xl:gap-10">
             <button
-             onClick={() => openBook("Consulta de Optometria")}
-              className={`hidden sm:flex px-5 py-2.5 text-xs font-semibold items-center gap-2 uppercase tracking-widest transition-all ${
-                transparent
-                  ? "border border-white text-white hover:bg-white hover:text-black"
-                  : "btn-forest"
-              }`}
+              onClick={() => setPage("home")}
+              className="flex items-center transition-transform hover:scale-105"
+            >
+              <img
+                src="/fotos/logo-optica13.png"
+                alt="Logo Óptica 13"
+                className="h-10 w-auto transition-all"
+              />
+            </button>
+
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest">
+              {[
+                ["Serviços", "services"],
+                ["Vantagens", "vantagens"],
+                ["MindTheLook", "mindthelook"],
+                ["Outlet", "outlet"],
+                ["Contactos", "contact"],
+              ].map(([label, p]) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`relative font-medium transition-all hover:opacity-100 ${
+                    page === p ? "opacity-100" : "opacity-60"
+                  }`}
+                  style={{ color: "var(--forest)" }}
+                >
+                  {label}
+                  {p === "outlet" && (
+                    <span
+                      className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
+                      style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
+                    >
+                      até -70%
+                    </span>
+                  )}
+                </button>
+              ))}
+            </nav>
+
+            {/* Agendar Exame — tratado como um item do menu */}
+            <button
+              onClick={() => openBook("Consulta de Optometria")}
+              className="hidden lg:flex btn-forest px-5 py-2.5 text-xs font-semibold items-center gap-2 uppercase tracking-widest transition-all"
             >
               <Calendar size={14} /> Agendar Exame
             </button>
+          </div>
 
-            {/* Ícones utilitários (pesquisa, favoritos, conta, carrinho) */}
-            <div className="hidden sm:flex items-center gap-3.5" style={{ color: transparent ? "#ffffff" : "var(--forest)" }}>
+          {/* Direita: apenas ícones utilitários + menu mobile */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="hidden sm:flex items-center gap-3.5" style={{ color: "var(--forest)" }}>
               <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar coleção" className="p-0.5 transition-opacity hover:opacity-60">
                 <Search size={19} strokeWidth={1.6} />
               </button>
@@ -2842,8 +2841,7 @@ function BookingModal({ isOpen, onClose, service }) {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all ${transparent ? "hover:bg-white/10" : "hover:bg-gray-100"}`}
-              style={{ color: transparent ? "#ffffff" : undefined }}
+              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-gray-100"
             >
               {mobileMenuOpen ? <X size={18} /> : <Filter size={18} />}
             </button>
@@ -3338,36 +3336,34 @@ function BookingModal({ isOpen, onClose, service }) {
                 </div>
               </button>
 
-              {/* Coluna direita: MindTheLook + Exame — imagem ao lado do texto
-                  (área menor => sem o recorte exagerado de antes) */}
+              {/* Coluna direita: MindTheLook + Exame — foto a preencher o
+                  cartão e texto por cima (mesmo estilo do card do Outlet) */}
               <div className="grid grid-rows-2 gap-5">
                 <button
                   onClick={() => setPage("mindthelook")}
-                  className="flex items-stretch overflow-hidden text-left group fade-up-2"
-                  style={{ borderRadius: 18, minHeight: 200, background: "#ffffff" }}
+                  className="relative overflow-hidden text-left group fade-up-2"
+                  style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <div className="flex-1 flex flex-col justify-center p-7 md:p-8">
-                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid var(--forest)", color: "var(--forest)" }}>Coleção</span>
-                    <p className="font-display" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1 }}>MindTheLook</p>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mt-4" style={{ color: "var(--forest)" }}>Ver Coleção <ArrowRight size={13} /></span>
-                  </div>
-                  <div className="relative overflow-hidden flex-shrink-0" style={{ width: "42%" }}>
-                    <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
+                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>MindTheLook</p>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Ver Coleção <ArrowRight size={13} /></span>
                   </div>
                 </button>
 
                 <button
                   onClick={() => openBook("Consulta de Optometria")}
-                  className="flex items-stretch overflow-hidden text-left group fade-up-3"
-                  style={{ borderRadius: 18, minHeight: 200, background: "#ffffff" }}
+                  className="relative overflow-hidden text-left group fade-up-3"
+                  style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <div className="flex-1 flex flex-col justify-center p-7 md:p-8">
-                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid var(--forest)", color: "var(--forest)" }}>Consulta</span>
-                    <p className="font-display" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1 }}>Exame gratuito</p>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest mt-4" style={{ color: "var(--forest)" }}>Marcar Exame <ArrowRight size={13} /></span>
-                  </div>
-                  <div className="relative overflow-hidden flex-shrink-0" style={{ width: "42%" }}>
-                    <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Consulta</span>
+                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>Exame gratuito</p>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Marcar Exame <ArrowRight size={13} /></span>
                   </div>
                 </button>
               </div>
