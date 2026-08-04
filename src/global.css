@@ -136,6 +136,30 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--f
   display: block !important;
 }
 
+/* Botão "Adicionar ao Carrinho" (Shopify SEM iframe): forçamos o mesmo
+   tamanho exato do "Reservar na Loja" — 24px de padding, 15px, altura igual.
+   Como já não está dentro de iframe, o nosso CSS controla-o de facto. */
+.shopify-product-embed .shopify-buy__product,
+.shopify-product-embed .shopify-buy__product-wrapper { width: 100% !important; max-width: 100% !important; }
+.shopify-product-embed .shopify-buy__btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 70px !important;
+  padding: 24px 28px !important;
+  font-family: 'Jost', sans-serif !important;
+  font-size: 15px !important;
+  line-height: 22px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em !important;
+  text-transform: uppercase !important;
+  border-radius: 0 !important;
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+.shopify-product-embed .shopify-buy__btn:hover { background-color: #333333 !important; }
+
 /* Esconde o botão flutuante do carrinho da Shopify — o carrinho é aberto
    pelo ícone do carrinho no cabeçalho. */
 .shopify-buy-frame--toggle,

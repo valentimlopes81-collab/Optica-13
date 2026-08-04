@@ -183,6 +183,10 @@ function ShopifyBuyButton({ productId }) {
         moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
         options: {
           product: {
+            // Renderiza o botão SEM iframe, para o podermos estilizar por CSS
+            // (via .shopify-product-embed) e garantir o mesmo tamanho do
+            // "Reservar na Loja". Dentro de iframe não conseguíamos controlá-lo.
+            iframe: false,
             // Adiciona ao carrinho (em vez de ir direto ao checkout);
             // o checkout faz-se depois pelo ícone do carrinho no header.
             buttonDestination: 'cart',
