@@ -3648,7 +3648,7 @@ function BookingModal({ isOpen, onClose, service }) {
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
             <div className="order-1 overflow-hidden img-zoom fade-up" style={{ height: 460 }}>
               <Img
-                src="https://i.postimg.cc/vmz3kPmW/Equipa-Optica13-r2p8lpvixuoy0zmplkvnvhdg2jia66ckxheqrzn9tc.jpg"
+                src="/fotos/equipa-vida.webp"
                 alt="Equipa da Óptica 13"
                 className="w-full h-full object-cover"
               />
@@ -3933,7 +3933,7 @@ function BookingModal({ isOpen, onClose, service }) {
             </ul>
           </>
         ),
-        img: "https://i.postimg.cc/9FR1DNGD/v2-watermarked-a55f23c6-8639-4f5f-b6ac-ee188e16a20b.jpg",
+        img: "/fotos/serv-acompanhamento.webp",
         actionLabel: "Fazer Quiz Virtual",
         actionFn: () => setPage("quiz"),
       },
@@ -3981,7 +3981,7 @@ function BookingModal({ isOpen, onClose, service }) {
             </div>
           </>
         ),
-        img: "https://i.postimg.cc/ZYPGPhpn/Otica-ao-domicilio-300x300.png",
+        img: "/fotos/serv-domicilio.webp",
         actionLabel: "Contactar-nos",
         actionFn: () => setPage("contact"),
       },
@@ -4968,7 +4968,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 title: "Óptica ao Domicílio",
                 desc: "Deslocamo-nos para consertos de óculos, aquisição de lentes e aros ou entregas, num raio de 20km da nossa loja.",
                 highlight: "Deslocação Gratuita",
-                img: "https://i.postimg.cc/ZYPGPhpn/Otica-ao-domicilio-300x300.png",
+                img: "/fotos/serv-domicilio.webp",
               },
               {
                 icon: Award,
@@ -5350,7 +5350,7 @@ function BookingModal({ isOpen, onClose, service }) {
               style={{ height: "550px" }}
             >
               <Img
-                src="https://i.postimg.cc/9QfMy0qS/DSC2432-scaled.jpg"
+                src="/fotos/sobre-1.webp"
                 alt="Interior da Óptica 13"
                 className="w-full h-full object-cover"
               />
@@ -5523,7 +5523,7 @@ function BookingModal({ isOpen, onClose, service }) {
           >
             {/* NOTA: Substituir o SRC desta imagem pelo URL da fotografia real da vossa equipa */}
             <Img
-              src="https://i.postimg.cc/vmz3kPmW/Equipa-Optica13-r2p8lpvixuoy0zmplkvnvhdg2jia66ckxheqrzn9tc.jpg"
+              src="/fotos/sobre-2.webp"
               alt="Equipa Óptica 13"
               className="w-full h-auto object-cover"
               style={{ maxHeight: "500px" }}
