@@ -125,25 +125,16 @@ function ensureShopify() {
       });
       window.ShopifyBuy.UI.onReady(client).then((ui) => {
         _shopifyUI = ui;
-        let cartNode = document.getElementById('optica13-cart-node');
-        if (!cartNode) {
-          cartNode = document.createElement('div');
-          cartNode.id = 'optica13-cart-node';
-          document.body.appendChild(cartNode);
-        }
-        // Cria um carrinho persistente. O botão flutuante (toggle) é
-        // escondido por CSS; o carrinho é aberto pelo ícone do header.
+        // Carrinho SEM node próprio: assim a Shopify cria a gaveta flutuante
+        // normal (position:fixed, desliza da direita) e o cart.open() funciona.
+        // Com um node fixo, o carrinho era renderizado inline e não abria.
         const created = ui.createComponent('cart', {
-          node: cartNode,
           options: {
             cart: {
               startImmediately: true,
               text: { title: 'O seu carrinho', empty: 'O carrinho está vazio.', button: 'Finalizar Compra', total: 'Total' },
               styles: { button: { 'background-color': '#111111', 'border-radius': '0', ':hover': { 'background-color': '#333333' } } },
             },
-            // O toggle é mantido (necessário para o carrinho funcionar) mas
-            // escondido para fora do ecrã por CSS — antes usávamos display:none,
-            // o que podia partir a abertura da gaveta.
           },
         });
         Promise.resolve(created).then((cart) => {
