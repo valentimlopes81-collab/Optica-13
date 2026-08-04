@@ -105,121 +105,148 @@ function CountUp({ end, duration = 1500, className, style }) {
 }
 /* ── SHOPIFY INTEGRATION ────────────────────────────────────── */
 
-/* ── SHOPIFY (carrinho único partilhado, aberto pelo ícone do header) ──
-   Uma só instância do SDK/cliente para todos os produtos, para que o
-   "Adicionar ao Carrinho" acumule tudo NUM carrinho, que depois é aberto
-   pelo ícone do carrinho no header (openShopifyCart). */
+/* ── SHOPIFY (só o cliente Storefront, para o checkout) ────────────────
+   O carrinho é 100% nosso (CartDrawer). Ao "Finalizar Compra" criamos um
+   checkout na Shopify com os artigos e reencaminhamos para o webUrl. */
 const SHOPIFY_DOMAIN = 'dqih6f-80.myshopify.com';
 const SHOPIFY_TOKEN = 'a9c7a2f027b84643f7ede12707d4e285';
 let _shopifyReady = null;
-let _shopifyUI = null;
-let _shopifyCart = null;
+let _shopifyClient = null;
 
 function ensureShopify() {
   if (_shopifyReady) return _shopifyReady;
-  _shopifyReady = new Promise((resolve) => {
+  _shopifyReady = new Promise((resolve, reject) => {
     const build = () => {
-      const client = window.ShopifyBuy.buildClient({
-        domain: SHOPIFY_DOMAIN,
-        storefrontAccessToken: SHOPIFY_TOKEN,
-      });
-      window.ShopifyBuy.UI.onReady(client).then((ui) => {
-        _shopifyUI = ui;
-        // Carrinho SEM node próprio: assim a Shopify cria a gaveta flutuante
-        // normal (position:fixed, desliza da direita) e o cart.open() funciona.
-        // Com um node fixo, o carrinho era renderizado inline e não abria.
-        const created = ui.createComponent('cart', {
-          options: {
-            cart: {
-              startImmediately: true,
-              text: { title: 'O seu carrinho', empty: 'O carrinho está vazio.', button: 'Finalizar Compra', total: 'Total' },
-              styles: { button: { 'background-color': '#111111', 'border-radius': '0', ':hover': { 'background-color': '#333333' } } },
-            },
-          },
+      try {
+        _shopifyClient = window.ShopifyBuy.buildClient({
+          domain: SHOPIFY_DOMAIN,
+          storefrontAccessToken: SHOPIFY_TOKEN,
         });
-        Promise.resolve(created).then((cart) => {
-          _shopifyCart = cart || (ui.components && ui.components.cart && ui.components.cart[0]);
-          resolve(ui);
-        });
-      });
+        resolve(_shopifyClient);
+      } catch (e) { reject(e); }
     };
-    if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+    if (window.ShopifyBuy && window.ShopifyBuy.buildClient) {
       build();
     } else {
       const script = document.createElement('script');
       script.async = true;
       script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
       script.onload = build;
+      script.onerror = () => reject(new Error('Falha ao carregar a Shopify'));
       document.head.appendChild(script);
     }
   });
   return _shopifyReady;
 }
 
-function openShopifyCart() {
-  ensureShopify().then((ui) => {
-    const cart = _shopifyCart || (ui && ui.components && ui.components.cart && ui.components.cart[0]);
-    if (!cart) return;
+// Encontra o ID (GID) da 1ª variante de um produto, tentando vários formatos de id.
+async function fetchFirstVariantId(client, productId) {
+  const candidates = [
+    String(productId),
+    `gid://shopify/Product/${productId}`,
+    (typeof btoa === 'function' ? btoa(`gid://shopify/Product/${productId}`) : null),
+  ].filter(Boolean);
+  for (const id of candidates) {
     try {
-      if (typeof cart.open === 'function') { cart.open(); return; }
-      if (typeof cart.toggleVisibility === 'function') { cart.toggleVisibility(true); return; }
-      if (typeof cart.render === 'function') { cart.isVisible = true; cart.render(); }
-    } catch (e) { /* silencioso */ }
-  }).catch(() => {});
+      const p = await client.product.fetch(id);
+      if (p && p.variants && p.variants[0] && p.variants[0].id) return p.variants[0].id;
+    } catch (e) { /* tenta o próximo formato */ }
+  }
+  return null;
 }
 
-function ShopifyBuyButton({ productId }) {
-  const buttonRef = useRef(null);
+// Cria um checkout na Shopify com os artigos do carrinho e vai para lá.
+async function checkoutViaShopify(items) {
+  const client = await ensureShopify();
+  const lineItems = [];
+  for (const it of items) {
+    const variantId = await fetchFirstVariantId(client, it.shopifyId);
+    if (variantId) lineItems.push({ variantId, quantity: it.qty });
+  }
+  if (!lineItems.length) throw new Error('Sem artigos válidos para checkout');
+  const checkout = await client.checkout.create();
+  const updated = await client.checkout.addLineItems(checkout.id, lineItems);
+  window.location.href = updated.webUrl;
+}
 
-  useEffect(() => {
-    let cancelled = false;
-    ensureShopify().then((ui) => {
-      if (cancelled || !buttonRef.current) return;
-      buttonRef.current.innerHTML = '';
-      ui.createComponent('product', {
-        id: productId,
-        node: buttonRef.current,
-        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
-        options: {
-          product: {
-            // Renderiza o botão SEM iframe, para o podermos estilizar por CSS
-            // (via .shopify-product-embed) e garantir o mesmo tamanho do
-            // "Reservar na Loja". Dentro de iframe não conseguíamos controlá-lo.
-            iframe: false,
-            // Adiciona ao carrinho (em vez de ir direto ao checkout);
-            // o checkout faz-se depois pelo ícone do carrinho no header.
-            buttonDestination: 'cart',
-            contents: { img: false, title: false, price: false, options: true, quantity: false, button: true },
-            text: { button: 'Adicionar ao Carrinho' },
-            styles: {
-              product: {
-                '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0', 'margin-bottom': '0' },
-                'width': '100%', 'max-width': '100%',
-              },
-              button: {
-                'background-color': '#111111',
-                'color': '#ffffff',
-                'border-radius': '0',
-                'font-family': 'Jost, sans-serif',
-                'font-weight': '600',
-                'font-size': '15px',
-                'line-height': '22px',
-                'padding': '24px 28px',
-                'width': '100%',
-                'max-width': '100%',
-                'letter-spacing': '0.025em',
-                'text-transform': 'uppercase',
-                ':hover': { 'background-color': '#333333' },
-              },
-            },
-          },
-        },
-      });
-    });
-    return () => { cancelled = true; };
-  }, [productId]);
+function parsePrice(v) {
+  const n = parseFloat(String(v).replace(/[^\d.,]/g, '').replace(',', '.'));
+  return isNaN(n) ? 0 : n;
+}
 
-  return <div ref={buttonRef} className="w-full shopify-product-embed"></div>;
+/* ── Gaveta de carrinho (100% nossa) ─────────────────────────────── */
+function CartDrawer({ open, onClose, cart, updateQty, removeFromCart }) {
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState(false);
+  const subtotal = cart.reduce((s, i) => s + parsePrice(i.price) * i.qty, 0);
+  const doCheckout = async () => {
+    if (!cart.length) return;
+    setErr(false); setLoading(true);
+    try { await checkoutViaShopify(cart); }
+    catch (e) { setErr(true); setLoading(false); }
+  };
+  return (
+    <>
+      <div
+        onClick={onClose}
+        className={`fixed inset-0 z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        style={{ background: "rgba(0,0,0,0.45)" }}
+      />
+      <aside
+        className={`fixed top-0 right-0 h-full z-[61] bg-white flex flex-col transition-transform duration-300 ${open ? "translate-x-0" : "translate-x-full"}`}
+        style={{ width: "min(430px, 92vw)", boxShadow: "-12px 0 40px rgba(0,0,0,0.16)" }}
+        aria-hidden={!open}
+      >
+        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: "var(--mist)" }}>
+          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>O seu carrinho</p>
+          <button onClick={onClose} aria-label="Fechar" className="p-1 hover:opacity-60"><X size={20} /></button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-6 py-5">
+          {cart.length === 0 ? (
+            <p className="text-sm" style={{ color: "var(--forest-light)" }}>O carrinho está vazio.</p>
+          ) : (
+            <div className="space-y-5">
+              {cart.map((item) => (
+                <div key={item.id} className="flex gap-4">
+                  <div className="w-20 h-20 flex-shrink-0 overflow-hidden" style={{ background: "#f5f4f0" }}>
+                    <Img src={item.image} alt={item.name} className="w-full h-full object-cover mix-blend-multiply" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold leading-tight" style={{ color: "var(--forest)" }}>{item.name}</p>
+                    <p className="text-xs mb-2" style={{ color: "var(--gold)" }}>{item.brand}</p>
+                    <div className="inline-flex items-center border" style={{ borderColor: "var(--mist)" }}>
+                      <button onClick={() => updateQty(item.id, item.qty - 1)} aria-label="Menos" className="px-2 py-1 hover:bg-gray-100"><Minus size={13} /></button>
+                      <span className="px-3 text-sm">{item.qty}</span>
+                      <button onClick={() => updateQty(item.id, item.qty + 1)} aria-label="Mais" className="px-2 py-1 hover:bg-gray-100"><Plus size={13} /></button>
+                    </div>
+                  </div>
+                  <div className="text-right flex flex-col items-end justify-between">
+                    <p className="font-display text-sm font-semibold" style={{ color: "var(--forest)" }}>€{(parsePrice(item.price) * item.qty).toFixed(2)}</p>
+                    <button onClick={() => removeFromCart(item.id)} className="text-[11px] uppercase tracking-wide hover:text-black" style={{ color: "var(--forest-light)" }}>Remover</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {cart.length > 0 && (
+          <div className="px-6 py-5 border-t" style={{ borderColor: "var(--mist)" }}>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>Subtotal</span>
+              <span className="font-display text-lg font-semibold" style={{ color: "var(--forest)" }}>€{subtotal.toFixed(2)}</span>
+            </div>
+            {err && <p className="text-xs mb-3" style={{ color: "var(--wine)" }}>Não foi possível iniciar o checkout. Tenta novamente.</p>}
+            <button onClick={doCheckout} disabled={loading} className="btn-forest w-full py-4 text-xs font-semibold uppercase tracking-widest">
+              {loading ? "A processar…" : "Finalizar Compra"}
+            </button>
+            <button onClick={onClose} className="w-full mt-2 py-3 text-xs uppercase tracking-widest" style={{ color: "var(--forest-light)" }}>Continuar a comprar</button>
+          </div>
+        )}
+      </aside>
+    </>
+  );
 }
 
 /* ── FAVORITOS (guardados no navegador via localStorage) ───────── */
@@ -227,6 +254,16 @@ const FAV_KEY = "optica13_favoritos";
 function loadFavorites() {
   try {
     const raw = localStorage.getItem(FAV_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+const CART_KEY = "optica13_carrinho";
+function loadCart() {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
     const arr = raw ? JSON.parse(raw) : [];
     return Array.isArray(arr) ? arr : [];
   } catch {
@@ -2555,8 +2592,12 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
             </div>
 
             <div className="mt-auto sticky bottom-0 bg-white pt-3 pb-1 space-y-3">
-              {/* Botão Oficial do Shopify */}
-              <ShopifyBuyButton productId={product.shopifyId} />
+              <button
+                onClick={() => onAdd(product)}
+                className="btn-forest w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2"
+              >
+                <ShoppingBag size={18} /> Adicionar ao Carrinho
+              </button>
 
               <button
                 onClick={onBook}
@@ -2754,7 +2795,7 @@ function BookingModal({ isOpen, onClose, service }) {
    Module-scope so identities stay stable across MainLayout re-renders
    ══════════════════════════════════════════════════════════════ */
   /* HEADER */
-  const Header = ({ page, setPage, openBook, favoritesCount = 0, onOpenFavorites, onOpenCart }) => {
+  const Header = ({ page, setPage, openBook, favoritesCount = 0, cartCount = 0, onOpenFavorites, onOpenCart }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -2847,8 +2888,16 @@ function BookingModal({ isOpen, onClose, service }) {
                   </span>
                 )}
               </button>
-              <button onClick={onOpenCart} aria-label="Carrinho" className="p-0.5 transition-opacity hover:opacity-60">
+              <button onClick={onOpenCart} aria-label="Carrinho" className="relative p-0.5 transition-opacity hover:opacity-60">
                 <ShoppingBag size={19} strokeWidth={1.6} />
+                {cartCount > 0 && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
+                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
+                  >
+                    {cartCount}
+                  </span>
+                )}
               </button>
             </div>
 
@@ -5870,7 +5919,7 @@ function MainLayout() {
 
   const [booking, setBooking] = useState(false);
   const [bookingService, setBookingService] = useState("Consulta Geral");
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(loadCart);
   const [cartOpen, setCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [exitIntent, setExitIntent] = useState(false);
@@ -5887,6 +5936,7 @@ function MainLayout() {
 
   // Pré-carrega o carrinho Shopify para o ícone do header funcionar sempre
   useEffect(() => { ensureShopify(); }, []);
+  useEffect(() => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} }, [cart]);
 
   // NOVO CÓDIGO AQUI: Faz o scroll para o topo quando a página muda (Atualizado para o Router)
   useEffect(() => {
@@ -6000,7 +6050,7 @@ const openBook = (service = "Consulta Geral") => {
         style={{ background: "var(--cream)", fontFamily: "Nord, Jost, sans-serif" }}
       >
        
-        <Header page={page} setPage={setPage} openBook={openBook} favoritesCount={favorites.length} onOpenFavorites={() => setFavoritesOpen(true)} onOpenCart={openShopifyCart} />
+        <Header page={page} setPage={setPage} openBook={openBook} favoritesCount={favorites.length} cartCount={cart.reduce((s, i) => s + i.qty, 0)} onOpenFavorites={() => setFavoritesOpen(true)} onOpenCart={() => setCartOpen(true)} />
         <div key={location.pathname} className="page-transition">
           <Routes>
             <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
@@ -6052,7 +6102,7 @@ const openBook = (service = "Consulta Geral") => {
           <ProductModal
             product={selectedProduct}
             onClose={() => setSelectedProduct(null)}
-            onAdd={addToCart}
+            onAdd={(p) => { addToCart(p); setSelectedProduct(null); setCartOpen(true); }}
             isFavorite={favorites.includes(selectedProduct.id)}
             onToggleFavorite={() => toggleFavorite(selectedProduct.id)}
             onBook={() => {
@@ -6072,6 +6122,13 @@ const openBook = (service = "Consulta Geral") => {
           favorites={favorites}
           onOpenProduct={(p) => setSelectedProduct(p)}
           onToggleFavorite={toggleFavorite}
+        />
+        <CartDrawer
+          open={cartOpen}
+          onClose={() => setCartOpen(false)}
+          cart={cart}
+          updateQty={updateQty}
+          removeFromCart={removeFromCart}
         />
         {exitIntent && (
           <ExitPopup
