@@ -2819,16 +2819,34 @@ function BookingModal({ isOpen, onClose, service }) {
         }}
       >
         <div className={`relative max-w-7xl mx-auto px-6 flex items-center justify-between transition-all ${scrolled ? "py-3" : "py-4"}`}>
-          {/* Esquerda: logo */}
+          {/* Esquerda: filtro/menu (mobile) + logo (desktop) */}
+          <div className="flex items-center">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
+              className="lg:hidden -ml-1 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-gray-100"
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Filter size={18} />}
+            </button>
+            <button
+              onClick={() => setPage("home")}
+              className="hidden lg:flex items-center transition-transform hover:scale-105"
+            >
+              <img
+                src="/fotos/logo-optica13.png"
+                alt="Logo Óptica 13"
+                className="h-10 w-auto transition-all"
+              />
+            </button>
+          </div>
+
+          {/* Logo ao centro — apenas mobile */}
           <button
             onClick={() => setPage("home")}
-            className="flex items-center transition-transform hover:scale-105"
+            aria-label="Início"
+            className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center"
           >
-            <img
-              src="/fotos/logo-optica13.png"
-              alt="Logo Óptica 13"
-              className="h-10 w-auto transition-all"
-            />
+            <img src="/fotos/logo-optica13.png" alt="Logo Óptica 13" className="h-9 w-auto" />
           </button>
 
           {/* Centro: menu + Agendar Exame, centrados no cabeçalho */}
@@ -2871,41 +2889,32 @@ function BookingModal({ isOpen, onClose, service }) {
             </button>
           </div>
 
-          {/* Direita: apenas ícones utilitários + menu mobile */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="hidden sm:flex items-center gap-3.5" style={{ color: "var(--forest)" }}>
-              <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar coleção" className="p-0.5 transition-opacity hover:opacity-60">
-                <Search size={19} strokeWidth={1.6} />
-              </button>
-              <button onClick={onOpenFavorites} aria-label="Favoritos" className="relative p-0.5 transition-opacity hover:opacity-60">
-                <Heart size={19} strokeWidth={1.6} />
-                {favoritesCount > 0 && (
-                  <span
-                    className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
-                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
-                  >
-                    {favoritesCount}
-                  </span>
-                )}
-              </button>
-              <button onClick={onOpenCart} aria-label="Carrinho" className="relative p-0.5 transition-opacity hover:opacity-60">
-                <ShoppingBag size={19} strokeWidth={1.6} />
-                {cartCount > 0 && (
-                  <span
-                    className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
-                    style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
-                  >
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-gray-100"
-            >
-              {mobileMenuOpen ? <X size={18} /> : <Filter size={18} />}
+          {/* Direita: ícones utilitários (pesquisa, favoritos, carrinho) — desktop e mobile */}
+          <div className="flex items-center gap-3.5" style={{ color: "var(--forest)" }}>
+            <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar coleção" className="p-0.5 transition-opacity hover:opacity-60">
+              <Search size={19} strokeWidth={1.6} />
+            </button>
+            <button onClick={onOpenFavorites} aria-label="Favoritos" className="relative p-0.5 transition-opacity hover:opacity-60">
+              <Heart size={19} strokeWidth={1.6} />
+              {favoritesCount > 0 && (
+                <span
+                  className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
+                  style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
+                >
+                  {favoritesCount}
+                </span>
+              )}
+            </button>
+            <button onClick={onOpenCart} aria-label="Carrinho" className="relative p-0.5 transition-opacity hover:opacity-60">
+              <ShoppingBag size={19} strokeWidth={1.6} />
+              {cartCount > 0 && (
+                <span
+                  className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full flex items-center justify-center text-white"
+                  style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 700, lineHeight: 1 }}
+                >
+                  {cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -2922,7 +2931,6 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
-                ["Sobre Nós", "about"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
@@ -2948,17 +2956,6 @@ function BookingModal({ isOpen, onClose, service }) {
                   )}
                 </button>
               ))}
-              <button
-                onClick={() => {
-                  setPage("quiz");
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-left px-4 py-2 rounded-xl font-medium transition-all flex items-center gap-2"
-                style={{ color: "var(--forest)" }}
-              >
-                <Sparkles size={14} style={{ color: "var(--gold)" }} /> Quiz de
-                Estilo
-              </button>
               <button
                 onClick={() => {
                   openBook();
