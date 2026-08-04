@@ -31,6 +31,7 @@ import {
   ZoomIn,
   Shield,
   Instagram,
+  BookMarked,
 } from "lucide-react";
 
 /* ── HELPERS ────────────────────────────────────────────────── */
@@ -136,7 +137,7 @@ function ensureShopify() {
           node: cartNode,
           options: {
             cart: {
-              startImmediately: false,
+              startImmediately: true,
               text: { title: 'O seu carrinho', empty: 'O carrinho está vazio.', button: 'Finalizar Compra', total: 'Total' },
               styles: { button: { 'background-color': '#111111', 'border-radius': '0', ':hover': { 'background-color': '#333333' } } },
             },
@@ -165,8 +166,13 @@ function ensureShopify() {
 function openShopifyCart() {
   ensureShopify().then((ui) => {
     const cart = _shopifyCart || (ui && ui.components && ui.components.cart && ui.components.cart[0]);
-    if (cart && typeof cart.open === 'function') cart.open();
-  });
+    if (!cart) return;
+    try {
+      if (typeof cart.open === 'function') { cart.open(); return; }
+      if (typeof cart.toggleVisibility === 'function') { cart.toggleVisibility(true); return; }
+      if (typeof cart.render === 'function') { cart.isVisible = true; cart.render(); }
+    } catch (e) { /* silencioso */ }
+  }).catch(() => {});
 }
 
 function ShopifyBuyButton({ productId }) {
@@ -3048,15 +3054,11 @@ function BookingModal({ isOpen, onClose, service }) {
               href="https://www.livroreclamacoes.pt/"
               target="_blank"
               rel="noreferrer"
-              className="inline-block mt-4 bg-white p-2 transition-transform hover:scale-105"
-              style={{ maxWidth: "100%" }}
+              className="inline-flex items-center gap-2 mt-4 text-sm transition-colors hover:text-white"
+              style={{ color: "rgba(250,247,242,0.5)" }}
             >
-              <img
-                src="https://www.livroreclamacoes.pt/Autenticacao_CC/img/logo-livro-reclamacoes.svg"
-                alt="Livro de Reclamações Eletrónico"
-                className="block h-auto"
-                style={{ width: 210, maxWidth: "100%" }}
-              />
+              <BookMarked size={18} strokeWidth={2} className="flex-shrink-0" />
+              Livro de Reclamações
             </a>
           </div>
         </div>
@@ -3368,16 +3370,16 @@ function BookingModal({ isOpen, onClose, service }) {
                 </button>
 
                 <button
-                  onClick={() => openBook("Consulta de Optometria")}
+                  onClick={() => setPage("quiz")}
                   className="relative overflow-hidden text-left group fade-up-3"
                   style={{ borderRadius: 18, minHeight: 200 }}
                 >
-                  <Img src="/fotos/scroll-exame.webp" alt="Exame de vista gratuito" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Img src="/fotos/scroll-exame.webp" alt="Quiz de Estilo" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
-                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Consulta</span>
-                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>Exame gratuito</p>
-                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Marcar Exame <ArrowRight size={13} /></span>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Estilo</span>
+                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>Quiz de Estilo</p>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Fazer Quiz <ArrowRight size={13} /></span>
                   </div>
                 </button>
               </div>
@@ -3419,12 +3421,7 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-              {[
-                PRODUCTS.men[0],
-                PRODUCTS.men[3],
-                PRODUCTS.women[0],
-                PRODUCTS.women[2],
-              ].map((p) => (
+              {PRODUCTS.outlet.slice(0, 4).map((p) => (
                 <div
                   key={p.id}
                   onClick={() => setSelectedProduct(p)}
