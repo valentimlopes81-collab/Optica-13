@@ -4954,7 +4954,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 title: "IO Segurança",
                 desc: "Os seus óculos protegidos contra acidentes, quebras, furtos e roubos. Cobertura válida em Portugal e no estrangeiro.",
                 highlight: "Desde 19,99€/ano (Até 2000€)",
-                img: "https://i.postimg.cc/QdKSbpw9/Post-240x300.jpg",
+                img: "/fotos/vant-seguranca.webp",
               },
               {
                 icon: Calendar,
@@ -4992,7 +4992,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 isApp: true,
                 playStore: "https://play.google.com/store/apps/details?id=com.optica13.opticae&pli=1",
                 appStore: "https://apps.apple.com/sa/app/%C3%B3ptica-13/id1580926491",
-                img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=600&h=400&fit=crop",
+                img: "/fotos/vant-app.webp",
               },
             ].map((v, i) => (
               <div
