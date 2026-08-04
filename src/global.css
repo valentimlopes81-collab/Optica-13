@@ -160,9 +160,18 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--f
 }
 .shopify-product-embed .shopify-buy__btn:hover { background-color: #333333 !important; }
 
-/* Esconde o botão flutuante do carrinho da Shopify — o carrinho é aberto
-   pelo ícone do carrinho no cabeçalho. */
+/* Esconde o botão flutuante do carrinho da Shopify (o carrinho é aberto pelo
+   ícone no cabeçalho) — mas SEM display:none, para não partir o mecanismo de
+   abertura da gaveta. Fica no DOM, fora do ecrã e não-clicável. */
 .shopify-buy-frame--toggle,
 #optica13-cart-node .shopify-buy-frame--toggle {
-  display: none !important;
+  position: fixed !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
 }

@@ -141,7 +141,9 @@ function ensureShopify() {
               text: { title: 'O seu carrinho', empty: 'O carrinho está vazio.', button: 'Finalizar Compra', total: 'Total' },
               styles: { button: { 'background-color': '#111111', 'border-radius': '0', ':hover': { 'background-color': '#333333' } } },
             },
-            toggle: { styles: { toggle: { display: 'none' } } },
+            // O toggle é mantido (necessário para o carrinho funcionar) mas
+            // escondido para fora do ecrã por CSS — antes usávamos display:none,
+            // o que podia partir a abertura da gaveta.
           },
         });
         Promise.resolve(created).then((cart) => {
