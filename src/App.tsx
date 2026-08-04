@@ -4983,7 +4983,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 title: "Open Day Mensal",
                 desc: "No primeiro sábado de cada mês, oferecemos descontos imperdíveis e consultoria de imagem (método de 3 passos).",
                 highlight: "Até 40% Sol | 30% Armações",
-                img: "https://i.postimg.cc/HnKXcNYC/6-600x338.png",
+                img: "/fotos/vant-openday.webp",
               },
               {
                 icon: Phone,
