@@ -3570,32 +3570,37 @@ function BookingModal({ isOpen, onClose, service }) {
           </div>
         </section>
 
-        {/* CONSULTA GRATUITA — faixa imersiva com fotografia de consulta */}
-        <section className="relative overflow-hidden" style={{ minHeight: "72vh" }}>
-          <div className="absolute inset-0">
-            <Img
-              src="https://i.postimg.cc/xd7WzbXY/maximilianovich-doctor-5710159-1920.jpg"
-              alt="Consulta de optometria na Óptica 13"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0" style={{ background: "rgba(12,14,16,0.6)" }} />
-          </div>
-          <div className="relative z-10 max-w-3xl mx-auto px-6 py-28 md:py-36 flex flex-col items-center text-center text-white">
-            <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "rgba(255,255,255,0.8)" }}>
-              Cuidado Visual
-            </p>
-            <h2 className="font-display mb-6 fade-up-1" style={{ fontSize: "clamp(2.2rem,4.4vw,3.4rem)", lineHeight: 1.08, fontWeight: 600 }}>
-              Exame de vista <em style={{ fontStyle: "italic", fontWeight: 400 }}>gratuito</em>
-            </h2>
-            <p className="text-base md:text-lg leading-relaxed mb-9 fade-up-2" style={{ maxWidth: 540, color: "rgba(255,255,255,0.85)" }}>
-              Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
-            </p>
-            <button
-              onClick={() => openBook("Consulta de Optometria")}
-              className="fade-up-3 bg-white text-black px-9 py-4 text-xs font-semibold uppercase tracking-widest transition-all hover:bg-black hover:text-white"
-            >
-              Marcar Exame Gratuito
-            </button>
+        {/* EXAME GRATUITO — caixa de texto com contorno rosa + foto à direita */}
+        <section className="py-20 md:py-28" style={{ background: "var(--cream)" }}>
+          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+            {/* Caixa com o texto — contorno na paleta rosa do site */}
+            <div className="order-2 lg:order-1 fade-up">
+              <div className="p-8 md:p-12" style={{ border: "1.5px solid #d29aa0", background: "var(--wine-soft)" }}>
+                <p className="uc-label text-[11px] font-semibold mb-4" style={{ color: "var(--wine)" }}>
+                  Cuidado Visual
+                </p>
+                <h2 className="font-display mb-5" style={{ fontSize: "clamp(2rem,4vw,3rem)", lineHeight: 1.08, fontWeight: 600, color: "var(--forest)" }}>
+                  Exame de vista <em style={{ fontStyle: "italic", fontWeight: 400 }}>gratuito</em>
+                </h2>
+                <p className="text-base leading-relaxed mb-8" style={{ color: "var(--forest-light)", maxWidth: 480 }}>
+                  Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
+                </p>
+                <button
+                  onClick={() => openBook("Consulta de Optometria")}
+                  className="btn-rose px-9 py-4 text-xs font-semibold uppercase tracking-widest"
+                >
+                  Marcar Exame Gratuito
+                </button>
+              </div>
+            </div>
+            {/* Foto 1 — à direita */}
+            <div className="order-1 lg:order-2 overflow-hidden img-zoom fade-up-1" style={{ height: 460 }}>
+              <Img
+                src="/fotos/consulta-foto1.webp"
+                alt="Consulta de optometria na Óptica 13"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </section>
 
