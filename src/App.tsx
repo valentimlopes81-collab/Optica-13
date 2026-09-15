@@ -1646,24 +1646,6 @@ PRODUCTS.outlet = [
     gallery: ["https://i.postimg.cc/nrh1Ngcn/18-1.png", "https://i.postimg.cc/d3V9gpts/18-2.png"],
   },
   {
-    id: 58,
-    name: "Victoria Beckham Tortoise Butterfly",
-    shopifyId: "15803069432182",
-    badge: "Outlet",
-    brand: "Victoria Beckham",
-    price: 83,
-    originalPrice: 269,
-    material: "Acetato",
-    color: "Tartaruga (Havana) com detalhes Dourados (Lentes cinza degradé)",
-    style: "Luxo / Elegante",
-    shape: "Borboleta / Cat-Eye",
-    faceShape: ["round", "oval", "heart"],
-    budget: "high",
-    description: "A essência do luxo e sofisticação. Este modelo Victoria Beckham em formato borboleta destaca-se pelo elegante acetato padrão tartaruga e requintados acabamentos texturizados em dourado nas charneiras. Uma peça de alta costura que confere um olhar poderoso, feminino e inegavelmente glamoroso.",
-    image: "https://i.postimg.cc/Y0Dx7Rhf/19.png",
-    gallery: ["https://i.postimg.cc/L5QVSDnt/19-1.png", "https://i.postimg.cc/rsZ9TjK5/19-2.png"],
-  },
-  {
     id: 59,
     name: "Victoria Beckham Soft Gradient Cat-Eye",
     shopifyId: "15803069956470",
@@ -1734,24 +1716,6 @@ PRODUCTS.outlet = [
     description: "Este modelo cat-eye feminino da Havaianas traz a energia e a leveza do verão para qualquer estação. Com uma armação preta marcante e hastes texturizadas inspiradas no famoso padrão das solas da marca, oferece um look descontraído mas cheio de atitude. As lentes em degradé completam esta peça versátil e essencial para os dias de sol.",
     image: "https://i.postimg.cc/sD1cckN4/23.png",
     gallery: ["https://i.postimg.cc/xTqRRw4N/23-1.png", "https://i.postimg.cc/65T00kmG/23-2.png"],
-  },
-  {
-    id: 63,
-    name: "Polaroid Navy Butterfly",
-    shopifyId: "15803073298806",
-    badge: "Outlet",
-    brand: "Polaroid",
-    price: 39,
-    originalPrice: 97,
-    material: "Injetado e Metal",
-    color: "Azul Marinho (Lentes cinza-escuro)",
-    style: "Elegante / Dia a Dia",
-    shape: "Borboleta / Cat-Eye Suave",
-    faceShape: ["round", "oval", "heart"],
-    budget: "mid",
-    description: "A elegância encontra a funcionalidade absoluta neste modelo Polaroid num sofisticado tom azul marinho. A sua silhueta feminina em formato borboleta é complementada por hastes finas em metal, garantindo um visual requintado e extremamente leve. Uma escolha perfeita para o uso diário, oferecendo proteção e um design que combina com qualquer look.",
-    image: "https://i.postimg.cc/fTFvg8GC/24-1.png",
-    gallery: ["https://i.postimg.cc/gk5KBgC1/24-2.png"],
   },
   {
     id: 64,
@@ -1904,7 +1868,7 @@ ALL_PRODUCTS.forEach(p => {
 
 // Outlet: género atribuído por id (peças clássicas/unissexo vs. femininas -
 // cat-eye, borboleta e outras formas claramente femininas na descrição)
-const outletFeminineIds = new Set([54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 68, 69]);
+const outletFeminineIds = new Set([54, 55, 56, 57, 59, 61, 62, 64, 65, 66, 68, 69]);
 PRODUCTS.outlet.forEach(p => {
   p.gender = outletFeminineIds.has(p.id) ? "Feminino" : "Unisexo";
 });
