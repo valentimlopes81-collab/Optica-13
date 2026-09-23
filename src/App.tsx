@@ -2948,8 +2948,8 @@ function BookingModal({ isOpen, onClose, service }) {
     <img 
       src="/fotos/logo-optica13.png" 
       alt="Logo Óptica 13" 
-      className="h-10 w-auto" 
-      style={{ filter: "brightness(0) invert(1)" }} // <--- A MAGIA PARA O TORNAR BRANCO
+      className="h-12 w-auto"
+      style={{ filter: "invert(1)" }} // inverte cores: "Óptica 13" fica branco e o selo institutoptico fica legível (caixa clara)
     />
   </div>
             <p
