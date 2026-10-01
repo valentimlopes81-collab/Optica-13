@@ -5036,48 +5036,6 @@ function BookingModal({ isOpen, onClose, service }) {
             ))}
           </div>
 
-          {/* Estacionamento Banner */}
-          <div
-            className="mt-16 rounded-3xl overflow-hidden relative fade-up-2 shadow-2xl"
-            style={{ background: "var(--forest)" }}
-          >
-            <div
-              className="absolute inset-0 opacity-25"
-              style={{
-                background:
-                  "radial-gradient(circle at right, var(--gold), transparent 70%)",
-              }}
-            />
-            <div className="relative z-10 flex flex-col md:flex-row items-center gap-0">
-              <div className="p-10 md:p-16 flex-1 text-white text-center md:text-left">
-                <h2 className="font-display text-4xl md:text-5xl font-semibold mb-5 leading-tight">
-                  Estacionamento
-                  <br />
-                  <em style={{ color: "var(--gold)" }}>Gratuito</em>
-                </h2>
-                <p className="opacity-90 leading-relaxed text-base mb-8 max-w-xl">
-                  O seu conforto é a nossa prioridade. Oferecemos estacionamento
-                  gratuito na <strong>Garagem Plátano</strong>, a apenas 200
-                  metros da nossa ótica. Venha visitar-nos sem preocupações!
-                </p>
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=R.+Cap.+Leitão+344,+2775-275+Parede"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-gold inline-flex px-8 py-4 rounded-xl font-semibold text-sm items-center gap-2 shadow-lg transition-transform hover:scale-105"
-                >
-                  <MapPin size={16} /> Abrir no Google Maps
-                </a>
-              </div>
-              <div className="w-full md:w-2/5 h-64 md:h-[420px] relative overflow-hidden flex-shrink-0">
-                <Img
-                  src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&h=800&fit=crop"
-                  alt="Estacionamento Garagem Plátano"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* MODAL DE SEGUROS E PROTOCOLOS */}
@@ -5355,9 +5313,8 @@ function BookingModal({ isOpen, onClose, service }) {
               style={{ color: "#555" }}
             >
               E, para tornar a sua visita mais agradável, oferecemos-lhe algumas
-              comodidades como estacionamento gratuito e um pequeno espaço
-              infantil. Conheça o nosso espaço e a nossa simpática equipa.
-              Esperamos por si!
+              comodidades como um pequeno espaço infantil. Conheça o nosso
+              espaço e a nossa simpática equipa. Esperamos por si!
             </p>
 
             {/* Missão e Visão em Colunas */}
