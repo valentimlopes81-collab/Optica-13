@@ -1718,24 +1718,6 @@ PRODUCTS.outlet = [
     gallery: ["https://i.postimg.cc/xTqRRw4N/23-1.png", "https://i.postimg.cc/65T00kmG/23-2.png"],
   },
   {
-    id: 64,
-    name: "Polaroid Berry Glam",
-    shopifyId: "15803074937206",
-    badge: "Outlet",
-    brand: "Polaroid",
-    price: 31,
-    originalPrice: 79,
-    material: "Injetado",
-    color: "Magenta / Berry (Lentes cinza-escuro)",
-    style: "Vibrante / Moderno",
-    shape: "Quadrado Suave / Cat-Eye",
-    faceShape: ["round", "oval", "heart"],
-    budget: "mid",
-    description: "Dê um toque de cor e ousadia ao seu visual com este modelo vibrante em tom magenta/berry. Com um formato quadrado de linhas ascendentes que alongam o olhar e elegantes detalhes dourados nos cantos, esta armação alia feminilidade a uma estética moderna. Um acessório cheio de personalidade que destaca o rosto e garante o conforto visual característico da Polaroid.",
-    image: "https://i.postimg.cc/Z5dLkrm1/25.png",
-    gallery: ["https://i.postimg.cc/ZKgLDfkt/25-1.png", "https://i.postimg.cc/5NGmkPc1/25-2.png"],
-  },
-  {
     id: 65,
     name: "Polaroid Chunky Cream",
     shopifyId: "15803077067126",
@@ -1868,7 +1850,7 @@ ALL_PRODUCTS.forEach(p => {
 
 // Outlet: género atribuído por id (peças clássicas/unissexo vs. femininas -
 // cat-eye, borboleta e outras formas claramente femininas na descrição)
-const outletFeminineIds = new Set([54, 55, 56, 57, 59, 61, 62, 64, 65, 66, 68, 69]);
+const outletFeminineIds = new Set([54, 55, 56, 57, 59, 61, 62, 65, 66, 68, 69]);
 PRODUCTS.outlet.forEach(p => {
   p.gender = outletFeminineIds.has(p.id) ? "Feminino" : "Unisexo";
 });
