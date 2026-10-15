@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" role="img" aria-label="Foto em breve">
+  <rect width="600" height="600" fill="#eceae5"/>
+  <g fill="none" stroke="#b7b4ab" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="225" cy="300" r="78"/>
+    <circle cx="405" cy="300" r="78"/>
+    <path d="M303 300 q12 -22 24 0"/>
+    <path d="M147 285 q-24 -6 -34 10"/>
+    <path d="M483 285 q24 -6 34 10"/>
+  </g>
+  <text x="300" y="440" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="34" letter-spacing="2" fill="#8a887f">FOTO EM BREVE</text>
+</svg>
