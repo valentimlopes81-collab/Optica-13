@@ -2826,7 +2826,9 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
-                ["Saldos", "saldos"],
+                // SALDOS-OCULTO: secção escondida da navegação até ter fotos reais.
+                // Para reativar, descomentar a linha seguinte (ver README).
+                // ["Saldos", "saldos"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
@@ -2909,7 +2911,8 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
-                ["Saldos", "saldos"],
+                // SALDOS-OCULTO: escondido da navegação até ter fotos (ver README).
+                // ["Saldos", "saldos"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
@@ -3000,7 +3003,8 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["vantagens", "Vantagens"],
                 ["mindthelook", "MindTheLook"],
                 ["outlet", "Outlet"],
-                ["saldos", "Saldos"],
+                // SALDOS-OCULTO: escondido da navegação até ter fotos (ver README).
+                // ["saldos", "Saldos"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
               ].map(([p, l]) => (
@@ -5958,6 +5962,22 @@ function MainLayout() {
     document.title = meta.title;
     const descTag = document.querySelector('meta[name="description"]');
     if (descTag) descTag.setAttribute("content", meta.description);
+
+    // SALDOS-OCULTO: enquanto a secção Saldos não tiver fotos reais, as suas
+    // páginas (/saldos e /saldos/<slug>) não devem ser indexadas pelos motores
+    // de busca. Para reativar a indexação, basta remover este bloco (ver README).
+    let robots = document.querySelector('meta[name="robots"]');
+    if (baseKey === "saldos") {
+      if (!robots) {
+        robots = document.createElement("meta");
+        robots.setAttribute("name", "robots");
+        document.head.appendChild(robots);
+      }
+      robots.setAttribute("content", "noindex, nofollow");
+    } else if (robots) {
+      // Noutras páginas, garante indexação normal.
+      robots.setAttribute("content", "index, follow");
+    }
   }, [page]);
 
   // Deep-link dos Saldos: /saldos/<slug> abre o template de produto (modal)

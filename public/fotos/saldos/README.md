@@ -3,6 +3,35 @@
 Esta pasta guarda as fotografias dos artigos da secção **Saldos / Liquidação**
 do site.
 
+---
+
+## ⚠️ A secção Saldos está ESCONDIDA (até ter fotos reais)
+
+Enquanto os artigos não tiverem fotos reais, a secção está **invisível na
+navegação** e **não indexável** pelos motores de busca. **Nada foi apagado** —
+as 231 páginas, os dados e as rotas continuam a funcionar (quem tiver o link
+direto `/saldos` ou `/saldos/<slug>` ainda consegue abrir).
+
+### Como REATIVAR tudo quando as fotos estiverem prontas
+
+Procurar no projeto por **`SALDOS-OCULTO`** — marca todos os pontos a reverter:
+
+1. **Menu desktop** — `src/App.tsx`: descomentar `// ["Saldos", "saldos"],`
+   na nav do `Header`.
+2. **Menu mobile** — `src/App.tsx`: descomentar `// ["Saldos", "saldos"],`
+   no menu mobile do `Header`.
+3. **Rodapé** — `src/App.tsx`: descomentar `// ["saldos", "Saldos"],`
+   na lista de Navegação do `Footer`.
+4. **Indexação (noindex)** — `src/App.tsx`: remover o bloco `SALDOS-OCULTO`
+   dentro do `useEffect` das metas (o que mete `robots = noindex`).
+5. **robots.txt** — `public/robots.txt`: remover as linhas
+   `Disallow: /saldos` e `Disallow: /saldos/`.
+
+Depois disto, `publicar` (build + deploy) e a secção volta a aparecer e a ser
+indexável. Não é preciso mexer em `src/saldosData.js` nem nas páginas.
+
+---
+
 ## Como substituir o placeholder pela foto real (SEM mexer em código)
 
 Cada artigo da secção Saldos procura a sua foto por **código** nesta pasta:
