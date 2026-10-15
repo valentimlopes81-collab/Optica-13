@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Analytics } from '@vercel/analytics/react';
+import { SALDOS, SALDOS_PLACEHOLDER } from "./saldosData";
 import './global.css';
 import {
   Glasses,
@@ -35,9 +36,24 @@ import {
 } from "lucide-react";
 
 /* ── HELPERS ────────────────────────────────────────────────── */
-function Img({ src, alt, className, style, priority = false }) {
+function Img({ src, alt, className, style, priority = false, fallbackSrc }) {
   const [err, setErr] = useState(false);
-  if (err)
+  // Sempre que a origem muda (ex.: foto real acabada de colocar), volta a tentar.
+  useEffect(() => { setErr(false); }, [src]);
+  if (err) {
+    // Se houver um fallback (ex.: placeholder dos Saldos), mostra-o; caso
+    // contrário mantém a antiga caixa cinzenta com "—".
+    if (fallbackSrc)
+      return (
+        <img
+          src={fallbackSrc}
+          alt={alt}
+          className={className}
+          style={style}
+          loading="lazy"
+          decoding="async"
+        />
+      );
     return (
       <div
         className={`bg-gray-100 flex items-center justify-center ${className}`}
@@ -46,6 +62,7 @@ function Img({ src, alt, className, style, priority = false }) {
         <span className="text-gray-400 text-xs">—</span>
       </div>
     );
+  }
   return (
     <img
       src={src}
@@ -2273,6 +2290,9 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
   // enevoado nelas — desativa-se para produtos com originalPrice.
   const plainPhoto = !!product?.originalPrice;
 
+  // Artigos de saldos ainda sem foto: usa o placeholder "Foto em breve".
+  const imgFallback = product?.isSaldo ? SALDOS_PLACEHOLDER : undefined;
+
   // Junta a foto de capa com as fotos extra
   const allImages = product?.gallery ? [product.image, ...product.gallery] : [product?.image];
 
@@ -2333,6 +2353,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
               <Img
                 src={activeImage}
                 alt={product.name}
+                fallbackSrc={imgFallback}
                 className={`w-full h-full object-contain transition-all duration-500 ease-in-out ${plainPhoto ? "" : "mix-blend-multiply"}`}
               />
             </div>
@@ -2352,7 +2373,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                     }`}
                     style={{ background: "var(--mist)" }}
                   >
-                    <Img src={img} alt={`Galeria ${idx + 1}`} className={`w-full h-full object-cover ${plainPhoto ? "" : "mix-blend-multiply"}`} />
+                    <Img src={img} alt={`Galeria ${idx + 1}`} fallbackSrc={imgFallback} className={`w-full h-full object-cover ${plainPhoto ? "" : "mix-blend-multiply"}`} />
                   </button>
                 ))}
               </div>
@@ -2460,14 +2481,15 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                   </p>
                   <p
                     className="text-sm font-semibold"
-                    style={{ color: "var(--forest)" }}
+                    style={{ color: v ? "var(--forest)" : "#b0531f" }}
                   >
-                    {v}
+                    {v || "[A REVER]"}
                   </p>
                 </div>
               ))}
             </div>
 
+            {product.faceShape?.length > 0 && (
             <div className="mb-8">
               <p
                 className="text-[11px] font-bold uppercase tracking-wider mb-3"
@@ -2491,6 +2513,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                 ))}
               </div>
             </div>
+            )}
 
             {/* Trust Section */}
             <div className="mb-4 grid grid-cols-2 gap-4">
@@ -2803,13 +2826,14 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
+                ["Saldos", "saldos"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
                   key={p}
                   onClick={() => setPage(p)}
                   className={`relative font-medium transition-all hover:opacity-100 ${
-                    page === p ? "opacity-100" : "opacity-60"
+                    page === p || page.split("/")[0] === p ? "opacity-100" : "opacity-60"
                   }`}
                   style={{ color: "var(--forest)" }}
                 >
@@ -2820,6 +2844,14 @@ function BookingModal({ isOpen, onClose, service }) {
                       style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
                     >
                       até -70%
+                    </span>
+                  )}
+                  {p === "saldos" && (
+                    <span
+                      className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
+                      style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
+                    >
+                      -50%
                     </span>
                   )}
                 </button>
@@ -2877,6 +2909,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
+                ["Saldos", "saldos"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
@@ -2898,6 +2931,14 @@ function BookingModal({ isOpen, onClose, service }) {
                       style={{ background: "var(--wine)", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
                     >
                       até -70%
+                    </span>
+                  )}
+                  {p === "saldos" && (
+                    <span
+                      className="px-1.5 py-0.5 rounded-full text-white whitespace-nowrap"
+                      style={{ background: "var(--wine)", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
+                    >
+                      -50%
                     </span>
                   )}
                 </button>
@@ -2959,6 +3000,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["vantagens", "Vantagens"],
                 ["mindthelook", "MindTheLook"],
                 ["outlet", "Outlet"],
+                ["saldos", "Saldos"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
               ].map(([p, l]) => (
@@ -4056,13 +4098,15 @@ function BookingModal({ isOpen, onClose, service }) {
     );
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
-  const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, setSelectedProduct, favorites = [], onToggleFavorite }) => {
+  const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, showCategoryFilter, hideAttributeFilters, onProductClick, setSelectedProduct, favorites = [], onToggleFavorite }) => {
+    const openProduct = onProductClick || setSelectedProduct;
     const [filters, setFilters] = useState({
       material: "",
       color: "",
       style: "",
       shape: "",
     });
+    const [categoryFilter, setCategoryFilter] = useState("");
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -4078,6 +4122,7 @@ function BookingModal({ isOpen, onClose, service }) {
     const filtered = useMemo(() => {
       return products.filter((p) => {
         if (search && !p.name.toLowerCase().includes(search.toLowerCase()) && !p.brand.toLowerCase().includes(search.toLowerCase())) return false;
+        if (categoryFilter && p.category !== categoryFilter) return false;
         if (filters.material && !p.material.toLowerCase().includes(filters.material.toLowerCase())) return false;
         if (filters.style && !p.style.toLowerCase().includes(filters.style.toLowerCase())) return false;
 
@@ -4101,11 +4146,12 @@ function BookingModal({ isOpen, onClose, service }) {
         }
         return true;
       });
-    }, [products, search, filters, genderFilter]);
+    }, [products, search, filters, genderFilter, categoryFilter]);
 
     const activeFilterCount = [filters.material, filters.color, filters.style, filters.shape].filter(Boolean).length;
     const activeChips = [
       ...(search ? [{ key: "search", label: `"${search}"`, clear: () => setSearch("") }] : []),
+      ...(categoryFilter ? [{ key: "categoria", label: categoryFilter, clear: () => setCategoryFilter("") }] : []),
       ...(genderFilter ? [{ key: "genero", label: genderFilter === "homem" ? "Homem" : "Mulher", clear: () => setGenderFilter("") }] : []),
       ...(filters.material ? [{ key: "material", label: filters.material, clear: () => setFilters({ ...filters, material: "" }) }] : []),
       ...(filters.color ? [{ key: "color", label: filters.color, clear: () => setFilters({ ...filters, color: "" }) }] : []),
@@ -4262,6 +4308,30 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
             )}
 
+            {/* Separador por categoria (Aros / Óculos de Sol) */}
+            {showCategoryFilter && (
+              <div className="flex gap-2 mb-5 flex-wrap">
+                {[["", "Todos"], ["Aros", "Aros"], ["Óculos de Sol", "Óculos de Sol"]].map(([value, label]) => {
+                  const active = categoryFilter === value;
+                  return (
+                    <button
+                      key={value || "todos"}
+                      type="button"
+                      onClick={() => setCategoryFilter(value)}
+                      className="px-5 py-2.5 rounded-full text-sm font-semibold border-2 transition-all hover:-translate-y-0.5"
+                      style={{
+                        borderColor: active ? "var(--forest)" : "var(--mist)",
+                        background: active ? "var(--forest)" : "white",
+                        color: active ? "white" : "#555",
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
             {/* Search & Filter Toggle */}
             <div className="flex gap-4">
               <div className="flex-1 relative">
@@ -4279,6 +4349,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   style={{ borderColor: "var(--mist)" }}
                 />
               </div>
+              {!hideAttributeFilters && (
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="lg:hidden btn-outline-forest px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 relative"
@@ -4293,6 +4364,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   </span>
                 )}
               </button>
+              )}
             </div>
 
             {/* Filtros ativos */}
@@ -4317,7 +4389,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ))}
                 <button
                   type="button"
-                  onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); }}
+                  onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); setCategoryFilter(""); }}
                   className="text-xs font-semibold underline"
                   style={{ color: "#888" }}
                 >
@@ -4329,6 +4401,7 @@ function BookingModal({ isOpen, onClose, service }) {
 
           <div className="flex gap-8">
             {/* Desktop Sidebar */}
+            {!hideAttributeFilters && (
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div
                 className="sticky top-28 p-6 rounded-2xl border overflow-y-auto"
@@ -4342,6 +4415,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 <FilterPanel isMobile={false} />
               </div>
             </aside>
+            )}
 
             {/* Products Grid */}
             <div className="flex-1">
@@ -4355,7 +4429,7 @@ function BookingModal({ isOpen, onClose, service }) {
                     key={p.id}
                     className="card-hover rounded-2xl overflow-hidden bg-white border cursor-pointer"
                     style={{ borderColor: "var(--mist)" }}
-                    onClick={() => setSelectedProduct(p)}
+                    onClick={() => openProduct(p)}
                   >
                     <div className="relative">
                       {p.badge && (
@@ -4391,7 +4465,8 @@ function BookingModal({ isOpen, onClose, service }) {
                         <Img
                           src={p.image}
                           alt={p.name}
-                          className={`w-full h-full object-cover ${showDiscount ? "" : "mix-blend-multiply"}`}
+                          fallbackSrc={p.isSaldo ? SALDOS_PLACEHOLDER : undefined}
+                          className={`w-full h-full object-cover ${showDiscount ? "" : "mix-blend-multiply"} ${p.isSaldo ? "p-6 opacity-90" : ""}`}
                         />
                       </div>
                     </div>
@@ -4404,6 +4479,7 @@ function BookingModal({ isOpen, onClose, service }) {
                         {p.brand}
                       </p>
                       <p className="font-semibold mb-1 truncate">{p.name}</p>
+                      {p.color && (
                       <div className="flex items-center gap-2 mb-3">
                         {(() => {
                           // Procura a cor que mais se aproxima no mapa para a bolinha
@@ -4429,6 +4505,7 @@ function BookingModal({ isOpen, onClose, service }) {
                           );
                         })()}
                       </div>
+                      )}
                       <div
                         className="font-display text-2xl font-semibold"
                         style={{ color: "var(--forest)" }}
@@ -4483,7 +4560,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   <p className="text-sm" style={{ color: "#888" }}>
                     Nenhum modelo encontrado com essa combinação exata de filtros.
                   </p>
-                  <button onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
+                  <button onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); setCategoryFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
                     Limpar Filtros
                   </button>
                 </div>
@@ -4521,6 +4598,27 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         )}
       </div>
+    );
+  };
+
+  /* SALDOS / LIQUIDAÇÃO — reutiliza a CollectionPage (mesmo design) com os
+     231 artigos do saldosData.js. Cada cartão leva ao URL /saldos/<slug>,
+     que abre o template de produto já existente (ProductModal). */
+  const SaldosPage = ({ setSelectedProduct, favorites, onToggleFavorite }) => {
+    const navigate = useNavigate();
+    return (
+      <CollectionPage
+        products={SALDOS}
+        title="Saldos"
+        eyebrow="Liquidação · até -50%"
+        showDiscount={true}
+        showCategoryFilter={true}
+        hideAttributeFilters={true}
+        onProductClick={(p) => navigate("/saldos/" + p.slug)}
+        setSelectedProduct={setSelectedProduct}
+        favorites={favorites}
+        onToggleFavorite={onToggleFavorite}
+      />
     );
   };
  /* QUIZ REFINADO - PT-PT */
@@ -5785,6 +5883,10 @@ const PAGE_META = {
     title: "Outlet | Óptica 13",
     description: "Óculos premium com desconto na Óptica 13. Modelos de coleções anteriores com preços de saldo, por tempo limitado.",
   },
+  saldos: {
+    title: "Saldos | Óptica 13",
+    description: "Liquidação de stock na Óptica 13: aros e óculos de sol de várias marcas com 50% de desconto, até esgotar. Disponíveis em loja.",
+  },
   quiz: {
     title: "Quiz de Estilo | Óptica 13",
     description: "Não sabe quais os óculos que lhe ficam melhor? Faça o nosso quiz interativo e descubra o seu par perfeito em minutos.",
@@ -5848,13 +5950,26 @@ function MainLayout() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Atualiza o <title> e a meta description por página, para SEO e partilhas
+  // Atualiza o <title> e a meta description por página, para SEO e partilhas.
+  // Para subpáginas (ex.: /saldos/<slug>) usa a chave base (saldos).
   useEffect(() => {
-    const meta = PAGE_META[page] || PAGE_META.home;
+    const baseKey = page.split("/")[0];
+    const meta = PAGE_META[page] || PAGE_META[baseKey] || PAGE_META.home;
     document.title = meta.title;
     const descTag = document.querySelector('meta[name="description"]');
     if (descTag) descTag.setAttribute("content", meta.description);
   }, [page]);
+
+  // Deep-link dos Saldos: /saldos/<slug> abre o template de produto (modal)
+  // correspondente. Permite partilhar o URL direto de cada artigo.
+  useEffect(() => {
+    const m = location.pathname.match(/^\/saldos\/(.+)$/);
+    if (m) {
+      const slug = decodeURIComponent(m[1]);
+      const prod = SALDOS.find((p) => p.slug === slug);
+      if (prod) setSelectedProduct(prod);
+    }
+  }, [location.pathname]);
 
   // Scroll-reveal: anima .fade-up/.fade-up-1..4 só quando entram no viewport,
   // em vez de na montagem (o que os fazia "gastar-se" fora de vista).
@@ -5990,6 +6105,26 @@ const openBook = (service = "Consulta Geral") => {
                 />
               }
             />
+            <Route
+              path="/saldos"
+              element={
+                <SaldosPage
+                  setSelectedProduct={setSelectedProduct}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                />
+              }
+            />
+            <Route
+              path="/saldos/:slug"
+              element={
+                <SaldosPage
+                  setSelectedProduct={setSelectedProduct}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                />
+              }
+            />
             <Route path="/men" element={<Navigate to="/mindthelook?genero=homem" replace />} />
             <Route path="/women" element={<Navigate to="/mindthelook?genero=mulher" replace />} />
             <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
@@ -6006,7 +6141,10 @@ const openBook = (service = "Consulta Geral") => {
         {selectedProduct && (
           <ProductModal
             product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
+            onClose={() => {
+              setSelectedProduct(null);
+              if (location.pathname.startsWith("/saldos/")) navigate("/saldos");
+            }}
             onAdd={(p) => { addToCart(p); setSelectedProduct(null); setCartOpen(true); }}
             isFavorite={favorites.includes(selectedProduct.id)}
             onToggleFavorite={() => toggleFavorite(selectedProduct.id)}
