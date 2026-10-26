@@ -3229,15 +3229,21 @@ function BookingModal({ isOpen, onClose, service }) {
     const slides = [
       {
         id: 0,
-        // Slide tipográfico (sem imagem) — anúncio Ray-Ban Meta
-        textSlide: true,
-        eyebrow: "Novidade · Óculos Inteligentes",
-        title: "Já temos Ray-Ban Meta",
-        subtitle:
-          "Os óculos inteligentes da Ray-Ban chegaram à Óptica 13 — câmara, áudio e Meta AI, na armação de sempre. Venha ver e experimentar em loja.",
+        // SLIDE RAY-BAN META — slide normal do carrossel (imagem + botão).
+        // Texto combinado para este slide (deve ficar no próprio grafismo da
+        // imagem, como nos outros slides):
+        //   Título: "Já temos Ray-Ban Meta"
+        //   Frase:  "Os óculos inteligentes da Ray-Ban chegaram à Óptica 13 —
+        //            câmara, áudio e Meta AI, na armação de sempre.
+        //            Venha ver e experimentar em loja."
+        // >>> PARA PÔR A FOTO REAL: basta substituir o ficheiro
+        //     public/fotos/raybanmeta-placeholder.jpg pela imagem definitiva
+        //     (mesma proporção 2:1 dos outros slides). Não é preciso tocar em
+        //     mais nada aqui.
+        img: "/fotos/raybanmeta-placeholder.jpg",
+        alt: "Já temos Ray-Ban Meta — óculos inteligentes com câmara, áudio e Meta AI",
         btnText: "Saber mais",
-        btnAction: () =>
-          document.getElementById("rayban-meta")?.scrollIntoView({ behavior: "smooth" }),
+        btnAction: () => setPage("contact"),
       },
       {
         id: 1,
@@ -3294,38 +3300,13 @@ function BookingModal({ isOpen, onClose, service }) {
               background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)",
             }}
           >
-            {slides[currentSlide].img ? (
-              <Img
-                key={`slide-${currentSlide}`}
-                src={slides[currentSlide].img}
-                alt={slides[currentSlide].alt}
-                priority={true}
-                className="w-full h-full object-contain fade-in"
-              />
-            ) : (
-              <div
-                key={`slide-${currentSlide}`}
-                className="w-full h-full flex items-center justify-center text-center px-8 fade-in"
-              >
-                <div className="max-w-2xl">
-                  <p className="uc-label text-[11px] md:text-xs font-semibold mb-3" style={{ color: "var(--wine)" }}>
-                    {slides[currentSlide].eyebrow}
-                  </p>
-                  <h2
-                    className="font-display mb-4"
-                    style={{ fontSize: "clamp(2rem,6vw,4rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}
-                  >
-                    {slides[currentSlide].title}
-                  </h2>
-                  <p
-                    className="text-sm md:text-lg leading-relaxed mx-auto"
-                    style={{ color: "var(--forest-light)", maxWidth: "36rem" }}
-                  >
-                    {slides[currentSlide].subtitle}
-                  </p>
-                </div>
-              </div>
-            )}
+            <Img
+              key={`slide-${currentSlide}`}
+              src={slides[currentSlide].img}
+              alt={slides[currentSlide].alt}
+              priority={true}
+              className="w-full h-full object-contain fade-in"
+            />
 
             {/* Setas de navegação frente/trás */}
             <button
@@ -3386,42 +3367,6 @@ function BookingModal({ isOpen, onClose, service }) {
                   }}
                 />
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* RAY-BAN META — secção informativa curta (sem preços nem modelos) */}
-        <section id="rayban-meta" className="py-16 md:py-20" style={{ background: "var(--cream)" }}>
-          <div className="max-w-5xl mx-auto px-6">
-            <div
-              className="rounded-3xl border-2 p-8 md:p-14 fade-up"
-              style={{ borderColor: "#d29aa0", background: "var(--wine-soft)" }}
-            >
-              <p className="uc-label text-[11px] font-semibold mb-3" style={{ color: "var(--wine)" }}>
-                Novidade · Óculos Inteligentes
-              </p>
-              <h2
-                className="font-display mb-5"
-                style={{ fontSize: "clamp(1.8rem,3.6vw,2.8rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}
-              >
-                Ray-Ban Meta na Óptica 13
-              </h2>
-              <p className="text-base md:text-lg leading-relaxed mb-4 max-w-3xl" style={{ color: "#444" }}>
-                Os <strong>Ray-Ban Meta</strong> são óculos inteligentes que juntam o design
-                clássico da Ray-Ban a tecnologia integrada: câmara para fotos e vídeos,
-                áudio <em>open-ear</em> e o assistente <strong>Meta AI</strong> — tudo numa
-                armação com o aspeto de sempre.
-              </p>
-              <p className="text-base md:text-lg leading-relaxed mb-8 max-w-3xl" style={{ color: "#444" }}>
-                Já estão disponíveis para <strong>ver e experimentar na nossa loja</strong>.
-                Venha conhecer de perto ou marque a sua visita.
-              </p>
-              <button
-                onClick={() => openBook("Visita — Ray-Ban Meta")}
-                className="btn-rose px-8 py-3.5 text-xs font-semibold uppercase tracking-widest inline-flex items-center gap-2"
-              >
-                <Calendar size={14} /> Marcar visita
-              </button>
             </div>
           </div>
         </section>
