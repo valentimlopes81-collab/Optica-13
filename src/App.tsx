@@ -2339,7 +2339,8 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
         </button>
 
         <div className="flex flex-col md:flex-row h-full overflow-y-auto scrollbar-hide">
-          {/* Lado da Imagem com Galeria */}
+          {/* Lado da Imagem com Galeria — oculto nos artigos de saldos (sem foto) */}
+          {!product.isSaldo && (
           <div className="w-full md:w-1/2 flex flex-col" style={{ background: "#fafafa" }}>
             {/* Foto Grande Ativa, com o nome do modelo em marca de água por trás */}
             <div className="relative img-zoom flex-1 h-[350px] md:h-auto min-h-[300px] overflow-hidden flex items-center justify-center p-8">
@@ -2379,9 +2380,10 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
               </div>
             )}
           </div>
+          )}
 
           {/* Lado da Informação */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col bg-white">
+          <div className={`w-full ${product.isSaldo ? "" : "md:w-1/2"} p-8 md:p-12 flex flex-col bg-white`}>
             <div className="flex items-start justify-between mb-4">
               <div>
                 <p
@@ -2561,18 +2563,21 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
             </div>
 
             <div className="mt-auto sticky bottom-0 bg-white pt-3 pb-1 space-y-3">
-              <button
-                onClick={() => onAdd(product)}
-                className="btn-forest w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2"
-              >
-                <ShoppingBag size={18} /> Adicionar ao Carrinho
-              </button>
+              {/* Saldos: sem compra direta — só reserva para ver em loja */}
+              {!product.isSaldo && (
+                <button
+                  onClick={() => onAdd(product)}
+                  className="btn-forest w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2"
+                >
+                  <ShoppingBag size={18} /> Adicionar ao Carrinho
+                </button>
+              )}
 
               <button
                 onClick={onBook}
-                className="btn-outline-forest w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                className={`${product.isSaldo ? "btn-forest" : "btn-outline-forest hover:bg-gray-50"} w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2 transition-colors`}
               >
-                <Calendar size={18} /> Reservar na Loja
+                <Calendar size={18} /> {product.isSaldo ? "Reservar para ver em loja" : "Reservar na Loja"}
               </button>
             </div>
           </div>
@@ -2826,9 +2831,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
-                // SALDOS-OCULTO: secção escondida da navegação até ter fotos reais.
-                // Para reativar, descomentar a linha seguinte (ver README).
-                // ["Saldos", "saldos"],
+                ["Saldos", "saldos"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
@@ -2911,8 +2914,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["Vantagens", "vantagens"],
                 ["MindTheLook", "mindthelook"],
                 ["Outlet", "outlet"],
-                // SALDOS-OCULTO: escondido da navegação até ter fotos (ver README).
-                // ["Saldos", "saldos"],
+                ["Saldos", "saldos"],
                 ["Contactos", "contact"],
               ].map(([label, p]) => (
                 <button
@@ -3003,8 +3005,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 ["vantagens", "Vantagens"],
                 ["mindthelook", "MindTheLook"],
                 ["outlet", "Outlet"],
-                // SALDOS-OCULTO: escondido da navegação até ter fotos (ver README).
-                // ["saldos", "Saldos"],
+                ["saldos", "Saldos"],
                 ["quiz", "Quiz de Estilo"],
                 ["contact", "Contactos"],
               ].map(([p, l]) => (
@@ -3227,6 +3228,18 @@ function BookingModal({ isOpen, onClose, service }) {
     // 1. Definir os Slides do Carrossel
     const slides = [
       {
+        id: 0,
+        // Slide tipográfico (sem imagem) — anúncio Ray-Ban Meta
+        textSlide: true,
+        eyebrow: "Novidade · Óculos Inteligentes",
+        title: "Já temos Ray-Ban Meta",
+        subtitle:
+          "Os óculos inteligentes da Ray-Ban chegaram à Óptica 13 — câmara, áudio e Meta AI, na armação de sempre. Venha ver e experimentar em loja.",
+        btnText: "Saber mais",
+        btnAction: () =>
+          document.getElementById("rayban-meta")?.scrollIntoView({ behavior: "smooth" }),
+      },
+      {
         id: 1,
         img: "/fotos/front-mindthelook.webp",
         alt: "Coleção MindTheLook — Mind the Look",
@@ -3281,13 +3294,38 @@ function BookingModal({ isOpen, onClose, service }) {
               background: "linear-gradient(90deg, rgb(253,221,222) 0 50%, #ffffff 50% 100%)",
             }}
           >
-            <Img
-              key={`slide-${currentSlide}`}
-              src={slides[currentSlide].img}
-              alt={slides[currentSlide].alt}
-              priority={true}
-              className="w-full h-full object-contain fade-in"
-            />
+            {slides[currentSlide].img ? (
+              <Img
+                key={`slide-${currentSlide}`}
+                src={slides[currentSlide].img}
+                alt={slides[currentSlide].alt}
+                priority={true}
+                className="w-full h-full object-contain fade-in"
+              />
+            ) : (
+              <div
+                key={`slide-${currentSlide}`}
+                className="w-full h-full flex items-center justify-center text-center px-8 fade-in"
+              >
+                <div className="max-w-2xl">
+                  <p className="uc-label text-[11px] md:text-xs font-semibold mb-3" style={{ color: "var(--wine)" }}>
+                    {slides[currentSlide].eyebrow}
+                  </p>
+                  <h2
+                    className="font-display mb-4"
+                    style={{ fontSize: "clamp(2rem,6vw,4rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}
+                  >
+                    {slides[currentSlide].title}
+                  </h2>
+                  <p
+                    className="text-sm md:text-lg leading-relaxed mx-auto"
+                    style={{ color: "var(--forest-light)", maxWidth: "36rem" }}
+                  >
+                    {slides[currentSlide].subtitle}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Setas de navegação frente/trás */}
             <button
@@ -3348,6 +3386,42 @@ function BookingModal({ isOpen, onClose, service }) {
                   }}
                 />
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* RAY-BAN META — secção informativa curta (sem preços nem modelos) */}
+        <section id="rayban-meta" className="py-16 md:py-20" style={{ background: "var(--cream)" }}>
+          <div className="max-w-5xl mx-auto px-6">
+            <div
+              className="rounded-3xl border-2 p-8 md:p-14 fade-up"
+              style={{ borderColor: "#d29aa0", background: "var(--wine-soft)" }}
+            >
+              <p className="uc-label text-[11px] font-semibold mb-3" style={{ color: "var(--wine)" }}>
+                Novidade · Óculos Inteligentes
+              </p>
+              <h2
+                className="font-display mb-5"
+                style={{ fontSize: "clamp(1.8rem,3.6vw,2.8rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}
+              >
+                Ray-Ban Meta na Óptica 13
+              </h2>
+              <p className="text-base md:text-lg leading-relaxed mb-4 max-w-3xl" style={{ color: "#444" }}>
+                Os <strong>Ray-Ban Meta</strong> são óculos inteligentes que juntam o design
+                clássico da Ray-Ban a tecnologia integrada: câmara para fotos e vídeos,
+                áudio <em>open-ear</em> e o assistente <strong>Meta AI</strong> — tudo numa
+                armação com o aspeto de sempre.
+              </p>
+              <p className="text-base md:text-lg leading-relaxed mb-8 max-w-3xl" style={{ color: "#444" }}>
+                Já estão disponíveis para <strong>ver e experimentar na nossa loja</strong>.
+                Venha conhecer de perto ou marque a sua visita.
+              </p>
+              <button
+                onClick={() => openBook("Visita — Ray-Ban Meta")}
+                className="btn-rose px-8 py-3.5 text-xs font-semibold uppercase tracking-widest inline-flex items-center gap-2"
+              >
+                <Calendar size={14} /> Marcar visita
+              </button>
             </div>
           </div>
         </section>
@@ -4605,24 +4679,183 @@ function BookingModal({ isOpen, onClose, service }) {
     );
   };
 
-  /* SALDOS / LIQUIDAÇÃO — reutiliza a CollectionPage (mesmo design) com os
-     231 artigos do saldosData.js. Cada cartão leva ao URL /saldos/<slug>,
-     que abre o template de produto já existente (ProductModal). */
-  const SaldosPage = ({ setSelectedProduct, favorites, onToggleFavorite }) => {
-    const navigate = useNavigate();
+  /* SALDOS / LIQUIDAÇÃO — lista editorial (sem fotos).
+     Muitos destes 231 modelos já foram descontinuados pelos fornecedores e não
+     temos fotografia, por isso NÃO usamos grelha de produto nem placeholders:
+     apresentamos uma lista tipo "sample sale" agrupada por marca. A ação por
+     artigo é "Reservar para ver em loja" (reaproveita a marcação já existente),
+     nunca uma compra direta.
+     Os URLs /saldos/<slug> continuam a funcionar (abrem o template de produto,
+     também sem área de foto). */
+  const SaldosPage = ({ openBook }) => {
+    const [search, setSearch] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
+
+    const filtered = useMemo(() => {
+      const q = search.trim().toLowerCase();
+      return SALDOS.filter((p) => {
+        if (categoryFilter && p.category !== categoryFilter) return false;
+        if (q && !p.name.toLowerCase().includes(q) && !p.brand.toLowerCase().includes(q)) return false;
+        return true;
+      });
+    }, [search, categoryFilter]);
+
+    // Agrupa por marca; grupos ordenados por nº de artigos (mais primeiro),
+    // e dentro de cada marca por valor em saldo (mais caro primeiro).
+    const groups = useMemo(() => {
+      const map = new Map();
+      filtered.forEach((p) => {
+        if (!map.has(p.brand)) map.set(p.brand, []);
+        map.get(p.brand).push(p);
+      });
+      const arr = Array.from(map.entries()).map(([brand, items]) => ({
+        brand,
+        items: items.slice().sort((a, b) => (b.price || 0) - (a.price || 0)),
+      }));
+      arr.sort((a, b) => b.items.length - a.items.length || a.brand.localeCompare(b.brand));
+      return arr;
+    }, [filtered]);
+
+    const fmtPrice = (v) => (v && v > 0 ? `€${v}` : "Sob consulta");
+
     return (
-      <CollectionPage
-        products={SALDOS}
-        title="Saldos"
-        eyebrow="Liquidação · até -50%"
-        showDiscount={true}
-        showCategoryFilter={true}
-        hideAttributeFilters={true}
-        onProductClick={(p) => navigate("/saldos/" + p.slug)}
-        setSelectedProduct={setSelectedProduct}
-        favorites={favorites}
-        onToggleFavorite={onToggleFavorite}
-      />
+      <div className="pt-28 pb-24 min-h-screen" style={{ background: "var(--cream)" }}>
+        <div className="max-w-4xl mx-auto px-6">
+          {/* Cabeçalho */}
+          <div className="mb-8">
+            <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--gold)" }}>
+              Liquidação · até -50%
+            </p>
+            <h1 className="font-display mb-5" style={{ fontSize: "clamp(2.5rem,5vw,4rem)", color: "var(--forest)" }}>
+              Saldos
+            </h1>
+            <p className="text-base leading-relaxed max-w-2xl" style={{ color: "#555" }}>
+              Uma seleção de modelos de coleções anteriores com desconto, muitos já
+              descontinuados pelos fornecedores. Como são peças únicas de stock de loja,
+              a lista é por marca e sem fotografia — reserve o modelo que lhe interessa
+              para o ver e experimentar na loja da Óptica 13.
+            </p>
+          </div>
+
+          {/* Separador por categoria */}
+          <div className="flex gap-2 mb-5 flex-wrap">
+            {[["", "Todos"], ["Aros", "Aros"], ["Óculos de Sol", "Óculos de Sol"]].map(([value, label]) => {
+              const active = categoryFilter === value;
+              return (
+                <button
+                  key={value || "todos"}
+                  type="button"
+                  onClick={() => setCategoryFilter(value)}
+                  className="px-5 py-2.5 rounded-full text-sm font-semibold border-2 transition-all hover:-translate-y-0.5"
+                  style={{
+                    borderColor: active ? "var(--forest)" : "var(--mist)",
+                    background: active ? "var(--forest)" : "white",
+                    color: active ? "white" : "#555",
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Pesquisa por marca/modelo */}
+          <div className="relative mb-6">
+            <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2" style={{ color: "#888" }} />
+            <input
+              type="text"
+              placeholder="Pesquisar por marca ou modelo..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm outline-none transition-colors"
+              style={{ borderColor: "var(--mist)" }}
+            />
+          </div>
+
+          <p className="text-sm mb-8" style={{ color: "#666" }}>
+            {filtered.length} {filtered.length === 1 ? "artigo" : "artigos"} em saldo
+          </p>
+
+          {/* Lista agrupada por marca */}
+          {groups.map(({ brand, items }) => (
+            <section key={brand} className="mb-12 fade-up">
+              <div className="flex items-baseline justify-between gap-4 mb-4 pb-3 border-b-2" style={{ borderColor: "var(--forest)" }}>
+                <h2 className="font-display font-semibold" style={{ fontSize: "clamp(1.4rem,2.6vw,2rem)", color: "var(--forest)", lineHeight: 1.05 }}>
+                  {brand}
+                </h2>
+                <span className="text-xs font-semibold uppercase tracking-wide whitespace-nowrap" style={{ color: "#999" }}>
+                  {items.length} {items.length === 1 ? "modelo" : "modelos"}
+                </span>
+              </div>
+
+              <ul className="divide-y" style={{ borderColor: "var(--mist)" }}>
+                {items.map((p) => {
+                  const hasPromo = p.originalPrice && p.originalPrice > p.price;
+                  return (
+                    <li
+                      key={p.id}
+                      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4"
+                      style={{ borderColor: "var(--mist)" }}
+                    >
+                      {/* Modelo + categoria */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold" style={{ color: "var(--forest)" }}>{p.name}</span>
+                          <span
+                            className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5"
+                            style={{ background: "var(--cream-dark)", color: "#777", border: "1px solid var(--mist)" }}
+                          >
+                            {p.category}
+                          </span>
+                        </div>
+                        <span className="text-[11px] uppercase tracking-wide" style={{ color: "#aaa" }}>
+                          Ref. {p.codigo}
+                        </span>
+                      </div>
+
+                      {/* Preços */}
+                      <div className="flex items-baseline gap-2 sm:w-40 sm:justify-end flex-shrink-0">
+                        {hasPromo && (
+                          <s className="text-sm" style={{ color: "#aaa" }}>€{p.originalPrice}</s>
+                        )}
+                        <span className="font-display text-xl font-semibold" style={{ color: "var(--wine)" }}>
+                          {fmtPrice(p.price)}
+                        </span>
+                        {hasPromo && (
+                          <span className="text-[10px] font-semibold text-white px-1.5 py-0.5" style={{ background: "var(--wine)" }}>
+                            -{Math.round(100 - (p.price / p.originalPrice) * 100)}%
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Ação: reservar para ver em loja */}
+                      <div className="flex-shrink-0">
+                        <button
+                          onClick={() => openBook(`Reserva de "${p.brand} ${p.name}" para ver em loja`)}
+                          className="btn-outline-forest w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 whitespace-nowrap"
+                        >
+                          <Calendar size={14} /> Reservar para ver em loja
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-16 bg-white rounded-2xl border" style={{ borderColor: "var(--mist)" }}>
+              <Search size={40} className="mx-auto mb-4 opacity-20" />
+              <h3 className="font-display text-xl font-semibold mb-2" style={{ color: "var(--forest)" }}>Sem resultados</h3>
+              <p className="text-sm" style={{ color: "#888" }}>Nenhum artigo encontrado com esta pesquisa.</p>
+              <button onClick={() => { setSearch(""); setCategoryFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
+                Limpar
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     );
   };
  /* QUIZ REFINADO - PT-PT */
@@ -5962,22 +6195,6 @@ function MainLayout() {
     document.title = meta.title;
     const descTag = document.querySelector('meta[name="description"]');
     if (descTag) descTag.setAttribute("content", meta.description);
-
-    // SALDOS-OCULTO: enquanto a secção Saldos não tiver fotos reais, as suas
-    // páginas (/saldos e /saldos/<slug>) não devem ser indexadas pelos motores
-    // de busca. Para reativar a indexação, basta remover este bloco (ver README).
-    let robots = document.querySelector('meta[name="robots"]');
-    if (baseKey === "saldos") {
-      if (!robots) {
-        robots = document.createElement("meta");
-        robots.setAttribute("name", "robots");
-        document.head.appendChild(robots);
-      }
-      robots.setAttribute("content", "noindex, nofollow");
-    } else if (robots) {
-      // Noutras páginas, garante indexação normal.
-      robots.setAttribute("content", "index, follow");
-    }
   }, [page]);
 
   // Deep-link dos Saldos: /saldos/<slug> abre o template de produto (modal)
@@ -6125,26 +6342,8 @@ const openBook = (service = "Consulta Geral") => {
                 />
               }
             />
-            <Route
-              path="/saldos"
-              element={
-                <SaldosPage
-                  setSelectedProduct={setSelectedProduct}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                />
-              }
-            />
-            <Route
-              path="/saldos/:slug"
-              element={
-                <SaldosPage
-                  setSelectedProduct={setSelectedProduct}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                />
-              }
-            />
+            <Route path="/saldos" element={<SaldosPage openBook={openBook} />} />
+            <Route path="/saldos/:slug" element={<SaldosPage openBook={openBook} />} />
             <Route path="/men" element={<Navigate to="/mindthelook?genero=homem" replace />} />
             <Route path="/women" element={<Navigate to="/mindthelook?genero=mulher" replace />} />
             <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
