@@ -3229,19 +3229,13 @@ function BookingModal({ isOpen, onClose, service }) {
     const slides = [
       {
         id: 0,
-        // SLIDE RAY-BAN META — slide normal do carrossel (imagem + botão).
-        // Texto combinado para este slide (deve ficar no próprio grafismo da
-        // imagem, como nos outros slides):
-        //   Título: "Já temos Ray-Ban Meta"
-        //   Frase:  "Os óculos inteligentes da Ray-Ban chegaram à Óptica 13 —
-        //            câmara, áudio e Meta AI, na armação de sempre.
-        //            Venha ver e experimentar em loja."
-        // >>> PARA PÔR A FOTO REAL: basta substituir o ficheiro
-        //     public/fotos/raybanmeta-placeholder.jpg pela imagem definitiva
-        //     (mesma proporção 2:1 dos outros slides). Não é preciso tocar em
-        //     mais nada aqui.
-        img: "/fotos/raybanmeta-placeholder.jpg",
-        alt: "Já temos Ray-Ban Meta — óculos inteligentes com câmara, áudio e Meta AI",
+        // SLIDE RAY-BAN META — slide normal do carrossel (só imagem + botão).
+        // A imagem é um recorte (PNG com fundo transparente) dos óculos, para
+        // assentarem diretamente sobre o fundo do carrossel. Para a trocar,
+        // substituir public/fotos/raybanmeta.png (de preferência já recortado,
+        // em PNG transparente).
+        img: "/fotos/raybanmeta.png",
+        alt: "Ray-Ban Meta — óculos inteligentes com câmara, áudio e Meta AI",
         btnText: "Saber mais",
         btnAction: () => setPage("contact"),
       },
