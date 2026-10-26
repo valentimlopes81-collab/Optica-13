@@ -2,9 +2,3 @@
 
 User-agent: *
 Allow: /
-
-# SALDOS-OCULTO: a secção Saldos está escondida enquanto não tem fotos reais.
-# Não deve ser indexada pelos motores de busca. Para reativar a indexação,
-# remover as duas linhas Disallow abaixo (ver public/fotos/saldos/README.md).
-Disallow: /saldos
-Disallow: /saldos/
