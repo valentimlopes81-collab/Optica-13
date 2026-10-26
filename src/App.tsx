@@ -2103,6 +2103,33 @@ function AssistantWidget({ setPage, openBook }) {
   ]);
   const scrollRef = useRef(null);
 
+  // Balão de boas-vindas junto ao ícone (uma vez por sessão).
+  const HINT_KEY = "optica13_assistant_hint";
+  const [showHint, setShowHint] = useState(false);
+  const hintDismissed = () => {
+    try { return sessionStorage.getItem(HINT_KEY) === "1"; } catch (e) { return false; }
+  };
+  const dismissHint = () => {
+    setShowHint(false);
+    try { sessionStorage.setItem(HINT_KEY, "1"); } catch (e) {}
+  };
+  const openChat = () => { setOpen(true); dismissHint(); };
+
+  // Aparece ~3s depois de carregar, se ainda não foi fechado nem o chat aberto.
+  useEffect(() => {
+    if (hintDismissed()) return;
+    const t = setTimeout(() => { if (!hintDismissed()) setShowHint(true); }, 3000);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Fechar o balão ao clicar fora dele (sem abrir o chat).
+  useEffect(() => {
+    if (!showHint) return;
+    const onDown = (e) => { if (!e.target.closest?.("[data-assistant-hint]")) dismissHint(); };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [showHint]);
+
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, open]);
@@ -2167,10 +2194,47 @@ function AssistantWidget({ setPage, openBook }) {
 
   return (
     <>
-      {/* Bolha do assistente — canto inferior direito */}
+      {/* Balão de boas-vindas junto ao ícone (por cima, alinhado à direita) */}
+      {!open && showHint && (
+        <div
+          data-assistant-hint
+          className="fixed bottom-24 right-4 sm:right-6 z-50"
+          style={{ width: "min(230px, calc(100vw - 6rem))" }}
+        >
+          <div
+            onClick={openChat}
+            role="button"
+            className="relative cursor-pointer rounded-2xl shadow-2xl px-4 py-3 pr-8 transition-transform hover:-translate-y-0.5"
+            style={{
+              background: "#fff",
+              border: "1px solid var(--mist)",
+              color: "var(--forest)",
+              fontFamily: "'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif",
+              textTransform: "none",
+            }}
+          >
+            <p className="text-sm font-medium leading-snug">{ASSISTANT.greeting}</p>
+            <button
+              onClick={(e) => { e.stopPropagation(); dismissHint(); }}
+              aria-label="Fechar"
+              className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center transition-colors hover:bg-black/10"
+              style={{ color: "#999" }}
+            >
+              <X size={13} />
+            </button>
+            {/* Bico a apontar para o ícone (canto inferior direito) */}
+            <span
+              className="absolute w-3 h-3 rotate-45"
+              style={{ background: "#fff", borderRight: "1px solid var(--mist)", borderBottom: "1px solid var(--mist)", bottom: "-7px", right: "22px" }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Ícone do assistente — canto inferior direito */}
       {!open && (
         <button
-          onClick={() => setOpen(true)}
+          onClick={openChat}
           aria-label="Abrir assistente"
           className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
           style={{ background: "var(--forest)", color: "#fff" }}
