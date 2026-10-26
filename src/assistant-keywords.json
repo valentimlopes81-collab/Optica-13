@@ -1,0 +1,51 @@
+{
+  "_comment": "Dicionário do assistente de navegação (router por palavras-chave, SEM IA). Editar à vontade: adicionar sinónimos em 'keywords', mudar textos em 'reply', ou destinos em 'action'. action.type: 'page' (navega para action.value: outlet | saldos | contact | mindthelook | services) ou 'book' (abre a marcação com o serviço action.value). A correspondência ignora maiúsculas e acentos. Os 'intents' marcados com quickReply:true aparecem como botões de resposta rápida, pela ordem em que estão aqui.",
+  "greeting": "Olá! 👋 O que procura hoje?",
+  "intents": [
+    {
+      "id": "sol",
+      "label": "Óculos de sol",
+      "quickReply": true,
+      "keywords": ["sol", "solar", "solares", "praia", "conducao", "condução", "conduzir", "verao", "verão", "espelhad", "polarizad"],
+      "reply": "Boa escolha! 🕶️ Temos óculos de sol de várias marcas. Vou levá-lo à nossa seleção.",
+      "action": { "type": "page", "value": "outlet" }
+    },
+    {
+      "id": "graduados",
+      "label": "Óculos graduados",
+      "quickReply": true,
+      "keywords": ["grau", "graduad", "miopia", "astigmatismo", "hipermetropia", "presbiopia", "lentes graduadas", "lente graduada", "vista cansada", "dioptria", "receita", "prescricao", "prescrição", "ver mal", "ver ao perto", "ver ao longe"],
+      "reply": "Para óculos graduados é necessária primeiro uma consulta de optometria — não fazemos venda direta de lentes graduadas online. Vou abrir já a marcação para si. 👓",
+      "action": { "type": "book", "value": "Consulta de Optometria" }
+    },
+    {
+      "id": "consulta",
+      "label": "Marcar consulta",
+      "quickReply": true,
+      "keywords": ["marcar", "marcacao", "marcação", "consulta", "exame", "agendar", "agendamento", "optometria", "rastreio", "horario de atendimento", "horário de atendimento"],
+      "reply": "Com certeza! 📅 Vou abrir a marcação da sua consulta.",
+      "action": { "type": "book", "value": "Consulta de Optometria" }
+    },
+    {
+      "id": "saldos",
+      "label": "Ver saldos/promoções",
+      "quickReply": true,
+      "keywords": ["saldo", "saldos", "desconto", "descontos", "promocao", "promoção", "promo", "barato", "baratos", "liquidacao", "liquidação", "campanha", "oferta", "ofertas", "outlet"],
+      "reply": "Temos saldos a decorrer, até -50%. 🏷️ Vou mostrar-lhe a lista.",
+      "action": { "type": "page", "value": "saldos" }
+    },
+    {
+      "id": "contactos",
+      "label": "Horários e lojas",
+      "quickReply": true,
+      "keywords": ["onde fica", "onde ficam", "morada", "endereco", "endereço", "localizacao", "localização", "como chegar", "horario", "horário", "aberto", "abre", "fecha", "contacto", "contactos", "telefone", "email", "loja", "lojas", "mapa", "direcoes", "direções"],
+      "reply": "Aqui ficam a nossa morada, horários e contactos. 📍",
+      "action": { "type": "page", "value": "contact" }
+    }
+  ],
+  "fallback": {
+    "reply": "Hmm, não tenho a certeza do que procura. 🙂 Pode escolher uma das opções acima — ou, se preferir, falar connosco diretamente.",
+    "linkLabel": "Falar connosco",
+    "action": { "type": "page", "value": "contact" }
+  }
+}

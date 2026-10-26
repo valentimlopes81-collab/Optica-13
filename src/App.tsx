@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Analytics } from '@vercel/analytics/react';
 import { SALDOS, SALDOS_PLACEHOLDER } from "./saldosData";
+import ASSISTANT from "./assistant-keywords.json";
 import './global.css';
 import {
   Glasses,
@@ -2076,7 +2077,7 @@ function WhatsAppBtn({ product }) {
       href={`https://wa.me/351934421310?text=${encodedMessage}`}
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl pulse-gold transition-transform hover:scale-110"
+      className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl pulse-gold transition-transform hover:scale-110"
       style={{ background: "#25D366" }}
     >
       <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white">
@@ -2084,6 +2085,213 @@ function WhatsAppBtn({ product }) {
         <path d="M12 0C5.373 0 0 5.373 0 12c0 2.087.536 4.047 1.477 5.754L0 24l6.395-1.477A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.793 9.793 0 01-5.006-1.375l-.359-.215-3.724.977.995-3.635-.234-.374A9.793 9.793 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z" />
       </svg>
     </a>
+  );
+}
+
+/* ── ASSISTENTE DE NAVEGAÇÃO (router por palavras-chave, SEM IA) ──────────
+   Encaminha a pessoa para a página certa com base em botões rápidos e num
+   mapeamento de palavras-chave (ver src/assistant-keywords.json). Corre 100%
+   no frontend — zero chamadas a APIs externas de IA. */
+const assistantNorm = (s) =>
+  (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+
+function AssistantWidget({ setPage, openBook }) {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([
+    { from: "bot", text: ASSISTANT.greeting, showQuickReplies: true },
+  ]);
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, open]);
+
+  const quickIntents = ASSISTANT.intents.filter((i) => i.quickReply);
+
+  const runAction = (action) => {
+    if (!action) return;
+    // Pequeno atraso para a pessoa ler a resposta antes de navegar/abrir.
+    setTimeout(() => {
+      if (action.type === "book") {
+        openBook(action.value);
+        setOpen(false);
+      } else if (action.type === "page") {
+        setPage(action.value);
+        setOpen(false);
+      }
+    }, 650);
+  };
+
+  const matchIntent = (text) => {
+    const t = assistantNorm(text);
+    if (!t) return null;
+    return (
+      ASSISTANT.intents.find((it) =>
+        it.keywords.some((k) => t.includes(assistantNorm(k)))
+      ) || null
+    );
+  };
+
+  const handleIntent = (intent) => {
+    setMessages((m) => [
+      ...m,
+      { from: "user", text: intent.label },
+      { from: "bot", text: intent.reply },
+    ]);
+    runAction(intent.action);
+  };
+
+  const handleFallback = () => {
+    const fb = ASSISTANT.fallback;
+    setMessages((m) => [
+      ...m,
+      { from: "bot", text: fb.reply, showQuickReplies: true, fallbackLink: fb },
+    ]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text) return;
+    setInput("");
+    const intent = matchIntent(text);
+    setMessages((m) => [...m, { from: "user", text }]);
+    if (intent) {
+      setMessages((m) => [...m, { from: "bot", text: intent.reply }]);
+      runAction(intent.action);
+    } else {
+      handleFallback();
+    }
+  };
+
+  return (
+    <>
+      {/* Bolha do assistente — canto inferior direito */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Abrir assistente"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
+          style={{ background: "var(--forest)", color: "#fff" }}
+        >
+          <MessageCircle size={26} strokeWidth={1.8} />
+        </button>
+      )}
+
+      {/* Painel de chat */}
+      {open && (
+        <div
+          className="fixed bottom-6 right-4 sm:right-6 z-[60] flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+          style={{
+            background: "white",
+            border: "1px solid var(--mist)",
+            width: "min(360px, calc(100vw - 2rem))",
+            height: "min(540px, calc(100vh - 2rem))",
+            // Chat legível: fonte com minúsculas (Nord é só maiúsculas) e sem uppercase.
+            fontFamily: "'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif",
+            textTransform: "none",
+          }}
+        >
+          {/* Cabeçalho */}
+          <div
+            className="flex items-center justify-between px-5 py-4 flex-shrink-0"
+            style={{ background: "var(--forest)", color: "#fff" }}
+          >
+            <div className="flex items-center gap-2.5">
+              <MessageCircle size={20} strokeWidth={1.8} />
+              <div>
+                <p className="font-semibold text-sm leading-tight">Assistente Óptica 13</p>
+                <p className="text-[11px] opacity-70 leading-tight normal-case">Ajudamos a encontrar o que procura</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Fechar assistente"
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-white/15"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* Mensagens */}
+          <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3" style={{ background: "var(--cream-dark)" }}>
+            {messages.map((msg, idx) => (
+              <div key={idx}>
+                <div className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className="max-w-[82%] px-3.5 py-2.5 text-sm leading-snug normal-case"
+                    style={
+                      msg.from === "user"
+                        ? { background: "var(--forest)", color: "#fff", borderRadius: "14px 14px 3px 14px" }
+                        : { background: "#fff", color: "#333", border: "1px solid var(--mist)", borderRadius: "14px 14px 14px 3px" }
+                    }
+                  >
+                    {msg.text}
+                  </div>
+                </div>
+
+                {/* Link de rede de segurança (fallback) */}
+                {msg.fallbackLink && (
+                  <div className="mt-2 flex justify-start">
+                    <button
+                      onClick={() => { setPage(msg.fallbackLink.action.value); setOpen(false); }}
+                      className="text-xs font-semibold underline"
+                      style={{ color: "var(--wine)", textTransform: "none" }}
+                    >
+                      {msg.fallbackLink.linkLabel} →
+                    </button>
+                  </div>
+                )}
+
+                {/* Botões de resposta rápida */}
+                {msg.showQuickReplies && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {quickIntents.map((it) => (
+                      <button
+                        key={it.id}
+                        onClick={() => handleIntent(it)}
+                        className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
+                        style={{ borderColor: "var(--forest)", color: "var(--forest)", background: "#fff", textTransform: "none" }}
+                      >
+                        {it.label}
+                      </button>
+                    ))}
+                    <button
+                      onClick={handleFallback}
+                      className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
+                      style={{ borderColor: "var(--mist)", color: "#777", background: "#fff", textTransform: "none" }}
+                    >
+                      Outra coisa
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Campo de texto livre */}
+          <form onSubmit={handleSubmit} className="flex items-center gap-2 p-3 flex-shrink-0 border-t" style={{ borderColor: "var(--mist)", background: "#fff" }}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Escreva aqui…"
+              className="flex-1 px-3 py-2.5 rounded-xl border text-sm outline-none normal-case"
+              style={{ borderColor: "var(--mist)" }}
+            />
+            <button
+              type="submit"
+              aria-label="Enviar"
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105"
+              style={{ background: "var(--forest)", color: "#fff" }}
+            >
+              <Send size={16} />
+            </button>
+          </form>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -6343,6 +6551,7 @@ const openBook = (service = "Consulta Geral") => {
 
         <Footer setPage={setPage} />
         <WhatsAppBtn />
+        <AssistantWidget setPage={setPage} openBook={openBook} />
         <CookieBanner />
         <Analytics />
       </div>
