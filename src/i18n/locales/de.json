@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "services": "Leistungen",
+    "vantagens": "Vorteile",
+    "mindthelook": "MindTheLook",
+    "outlet": "Outlet",
+    "saldos": "Sale",
+    "contact": "Kontakt",
+    "quiz": "Stil-Quiz"
+  },
+  "badges": {
+    "outlet": "bis zu -70%",
+    "saldos": "-50%"
+  },
+  "header": {
+    "book": "Termin buchen",
+    "menu": "Menü",
+    "home": "Startseite",
+    "search": "Kollektion durchsuchen",
+    "favorites": "Favoriten",
+    "cart": "Warenkorb",
+    "lang": "Sprache"
+  },
+  "slides": {
+    "verColecao": "Kollektion ansehen",
+    "verOutlet": "Outlet ansehen",
+    "marcarExame": "Termin buchen",
+    "saberMais": "Mehr erfahren"
+  },
+  "footer": {
+    "tagline": "Wir kümmern uns mit modernster Technik und Professionalität um Ihre Sehkraft.",
+    "navTitle": "Navigation",
+    "contactsTitle": "Kontakt",
+    "legalTitle": "Rechtliches",
+    "terms": "AGB & Datenschutz",
+    "hoursWeek": "Wochentags: 9:30 – 19:30 Uhr",
+    "hoursSat": "Sa: 9:30–13:30 / 15:00–18:00 Uhr",
+    "complaints": "Beschwerdebuch",
+    "copyright": "© 2026 Óptica 13 · Alle Rechte vorbehalten"
+  },
+  "collection": {
+    "searchPlaceholder": "Nach Marke oder Modell suchen...",
+    "filtersTitle": "Filter",
+    "material": "Material",
+    "cor": "Dominante Farbe",
+    "estilo": "Stil",
+    "formato": "Form",
+    "todos": "Alle",
+    "todas": "Alle",
+    "homem": "Herren",
+    "mulher": "Damen",
+    "aplicar": "Filter anwenden",
+    "limparTudo": "Alle löschen",
+    "limparFiltros": "Filter löschen",
+    "semResultados": "Keine Ergebnisse",
+    "semResultadosDesc": "Kein Modell mit genau dieser Filterkombination gefunden.",
+    "produto": "Produkt",
+    "produtos": "Produkte"
+  },
+  "saldos": {
+    "title": "Sale",
+    "eyebrow": "Abverkauf · bis zu -50%",
+    "intro": "Eine Auswahl reduzierter Modelle aus früheren Kollektionen, viele bereits von den Herstellern eingestellt. Da es sich um Einzelstücke aus dem Ladenbestand handelt, ist die Liste nach Marke geordnet und ohne Fotos — reservieren Sie das gewünschte Modell, um es im Geschäft Óptica 13 anzusehen und anzuprobieren.",
+    "catTodos": "Alle",
+    "catAros": "Fassungen",
+    "catSol": "Sonnenbrillen",
+    "searchPlaceholder": "Nach Marke oder Modell suchen...",
+    "artigo": "Artikel im Sale",
+    "artigos": "Artikel im Sale",
+    "reservar": "Zum Ansehen im Geschäft reservieren",
+    "modelo": "Modell",
+    "modelos": "Modelle",
+    "ref": "Ref.",
+    "sobConsulta": "Auf Anfrage",
+    "semResultados": "Keine Ergebnisse",
+    "semResultadosDesc": "Kein Artikel für diese Suche gefunden.",
+    "limpar": "Löschen"
+  },
+  "category": {
+    "sol": "Sonnenbrillen",
+    "aros": "Fassungen"
+  },
+  "assistant": {
+    "greeting": "Hallo! 👋 Wonach suchen Sie heute?",
+    "title": "Óptica 13 Assistent",
+    "subtitle": "Wir helfen Ihnen zu finden, was Sie suchen",
+    "placeholder": "Hier schreiben…",
+    "outraCoisa": "Etwas anderes",
+    "close": "Schließen",
+    "labels": {
+      "sol": "Sonnenbrillen",
+      "graduados": "Korrektionsbrillen",
+      "consulta": "Termin buchen",
+      "saldos": "Sale/Angebote ansehen",
+      "contactos": "Öffnungszeiten & Geschäfte"
+    },
+    "replies": {
+      "sol": "Gute Wahl! 🕶️ Wir haben Sonnenbrillen von mehreren Marken. Ich bringe Sie zu unserer Auswahl.",
+      "graduados": "Für Korrektionsbrillen ist zunächst ein Optometrie-Termin nötig — wir verkaufen korrigierende Gläser nicht direkt online. Ich öffne jetzt die Terminbuchung für Sie. 👓",
+      "consulta": "Gerne! 📅 Ich öffne Ihre Terminbuchung.",
+      "saldos": "Wir haben einen Sale, bis zu -50%. 🏷️ Ich zeige Ihnen die Liste.",
+      "contactos": "Hier finden Sie unsere Adresse, Öffnungszeiten und Kontakte. 📍"
+    },
+    "fallbackReply": "Hmm, ich bin mir nicht sicher, wonach Sie suchen. 🙂 Sie können eine der Optionen oben wählen — oder, wenn Sie möchten, direkt mit uns sprechen.",
+    "fallbackLink": "Mit uns sprechen"
+  },
+  "product": {
+    "addCart": "In den Warenkorb",
+    "reserveStore": "Im Geschäft reservieren",
+    "reserveSaldos": "Zum Ansehen im Geschäft reservieren",
+    "material": "Material",
+    "cor": "Farbe",
+    "formato": "Form",
+    "estilo": "Stil",
+    "aRever": "[ZU PRÜFEN]",
+    "faces": "Empfohlene Gesichtsformen",
+    "warranty": "2 Jahre Garantie",
+    "returns": "30 Tage Rückgabe",
+    "consultaText": "Brauchen Sie Korrektionsgläser? Der Optometrie-Termin ist kostenlos, wenn Sie Ihre Brille bei Óptica 13 anfertigen.",
+    "consultaBtn": "Termin buchen",
+    "save": "Sparen Sie",
+    "saveStore": "bei diesem Kauf",
+    "limited": "Limitierte Edition · keine Nachbestellung"
+  }
+}

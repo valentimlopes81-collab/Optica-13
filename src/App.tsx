@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Analytics } from '@vercel/analytics/react';
+import { useTranslation } from "react-i18next";
+import { SUPPORTED_LANGS } from "./i18n";
 import { SALDOS, SALDOS_PLACEHOLDER } from "./saldosData";
 import ASSISTANT from "./assistant-keywords.json";
 import './global.css';
@@ -2096,10 +2098,11 @@ const assistantNorm = (s) =>
   (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
 function AssistantWidget({ setPage, openBook }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
-    { from: "bot", text: ASSISTANT.greeting, showQuickReplies: true },
+    { from: "bot", greetingKey: true, showQuickReplies: true },
   ]);
   const scrollRef = useRef(null);
 
@@ -2163,8 +2166,8 @@ function AssistantWidget({ setPage, openBook }) {
   const handleIntent = (intent) => {
     setMessages((m) => [
       ...m,
-      { from: "user", text: intent.label },
-      { from: "bot", text: intent.reply },
+      { from: "user", text: t("assistant.labels." + intent.id) },
+      { from: "bot", text: t("assistant.replies." + intent.id) },
     ]);
     runAction(intent.action);
   };
@@ -2173,7 +2176,7 @@ function AssistantWidget({ setPage, openBook }) {
     const fb = ASSISTANT.fallback;
     setMessages((m) => [
       ...m,
-      { from: "bot", text: fb.reply, showQuickReplies: true, fallbackLink: fb },
+      { from: "bot", text: t("assistant.fallbackReply"), showQuickReplies: true, fallbackLink: fb },
     ]);
   };
 
@@ -2185,7 +2188,7 @@ function AssistantWidget({ setPage, openBook }) {
     const intent = matchIntent(text);
     setMessages((m) => [...m, { from: "user", text }]);
     if (intent) {
-      setMessages((m) => [...m, { from: "bot", text: intent.reply }]);
+      setMessages((m) => [...m, { from: "bot", text: t("assistant.replies." + intent.id) }]);
       runAction(intent.action);
     } else {
       handleFallback();
@@ -2213,7 +2216,7 @@ function AssistantWidget({ setPage, openBook }) {
               textTransform: "none",
             }}
           >
-            <p className="text-sm font-medium leading-snug">{ASSISTANT.greeting}</p>
+            <p className="text-sm font-medium leading-snug">{t("assistant.greeting")}</p>
             <button
               onClick={(e) => { e.stopPropagation(); dismissHint(); }}
               aria-label="Fechar"
@@ -2265,13 +2268,13 @@ function AssistantWidget({ setPage, openBook }) {
             <div className="flex items-center gap-2.5">
               <MessageCircle size={20} strokeWidth={1.8} />
               <div>
-                <p className="font-semibold text-sm leading-tight">Assistente Óptica 13</p>
-                <p className="text-[11px] opacity-70 leading-tight normal-case">Ajudamos a encontrar o que procura</p>
+                <p className="font-semibold text-sm leading-tight">{t("assistant.title")}</p>
+                <p className="text-[11px] opacity-70 leading-tight normal-case">{t("assistant.subtitle")}</p>
               </div>
             </div>
             <button
               onClick={() => setOpen(false)}
-              aria-label="Fechar assistente"
+              aria-label={t("assistant.close")}
               className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-white/15"
             >
               <X size={16} />
@@ -2291,7 +2294,7 @@ function AssistantWidget({ setPage, openBook }) {
                         : { background: "#fff", color: "#333", border: "1px solid var(--mist)", borderRadius: "14px 14px 14px 3px" }
                     }
                   >
-                    {msg.text}
+                    {msg.greetingKey ? t("assistant.greeting") : msg.text}
                   </div>
                 </div>
 
@@ -2303,7 +2306,7 @@ function AssistantWidget({ setPage, openBook }) {
                       className="text-xs font-semibold underline"
                       style={{ color: "var(--wine)", textTransform: "none" }}
                     >
-                      {msg.fallbackLink.linkLabel} →
+                      {t("assistant.fallbackLink")} →
                     </button>
                   </div>
                 )}
@@ -2318,7 +2321,7 @@ function AssistantWidget({ setPage, openBook }) {
                         className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
                         style={{ borderColor: "var(--forest)", color: "var(--forest)", background: "#fff", textTransform: "none" }}
                       >
-                        {it.label}
+                        {t("assistant.labels." + it.id)}
                       </button>
                     ))}
                     <button
@@ -2326,7 +2329,7 @@ function AssistantWidget({ setPage, openBook }) {
                       className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
                       style={{ borderColor: "var(--mist)", color: "#777", background: "#fff", textTransform: "none" }}
                     >
-                      Outra coisa
+                      {t("assistant.outraCoisa")}
                     </button>
                   </div>
                 )}
@@ -2340,7 +2343,7 @@ function AssistantWidget({ setPage, openBook }) {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Escreva aqui…"
+              placeholder={t("assistant.placeholder")}
               className="flex-1 px-3 py-2.5 rounded-xl border text-sm outline-none normal-case"
               style={{ borderColor: "var(--mist)" }}
             />
@@ -2555,6 +2558,7 @@ function CookieBanner() {
 
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
 function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavorite, onToggleFavorite }) {
+  const { t } = useTranslation();
   const [activeImage, setActiveImage] = useState(product?.image);
 
   // Fotos do Outlet têm fundo cinza (não branco puro), por isso o
@@ -2675,7 +2679,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                     className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide mt-3 px-3 py-1.5"
                     style={{ background: "var(--wine-soft)", color: "var(--wine)" }}
                   >
-                    Edição limitada · sem reposição de stock
+                    {t("product.limited")}
                   </p>
                 )}
               </div>
@@ -2721,7 +2725,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
             </p>
             {product.originalPrice && product.originalPrice > product.price && (
               <p className="text-sm font-semibold mb-6 -mt-4" style={{ color: "var(--wine)" }}>
-                Poupa €{product.originalPrice - product.price} nesta compra
+                {t("product.save")} €{product.originalPrice - product.price} {t("product.saveStore")}
               </p>
             )}
 
@@ -2734,10 +2738,10 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
 
             <div className="grid grid-cols-2 gap-4 mb-8">
               {[
-                ["Material", product.material],
-                ["Cor", product.color],
-                ["Formato", product.shape],
-                ["Estilo", product.style],
+                [t("product.material"), product.material],
+                [t("product.cor"), product.color],
+                [t("product.formato"), product.shape],
+                [t("product.estilo"), product.style],
               ].map(([k, v]) => (
                 <div
                   key={k}
@@ -2757,7 +2761,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                     className="text-sm font-semibold"
                     style={{ color: v ? "var(--forest)" : "#b0531f" }}
                   >
-                    {v || "[A REVER]"}
+                    {v || t("product.aRever")}
                   </p>
                 </div>
               ))}
@@ -2769,7 +2773,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                 className="text-[11px] font-bold uppercase tracking-wider mb-3"
                 style={{ color: "#888" }}
               >
-                Rostos recomendados
+                {t("product.faces")}
               </p>
               <div className="flex gap-2 flex-wrap">
                 {product.faceShape.map((f) => (
@@ -2797,8 +2801,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                   className="text-xs font-semibold leading-tight"
                   style={{ color: "#555" }}
                 >
-                  Garantia de
-                  <br />2 anos
+                  {t("product.warranty")}
                 </p>
               </div>
               <div className="flex items-center gap-3 p-4 rounded-xl border bg-gray-50 border-gray-100">
@@ -2807,9 +2810,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                   className="text-xs font-semibold leading-tight"
                   style={{ color: "#555" }}
                 >
-                  Devolução
-                  <br />
-                  em 30 dias
+                  {t("product.returns")}
                 </p>
               </div>
             </div>
@@ -2822,7 +2823,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
               <div className="flex items-center gap-3">
                 <Sparkles size={20} className="flex-shrink-0" style={{ color: "var(--gold)" }} />
                 <p className="text-xs font-semibold leading-snug" style={{ color: "#1e3a8a" }}>
-                  Precisa de lentes graduadas? A consulta de optometria é <strong>gratuita</strong> ao fazer os seus óculos na Óptica 13.
+                  {t("product.consultaText")}
                 </p>
               </div>
               <button
@@ -2830,7 +2831,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                 className="mt-3 w-full py-2.5 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
                 style={{ background: "#1e3a8a", color: "#ffffff" }}
               >
-                <Calendar size={14} /> Marcar consulta
+                <Calendar size={14} /> {t("product.consultaBtn")}
               </button>
             </div>
 
@@ -2841,7 +2842,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                   onClick={() => onAdd(product)}
                   className="btn-forest w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2"
                 >
-                  <ShoppingBag size={18} /> Adicionar ao Carrinho
+                  <ShoppingBag size={18} /> {t("product.addCart")}
                 </button>
               )}
 
@@ -2849,7 +2850,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                 onClick={onBook}
                 className={`${product.isSaldo ? "btn-forest" : "btn-outline-forest hover:bg-gray-50"} w-full py-[24px] rounded-xl font-semibold text-[15px] leading-[22px] tracking-wide flex items-center justify-center gap-2 transition-colors`}
               >
-                <Calendar size={18} /> {product.isSaldo ? "Reservar para ver em loja" : "Reservar na Loja"}
+                <Calendar size={18} /> {product.isSaldo ? t("product.reserveSaldos") : t("product.reserveStore")}
               </button>
             </div>
           </div>
@@ -3041,9 +3042,11 @@ function BookingModal({ isOpen, onClose, service }) {
    Module-scope so identities stay stable across MainLayout re-renders
    ══════════════════════════════════════════════════════════════ */
   /* HEADER */
-  const Header = ({ page, setPage, openBook, favoritesCount = 0, cartCount = 0, onOpenFavorites, onOpenCart }) => {
+  const Header = ({ page, setPage, openBook, lng = "pt", changeLang, favoritesCount = 0, cartCount = 0, onOpenFavorites, onOpenCart }) => {
+    const { t } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [langOpen, setLangOpen] = useState(false);
 
     useEffect(() => {
       const onScroll = () => setScrolled(window.scrollY > 12);
@@ -3098,14 +3101,7 @@ function BookingModal({ isOpen, onClose, service }) {
           {/* Centro: menu + Agendar Exame, centrados no cabeçalho */}
           <div className="hidden lg:flex items-center gap-7 w-max absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <nav className="flex items-center gap-7 text-xs uppercase tracking-widest">
-              {[
-                ["Serviços", "services"],
-                ["Vantagens", "vantagens"],
-                ["MindTheLook", "mindthelook"],
-                ["Outlet", "outlet"],
-                ["Saldos", "saldos"],
-                ["Contactos", "contact"],
-              ].map(([label, p]) => (
+              {["services", "vantagens", "mindthelook", "outlet", "saldos", "contact"].map((p) => (
                 <button
                   key={p}
                   onClick={() => setPage(p)}
@@ -3114,13 +3110,13 @@ function BookingModal({ isOpen, onClose, service }) {
                   }`}
                   style={{ color: "var(--forest)" }}
                 >
-                  {label}
+                  {t("nav." + p)}
                   {p === "outlet" && (
                     <span
                       className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
                       style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
                     >
-                      até -70%
+                      {t("badges.outlet")}
                     </span>
                   )}
                   {p === "saldos" && (
@@ -3128,7 +3124,7 @@ function BookingModal({ isOpen, onClose, service }) {
                       className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full text-white whitespace-nowrap shadow-sm"
                       style={{ background: "var(--wine)", fontSize: "9px", fontWeight: 800, lineHeight: 1 }}
                     >
-                      -50%
+                      {t("badges.saldos")}
                     </span>
                   )}
                 </button>
@@ -3140,16 +3136,46 @@ function BookingModal({ isOpen, onClose, service }) {
               onClick={() => openBook("Consulta de Optometria")}
               className="btn-forest px-5 py-2.5 text-xs font-semibold flex items-center gap-2 uppercase tracking-widest whitespace-nowrap transition-all"
             >
-              <Calendar size={14} /> Agendar Exame
+              <Calendar size={14} /> {t("header.book")}
             </button>
           </div>
 
           {/* Direita: ícones utilitários (pesquisa, favoritos, carrinho) — desktop e mobile */}
           <div className="flex items-center gap-3.5" style={{ color: "var(--forest)" }}>
-            <button onClick={() => setPage("mindthelook")} aria-label="Pesquisar coleção" className="p-0.5 transition-opacity hover:opacity-60">
+            {/* Seletor de idioma */}
+            <div className="relative">
+              <button
+                onClick={() => setLangOpen((v) => !v)}
+                onBlur={() => setTimeout(() => setLangOpen(false), 150)}
+                aria-label={t("header.lang")}
+                className="flex items-center gap-1 text-xs font-semibold uppercase tracking-widest transition-opacity hover:opacity-60"
+                style={{ color: "var(--forest)" }}
+              >
+                {lng}
+                <ChevronDown size={13} strokeWidth={2} />
+              </button>
+              {langOpen && (
+                <div
+                  className="absolute right-0 top-full mt-2 py-1 rounded-xl shadow-2xl z-50"
+                  style={{ background: "#fff", border: "1px solid var(--mist)", minWidth: "52px" }}
+                >
+                  {SUPPORTED_LANGS.map((l) => (
+                    <button
+                      key={l}
+                      onMouseDown={() => { changeLang && changeLang(l); setLangOpen(false); }}
+                      className="block w-full text-left px-4 py-1.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-gray-100"
+                      style={{ color: l === lng ? "var(--wine)" : "var(--forest)" }}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button onClick={() => setPage("mindthelook")} aria-label={t("header.search")} className="p-0.5 transition-opacity hover:opacity-60">
               <Search size={19} strokeWidth={1.6} />
             </button>
-            <button onClick={onOpenFavorites} aria-label="Favoritos" className="relative p-0.5 transition-opacity hover:opacity-60">
+            <button onClick={onOpenFavorites} aria-label={t("header.favorites")} className="relative p-0.5 transition-opacity hover:opacity-60">
               <Heart size={19} strokeWidth={1.6} />
               {favoritesCount > 0 && (
                 <span
@@ -3160,7 +3186,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 </span>
               )}
             </button>
-            <button onClick={onOpenCart} aria-label="Carrinho" className="relative p-0.5 transition-opacity hover:opacity-60">
+            <button onClick={onOpenCart} aria-label={t("header.cart")} className="relative p-0.5 transition-opacity hover:opacity-60">
               <ShoppingBag size={19} strokeWidth={1.6} />
               {cartCount > 0 && (
                 <span
@@ -3181,14 +3207,7 @@ function BookingModal({ isOpen, onClose, service }) {
             style={{ background: "white", borderColor: "var(--mist)" }}
           >
             <div className="px-6 py-4 space-y-2">
-              {[
-                ["Serviços", "services"],
-                ["Vantagens", "vantagens"],
-                ["MindTheLook", "mindthelook"],
-                ["Outlet", "outlet"],
-                ["Saldos", "saldos"],
-                ["Contactos", "contact"],
-              ].map(([label, p]) => (
+              {["services", "vantagens", "mindthelook", "outlet", "saldos", "contact"].map((p) => (
                 <button
                   key={p}
                   onClick={() => {
@@ -3201,13 +3220,13 @@ function BookingModal({ isOpen, onClose, service }) {
                     color: page === p ? "var(--gold)" : "var(--forest)",
                   }}
                 >
-                  {label}
+                  {t("nav." + p)}
                   {p === "outlet" && (
                     <span
                       className="px-1.5 py-0.5 rounded-full text-white whitespace-nowrap"
                       style={{ background: "var(--wine)", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
                     >
-                      até -70%
+                      {t("badges.outlet")}
                     </span>
                   )}
                   {p === "saldos" && (
@@ -3215,11 +3234,28 @@ function BookingModal({ isOpen, onClose, service }) {
                       className="px-1.5 py-0.5 rounded-full text-white whitespace-nowrap"
                       style={{ background: "var(--wine)", fontSize: "10px", fontWeight: 800, lineHeight: 1 }}
                     >
-                      -50%
+                      {t("badges.saldos")}
                     </span>
                   )}
                 </button>
               ))}
+              {/* Seletor de idioma (mobile) */}
+              <div className="flex items-center gap-2 pt-3 mt-2 border-t" style={{ borderColor: "var(--mist)" }}>
+                {SUPPORTED_LANGS.map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => { changeLang && changeLang(l); setMobileMenuOpen(false); }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-widest border"
+                    style={{
+                      borderColor: l === lng ? "var(--forest)" : "var(--mist)",
+                      background: l === lng ? "var(--forest)" : "#fff",
+                      color: l === lng ? "#fff" : "var(--forest)",
+                    }}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
               <button
                 onClick={() => {
                   openBook();
@@ -3227,7 +3263,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 }}
                 className="btn-forest w-full px-4 py-3 rounded-xl text-sm font-semibold mt-4 flex items-center justify-center gap-2"
               >
-                <Calendar size={14} /> Agendar Exame
+                <Calendar size={14} /> {t("header.book")}
               </button>
             </div>
           </div>
@@ -3236,7 +3272,9 @@ function BookingModal({ isOpen, onClose, service }) {
     );
   };
   /* FOOTER */
-  const Footer = ({ setPage }) => (
+  const Footer = ({ setPage }) => {
+    const { t } = useTranslation();
+    return (
     <footer className="py-16" style={{ background: "var(--slate)" }}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Usamos 5 colunas para caber tudo bem */}
@@ -3256,7 +3294,7 @@ function BookingModal({ isOpen, onClose, service }) {
               className="text-sm leading-relaxed mb-3 max-w-sm"
               style={{ color: "rgba(250,247,242,0.45)" }}
             >
-              Cuidamos da sua visão com tecnologia de ponta e profissionalismo.
+              {t("footer.tagline")}
             </p>
             <p className="text-xs font-semibold text-gray-500">
               Nº Registo ERS: E131391| NIF: 501687459
@@ -3269,18 +3307,10 @@ function BookingModal({ isOpen, onClose, service }) {
               className="text-xs font-semibold tracking-widest uppercase mb-5"
               style={{ color: "var(--gold)" }}
             >
-              Navegação
+              {t("footer.navTitle")}
             </p>
             <ul className="space-y-3">
-              {[
-                ["services", "Serviços"],
-                ["vantagens", "Vantagens"],
-                ["mindthelook", "MindTheLook"],
-                ["outlet", "Outlet"],
-                ["saldos", "Saldos"],
-                ["quiz", "Quiz de Estilo"],
-                ["contact", "Contactos"],
-              ].map(([p, l]) => (
+              {["services", "vantagens", "mindthelook", "outlet", "saldos", "quiz", "contact"].map((p) => (
                 <li key={p}>
                   <button
                     onClick={() => setPage(p)}
@@ -3291,7 +3321,7 @@ function BookingModal({ isOpen, onClose, service }) {
                       (e.target.style.color = "rgba(250,247,242,0.5)")
                     }
                   >
-                    {l}
+                    {t("nav." + p)}
                   </button>
                 </li>
               ))}
@@ -3304,7 +3334,7 @@ function BookingModal({ isOpen, onClose, service }) {
               className="text-xs font-semibold tracking-widest uppercase mb-5"
               style={{ color: "var(--gold)" }}
             >
-              Contactos
+              {t("footer.contactsTitle")}
             </p>
             <ul className="space-y-3 text-sm" style={{ color: "rgba(250,247,242,0.5)" }}>
               <li className="flex items-start gap-2">
@@ -3326,9 +3356,9 @@ function BookingModal({ isOpen, onClose, service }) {
               <li className="flex items-start gap-2 mt-4 pt-4 border-t border-gray-800">
                 <Clock size={14} className="mt-1 flex-shrink-0" style={{ color: "var(--gold)" }} />
                 <span>
-                  Dias Úteis: 9:30 – 19:30
+                  {t("footer.hoursWeek")}
                   <br />
-                  Sáb: 9h30–13h30 / 15h–18h
+                  {t("footer.hoursSat")}
                 </span>
               </li>
             </ul>
@@ -3340,12 +3370,12 @@ function BookingModal({ isOpen, onClose, service }) {
               className="text-xs font-semibold tracking-widest uppercase mb-5"
               style={{ color: "var(--gold)" }}
             >
-              Legal
+              {t("footer.legalTitle")}
             </p>
             <ul className="space-y-3 text-sm" style={{ color: "rgba(250,247,242,0.5)" }}>
               <li>
                 <button onClick={() => setPage("terms")} className="hover:text-white transition-colors">
-                  Termos e Privacidade
+                  {t("footer.terms")}
                 </button>
               </li>
             </ul>
@@ -3362,7 +3392,7 @@ function BookingModal({ isOpen, onClose, service }) {
               style={{ color: "rgba(250,247,242,0.5)" }}
             >
               <BookMarked size={18} strokeWidth={2} className="flex-shrink-0" />
-              Livro de Reclamações
+              {t("footer.complaints")}
             </a>
           </div>
         </div>
@@ -3375,11 +3405,12 @@ function BookingModal({ isOpen, onClose, service }) {
             color: "rgba(250,247,242,0.25)",
           }}
         >
-          © 2026 Óptica 13 · Todos os direitos reservados
+          {t("footer.copyright")}
         </div>
       </div>
     </footer>
-  );
+    );
+  };
   /* TESTIMONIALS CAROUSEL */
   const TestimonialsSection = () => {
     const [active, setActive] = useState(0);
@@ -3497,6 +3528,7 @@ function BookingModal({ isOpen, onClose, service }) {
   };
  /* HOME PAGE (COM CARROSSEL) */
   const HomePage = ({ setPage, openBook, setSelectedProduct }) => {
+    const { t } = useTranslation();
     // 1. Definir os Slides do Carrossel
     const slides = [
       {
@@ -3508,28 +3540,28 @@ function BookingModal({ isOpen, onClose, service }) {
         // restantes slides. Para a trocar, substituir public/fotos/raybanmeta.webp.
         img: "/fotos/raybanmeta.webp",
         alt: "Adquira já os seus Ray-Ban Meta na Óptica 13 — óculos inteligentes com câmara, áudio e Meta AI",
-        btnText: "Saber mais",
+        btnText: t("slides.saberMais"),
         btnAction: () => setPage("contact"),
       },
       {
         id: 1,
         img: "/fotos/front-mindthelook.webp",
         alt: "Coleção MindTheLook — Mind the Look",
-        btnText: "Ver Coleção",
+        btnText: t("slides.verColecao"),
         btnAction: () => setPage("mindthelook"),
       },
       {
         id: 2,
         img: "/fotos/front-outlet.webp",
         alt: "Outlet — óculos premium com desconto",
-        btnText: "Ver Outlet",
+        btnText: t("slides.verOutlet"),
         btnAction: () => setPage("outlet"),
       },
       {
         id: 3,
         img: "/fotos/front-cuidado.webp",
         alt: "Exame de vista gratuito",
-        btnText: "Marcar Exame",
+        btnText: t("slides.marcarExame"),
         btnAction: () => openBook("Consulta de Optometria"),
       },
     ];
@@ -4388,6 +4420,7 @@ function BookingModal({ isOpen, onClose, service }) {
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
   const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, showCategoryFilter, hideAttributeFilters, onProductClick, setSelectedProduct, favorites = [], onToggleFavorite }) => {
+    const { t } = useTranslation();
     const openProduct = onProductClick || setSelectedProduct;
     const [filters, setFilters] = useState({
       material: "",
@@ -4469,7 +4502,7 @@ function BookingModal({ isOpen, onClose, service }) {
                     color: active ? "white" : "#555",
                   }}
                 >
-                  {opt || "Todos"}
+                  {opt || t("collection.todos")}
                 </button>
               );
             })}
@@ -4482,12 +4515,12 @@ function BookingModal({ isOpen, onClose, service }) {
       return (
         <div className={isMobile ? "p-6" : ""}>
           <div className="space-y-7">
-            {pillGroup("Material", "material", ["", "Acetato", "Metal", "Ultem"])}
+            {pillGroup(t("collection.material"), "material", ["", "Acetato", "Metal", "Ultem"])}
 
             {/* Cor Dominante — swatches com a cor real, em vez de uma lista de texto */}
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide mb-3" style={{ color: "#888" }}>
-                Cor Dominante
+                {t("collection.cor")}
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 <button
@@ -4533,15 +4566,15 @@ function BookingModal({ isOpen, onClose, service }) {
               </div>
             </div>
 
-            {pillGroup("Estilo", "style", ["", "Clássico", "Moderno", "Intelectual", "Arrojado", "Glamour", "Casual"])}
-            {pillGroup("Formato", "shape", ["", "Retangular", "Quadrado", "Redondo", "Cat-Eye", "Aviador", "Geométrico"])}
+            {pillGroup(t("collection.estilo"), "style", ["", "Clássico", "Moderno", "Intelectual", "Arrojado", "Glamour", "Casual"])}
+            {pillGroup(t("collection.formato"), "shape", ["", "Retangular", "Quadrado", "Redondo", "Cat-Eye", "Aviador", "Geométrico"])}
 
             {isMobile && (
               <button
                 onClick={() => setDrawerOpen(false)}
                 className="btn-forest w-full py-3 rounded-xl font-semibold text-sm"
               >
-                Aplicar Filtros
+                {t("collection.aplicar")}
               </button>
             )}
           </div>
@@ -4576,7 +4609,7 @@ function BookingModal({ isOpen, onClose, service }) {
             {/* Filtro de Género — em destaque, porque muitos modelos servem para ambos */}
             {showGenderFilter && (
               <div className="flex gap-2 mb-5">
-                {[["", "Todos"], ["homem", "Homem"], ["mulher", "Mulher"]].map(([value, label]) => {
+                {[["", t("collection.todos")], ["homem", t("collection.homem")], ["mulher", t("collection.mulher")]].map(([value, label]) => {
                   const active = genderFilter === value;
                   return (
                     <button
@@ -4631,7 +4664,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 />
                 <input
                   type="text"
-                  placeholder="Pesquisar por marca ou modelo..."
+                  placeholder={t("collection.searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm outline-none transition-colors"
@@ -4643,7 +4676,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 onClick={() => setDrawerOpen(true)}
                 className="lg:hidden btn-outline-forest px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 relative"
               >
-                <Filter size={16} /> Filtros
+                <Filter size={16} /> {t("collection.filtersTitle")}
                 {activeFilterCount > 0 && (
                   <span
                     className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
@@ -4682,7 +4715,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   className="text-xs font-semibold underline"
                   style={{ color: "#888" }}
                 >
-                  Limpar tudo
+                  {t("collection.limparTudo")}
                 </button>
               </div>
             )}
@@ -4700,7 +4733,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   maxHeight: "calc(100vh - 8rem)",
                 }}
               >
-                <p className="font-display text-xl font-semibold mb-6" style={{ color: "var(--forest)" }}>Filtros</p>
+                <p className="font-display text-xl font-semibold mb-6" style={{ color: "var(--forest)" }}>{t("collection.filtersTitle")}</p>
                 <FilterPanel isMobile={false} />
               </div>
             </aside>
@@ -4710,7 +4743,7 @@ function BookingModal({ isOpen, onClose, service }) {
             <div className="flex-1">
               <p className="text-sm mb-6" style={{ color: "#666" }}>
                 {filtered.length}{" "}
-                {filtered.length === 1 ? "produto" : "produtos"}
+                {filtered.length === 1 ? t("collection.produto") : t("collection.produtos")}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filtered.map((p) => (
@@ -4808,7 +4841,7 @@ function BookingModal({ isOpen, onClose, service }) {
                               </span>
                             </span>
                             <p className="text-xs font-semibold mt-0.5" style={{ color: "var(--wine)" }}>
-                              Poupa €{p.originalPrice - p.price}
+                              {t("product.save")} €{p.originalPrice - p.price}
                             </p>
                           </>
                         ) : (
@@ -4845,12 +4878,12 @@ function BookingModal({ isOpen, onClose, service }) {
               {filtered.length === 0 && (
                 <div className="text-center py-16 bg-white rounded-2xl border" style={{ borderColor: "var(--mist)" }}>
                   <Search size={40} className="mx-auto mb-4 opacity-20" />
-                  <h3 className="font-display text-xl font-semibold mb-2" style={{ color: "var(--forest)" }}>Sem resultados</h3>
+                  <h3 className="font-display text-xl font-semibold mb-2" style={{ color: "var(--forest)" }}>{t("collection.semResultados")}</h3>
                   <p className="text-sm" style={{ color: "#888" }}>
-                    Nenhum modelo encontrado com essa combinação exata de filtros.
+                    {t("collection.semResultadosDesc")}
                   </p>
                   <button onClick={() => { setSearch(""); setFilters({ material: "", color: "", style: "", shape: "" }); setGenderFilter(""); setCategoryFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
-                    Limpar Filtros
+                    {t("collection.limparFiltros")}
                   </button>
                 </div>
               )}
@@ -4877,7 +4910,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 className="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10"
                 style={{ borderColor: "var(--mist)" }}
               >
-                <p className="font-display text-xl font-semibold">Filtros</p>
+                <p className="font-display text-xl font-semibold">{t("collection.filtersTitle")}</p>
                 <button onClick={() => setDrawerOpen(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
                   <X size={16} />
                 </button>
@@ -4899,8 +4932,10 @@ function BookingModal({ isOpen, onClose, service }) {
      Os URLs /saldos/<slug> continuam a funcionar (abrem o template de produto,
      também sem área de foto). */
   const SaldosPage = ({ openBook }) => {
+    const { t } = useTranslation();
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("");
+    const catLabel = (c) => (c === "Óculos de Sol" ? t("category.sol") : t("category.aros"));
 
     const filtered = useMemo(() => {
       const q = search.trim().toLowerCase();
@@ -4927,7 +4962,7 @@ function BookingModal({ isOpen, onClose, service }) {
       return arr;
     }, [filtered]);
 
-    const fmtPrice = (v) => (v && v > 0 ? `€${v}` : "Sob consulta");
+    const fmtPrice = (v) => (v && v > 0 ? `€${v}` : t("saldos.sobConsulta"));
 
     return (
       <div className="pt-28 pb-24 min-h-screen" style={{ background: "var(--cream)" }}>
@@ -4935,22 +4970,19 @@ function BookingModal({ isOpen, onClose, service }) {
           {/* Cabeçalho */}
           <div className="mb-8">
             <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--gold)" }}>
-              Liquidação · até -50%
+              {t("saldos.eyebrow")}
             </p>
             <h1 className="font-display mb-5" style={{ fontSize: "clamp(2.5rem,5vw,4rem)", color: "var(--forest)" }}>
-              Saldos
+              {t("saldos.title")}
             </h1>
             <p className="text-base leading-relaxed max-w-2xl" style={{ color: "#555" }}>
-              Uma seleção de modelos de coleções anteriores com desconto, muitos já
-              descontinuados pelos fornecedores. Como são peças únicas de stock de loja,
-              a lista é por marca e sem fotografia — reserve o modelo que lhe interessa
-              para o ver e experimentar na loja da Óptica 13.
+              {t("saldos.intro")}
             </p>
           </div>
 
           {/* Separador por categoria */}
           <div className="flex gap-2 mb-5 flex-wrap">
-            {[["", "Todos"], ["Aros", "Aros"], ["Óculos de Sol", "Óculos de Sol"]].map(([value, label]) => {
+            {[["", t("saldos.catTodos")], ["Aros", t("saldos.catAros")], ["Óculos de Sol", t("saldos.catSol")]].map(([value, label]) => {
               const active = categoryFilter === value;
               return (
                 <button
@@ -4975,7 +5007,7 @@ function BookingModal({ isOpen, onClose, service }) {
             <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2" style={{ color: "#888" }} />
             <input
               type="text"
-              placeholder="Pesquisar por marca ou modelo..."
+              placeholder={t("saldos.searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border-2 text-sm outline-none transition-colors"
@@ -4984,7 +5016,7 @@ function BookingModal({ isOpen, onClose, service }) {
           </div>
 
           <p className="text-sm mb-8" style={{ color: "#666" }}>
-            {filtered.length} {filtered.length === 1 ? "artigo" : "artigos"} em saldo
+            {filtered.length} {filtered.length === 1 ? t("saldos.artigo") : t("saldos.artigos")}
           </p>
 
           {/* Lista agrupada por marca */}
@@ -4995,7 +5027,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   {brand}
                 </h2>
                 <span className="text-xs font-semibold uppercase tracking-wide whitespace-nowrap" style={{ color: "#999" }}>
-                  {items.length} {items.length === 1 ? "modelo" : "modelos"}
+                  {items.length} {items.length === 1 ? t("saldos.modelo") : t("saldos.modelos")}
                 </span>
               </div>
 
@@ -5016,11 +5048,11 @@ function BookingModal({ isOpen, onClose, service }) {
                             className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5"
                             style={{ background: "var(--cream-dark)", color: "#777", border: "1px solid var(--mist)" }}
                           >
-                            {p.category}
+                            {catLabel(p.category)}
                           </span>
                         </div>
                         <span className="text-[11px] uppercase tracking-wide" style={{ color: "#aaa" }}>
-                          Ref. {p.codigo}
+                          {t("saldos.ref")} {p.codigo}
                         </span>
                       </div>
 
@@ -5045,7 +5077,7 @@ function BookingModal({ isOpen, onClose, service }) {
                           onClick={() => openBook(`Reserva de "${p.brand} ${p.name}" para ver em loja`)}
                           className="btn-outline-forest w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 whitespace-nowrap"
                         >
-                          <Calendar size={14} /> Reservar para ver em loja
+                          <Calendar size={14} /> {t("saldos.reservar")}
                         </button>
                       </div>
                     </li>
@@ -5058,10 +5090,10 @@ function BookingModal({ isOpen, onClose, service }) {
           {filtered.length === 0 && (
             <div className="text-center py-16 bg-white rounded-2xl border" style={{ borderColor: "var(--mist)" }}>
               <Search size={40} className="mx-auto mb-4 opacity-20" />
-              <h3 className="font-display text-xl font-semibold mb-2" style={{ color: "var(--forest)" }}>Sem resultados</h3>
-              <p className="text-sm" style={{ color: "#888" }}>Nenhum artigo encontrado com esta pesquisa.</p>
+              <h3 className="font-display text-xl font-semibold mb-2" style={{ color: "var(--forest)" }}>{t("saldos.semResultados")}</h3>
+              <p className="text-sm" style={{ color: "#888" }}>{t("saldos.semResultadosDesc")}</p>
               <button onClick={() => { setSearch(""); setCategoryFilter(""); }} className="mt-6 btn-outline-forest px-6 py-2 rounded-xl text-sm font-semibold">
-                Limpar
+                {t("saldos.limpar")}
               </button>
             </div>
           )}
@@ -6359,17 +6391,38 @@ const PAGE_META = {
 export default function App() {
   return (
     <Router>
-      <MainLayout />
+      <Routes>
+        <Route path="/en/*" element={<MainLayout lng="en" />} />
+        <Route path="/es/*" element={<MainLayout lng="es" />} />
+        <Route path="/fr/*" element={<MainLayout lng="fr" />} />
+        <Route path="/de/*" element={<MainLayout lng="de" />} />
+        <Route path="/*" element={<MainLayout lng="pt" />} />
+      </Routes>
     </Router>
   );
 }
 
-function MainLayout() {
+function MainLayout({ lng = "pt" }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const page = location.pathname.replace("/", "") || "home";
+  const { i18n } = useTranslation();
+
+  // Prefixo de idioma no URL (PT na raiz; /en, /es, /fr, /de nas outras).
+  const prefix = lng === "pt" ? "" : "/" + lng;
+  const rel = (lng === "pt" ? location.pathname : location.pathname.slice(prefix.length)) || "/";
+  const page = rel.replace(/^\/+/, "").replace(/\/+$/, "") || "home";
+
+  // Sincroniza o idioma do i18n com o do URL.
+  useEffect(() => { i18n.changeLanguage(lng); }, [lng, i18n]);
+
   const setPage = (newPage) => {
-    navigate(newPage === "home" ? "/" : "/" + newPage);
+    navigate(newPage === "home" ? (prefix || "/") : prefix + "/" + newPage);
+  };
+  // Troca de idioma mantendo a página atual (e os filtros/query).
+  const changeLang = (newLng) => {
+    const np = newLng === "pt" ? "" : "/" + newLng;
+    const rest = page === "home" ? "" : "/" + page;
+    navigate((np + rest || "/") + (location.search || ""));
   };
 
   const [booking, setBooking] = useState(false);
@@ -6411,7 +6464,7 @@ function MainLayout() {
   // Deep-link dos Saldos: /saldos/<slug> abre o template de produto (modal)
   // correspondente. Permite partilhar o URL direto de cada artigo.
   useEffect(() => {
-    const m = location.pathname.match(/^\/saldos\/(.+)$/);
+    const m = rel.match(/^\/?saldos\/(.+)$/);
     if (m) {
       const slug = decodeURIComponent(m[1]);
       const prod = SALDOS.find((p) => p.slug === slug);
@@ -6518,14 +6571,14 @@ const openBook = (service = "Consulta Geral") => {
         style={{ background: "var(--cream)", fontFamily: "Nord, Jost, sans-serif" }}
       >
        
-        <Header page={page} setPage={setPage} openBook={openBook} favoritesCount={favorites.length} cartCount={cart.reduce((s, i) => s + i.qty, 0)} onOpenFavorites={() => setFavoritesOpen(true)} onOpenCart={() => setCartOpen(true)} />
+        <Header page={page} setPage={setPage} openBook={openBook} lng={lng} changeLang={changeLang} favoritesCount={favorites.length} cartCount={cart.reduce((s, i) => s + i.qty, 0)} onOpenFavorites={() => setFavoritesOpen(true)} onOpenCart={() => setCartOpen(true)} />
         <div key={location.pathname} className="page-transition">
           <Routes>
-            <Route path="/" element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
-            <Route path="/services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
-            <Route path="/vantagens" element={<VantagensPage />} />
+            <Route index element={<HomePage setPage={setPage} openBook={openBook} setSelectedProduct={setSelectedProduct} />} />
+            <Route path="services" element={<ServicesPage openBook={openBook} setPage={setPage} />} />
+            <Route path="vantagens" element={<VantagensPage />} />
             <Route
-              path="/mindthelook"
+              path="mindthelook"
               element={
                 <CollectionPage
                   products={[...ALL_PRODUCTS].reverse()}
@@ -6539,7 +6592,7 @@ const openBook = (service = "Consulta Geral") => {
               }
             />
             <Route
-              path="/outlet"
+              path="outlet"
               element={
                 <CollectionPage
                   products={PRODUCTS.outlet}
@@ -6553,14 +6606,14 @@ const openBook = (service = "Consulta Geral") => {
                 />
               }
             />
-            <Route path="/saldos" element={<SaldosPage openBook={openBook} />} />
-            <Route path="/saldos/:slug" element={<SaldosPage openBook={openBook} />} />
-            <Route path="/men" element={<Navigate to="/mindthelook?genero=homem" replace />} />
-            <Route path="/women" element={<Navigate to="/mindthelook?genero=mulher" replace />} />
-            <Route path="/quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
-            <Route path="/about" element={<AboutPage setPage={setPage} />} />
-            <Route path="/contact" element={<ContactPage openBook={openBook} />} />
-            <Route path="/terms" element={<TermsPage />} />
+            <Route path="saldos" element={<SaldosPage openBook={openBook} />} />
+            <Route path="saldos/:slug" element={<SaldosPage openBook={openBook} />} />
+            <Route path="men" element={<Navigate to={`${prefix}/mindthelook?genero=homem`} replace />} />
+            <Route path="women" element={<Navigate to={`${prefix}/mindthelook?genero=mulher`} replace />} />
+            <Route path="quiz" element={<QuizPage onSelectProduct={setSelectedProduct} />} />
+            <Route path="about" element={<AboutPage setPage={setPage} />} />
+            <Route path="contact" element={<ContactPage openBook={openBook} />} />
+            <Route path="terms" element={<TermsPage />} />
           </Routes>
         </div>
         <BookingModal 
@@ -6573,7 +6626,7 @@ const openBook = (service = "Consulta Geral") => {
             product={selectedProduct}
             onClose={() => {
               setSelectedProduct(null);
-              if (location.pathname.startsWith("/saldos/")) navigate("/saldos");
+              if (rel.replace(/^\//, "").startsWith("saldos/")) navigate(prefix + "/saldos");
             }}
             onAdd={(p) => { addToCart(p); setSelectedProduct(null); setCartOpen(true); }}
             isFavorite={favorites.includes(selectedProduct.id)}
