@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "services": "Servicios",
+    "vantagens": "Ventajas",
+    "mindthelook": "MindTheLook",
+    "outlet": "Outlet",
+    "saldos": "Rebajas",
+    "contact": "Contacto",
+    "quiz": "Quiz de Estilo"
+  },
+  "badges": {
+    "outlet": "hasta -70%",
+    "saldos": "-50%"
+  },
+  "header": {
+    "book": "Reservar Examen",
+    "menu": "Menú",
+    "home": "Inicio",
+    "search": "Buscar colección",
+    "favorites": "Favoritos",
+    "cart": "Carrito",
+    "lang": "Idioma"
+  },
+  "slides": {
+    "verColecao": "Ver Colección",
+    "verOutlet": "Ver Outlet",
+    "marcarExame": "Reservar Examen",
+    "saberMais": "Saber más"
+  },
+  "footer": {
+    "tagline": "Cuidamos de su visión con tecnología de vanguardia y profesionalidad.",
+    "navTitle": "Navegación",
+    "contactsTitle": "Contacto",
+    "legalTitle": "Legal",
+    "terms": "Términos y Privacidad",
+    "hoursWeek": "Días laborables: 9:30 – 19:30",
+    "hoursSat": "Sáb: 9:30–13:30 / 15:00–18:00",
+    "complaints": "Libro de Reclamaciones",
+    "copyright": "© 2026 Óptica 13 · Todos los derechos reservados"
+  },
+  "collection": {
+    "searchPlaceholder": "Buscar por marca o modelo...",
+    "filtersTitle": "Filtros",
+    "material": "Material",
+    "cor": "Color dominante",
+    "estilo": "Estilo",
+    "formato": "Forma",
+    "todos": "Todos",
+    "todas": "Todas",
+    "homem": "Hombre",
+    "mulher": "Mujer",
+    "aplicar": "Aplicar filtros",
+    "limparTudo": "Borrar todo",
+    "limparFiltros": "Borrar filtros",
+    "semResultados": "Sin resultados",
+    "semResultadosDesc": "No se ha encontrado ningún modelo con esa combinación exacta de filtros.",
+    "produto": "producto",
+    "produtos": "productos"
+  },
+  "saldos": {
+    "title": "Rebajas",
+    "eyebrow": "Liquidación · hasta -50%",
+    "intro": "Una selección de modelos de colecciones anteriores con descuento, muchos ya descatalogados por los proveedores. Como son piezas únicas de stock de tienda, la lista es por marca y sin fotografía — reserve el modelo que le interese para verlo y probarlo en la tienda de Óptica 13.",
+    "catTodos": "Todos",
+    "catAros": "Monturas",
+    "catSol": "Gafas de sol",
+    "searchPlaceholder": "Buscar por marca o modelo...",
+    "artigo": "artículo en rebajas",
+    "artigos": "artículos en rebajas",
+    "reservar": "Reservar para ver en tienda",
+    "modelo": "modelo",
+    "modelos": "modelos",
+    "ref": "Ref.",
+    "sobConsulta": "A consultar",
+    "semResultados": "Sin resultados",
+    "semResultadosDesc": "No se ha encontrado ningún artículo para esta búsqueda.",
+    "limpar": "Borrar"
+  },
+  "category": {
+    "sol": "Gafas de sol",
+    "aros": "Monturas"
+  },
+  "assistant": {
+    "greeting": "¡Hola! 👋 ¿Qué busca hoy?",
+    "title": "Asistente Óptica 13",
+    "subtitle": "Le ayudamos a encontrar lo que busca",
+    "placeholder": "Escriba aquí…",
+    "outraCoisa": "Otra cosa",
+    "close": "Cerrar",
+    "labels": {
+      "sol": "Gafas de sol",
+      "graduados": "Gafas graduadas",
+      "consulta": "Reservar cita",
+      "saldos": "Ver rebajas/ofertas",
+      "contactos": "Horarios y tiendas"
+    },
+    "replies": {
+      "sol": "¡Buena elección! 🕶️ Tenemos gafas de sol de varias marcas. Le llevo a nuestra selección.",
+      "graduados": "Las gafas graduadas requieren primero una cita de optometría — no vendemos lentes graduadas directamente online. Le abro ahora la reserva de cita. 👓",
+      "consulta": "¡Por supuesto! 📅 Le abro la reserva de su cita.",
+      "saldos": "Tenemos rebajas, hasta -50%. 🏷️ Le muestro la lista.",
+      "contactos": "Aquí tiene nuestra dirección, horarios y contactos. 📍"
+    },
+    "fallbackReply": "Mmm, no estoy seguro de lo que busca. 🙂 Puede elegir una de las opciones de arriba — o, si lo prefiere, hablar con nosotros directamente.",
+    "fallbackLink": "Hablar con nosotros"
+  },
+  "product": {
+    "addCart": "Añadir al Carrito",
+    "reserveStore": "Reservar en Tienda",
+    "reserveSaldos": "Reservar para ver en tienda",
+    "material": "Material",
+    "cor": "Color",
+    "formato": "Forma",
+    "estilo": "Estilo",
+    "aRever": "[REVISAR]",
+    "faces": "Rostros recomendados",
+    "warranty": "Garantía de 2 años",
+    "returns": "Devolución en 30 días",
+    "consultaText": "¿Necesita lentes graduadas? La cita de optometría es gratuita al hacer sus gafas en Óptica 13.",
+    "consultaBtn": "Reservar cita",
+    "save": "Ahorra",
+    "saveStore": "en esta compra",
+    "limited": "Edición limitada · sin reposición de stock"
+  }
+}

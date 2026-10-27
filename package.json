@@ -11,9 +11,12 @@
   "dependencies": {
     "@vercel/analytics": "^1.2.2",
     "ajv": "^8.20.0",
+    "i18next": "^23.11.5",
+    "i18next-browser-languagedetector": "^7.2.1",
     "lucide-react": "^0.263.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^13.5.0",
     "react-router-dom": "^6.22.3",
     "react-scripts": "^5.0.1"
   },

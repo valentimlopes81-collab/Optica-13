@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "services": "Services",
+    "vantagens": "Benefits",
+    "mindthelook": "MindTheLook",
+    "outlet": "Outlet",
+    "saldos": "Sale",
+    "contact": "Contact",
+    "quiz": "Style Quiz"
+  },
+  "badges": {
+    "outlet": "up to -70%",
+    "saldos": "-50%"
+  },
+  "header": {
+    "book": "Book Eye Exam",
+    "menu": "Menu",
+    "home": "Home",
+    "search": "Search collection",
+    "favorites": "Favourites",
+    "cart": "Cart",
+    "lang": "Language"
+  },
+  "slides": {
+    "verColecao": "View Collection",
+    "verOutlet": "View Outlet",
+    "marcarExame": "Book Eye Exam",
+    "saberMais": "Learn more"
+  },
+  "footer": {
+    "tagline": "We care for your vision with state-of-the-art technology and professionalism.",
+    "navTitle": "Navigation",
+    "contactsTitle": "Contact",
+    "legalTitle": "Legal",
+    "terms": "Terms & Privacy",
+    "hoursWeek": "Weekdays: 9:30 am – 7:30 pm",
+    "hoursSat": "Sat: 9:30 am–1:30 pm / 3 pm–6 pm",
+    "complaints": "Complaints Book",
+    "copyright": "© 2026 Óptica 13 · All rights reserved"
+  },
+  "collection": {
+    "searchPlaceholder": "Search by brand or model...",
+    "filtersTitle": "Filters",
+    "material": "Material",
+    "cor": "Dominant Colour",
+    "estilo": "Style",
+    "formato": "Shape",
+    "todos": "All",
+    "todas": "All",
+    "homem": "Men",
+    "mulher": "Women",
+    "aplicar": "Apply Filters",
+    "limparTudo": "Clear all",
+    "limparFiltros": "Clear Filters",
+    "semResultados": "No results",
+    "semResultadosDesc": "No model found with that exact combination of filters.",
+    "produto": "product",
+    "produtos": "products"
+  },
+  "saldos": {
+    "title": "Sale",
+    "eyebrow": "Clearance · up to -50%",
+    "intro": "A selection of discounted models from previous collections, many already discontinued by suppliers. As these are one-off, in-store stock pieces, the list is organised by brand and without photos — reserve the model you are interested in to see and try it on at the Óptica 13 store.",
+    "catTodos": "All",
+    "catAros": "Frames",
+    "catSol": "Sunglasses",
+    "searchPlaceholder": "Search by brand or model...",
+    "artigo": "item on sale",
+    "artigos": "items on sale",
+    "reservar": "Reserve to see in store",
+    "modelo": "model",
+    "modelos": "models",
+    "ref": "Ref.",
+    "sobConsulta": "On request",
+    "semResultados": "No results",
+    "semResultadosDesc": "No item found for this search.",
+    "limpar": "Clear"
+  },
+  "category": {
+    "sol": "Sunglasses",
+    "aros": "Frames"
+  },
+  "assistant": {
+    "greeting": "Hi! 👋 What are you looking for today?",
+    "title": "Óptica 13 Assistant",
+    "subtitle": "We help you find what you need",
+    "placeholder": "Type here…",
+    "outraCoisa": "Something else",
+    "close": "Close",
+    "labels": {
+      "sol": "Sunglasses",
+      "graduados": "Prescription glasses",
+      "consulta": "Book an appointment",
+      "saldos": "See sale/offers",
+      "contactos": "Hours & stores"
+    },
+    "replies": {
+      "sol": "Great choice! 🕶️ We have sunglasses from several brands. Let me take you to our selection.",
+      "graduados": "Prescription glasses require an optometry appointment first — we don't sell prescription lenses directly online. I'll open the booking for you now. 👓",
+      "consulta": "Of course! 📅 I'll open your appointment booking.",
+      "saldos": "We have a sale on, up to -50%. 🏷️ Let me show you the list.",
+      "contactos": "Here are our address, opening hours and contacts. 📍"
+    },
+    "fallbackReply": "Hmm, I'm not sure what you're looking for. 🙂 You can pick one of the options above — or, if you prefer, talk to us directly.",
+    "fallbackLink": "Talk to us"
+  },
+  "product": {
+    "addCart": "Add to Cart",
+    "reserveStore": "Reserve in Store",
+    "reserveSaldos": "Reserve to see in store",
+    "material": "Material",
+    "cor": "Colour",
+    "formato": "Shape",
+    "estilo": "Style",
+    "aRever": "[TO REVIEW]",
+    "faces": "Recommended face shapes",
+    "warranty": "2-year warranty",
+    "returns": "30-day returns",
+    "consultaText": "Need prescription lenses? The optometry appointment is free when you make your glasses at Óptica 13.",
+    "consultaBtn": "Book appointment",
+    "save": "Save",
+    "saveStore": "on this purchase",
+    "limited": "Limited edition · no restock"
+  }
+}

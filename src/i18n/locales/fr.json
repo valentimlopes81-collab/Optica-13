@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "services": "Services",
+    "vantagens": "Avantages",
+    "mindthelook": "MindTheLook",
+    "outlet": "Outlet",
+    "saldos": "Soldes",
+    "contact": "Contact",
+    "quiz": "Quiz de Style"
+  },
+  "badges": {
+    "outlet": "jusqu'à -70%",
+    "saldos": "-50%"
+  },
+  "header": {
+    "book": "Prendre RDV",
+    "menu": "Menu",
+    "home": "Accueil",
+    "search": "Rechercher la collection",
+    "favorites": "Favoris",
+    "cart": "Panier",
+    "lang": "Langue"
+  },
+  "slides": {
+    "verColecao": "Voir la Collection",
+    "verOutlet": "Voir l'Outlet",
+    "marcarExame": "Prendre RDV",
+    "saberMais": "En savoir plus"
+  },
+  "footer": {
+    "tagline": "Nous prenons soin de votre vision avec une technologie de pointe et professionnalisme.",
+    "navTitle": "Navigation",
+    "contactsTitle": "Contact",
+    "legalTitle": "Mentions légales",
+    "terms": "Conditions et Confidentialité",
+    "hoursWeek": "Jours ouvrés : 9h30 – 19h30",
+    "hoursSat": "Sam : 9h30–13h30 / 15h–18h",
+    "complaints": "Livre de Réclamations",
+    "copyright": "© 2026 Óptica 13 · Tous droits réservés"
+  },
+  "collection": {
+    "searchPlaceholder": "Rechercher par marque ou modèle...",
+    "filtersTitle": "Filtres",
+    "material": "Matière",
+    "cor": "Couleur dominante",
+    "estilo": "Style",
+    "formato": "Forme",
+    "todos": "Tous",
+    "todas": "Toutes",
+    "homem": "Homme",
+    "mulher": "Femme",
+    "aplicar": "Appliquer les filtres",
+    "limparTudo": "Tout effacer",
+    "limparFiltros": "Effacer les filtres",
+    "semResultados": "Aucun résultat",
+    "semResultadosDesc": "Aucun modèle trouvé avec cette combinaison exacte de filtres.",
+    "produto": "produit",
+    "produtos": "produits"
+  },
+  "saldos": {
+    "title": "Soldes",
+    "eyebrow": "Liquidation · jusqu'à -50%",
+    "intro": "Une sélection de modèles des collections précédentes en promotion, dont beaucoup déjà arrêtés par les fournisseurs. Comme il s'agit de pièces uniques du stock en boutique, la liste est classée par marque et sans photo — réservez le modèle qui vous intéresse pour le voir et l'essayer à la boutique Óptica 13.",
+    "catTodos": "Tous",
+    "catAros": "Montures",
+    "catSol": "Lunettes de soleil",
+    "searchPlaceholder": "Rechercher par marque ou modèle...",
+    "artigo": "article en solde",
+    "artigos": "articles en solde",
+    "reservar": "Réserver pour voir en boutique",
+    "modelo": "modèle",
+    "modelos": "modèles",
+    "ref": "Réf.",
+    "sobConsulta": "Sur demande",
+    "semResultados": "Aucun résultat",
+    "semResultadosDesc": "Aucun article trouvé pour cette recherche.",
+    "limpar": "Effacer"
+  },
+  "category": {
+    "sol": "Lunettes de soleil",
+    "aros": "Montures"
+  },
+  "assistant": {
+    "greeting": "Bonjour ! 👋 Que recherchez-vous aujourd'hui ?",
+    "title": "Assistant Óptica 13",
+    "subtitle": "Nous vous aidons à trouver ce que vous cherchez",
+    "placeholder": "Écrivez ici…",
+    "outraCoisa": "Autre chose",
+    "close": "Fermer",
+    "labels": {
+      "sol": "Lunettes de soleil",
+      "graduados": "Lunettes de vue",
+      "consulta": "Prendre rendez-vous",
+      "saldos": "Voir soldes/offres",
+      "contactos": "Horaires et boutiques"
+    },
+    "replies": {
+      "sol": "Bon choix ! 🕶️ Nous avons des lunettes de soleil de plusieurs marques. Je vous emmène à notre sélection.",
+      "graduados": "Les lunettes de vue nécessitent d'abord un rendez-vous d'optométrie — nous ne vendons pas de verres correcteurs directement en ligne. J'ouvre la prise de rendez-vous pour vous. 👓",
+      "consulta": "Bien sûr ! 📅 J'ouvre la prise de votre rendez-vous.",
+      "saldos": "Nous avons des soldes en cours, jusqu'à -50%. 🏷️ Je vous montre la liste.",
+      "contactos": "Voici notre adresse, nos horaires et nos contacts. 📍"
+    },
+    "fallbackReply": "Hmm, je ne suis pas sûr de ce que vous cherchez. 🙂 Vous pouvez choisir l'une des options ci-dessus — ou, si vous préférez, nous parler directement.",
+    "fallbackLink": "Nous contacter"
+  },
+  "product": {
+    "addCart": "Ajouter au Panier",
+    "reserveStore": "Réserver en Boutique",
+    "reserveSaldos": "Réserver pour voir en boutique",
+    "material": "Matière",
+    "cor": "Couleur",
+    "formato": "Forme",
+    "estilo": "Style",
+    "aRever": "[À REVOIR]",
+    "faces": "Formes de visage recommandées",
+    "warranty": "Garantie de 2 ans",
+    "returns": "Retour sous 30 jours",
+    "consultaText": "Besoin de verres correcteurs ? Le rendez-vous d'optométrie est gratuit lorsque vous faites vos lunettes chez Óptica 13.",
+    "consultaBtn": "Prendre rendez-vous",
+    "save": "Économisez",
+    "saveStore": "sur cet achat",
+    "limited": "Édition limitée · sans réapprovisionnement"
+  }
+}
