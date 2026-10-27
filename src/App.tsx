@@ -3081,6 +3081,38 @@ function BookingModal({ isOpen, onClose, service }) {
             >
               {mobileMenuOpen ? <X size={18} /> : <Filter size={18} />}
             </button>
+
+            {/* Seletor de idioma — mobile, entre o filtro e o logo */}
+            <div className="relative lg:hidden">
+              <button
+                onClick={() => setLangOpen((v) => !v)}
+                onBlur={() => setTimeout(() => setLangOpen(false), 150)}
+                aria-label={t("header.lang")}
+                className="flex items-center gap-0.5 text-xs font-semibold uppercase tracking-widest transition-opacity hover:opacity-60"
+                style={{ color: "var(--forest)" }}
+              >
+                {lng}
+                <ChevronDown size={13} strokeWidth={2} />
+              </button>
+              {langOpen && (
+                <div
+                  className="absolute left-0 top-full mt-2 py-1 rounded-xl shadow-2xl z-50"
+                  style={{ background: "#fff", border: "1px solid var(--mist)", minWidth: "52px" }}
+                >
+                  {SUPPORTED_LANGS.map((l) => (
+                    <button
+                      key={l}
+                      onMouseDown={() => { changeLang && changeLang(l); setLangOpen(false); }}
+                      className="block w-full text-left px-4 py-1.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-gray-100"
+                      style={{ color: l === lng ? "var(--wine)" : "var(--forest)" }}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
               onClick={() => setPage("home")}
               className="hidden lg:flex items-center transition-transform hover:scale-105"
@@ -3146,8 +3178,8 @@ function BookingModal({ isOpen, onClose, service }) {
 
           {/* Direita: ícones utilitários (pesquisa, favoritos, carrinho) — desktop e mobile */}
           <div className="flex items-center gap-3.5" style={{ color: "var(--forest)" }}>
-            {/* Seletor de idioma */}
-            <div className="relative">
+            {/* Seletor de idioma — desktop (no mobile fica à esquerda, junto ao filtro) */}
+            <div className="relative hidden lg:block">
               <button
                 onClick={() => setLangOpen((v) => !v)}
                 onBlur={() => setTimeout(() => setLangOpen(false), 150)}
