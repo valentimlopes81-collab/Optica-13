@@ -243,5 +243,18 @@
     "wd4": "Do",
     "wd5": "Fr",
     "wd6": "Sa"
+  },
+  "services": {
+    "t1": "Optometrie-Termine",
+    "t2": "Ärztliches Attest (Führerschein)",
+    "t3": "Kontaktlinsen-Termine",
+    "t4": "Persönliche Beratung",
+    "t5": "Optiker-Hausbesuch",
+    "t6": "Augeninnendruck-Messung",
+    "aAgendar": "Termin buchen",
+    "aExame": "Untersuchung buchen",
+    "aQuiz": "Virtuelles Quiz starten",
+    "aContact": "Kontakt aufnehmen",
+    "aVisit": "Geschäft besuchen"
   }
 }

@@ -243,5 +243,18 @@
     "wd4": "Jeu",
     "wd5": "Ven",
     "wd6": "Sam"
+  },
+  "services": {
+    "t1": "Consultations d'optométrie",
+    "t2": "Certificat médical (permis de conduire)",
+    "t3": "Consultations de contactologie",
+    "t4": "Conseil personnalisé",
+    "t5": "Opticien à domicile",
+    "t6": "Mesure de la tension oculaire",
+    "aAgendar": "Prendre rendez-vous",
+    "aExame": "Réserver un examen",
+    "aQuiz": "Faire le quiz virtuel",
+    "aContact": "Nous contacter",
+    "aVisit": "Visiter la boutique"
   }
 }

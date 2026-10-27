@@ -4008,9 +4008,10 @@ function BookingModal({ isOpen, onClose, service }) {
   };
   /* SERVICES PAGE */
   const ServicesPage = ({ openBook, setPage }) => {
+    const { t } = useTranslation();
     const servicesData = [
       {
-        title: "Consultas de Optometria",
+        title: t("services.t1"),
         text: (
           <>
             <p className="mb-4">
@@ -4077,11 +4078,11 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         ),
        img: "https://i.postimg.cc/KjLFzDfn/newarta-eye-care-5016078-1920.jpg",
-        actionLabel: "Agendar Consulta",
+        actionLabel: t("services.aAgendar"),
         actionFn: () => openBook("Consulta de Optometria"),
       },
       {
-        title: "Atestado Médico (Cartas de Condução)",
+        title: t("services.t2"),
         text: (
           <>
             <p className="mb-4">
@@ -4139,11 +4140,11 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         ),
         img: "https://i.postimg.cc/xd7WzbXY/maximilianovich-doctor-5710159-1920.jpg",
-        actionLabel: "Marcar Exame",
+        actionLabel: t("services.aExame"),
        actionFn: () => openBook("Exame Carta de Condução"),
       },
       {
-        title: "Consultas de Contactologia",
+        title: t("services.t3"),
         text: (
           <>
             <p className="mb-6">
@@ -4197,11 +4198,11 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         ),
         img: "https://i.postimg.cc/MZySsB2x/Contactologia-1-300x300.png",
-        actionLabel: "Agendar Consulta",
+        actionLabel: t("services.aAgendar"),
         actionFn: () => openBook("Consulta de Contactologia"),
       },
       {
-        title: "Aconselhamento Personalizado",
+        title: t("services.t4"),
         text: (
           <>
             <p className="mb-4">
@@ -4250,11 +4251,11 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         ),
         img: "/fotos/serv-acompanhamento.webp",
-        actionLabel: "Fazer Quiz Virtual",
+        actionLabel: t("services.aQuiz"),
         actionFn: () => setPage("quiz"),
       },
       {
-        title: "Ótica ao Domicílio",
+        title: t("services.t5"),
         text: (
           <>
             <p className="mb-6 text-lg">
@@ -4298,11 +4299,11 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         ),
         img: "/fotos/serv-domicilio.webp",
-        actionLabel: "Contactar-nos",
+        actionLabel: t("services.aContact"),
         actionFn: () => setPage("contact"),
       },
       {
-        title: "Medição de Tensão Ocular",
+        title: t("services.t6"),
         text: (
           <>
             <p className="mb-4">
@@ -4338,7 +4339,7 @@ function BookingModal({ isOpen, onClose, service }) {
           </>
         ),
         img: "https://i.postimg.cc/RZh2z687/Medicao-de-tensao-ocular-300x300.png",
-        actionLabel: "Visitar Loja",
+        actionLabel: t("services.aVisit"),
         actionFn: () => setPage("contact"),
       },
     ];

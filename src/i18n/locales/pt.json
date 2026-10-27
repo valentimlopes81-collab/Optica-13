@@ -243,5 +243,18 @@
     "wd4": "Qui",
     "wd5": "Sex",
     "wd6": "Sáb"
+  },
+  "services": {
+    "t1": "Consultas de Optometria",
+    "t2": "Atestado Médico (Cartas de Condução)",
+    "t3": "Consultas de Contactologia",
+    "t4": "Aconselhamento Personalizado",
+    "t5": "Ótica ao Domicílio",
+    "t6": "Medição de Tensão Ocular",
+    "aAgendar": "Agendar Consulta",
+    "aExame": "Marcar Exame",
+    "aQuiz": "Fazer Quiz Virtual",
+    "aContact": "Contactar-nos",
+    "aVisit": "Visitar Loja"
   }
 }
