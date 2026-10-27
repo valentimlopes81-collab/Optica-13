@@ -184,5 +184,64 @@
     "successTitle": "Desconto Garantido!",
     "successPara": "Enviámos o seu cupão exclusivo de 20% de desconto para a sua caixa de entrada.",
     "continueBtn": "Continuar a explorar"
+  },
+  "common": {
+    "close": "Fechar",
+    "less": "Menos",
+    "more": "Mais"
+  },
+  "cart": {
+    "title": "O seu carrinho",
+    "empty": "O carrinho está vazio.",
+    "remove": "Remover",
+    "subtotal": "Subtotal",
+    "checkoutErr": "Não foi possível iniciar o checkout. Tente novamente.",
+    "processing": "A processar…",
+    "checkout": "Finalizar Compra",
+    "continue": "Continuar a comprar"
+  },
+  "fav": {
+    "title": "Favoritos",
+    "empty1": "Ainda não guardou favoritos.",
+    "empty2": "Toque no coração de um modelo para o guardar aqui.",
+    "sent": "Enviámos os seus favoritos para {{email}}.",
+    "getByEmail": "Receber os meus favoritos por email:",
+    "emailPlaceholder": "O seu email",
+    "send": "Enviar",
+    "sendErr": "Não foi possível enviar. Tente novamente.",
+    "removeAria": "Remover dos favoritos"
+  },
+  "cookie": {
+    "title": "Usamos cookies 🍪",
+    "text": "Utilizamos cookies para melhorar a sua experiência, personalizar conteúdos e analisar tráfego. Pode aceitar todos ou apenas os estritamente necessários.",
+    "essential": "Apenas Essenciais",
+    "acceptAll": "Aceitar Todos"
+  },
+  "booking": {
+    "title": "Agendar marcação",
+    "confirmedTitle": "Marcação Confirmada",
+    "stepOf": "Passo {{step}} de 4",
+    "doneTitle": "Tudo Pronto!",
+    "doneText": "A sua marcação para {{time}} de {{date}} foi confirmada. Verifique o seu e-mail!",
+    "backToStore": "Voltar à Loja",
+    "continue": "Continuar",
+    "back": "Voltar",
+    "namePlaceholder": "Nome Completo",
+    "phonePlaceholder": "Telemóvel",
+    "emailPlaceholder": "E-mail",
+    "summary": "Resumo da Marcação",
+    "date": "Data",
+    "time": "Hora",
+    "client": "Cliente",
+    "sending": "A enviar...",
+    "confirm": "Confirmar Marcação",
+    "confirmErr": "Não foi possível enviar o pedido de marcação. Ligue-nos para 934 421 310 ou tente novamente.",
+    "wd0": "Dom",
+    "wd1": "Seg",
+    "wd2": "Ter",
+    "wd3": "Qua",
+    "wd4": "Qui",
+    "wd5": "Sex",
+    "wd6": "Sáb"
   }
 }

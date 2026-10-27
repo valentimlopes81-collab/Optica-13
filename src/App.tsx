@@ -197,6 +197,7 @@ function parsePrice(v) {
 
 /* ── Gaveta de carrinho (100% nossa) ─────────────────────────────── */
 function CartDrawer({ open, onClose, cart, updateQty, removeFromCart }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(false);
   const subtotal = cart.reduce((s, i) => s + parsePrice(i.price) * i.qty, 0);
@@ -219,13 +220,13 @@ function CartDrawer({ open, onClose, cart, updateQty, removeFromCart }) {
         aria-hidden={!open}
       >
         <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: "var(--mist)" }}>
-          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>O seu carrinho</p>
-          <button onClick={onClose} aria-label="Fechar" className="p-1 hover:opacity-60"><X size={20} /></button>
+          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>{t("cart.title")}</p>
+          <button onClick={onClose} aria-label={t("common.close")} className="p-1 hover:opacity-60"><X size={20} /></button>
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 py-5">
           {cart.length === 0 ? (
-            <p className="text-sm" style={{ color: "var(--forest-light)" }}>O carrinho está vazio.</p>
+            <p className="text-sm" style={{ color: "var(--forest-light)" }}>{t("cart.empty")}</p>
           ) : (
             <div className="space-y-5">
               {cart.map((item) => (
@@ -237,14 +238,14 @@ function CartDrawer({ open, onClose, cart, updateQty, removeFromCart }) {
                     <p className="text-sm font-semibold leading-tight" style={{ color: "var(--forest)" }}>{item.name}</p>
                     <p className="text-xs mb-2" style={{ color: "var(--gold)" }}>{item.brand}</p>
                     <div className="inline-flex items-center border" style={{ borderColor: "var(--mist)" }}>
-                      <button onClick={() => updateQty(item.id, item.qty - 1)} aria-label="Menos" className="px-2 py-1 hover:bg-gray-100"><Minus size={13} /></button>
+                      <button onClick={() => updateQty(item.id, item.qty - 1)} aria-label={t("common.less")} className="px-2 py-1 hover:bg-gray-100"><Minus size={13} /></button>
                       <span className="px-3 text-sm">{item.qty}</span>
-                      <button onClick={() => updateQty(item.id, item.qty + 1)} aria-label="Mais" className="px-2 py-1 hover:bg-gray-100"><Plus size={13} /></button>
+                      <button onClick={() => updateQty(item.id, item.qty + 1)} aria-label={t("common.more")} className="px-2 py-1 hover:bg-gray-100"><Plus size={13} /></button>
                     </div>
                   </div>
                   <div className="text-right flex flex-col items-end justify-between">
                     <p className="font-display text-sm font-semibold" style={{ color: "var(--forest)" }}>€{(parsePrice(item.price) * item.qty).toFixed(2)}</p>
-                    <button onClick={() => removeFromCart(item.id)} className="text-[11px] uppercase tracking-wide hover:text-black" style={{ color: "var(--forest-light)" }}>Remover</button>
+                    <button onClick={() => removeFromCart(item.id)} className="text-[11px] uppercase tracking-wide hover:text-black" style={{ color: "var(--forest-light)" }}>{t("cart.remove")}</button>
                   </div>
                 </div>
               ))}
@@ -255,14 +256,14 @@ function CartDrawer({ open, onClose, cart, updateQty, removeFromCart }) {
         {cart.length > 0 && (
           <div className="px-6 py-5 border-t" style={{ borderColor: "var(--mist)" }}>
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>Subtotal</span>
+              <span className="text-sm uppercase tracking-wide" style={{ color: "var(--forest-light)" }}>{t("cart.subtotal")}</span>
               <span className="font-display text-lg font-semibold" style={{ color: "var(--forest)" }}>€{subtotal.toFixed(2)}</span>
             </div>
-            {err && <p className="text-xs mb-3" style={{ color: "var(--wine)" }}>Não foi possível iniciar o checkout. Tenta novamente.</p>}
+            {err && <p className="text-xs mb-3" style={{ color: "var(--wine)" }}>{t("cart.checkoutErr")}</p>}
             <button onClick={doCheckout} disabled={loading} className="btn-forest w-full py-4 text-xs font-semibold uppercase tracking-widest">
-              {loading ? "A processar…" : "Finalizar Compra"}
+              {loading ? t("cart.processing") : t("cart.checkout")}
             </button>
-            <button onClick={onClose} className="w-full mt-2 py-3 text-xs uppercase tracking-widest" style={{ color: "var(--forest-light)" }}>Continuar a comprar</button>
+            <button onClick={onClose} className="w-full mt-2 py-3 text-xs uppercase tracking-widest" style={{ color: "var(--forest-light)" }}>{t("cart.continue")}</button>
           </div>
         )}
       </aside>
@@ -297,6 +298,7 @@ function findProductById(id) {
 
 /* ── DRAWER DE FAVORITOS ──────────────────────────────────────── */
 function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavorite }) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -345,13 +347,13 @@ function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavo
         style={{ boxShadow: "-10px 0 40px rgba(0,0,0,0.12)" }}
       >
         <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: "var(--mist)" }}>
-          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>Favoritos ({items.length})</p>
-          <button onClick={onClose} className="p-2 hover:opacity-60" aria-label="Fechar"><X size={18} /></button>
+          <p className="uc-label text-sm font-semibold" style={{ color: "var(--forest)" }}>{t("fav.title")} ({items.length})</p>
+          <button onClick={onClose} className="p-2 hover:opacity-60" aria-label={t("common.close")}><X size={18} /></button>
         </div>
         <div className="flex-1 overflow-y-auto">
           {items.length === 0 ? (
             <div className="p-10 text-center text-sm leading-relaxed" style={{ color: "var(--forest-light)" }}>
-              Ainda não guardou favoritos.<br />Toque no coração de um modelo para o guardar aqui.
+              {t("fav.empty1")}<br />{t("fav.empty2")}
             </div>
           ) : (
             <ul>
@@ -365,7 +367,7 @@ function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavo
                     <p className="font-semibold text-sm" style={{ color: "var(--forest)" }}>{p.name}</p>
                     <p className="text-sm" style={{ color: "var(--forest)" }}>€{p.price}</p>
                   </button>
-                  <button onClick={() => onToggleFavorite(p.id)} aria-label="Remover dos favoritos" className="p-2 hover:opacity-60">
+                  <button onClick={() => onToggleFavorite(p.id)} aria-label={t("fav.removeAria")} className="p-2 hover:opacity-60">
                     <Heart size={18} fill="var(--wine)" style={{ color: "var(--wine)" }} />
                   </button>
                 </li>
@@ -376,16 +378,16 @@ function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavo
         {items.length > 0 && (
           <div className="px-6 py-5 border-t" style={{ borderColor: "var(--mist)" }}>
             {sent ? (
-              <p className="text-sm text-center" style={{ color: "var(--forest)" }}>Enviámos os seus favoritos para {email}.</p>
+              <p className="text-sm text-center" style={{ color: "var(--forest)" }}>{t("fav.sent", { email })}</p>
             ) : (
               <>
-                <p className="text-xs mb-2" style={{ color: "var(--forest-light)" }}>Receber os meus favoritos por email:</p>
+                <p className="text-xs mb-2" style={{ color: "var(--forest-light)" }}>{t("fav.getByEmail")}</p>
                 <div className="flex gap-2">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="O seu email"
+                    placeholder={t("fav.emailPlaceholder")}
                     className="flex-1 px-3 py-2.5 border text-sm outline-none"
                     style={{ borderColor: "var(--mist)" }}
                   />
@@ -394,10 +396,10 @@ function FavoritesDrawer({ open, onClose, favorites, onOpenProduct, onToggleFavo
                     disabled={sending || !email}
                     className="btn-forest px-4 py-2.5 text-xs font-semibold uppercase tracking-widest disabled:opacity-50"
                   >
-                    {sending ? "..." : "Enviar"}
+                    {sending ? "..." : t("fav.send")}
                   </button>
                 </div>
-                {error && <p className="text-xs mt-2" style={{ color: "var(--wine)" }}>Não foi possível enviar. Tente novamente.</p>}
+                {error && <p className="text-xs mt-2" style={{ color: "var(--wine)" }}>{t("fav.sendErr")}</p>}
               </>
             )}
           </div>
@@ -2512,6 +2514,7 @@ function ExitPopup({ onClose }) {
 }
 /* ── COOKIE BANNER (LEGALIZADO RGPD) ──────────────────────────── */
 function CookieBanner() {
+  const { t } = useTranslation();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -2534,8 +2537,8 @@ function CookieBanner() {
     >
       <div className="text-sm" style={{ color: "#555" }}>
         <p>
-          <strong style={{ color: "var(--forest)" }}>Usamos cookies 🍪</strong><br/>
-          Utilizamos cookies para melhorar a sua experiência, personalizar conteúdos e analisar tráfego. Pode aceitar todos ou apenas os estritamente necessários.
+          <strong style={{ color: "var(--forest)" }}>{t("cookie.title")}</strong><br/>
+          {t("cookie.text")}
         </p>
       </div>
       <div className="flex gap-3 w-full sm:w-auto flex-shrink-0">
@@ -2543,13 +2546,13 @@ function CookieBanner() {
           onClick={() => handleCookies("essential")} 
           className="btn-outline-forest w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-sm"
         >
-          Apenas Essenciais
+          {t("cookie.essential")}
         </button>
         <button 
           onClick={() => handleCookies("all")} 
           className="btn-forest w-full sm:w-auto px-8 py-3 rounded-xl font-semibold text-sm"
         >
-          Aceitar Todos
+          {t("cookie.acceptAll")}
         </button>
       </div>
     </div>
@@ -2863,6 +2866,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
 /* ── BOOKING MODAL (COM SÁBADOS) ────────────────────────────── */
 /* ── BOOKING MODAL (COM NOTIFICAÇÃO REAL) ────────────────────────────── */
 function BookingModal({ isOpen, onClose, service }) {
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -2936,9 +2940,9 @@ function BookingModal({ isOpen, onClose, service }) {
         <div className="p-6 border-b flex items-center justify-between" style={{ borderColor: "var(--mist)" }}>
           <div>
             <p className="font-display text-2xl font-semibold" style={{ color: "var(--forest)" }}>
-              {confirmed ? "Marcação Confirmada" : `Agendar ${service}`}
+              {confirmed ? t("booking.confirmedTitle") : t("booking.title")}
             </p>
-            {!confirmed && <p className="text-xs mt-1 text-gray-400">Passo {step} de 4</p>}
+            {!confirmed && <p className="text-xs mt-1 text-gray-400">{t("booking.stepOf", { step })}</p>}
           </div>
           <button onClick={() => { reset(); onClose(); }} className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100"><X size={18} /></button>
         </div>
@@ -2950,20 +2954,20 @@ function BookingModal({ isOpen, onClose, service }) {
               <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-6" style={{ background: "#e8f5ee" }}>
                 <CheckCircle size={40} style={{ color: "#16a34a" }} />
               </div>
-              <p className="font-display text-3xl font-semibold mb-2" style={{ color: "var(--forest)" }}>Tudo Pronto!</p>
-              <p className="text-sm mb-8 text-gray-500">A sua marcação para {selectedTime} de {selectedDate?.toLocaleDateString()} foi confirmada. Verifique o seu e-mail!</p>
-              <button onClick={() => { reset(); onClose(); }} className="btn-forest px-10 py-4 rounded-xl font-bold text-sm w-full">Voltar à Loja</button>
+              <p className="font-display text-3xl font-semibold mb-2" style={{ color: "var(--forest)" }}>{t("booking.doneTitle")}</p>
+              <p className="text-sm mb-8 text-gray-500">{t("booking.doneText", { time: selectedTime, date: selectedDate?.toLocaleDateString(i18n.language) })}</p>
+              <button onClick={() => { reset(); onClose(); }} className="btn-forest px-10 py-4 rounded-xl font-bold text-sm w-full">{t("booking.backToStore")}</button>
             </div>
           ) : step === 1 ? (
             /* Passo 1: Calendário */
             <div className="fade-up">
               <div className="flex items-center justify-between mb-6">
                 <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1))} disabled={month.getMonth() === today.getMonth()} className="p-2 bg-gray-100 rounded-lg disabled:opacity-30"><ChevronRight size={16} className="rotate-180" /></button>
-                <p className="font-bold capitalize">{new Intl.DateTimeFormat("pt-PT", { month: "long", year: "numeric" }).format(month)}</p>
+                <p className="font-bold capitalize">{new Intl.DateTimeFormat(i18n.language, { month: "long", year: "numeric" }).format(month)}</p>
                 <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1))} className="p-2 bg-gray-100 rounded-lg"><ChevronRight size={16} /></button>
               </div>
               <div className="grid grid-cols-7 gap-2">
-                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(d => <div key={d} className="text-center text-[10px] font-bold uppercase text-gray-400">{d}</div>)}
+                {[t("booking.wd0"), t("booking.wd1"), t("booking.wd2"), t("booking.wd3"), t("booking.wd4"), t("booking.wd5"), t("booking.wd6")].map(d => <div key={d} className="text-center text-[10px] font-bold uppercase text-gray-400">{d}</div>)}
                 {Array(startDay).fill(0).map((_, i) => <div key={i} />)}
                 {Array(daysInMonth).fill(0).map((_, i) => {
                   const day = i + 1;
@@ -2977,7 +2981,7 @@ function BookingModal({ isOpen, onClose, service }) {
                   );
                 })}
               </div>
-              <button onClick={() => setStep(2)} disabled={!selectedDate} className="btn-forest w-full py-4 rounded-xl font-bold mt-8 disabled:opacity-40">Continuar</button>
+              <button onClick={() => setStep(2)} disabled={!selectedDate} className="btn-forest w-full py-4 rounded-xl font-bold mt-8 disabled:opacity-40">{t("booking.continue")}</button>
             </div>
           ) : step === 2 ? (
             /* Passo 2: Horas */
@@ -2988,45 +2992,45 @@ function BookingModal({ isOpen, onClose, service }) {
                 ))}
               </div>
               <div className="flex gap-3 mt-8">
-                <button onClick={() => setStep(1)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
-                <button onClick={() => setStep(3)} disabled={!selectedTime} className="btn-forest flex-1 py-4 rounded-xl font-bold disabled:opacity-40">Continuar</button>
+                <button onClick={() => setStep(1)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">{t("booking.back")}</button>
+                <button onClick={() => setStep(3)} disabled={!selectedTime} className="btn-forest flex-1 py-4 rounded-xl font-bold disabled:opacity-40">{t("booking.continue")}</button>
               </div>
             </div>
           ) : step === 3 ? (
             /* Passo 3: Dados */
             <div className="fade-up space-y-4">
-              <input type="text" placeholder="Nome Completo" value={clientData.name} onChange={e => setClientData({...clientData, name: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
-              <input type="tel" placeholder="Telemóvel" value={clientData.phone} onChange={e => setClientData({...clientData, phone: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
-              <input type="email" placeholder="E-mail" value={clientData.email} onChange={e => setClientData({...clientData, email: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
+              <input type="text" placeholder={t("booking.namePlaceholder")} value={clientData.name} onChange={e => setClientData({...clientData, name: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
+              <input type="tel" placeholder={t("booking.phonePlaceholder")} value={clientData.phone} onChange={e => setClientData({...clientData, phone: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
+              <input type="email" placeholder={t("booking.emailPlaceholder")} value={clientData.email} onChange={e => setClientData({...clientData, email: e.target.value})} className="w-full px-5 py-4 rounded-xl border-2 outline-none focus:border-black" />
               <div className="flex gap-3 mt-8">
-                <button onClick={() => setStep(2)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
-                <button onClick={() => setStep(4)} disabled={!clientData.name || !clientData.phone} className="btn-forest flex-1 py-4 rounded-xl font-bold">Continuar</button>
+                <button onClick={() => setStep(2)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">{t("booking.back")}</button>
+                <button onClick={() => setStep(4)} disabled={!clientData.name || !clientData.phone} className="btn-forest flex-1 py-4 rounded-xl font-bold">{t("booking.continue")}</button>
               </div>
             </div>
           ) : (
             /* Passo 4: Resumo Final */
             <div className="fade-up">
               <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
-                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Resumo da Marcação</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">{t("booking.summary")}</p>
                 <div className="space-y-3">
-                  <div className="flex justify-between"><span>Data</span><span className="font-bold">{selectedDate?.toLocaleDateString()}</span></div>
-                  <div className="flex justify-between"><span>Hora</span><span className="font-bold">{selectedTime}</span></div>
-                  <div className="flex justify-between"><span>Cliente</span><span className="font-bold">{clientData.name}</span></div>
+                  <div className="flex justify-between"><span>{t("booking.date")}</span><span className="font-bold">{selectedDate?.toLocaleDateString()}</span></div>
+                  <div className="flex justify-between"><span>{t("booking.time")}</span><span className="font-bold">{selectedTime}</span></div>
+                  <div className="flex justify-between"><span>{t("booking.client")}</span><span className="font-bold">{clientData.name}</span></div>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button onClick={() => setStep(3)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">Voltar</button>
+                <button onClick={() => setStep(3)} className="btn-outline-forest flex-1 py-4 rounded-xl font-bold">{t("booking.back")}</button>
                 <button
                   onClick={handleFinalConfirm}
                   disabled={isSending}
                   className="btn-forest flex-1 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg"
                 >
-                  {isSending ? "A enviar..." : <><CheckCircle size={18} /> Confirmar Marcação</>}
+                  {isSending ? t("booking.sending") : <><CheckCircle size={18} /> {t("booking.confirm")}</>}
                 </button>
               </div>
               {sendError && (
                 <p className="text-xs mt-4 text-center" style={{ color: "#c0392b" }}>
-                  Não foi possível enviar o pedido de marcação. Ligue-nos para 934 421 310 ou tente novamente.
+                  {t("booking.confirmErr")}
                 </p>
               )}
             </div>
@@ -3528,7 +3532,8 @@ function BookingModal({ isOpen, onClose, service }) {
   };
  /* HOME PAGE (COM CARROSSEL) */
   const HomePage = ({ setPage, openBook, setSelectedProduct }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const langImg = (base) => (i18n.language === "pt" ? `/fotos/${base}.webp` : `/fotos/${base}-${i18n.language}.webp`);
     // 1. Definir os Slides do Carrossel
     const slides = [
       {
@@ -3538,7 +3543,7 @@ function BookingModal({ isOpen, onClose, service }) {
         // letras esbatida, wordmark "RAY-BAN" grande por trás, óculos recortados
         // à mesma escala e um texto curto no topo. É uma imagem única, como os
         // restantes slides. Para a trocar, substituir public/fotos/raybanmeta.webp.
-        img: "/fotos/raybanmeta.webp",
+        img: langImg("raybanmeta"),
         alt: "Adquira já os seus Ray-Ban Meta na Óptica 13 — óculos inteligentes com câmara, áudio e Meta AI",
         btnText: t("slides.saberMais"),
         btnAction: () => setPage("contact"),
@@ -3559,7 +3564,7 @@ function BookingModal({ isOpen, onClose, service }) {
       },
       {
         id: 3,
-        img: "/fotos/front-cuidado.webp",
+        img: langImg("front-cuidado"),
         alt: "Exame de vista gratuito",
         btnText: t("slides.marcarExame"),
         btnAction: () => openBook("Consulta de Optometria"),

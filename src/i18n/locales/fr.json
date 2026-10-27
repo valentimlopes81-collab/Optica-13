@@ -184,5 +184,64 @@
     "successTitle": "Réduction garantie !",
     "successPara": "Nous avons envoyé votre coupon exclusif de -20% dans votre boîte mail.",
     "continueBtn": "Continuer à explorer"
+  },
+  "common": {
+    "close": "Fermer",
+    "less": "Moins",
+    "more": "Plus"
+  },
+  "cart": {
+    "title": "Votre panier",
+    "empty": "Votre panier est vide.",
+    "remove": "Retirer",
+    "subtotal": "Sous-total",
+    "checkoutErr": "Impossible de lancer le paiement. Réessayez.",
+    "processing": "Traitement…",
+    "checkout": "Finaliser la commande",
+    "continue": "Continuer mes achats"
+  },
+  "fav": {
+    "title": "Favoris",
+    "empty1": "Vous n'avez pas encore de favoris.",
+    "empty2": "Touchez le cœur d'un modèle pour l'enregistrer ici.",
+    "sent": "Nous avons envoyé vos favoris à {{email}}.",
+    "getByEmail": "Recevoir mes favoris par e-mail :",
+    "emailPlaceholder": "Votre e-mail",
+    "send": "Envoyer",
+    "sendErr": "Échec de l'envoi. Réessayez.",
+    "removeAria": "Retirer des favoris"
+  },
+  "cookie": {
+    "title": "Nous utilisons des cookies 🍪",
+    "text": "Nous utilisons des cookies pour améliorer votre expérience, personnaliser le contenu et analyser le trafic. Vous pouvez tout accepter ou seulement les strictement nécessaires.",
+    "essential": "Essentiels uniquement",
+    "acceptAll": "Tout accepter"
+  },
+  "booking": {
+    "title": "Prendre rendez-vous",
+    "confirmedTitle": "Rendez-vous confirmé",
+    "stepOf": "Étape {{step}} sur 4",
+    "doneTitle": "C'est fait !",
+    "doneText": "Votre rendez-vous à {{time}} le {{date}} est confirmé. Vérifiez votre e-mail !",
+    "backToStore": "Retour à la boutique",
+    "continue": "Continuer",
+    "back": "Retour",
+    "namePlaceholder": "Nom complet",
+    "phonePlaceholder": "Téléphone",
+    "emailPlaceholder": "E-mail",
+    "summary": "Récapitulatif du rendez-vous",
+    "date": "Date",
+    "time": "Heure",
+    "client": "Client",
+    "sending": "Envoi...",
+    "confirm": "Confirmer le rendez-vous",
+    "confirmErr": "Impossible d'envoyer la demande de rendez-vous. Appelez-nous au 934 421 310 ou réessayez.",
+    "wd0": "Dim",
+    "wd1": "Lun",
+    "wd2": "Mar",
+    "wd3": "Mer",
+    "wd4": "Jeu",
+    "wd5": "Ven",
+    "wd6": "Sam"
   }
 }

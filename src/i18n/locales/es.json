@@ -184,5 +184,64 @@
     "successTitle": "¡Descuento Garantizado!",
     "successPara": "Hemos enviado su cupón exclusivo de 20% de descuento a su correo.",
     "continueBtn": "Seguir explorando"
+  },
+  "common": {
+    "close": "Cerrar",
+    "less": "Menos",
+    "more": "Más"
+  },
+  "cart": {
+    "title": "Su carrito",
+    "empty": "Su carrito está vacío.",
+    "remove": "Quitar",
+    "subtotal": "Subtotal",
+    "checkoutErr": "No se pudo iniciar el pago. Inténtelo de nuevo.",
+    "processing": "Procesando…",
+    "checkout": "Finalizar compra",
+    "continue": "Seguir comprando"
+  },
+  "fav": {
+    "title": "Favoritos",
+    "empty1": "Aún no ha guardado favoritos.",
+    "empty2": "Toque el corazón de un modelo para guardarlo aquí.",
+    "sent": "Hemos enviado sus favoritos a {{email}}.",
+    "getByEmail": "Recibir mis favoritos por correo:",
+    "emailPlaceholder": "Su correo",
+    "send": "Enviar",
+    "sendErr": "No se pudo enviar. Inténtelo de nuevo.",
+    "removeAria": "Quitar de favoritos"
+  },
+  "cookie": {
+    "title": "Usamos cookies 🍪",
+    "text": "Utilizamos cookies para mejorar su experiencia, personalizar contenidos y analizar el tráfico. Puede aceptar todas o solo las estrictamente necesarias.",
+    "essential": "Solo Esenciales",
+    "acceptAll": "Aceptar Todo"
+  },
+  "booking": {
+    "title": "Reservar cita",
+    "confirmedTitle": "Cita Confirmada",
+    "stepOf": "Paso {{step}} de 4",
+    "doneTitle": "¡Todo Listo!",
+    "doneText": "Su cita para las {{time}} del {{date}} está confirmada. ¡Revise su correo!",
+    "backToStore": "Volver a la Tienda",
+    "continue": "Continuar",
+    "back": "Volver",
+    "namePlaceholder": "Nombre Completo",
+    "phonePlaceholder": "Teléfono",
+    "emailPlaceholder": "Correo",
+    "summary": "Resumen de la Cita",
+    "date": "Fecha",
+    "time": "Hora",
+    "client": "Cliente",
+    "sending": "Enviando...",
+    "confirm": "Confirmar Cita",
+    "confirmErr": "No se pudo enviar la solicitud de cita. Llámenos al 934 421 310 o inténtelo de nuevo.",
+    "wd0": "Dom",
+    "wd1": "Lun",
+    "wd2": "Mar",
+    "wd3": "Mié",
+    "wd4": "Jue",
+    "wd5": "Vie",
+    "wd6": "Sáb"
   }
 }

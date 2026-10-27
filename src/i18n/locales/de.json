@@ -184,5 +184,64 @@
     "successTitle": "Rabatt gesichert!",
     "successPara": "Wir haben Ihren exklusiven 20%-Gutschein an Ihr Postfach gesendet.",
     "continueBtn": "Weiter stöbern"
+  },
+  "common": {
+    "close": "Schließen",
+    "less": "Weniger",
+    "more": "Mehr"
+  },
+  "cart": {
+    "title": "Ihr Warenkorb",
+    "empty": "Ihr Warenkorb ist leer.",
+    "remove": "Entfernen",
+    "subtotal": "Zwischensumme",
+    "checkoutErr": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
+    "processing": "Wird verarbeitet…",
+    "checkout": "Zur Kasse",
+    "continue": "Weiter einkaufen"
+  },
+  "fav": {
+    "title": "Favoriten",
+    "empty1": "Sie haben noch keine Favoriten gespeichert.",
+    "empty2": "Tippen Sie auf das Herz eines Modells, um es hier zu speichern.",
+    "sent": "Wir haben Ihre Favoriten an {{email}} gesendet.",
+    "getByEmail": "Meine Favoriten per E-Mail erhalten:",
+    "emailPlaceholder": "Ihre E-Mail",
+    "send": "Senden",
+    "sendErr": "Senden fehlgeschlagen. Bitte erneut versuchen.",
+    "removeAria": "Aus Favoriten entfernen"
+  },
+  "cookie": {
+    "title": "Wir verwenden Cookies 🍪",
+    "text": "Wir verwenden Cookies, um Ihr Erlebnis zu verbessern, Inhalte zu personalisieren und den Verkehr zu analysieren. Sie können alle oder nur die unbedingt notwendigen akzeptieren.",
+    "essential": "Nur notwendige",
+    "acceptAll": "Alle akzeptieren"
+  },
+  "booking": {
+    "title": "Termin buchen",
+    "confirmedTitle": "Termin bestätigt",
+    "stepOf": "Schritt {{step}} von 4",
+    "doneTitle": "Alles erledigt!",
+    "doneText": "Ihr Termin um {{time}} am {{date}} ist bestätigt. Bitte prüfen Sie Ihre E-Mail!",
+    "backToStore": "Zurück zum Shop",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "namePlaceholder": "Vollständiger Name",
+    "phonePlaceholder": "Telefon",
+    "emailPlaceholder": "E-Mail",
+    "summary": "Terminübersicht",
+    "date": "Datum",
+    "time": "Uhrzeit",
+    "client": "Kunde",
+    "sending": "Senden...",
+    "confirm": "Termin bestätigen",
+    "confirmErr": "Die Terminanfrage konnte nicht gesendet werden. Rufen Sie uns unter 934 421 310 an oder versuchen Sie es erneut.",
+    "wd0": "So",
+    "wd1": "Mo",
+    "wd2": "Di",
+    "wd3": "Mi",
+    "wd4": "Do",
+    "wd5": "Fr",
+    "wd6": "Sa"
   }
 }

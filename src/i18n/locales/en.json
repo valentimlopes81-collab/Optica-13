@@ -184,5 +184,64 @@
     "successTitle": "Discount Secured!",
     "successPara": "We've sent your exclusive 20%-off coupon to your inbox.",
     "continueBtn": "Keep exploring"
+  },
+  "common": {
+    "close": "Close",
+    "less": "Less",
+    "more": "More"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "checkoutErr": "Couldn't start checkout. Please try again.",
+    "processing": "Processing…",
+    "checkout": "Checkout",
+    "continue": "Continue shopping"
+  },
+  "fav": {
+    "title": "Favourites",
+    "empty1": "You haven't saved any favourites yet.",
+    "empty2": "Tap the heart on a model to save it here.",
+    "sent": "We've sent your favourites to {{email}}.",
+    "getByEmail": "Get my favourites by email:",
+    "emailPlaceholder": "Your email",
+    "send": "Send",
+    "sendErr": "Couldn't send. Please try again.",
+    "removeAria": "Remove from favourites"
+  },
+  "cookie": {
+    "title": "We use cookies 🍪",
+    "text": "We use cookies to improve your experience, personalise content and analyse traffic. You can accept all or only the strictly necessary ones.",
+    "essential": "Essential Only",
+    "acceptAll": "Accept All"
+  },
+  "booking": {
+    "title": "Book appointment",
+    "confirmedTitle": "Appointment Confirmed",
+    "stepOf": "Step {{step}} of 4",
+    "doneTitle": "All Set!",
+    "doneText": "Your appointment for {{time}} on {{date}} is confirmed. Please check your e-mail!",
+    "backToStore": "Back to Store",
+    "continue": "Continue",
+    "back": "Back",
+    "namePlaceholder": "Full Name",
+    "phonePlaceholder": "Phone",
+    "emailPlaceholder": "E-mail",
+    "summary": "Appointment Summary",
+    "date": "Date",
+    "time": "Time",
+    "client": "Client",
+    "sending": "Sending...",
+    "confirm": "Confirm Appointment",
+    "confirmErr": "We couldn't send your appointment request. Call us at 934 421 310 or try again.",
+    "wd0": "Sun",
+    "wd1": "Mon",
+    "wd2": "Tue",
+    "wd3": "Wed",
+    "wd4": "Thu",
+    "wd5": "Fri",
+    "wd6": "Sat"
   }
 }
