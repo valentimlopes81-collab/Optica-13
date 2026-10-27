@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate, us
 import { Analytics } from '@vercel/analytics/react';
 import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGS } from "./i18n";
+import { translateAttr } from "./i18n/productTerms";
 import { SALDOS, SALDOS_PLACEHOLDER } from "./saldosData";
 import ASSISTANT from "./assistant-keywords.json";
 import './global.css';
@@ -2364,6 +2365,7 @@ function AssistantWidget({ setPage, openBook }) {
 
 /* ── EXIT INTENT POPUP ──────────────────────────────────────── */
 function ExitPopup({ onClose }) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [subscribeError, setSubscribeError] = useState(false);
@@ -2431,9 +2433,7 @@ function ExitPopup({ onClose }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
             <p className="text-white font-display text-2xl font-medium leading-tight">
-              A visão perfeita
-              <br />
-              está à sua espera.
+              {t("newsletter.imgCaption")}
             </p>
           </div>
         </div>
@@ -2448,34 +2448,34 @@ function ExitPopup({ onClose }) {
                 <CheckCircle size={40} style={{ color: "#16a34a" }} />
               </div>
               <h3 className="font-display text-3xl font-semibold mb-3" style={{ color: "var(--forest)" }}>
-                Desconto Garantido!
+                {t("newsletter.successTitle")}
               </h3>
               <p className="text-sm mb-6 leading-relaxed" style={{ color: "#555" }}>
-                Enviámos o seu cupão exclusivo de <strong>20% de desconto</strong> para a sua caixa de entrada.
+                {t("newsletter.successPara")}
               </p>
               <button
                 onClick={onClose}
                 className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide shadow-lg"
               >
-                Continuar a explorar
+                {t("newsletter.continueBtn")}
               </button>
             </div>
           ) : (
             <div className="fade-up">
               <span className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: "var(--gold)" }}>
-                Oferta Exclusiva
+                {t("newsletter.eyebrow")}
               </span>
               <h3 className="font-display text-3xl sm:text-4xl font-semibold mb-4 leading-tight" style={{ color: "var(--forest)" }}>
-                Não saia de mãos a abanar.
+                {t("newsletter.title")}
               </h3>
               <p className="text-sm sm:text-base mb-6 leading-relaxed" style={{ color: "#555" }}>
-                Registe o seu email e receba instantaneamente <strong>20% de desconto</strong>.
+                {t("newsletter.subPara")}
               </p>
 
               <form onSubmit={handleSubscribe} className="space-y-4">
                 <input
                   type="email"
-                  placeholder="Introduza o seu melhor e-mail"
+                  placeholder={t("newsletter.emailPlaceholder")}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -2487,11 +2487,11 @@ function ExitPopup({ onClose }) {
                   disabled={submitting}
                   className="btn-forest w-full py-4 rounded-xl font-semibold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
                 >
-                  {submitting ? "A processar..." : <>Quero os meus 20% <ArrowRight size={16} /></>}
+                  {submitting ? t("newsletter.submitProcessing") : <>{t("newsletter.submitBtn")} <ArrowRight size={16} /></>}
                 </button>
                 {subscribeError && (
                   <p className="text-xs text-center" style={{ color: "#c0392b" }}>
-                    Não foi possível registar o seu e-mail agora. Tente novamente.
+                    {t("newsletter.errorMsg")}
                   </p>
                 )}
               </form>
@@ -2501,7 +2501,7 @@ function ExitPopup({ onClose }) {
                 className="mt-6 text-xs w-full text-center block underline"
                 style={{ color: "#999" }}
               >
-                Não, obrigado. Prefiro pagar o preço inteiro.
+                {t("newsletter.declineBtn")}
               </button>
             </div>
           )}
@@ -2558,7 +2558,7 @@ function CookieBanner() {
 
 /* ── PRODUCT MODAL ──────────────────────────────────────────── */
 function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavorite, onToggleFavorite }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeImage, setActiveImage] = useState(product?.image);
 
   // Fotos do Outlet têm fundo cinza (não branco puro), por isso o
@@ -2761,7 +2761,7 @@ function ProductModal({ product, onClose, onAdd, onBook, onBookConsulta, isFavor
                     className="text-sm font-semibold"
                     style={{ color: v ? "var(--forest)" : "#b0531f" }}
                   >
-                    {v || t("product.aRever")}
+                    {v ? translateAttr(v, i18n.language) : t("product.aRever")}
                   </p>
                 </div>
               ))}
@@ -3673,9 +3673,9 @@ function BookingModal({ isOpen, onClose, service }) {
         <section id="colecoes" className="py-16 md:py-20" style={{ background: "#f9e2d7" }}>
           <div className="max-w-7xl mx-auto px-6">
             <div className="mb-8 md:mb-10 fade-up">
-              <p className="uc-label text-[11px] font-semibold mb-2" style={{ color: "var(--wine)" }}>A Óptica 13</p>
+              <p className="uc-label text-[11px] font-semibold mb-2" style={{ color: "var(--wine)" }}>{t("home.colecoesEyebrow")}</p>
               <h2 className="font-display" style={{ fontSize: "clamp(1.8rem,3.6vw,2.8rem)", fontWeight: 600, color: "var(--forest)", lineHeight: 1.05 }}>
-                Explore as nossas coleções
+                {t("home.colecoesTitle")}
               </h2>
             </div>
 
@@ -3689,13 +3689,13 @@ function BookingModal({ isOpen, onClose, service }) {
                 <Img src="/fotos/scroll-outlet.webp" alt="Outlet Óptica 13" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0) 100%)" }} />
                 <div className="relative z-10 h-full flex flex-col justify-end p-8 md:p-10" style={{ minHeight: 420 }}>
-                  <p className="uc-label text-[11px] font-semibold text-white/85 mb-2">Outlet · Stock limitado</p>
-                  <p className="font-display text-white" style={{ fontSize: "clamp(2.6rem,6vw,4.2rem)", fontWeight: 700, lineHeight: 0.95 }}>até -70%</p>
+                  <p className="uc-label text-[11px] font-semibold text-white/85 mb-2">{t("home.outletCardEyebrow")}</p>
+                  <p className="font-display text-white" style={{ fontSize: "clamp(2.6rem,6vw,4.2rem)", fontWeight: 700, lineHeight: 0.95 }}>{t("badges.outlet")}</p>
                   <p className="text-white/90 text-sm leading-relaxed mt-4 mb-6" style={{ maxWidth: 380 }}>
-                    Óculos premium de coleções anteriores a preços de saldo. Por tempo limitado.
+                    {t("home.outletCardDesc")}
                   </p>
                   <span className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 text-xs font-semibold uppercase tracking-widest w-fit" style={{ borderRadius: 999 }}>
-                    Ver Outlet <ArrowRight size={14} />
+                    {t("slides.verOutlet")} <ArrowRight size={14} />
                   </span>
                 </div>
               </button>
@@ -3711,9 +3711,9 @@ function BookingModal({ isOpen, onClose, service }) {
                   <Img src="/fotos/scroll-mindthelook.webp" alt="Coleção MindTheLook" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
-                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Coleção</span>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>{t("home.cardColecaoBadge")}</span>
                     <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>MindTheLook</p>
-                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Ver Coleção <ArrowRight size={13} /></span>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>{t("slides.verColecao")} <ArrowRight size={13} /></span>
                   </div>
                 </button>
 
@@ -3725,9 +3725,9 @@ function BookingModal({ isOpen, onClose, service }) {
                   <Img src="/fotos/scroll-exame.webp" alt="Quiz de Estilo" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0) 100%)" }} />
                   <div className="relative z-10 h-full flex flex-col justify-end p-7" style={{ minHeight: 200 }}>
-                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>Estilo</span>
-                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>Quiz de Estilo</p>
-                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>Fazer Quiz <ArrowRight size={13} /></span>
+                    <span className="uc-label text-[10px] font-semibold px-3 py-1 mb-3 w-fit" style={{ border: "1px solid rgba(255,255,255,0.8)", color: "#ffffff" }}>{t("home.cardEstiloBadge")}</span>
+                    <p className="font-display text-white" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", fontWeight: 600, lineHeight: 1 }}>{t("nav.quiz")}</p>
+                    <span className="inline-flex items-center gap-2 bg-white text-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest w-fit mt-4" style={{ borderRadius: 999 }}>{t("home.fazerQuiz")} <ArrowRight size={13} /></span>
                   </div>
                 </button>
               </div>
@@ -3744,13 +3744,13 @@ function BookingModal({ isOpen, onClose, service }) {
                   className="text-xs font-semibold tracking-widest uppercase mb-2"
                   style={{ color: "var(--gold)" }}
                 >
-                  Coleção
+                  {t("home.collection")}
                 </p>
                 <h2
                   className="font-display text-4xl font-medium"
                   style={{ color: "var(--forest)" }}
                 >
-                  Os <em>Mais Vendidos</em>
+                  {t("home.bestSellersPre")} <em>{t("home.bestSellersEm")}</em>
                 </h2>
               </div>
               <div className="hidden sm:flex gap-3">
@@ -3758,13 +3758,13 @@ function BookingModal({ isOpen, onClose, service }) {
                   onClick={() => setPage("mindthelook?genero=homem")}
                   className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
                 >
-                  Homem
+                  {t("collection.homem")}
                 </button>
                 <button
                   onClick={() => setPage("mindthelook?genero=mulher")}
                   className="btn-outline-forest px-5 py-2.5 rounded-xl text-sm font-semibold"
                 >
-                  Mulher
+                  {t("collection.mulher")}
                 </button>
               </div>
             </div>
@@ -3815,7 +3815,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 className="text-xs font-semibold tracking-widest uppercase mb-3"
                 style={{ color: "var(--gold)" }}
               >
-                Serviços Premium
+                {t("home.servicesEyebrow")}
               </p>
               <h2
                 className="font-display mb-4"
@@ -3824,25 +3824,25 @@ function BookingModal({ isOpen, onClose, service }) {
                   color: "var(--forest)",
                 }}
               >
-                Tudo o que precisa para <em>ver melhor</em>
+                {t("home.servicesTitlePre")} <em>{t("home.servicesTitleEm")}</em>
               </h2>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
                   Icon: OptometryIcon,
-                  title: "Optometria",
-                  desc: "Exames completos com tecnologia de última geração. Gratuitos na compra de óculos.",
+                  title: t("home.svc1Title"),
+                  desc: t("home.svc1Desc"),
                 },
                 {
                   Icon: LensIcon,
-                  title: "Contactologia",
-                  desc: "Adaptação personalizada de lentes de contacto para o seu conforto máximo.",
+                  title: t("home.svc2Title"),
+                  desc: t("home.svc2Desc"),
                 },
                 {
                   Icon: CardIcon,
-                  title: "Certificados de Condução",
-                  desc: "Exames oficiais rápidos e sem complicações. Agende já o seu.",
+                  title: t("home.svc3Title"),
+                  desc: t("home.svc3Desc"),
                 },
               ].map(({ Icon, title, desc }, i) => (
                 <div
@@ -3883,19 +3883,19 @@ function BookingModal({ isOpen, onClose, service }) {
             <div className="order-2 lg:order-1 fade-up">
               <div className="p-8 md:p-12" style={{ border: "1.5px solid #d29aa0", background: "var(--wine-soft)" }}>
                 <p className="uc-label text-[11px] font-semibold mb-4" style={{ color: "var(--wine)" }}>
-                  Cuidado Visual
+                  {t("home.exameEyebrow")}
                 </p>
                 <h2 className="font-display mb-5" style={{ fontSize: "clamp(2rem,4vw,3rem)", lineHeight: 1.08, fontWeight: 600, color: "var(--forest)" }}>
-                  Exame de vista <em style={{ fontStyle: "italic", fontWeight: 400 }}>gratuito</em>
+                  {t("home.exameTitlePre")} <em style={{ fontStyle: "italic", fontWeight: 400 }}>{t("home.exameTitleEm")}</em>
                 </h2>
                 <p className="text-base leading-relaxed mb-8" style={{ color: "var(--forest-light)", maxWidth: 480 }}>
-                  Agende a sua consulta de optometria com os nossos especialistas. O exame é totalmente gratuito na compra dos seus novos óculos ou caso não leve prescrição.
+                  {t("home.examePara")}
                 </p>
                 <button
                   onClick={() => openBook("Consulta de Optometria")}
                   className="btn-rose px-9 py-4 text-xs font-semibold uppercase tracking-widest"
                 >
-                  Marcar Exame Gratuito
+                  {t("home.exameBtn")}
                 </button>
               </div>
             </div>
@@ -3914,19 +3914,19 @@ function BookingModal({ isOpen, onClose, service }) {
         <section className="py-24 md:py-32" style={{ background: "var(--cream)" }}>
           <div className="max-w-4xl mx-auto px-6 text-center">
             <p className="uc-label text-[11px] font-semibold mb-5 fade-up" style={{ color: "var(--forest-light)" }}>
-              Atendimento Premium
+              {t("home.consultEyebrow")}
             </p>
             <h2 className="font-display mb-6 fade-up-1" style={{ fontSize: "clamp(2.2rem,4.4vw,3.4rem)", lineHeight: 1.1, fontWeight: 600, color: "var(--forest)" }}>
-              Consultoria de <em style={{ fontStyle: "italic", fontWeight: 400 }}>Imagem</em> Especializada
+              {t("home.consultTitlePre")} <em style={{ fontStyle: "italic", fontWeight: 400 }}>{t("home.consultTitleEm")}</em> {t("home.consultTitlePost")}
             </h2>
             <p className="text-base leading-relaxed mb-16 mx-auto fade-up-2" style={{ maxWidth: 560, color: "var(--forest-light)" }}>
-              Não vendemos apenas óculos. Acreditamos que a sua armação é a moldura do seu rosto. A nossa equipa utiliza técnicas de visagismo para identificar os modelos que melhor harmonizam com os seus traços, tom de pele e estilo de vida.
+              {t("home.consultPara")}
             </p>
             <div className="grid sm:grid-cols-3 gap-12 mb-16">
               {[
-                { icon: Eye, title: "Análise Facial", text: "Estudo detalhado do formato e proporções do seu rosto." },
-                { icon: Sparkles, title: "Coloração Pessoal", text: "Identificação dos tons (quentes ou frios) que iluminam o seu olhar." },
-                { icon: Award, title: "Curadoria de Marcas", text: "Seleção personalizada dentro do nosso portefólio premium." },
+                { icon: Eye, title: t("home.consult1Title"), text: t("home.consult1Text") },
+                { icon: Sparkles, title: t("home.consult2Title"), text: t("home.consult2Text") },
+                { icon: Award, title: t("home.consult3Title"), text: t("home.consult3Text") },
               ].map((item, i) => (
                 <div key={i} className={`flex flex-col items-center text-center fade-up-${i + 1}`}>
                   <div className="w-12 h-12 flex items-center justify-center mb-5" style={{ border: "1px solid var(--forest)" }}>
@@ -3942,13 +3942,13 @@ function BookingModal({ isOpen, onClose, service }) {
                 onClick={() => openBook("Consultoria de Imagem")}
                 className="btn-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
               >
-                <Calendar size={16} /> Agendar Consultoria
+                <Calendar size={16} /> {t("home.consultBtn1")}
               </button>
               <button
                 onClick={() => setPage("quiz")}
                 className="btn-outline-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
               >
-                <Glasses size={16} /> Fazer Quiz Virtual
+                <Glasses size={16} /> {t("home.consultBtn2")}
               </button>
             </div>
           </div>
@@ -3966,19 +3966,19 @@ function BookingModal({ isOpen, onClose, service }) {
             </div>
             <div className="order-2 fade-up-1">
               <p className="uc-label text-[11px] font-semibold mb-5" style={{ color: "var(--forest-light)" }}>
-                Na Parede desde 1986
+                {t("home.sobreEyebrow")}
               </p>
               <h2 className="font-display mb-6" style={{ fontSize: "clamp(2.1rem,4vw,3.2rem)", lineHeight: 1.1, fontWeight: 600, color: "var(--forest)" }}>
-                Uma vida dedicada <br /><em style={{ fontStyle: "italic", fontWeight: 400 }}>à sua visão</em>
+                {t("home.sobreTitlePre")} <br /><em style={{ fontStyle: "italic", fontWeight: 400 }}>{t("home.sobreTitleEm")}</em>
               </h2>
               <p className="text-base leading-relaxed mb-9" style={{ maxWidth: 460, color: "var(--forest-light)" }}>
-                Há mais de 38 anos que cuidamos da visão das famílias da Parede, com o rigor de uma equipa credenciada e a proximidade de quem conhece os seus clientes pelo nome. Tecnologia de ponta, marcas premium e um atendimento que faz a diferença.
+                {t("home.sobrePara")}
               </p>
               <div className="flex flex-wrap gap-x-12 gap-y-5 mb-10">
                 {[
-                  ["38", "anos de experiência"],
-                  ["+15", "entidades parceiras"],
-                  ["ERS", "registo E131391"],
+                  ["38", t("home.stat1")],
+                  ["+15", t("home.stat2")],
+                  ["ERS", t("home.stat3")],
                 ].map(([n, l]) => (
                   <div key={l}>
                     <p className="font-display text-3xl font-semibold" style={{ color: "var(--forest)" }}>{n}</p>
@@ -3990,7 +3990,7 @@ function BookingModal({ isOpen, onClose, service }) {
                 onClick={() => setPage("about")}
                 className="btn-outline-forest px-8 py-4 text-xs font-semibold uppercase tracking-widest"
               >
-                Conhecer a Óptica 13
+                {t("home.sobreBtn")}
               </button>
             </div>
           </div>
@@ -4420,7 +4420,7 @@ function BookingModal({ isOpen, onClose, service }) {
   };
   /* COLLECTION PAGE (MEN/WOMEN) */
   const CollectionPage = ({ products: productsProp, title, eyebrow, showDiscount, showGenderFilter, showCategoryFilter, hideAttributeFilters, onProductClick, setSelectedProduct, favorites = [], onToggleFavorite }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const openProduct = onProductClick || setSelectedProduct;
     const [filters, setFilters] = useState({
       material: "",
@@ -4502,7 +4502,7 @@ function BookingModal({ isOpen, onClose, service }) {
                     color: active ? "white" : "#555",
                   }}
                 >
-                  {opt || t("collection.todos")}
+                  {opt ? translateAttr(opt, i18n.language) : t("collection.todos")}
                 </button>
               );
             })}
@@ -4543,8 +4543,8 @@ function BookingModal({ isOpen, onClose, service }) {
                       key={c}
                       type="button"
                       onClick={() => setFilters({ ...filters, color: c })}
-                      title={c}
-                      aria-label={c}
+                      title={translateAttr(c, i18n.language)}
+                      aria-label={translateAttr(c, i18n.language)}
                       className="relative w-9 h-9 rounded-full transition-transform hover:scale-110 flex-shrink-0"
                       style={{
                         background: COLOR_SWATCHES[c],
@@ -4815,13 +4815,13 @@ function BookingModal({ isOpen, onClose, service }) {
                               <div
                                 className="w-4 h-4 rounded-full border border-gray-200 shadow-sm flex-shrink-0"
                                 style={{ background: dotColor }}
-                                title={p.color}
+                                title={translateAttr(p.color, i18n.language)}
                               />
                               <span
                                 className="text-[11px] font-medium truncate"
                                 style={{ color: "#888" }}
                               >
-                                {p.color}
+                                {translateAttr(p.color, i18n.language)}
                               </span>
                             </>
                           );
@@ -6405,7 +6405,7 @@ export default function App() {
 function MainLayout({ lng = "pt" }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Prefixo de idioma no URL (PT na raiz; /en, /es, /fr, /de nas outras).
   const prefix = lng === "pt" ? "" : "/" + lng;
@@ -6582,8 +6582,8 @@ const openBook = (service = "Consulta Geral") => {
               element={
                 <CollectionPage
                   products={[...ALL_PRODUCTS].reverse()}
-                  title={<>Coleção <em>MindTheLook</em></>}
-                  eyebrow="Coleção Assinatura"
+                  title={<>{t("collection.mtlTitlePre")} <em>MindTheLook</em></>}
+                  eyebrow={t("collection.mtlEyebrow")}
                   showGenderFilter={true}
                   setSelectedProduct={setSelectedProduct}
                   favorites={favorites}
@@ -6596,8 +6596,8 @@ const openBook = (service = "Consulta Geral") => {
               element={
                 <CollectionPage
                   products={PRODUCTS.outlet}
-                  title="Outlet"
-                  eyebrow="Saldos"
+                  title={t("nav.outlet")}
+                  eyebrow={t("nav.saldos")}
                   showDiscount={true}
                   showGenderFilter={true}
                   setSelectedProduct={setSelectedProduct}
