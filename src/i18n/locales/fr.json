@@ -256,5 +256,13 @@
     "aQuiz": "Faire le quiz virtuel",
     "aContact": "Nous contacter",
     "aVisit": "Visiter la boutique"
+  },
+  "rayban": {
+    "title": "Ray-Ban Meta",
+    "backToGrid": "Retour à la grille",
+    "visitBtn": "Prendre rendez-vous",
+    "of": "{{current}} sur {{total}}",
+    "prev": "Précédent",
+    "next": "Suivant"
   }
 }
