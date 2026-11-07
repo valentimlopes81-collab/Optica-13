@@ -2093,6 +2093,154 @@ function WhatsAppBtn({ product }) {
   );
 }
 
+/* ── GALERIA RAY-BAN META ───────────────────────────────────────────────
+   Abre ao clicar em "Saber mais" no slide Ray-Ban Meta do carrossel (a
+   imagem do próprio slide NÃO muda). Mostra as fotos oficiais da campanha
+   Ray-Ban | Meta: grelha de capas + lightbox a abrir em grande, com
+   navegação por setas/teclado/toque. Fundo escuro translúcido, a condizer
+   com o grafismo das próprias fotos (fundos neutros/escuros, tipografia
+   em maiúsculas).
+   Para adicionar/substituir fotos: ficheiros em
+   public/fotos/raybanmeta/gallery-N.webp (miniatura: gallery-N-thumb.webp)
+   — e ajustar RAYBAN_GALLERY_COUNT. */
+const RAYBAN_GALLERY_COUNT = 7;
+const RAYBAN_GALLERY = Array.from({ length: RAYBAN_GALLERY_COUNT }, (_, i) => ({
+  full: `/fotos/raybanmeta/gallery-${i + 1}.webp`,
+  thumb: `/fotos/raybanmeta/gallery-${i + 1}-thumb.webp`,
+}));
+
+function RayBanMetaGallery({ open, onClose, openBook }) {
+  const { t } = useTranslation();
+  const [index, setIndex] = useState(null); // null = grelha; número = lightbox
+  const touchStartX = useRef(null);
+
+  const showPrev = () => setIndex((i) => (i - 1 + RAYBAN_GALLERY_COUNT) % RAYBAN_GALLERY_COUNT);
+  const showNext = () => setIndex((i) => (i + 1) % RAYBAN_GALLERY_COUNT);
+
+  // Reset ao abrir/fechar + teclado (Esc fecha, setas navegam no lightbox)
+  useEffect(() => {
+    if (!open) return;
+    setIndex(null);
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") setIndex((i) => (i === null ? i : (i - 1 + RAYBAN_GALLERY_COUNT) % RAYBAN_GALLERY_COUNT));
+      else if (e.key === "ArrowRight") setIndex((i) => (i === null ? i : (i + 1) % RAYBAN_GALLERY_COUNT));
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[400] flex flex-col fade-up"
+      style={{ background: "rgba(10,10,12,0.94)", backdropFilter: "blur(8px)" }}
+      onClick={onClose}
+    >
+      <div className="flex flex-col h-full" onClick={(e) => e.stopPropagation()}>
+        {/* Cabeçalho */}
+        <div className="flex items-center justify-between px-5 sm:px-8 py-5 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            {index !== null && (
+              <button
+                onClick={() => setIndex(null)}
+                aria-label={t("rayban.backToGrid")}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white transition-colors hover:bg-white/10"
+              >
+                <ChevronLeft size={18} />
+              </button>
+            )}
+            <p className="uc-label text-white text-sm font-semibold tracking-widest">
+              {t("rayban.title")}
+              {index !== null && (
+                <span className="opacity-50 font-normal normal-case ml-2 tracking-normal">
+                  {t("rayban.of", { current: index + 1, total: RAYBAN_GALLERY_COUNT })}
+                </span>
+              )}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label={t("common.close")}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors hover:bg-white/10"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Corpo: grelha ou lightbox */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide px-5 sm:px-8 pb-6">
+          {index === null ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-5xl mx-auto">
+              {RAYBAN_GALLERY.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  className="relative overflow-hidden img-zoom"
+                  style={{ aspectRatio: "3 / 4" }}
+                >
+                  <Img
+                    src={img.thumb}
+                    alt={`Ray-Ban Meta ${i + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-500"
+                  />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div
+              className="relative max-w-2xl mx-auto h-full flex items-center justify-center select-none"
+              onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+              onTouchEnd={(e) => {
+                if (touchStartX.current === null) return;
+                const dx = e.changedTouches[0].clientX - touchStartX.current;
+                if (dx > 50) showPrev();
+                else if (dx < -50) showNext();
+                touchStartX.current = null;
+              }}
+            >
+              <Img
+                key={index}
+                src={RAYBAN_GALLERY[index].full}
+                alt={`Ray-Ban Meta ${index + 1}`}
+                className="max-h-[72vh] w-auto mx-auto object-contain fade-in"
+              />
+              {/* Setas — escondidas em mobile (usa-se o toque) */}
+              <button
+                onClick={showPrev}
+                aria-label={t("rayban.prev")}
+                className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full items-center justify-center text-white transition-colors hover:bg-white/10"
+                style={{ background: "rgba(255,255,255,0.08)" }}
+              >
+                <ChevronLeft size={22} />
+              </button>
+              <button
+                onClick={showNext}
+                aria-label={t("rayban.next")}
+                className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full items-center justify-center text-white transition-colors hover:bg-white/10"
+                style={{ background: "rgba(255,255,255,0.08)" }}
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Rodapé: CTA */}
+        <div className="flex-shrink-0 px-6 py-5 flex justify-center border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+          <button
+            onClick={() => { onClose(); openBook("Visita — Ray-Ban Meta"); }}
+            className="btn-rose px-8 py-3.5 text-xs font-semibold uppercase tracking-widest"
+          >
+            {t("rayban.visitBtn")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── ASSISTENTE DE NAVEGAÇÃO (router por palavras-chave, SEM IA) ──────────
    Encaminha a pessoa para a página certa com base em botões rápidos e num
    mapeamento de palavras-chave (ver src/assistant-keywords.json). Corre 100%
@@ -3566,6 +3714,9 @@ function BookingModal({ isOpen, onClose, service }) {
   const HomePage = ({ setPage, openBook, setSelectedProduct }) => {
     const { t, i18n } = useTranslation();
     const langImg = (base) => (i18n.language === "pt" ? `/fotos/${base}.webp` : `/fotos/${base}-${i18n.language}.webp`);
+    // Galeria Ray-Ban Meta — abre ao clicar em "Saber mais" no slide (a
+    // imagem do slide em si não muda, só o botão passa a abrir a galeria).
+    const [rbGalleryOpen, setRbGalleryOpen] = useState(false);
     // 1. Definir os Slides do Carrossel
     const slides = [
       {
@@ -3578,7 +3729,8 @@ function BookingModal({ isOpen, onClose, service }) {
         img: langImg("raybanmeta"),
         alt: "Adquira já os seus Ray-Ban Meta na Óptica 13 — óculos inteligentes com câmara, áudio e Meta AI",
         btnText: t("slides.saberMais"),
-        btnAction: () => setPage("contact"),
+        // "Saber mais" abre a galeria de fotos da campanha (RayBanMetaGallery).
+        btnAction: () => setRbGalleryOpen(true),
       },
       {
         id: 1,
@@ -4035,6 +4187,13 @@ function BookingModal({ isOpen, onClose, service }) {
 
         {/* Testemunhos */}
         <TestimonialsSection />
+
+        {/* Galeria Ray-Ban Meta — aberta pelo botão "Saber mais" do slide */}
+        <RayBanMetaGallery
+          open={rbGalleryOpen}
+          onClose={() => setRbGalleryOpen(false)}
+          openBook={openBook}
+        />
       </div>
     );
   };
