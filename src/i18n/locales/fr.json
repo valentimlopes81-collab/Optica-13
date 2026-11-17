@@ -83,28 +83,54 @@
     "aros": "Montures"
   },
   "assistant": {
-    "greeting": "Bonjour ! 👋 Que recherchez-vous aujourd'hui ?",
-    "title": "Assistant Óptica 13",
-    "subtitle": "Nous vous aidons à trouver ce que vous cherchez",
+    "hint": "Besoin d'aide ? Parlez à Vera ou Rodrigo 👋",
+    "pickerTitle": "Comment pouvons-nous vous aider ?",
+    "pickerSubtitle": "Choisissez à qui vous souhaitez parler :",
+    "backToChat": "Retour à la conversation",
+    "switchLink": "Changer",
+    "switchedToVera": "vous parlez maintenant à Vera",
+    "switchedToRodrigo": "vous parlez maintenant à Rodrigo",
+    "handoffToVera": "Cette question concerne plutôt Vera, notre spécialiste produit. 🙂",
+    "handoffToRodrigo": "Cette question concerne plutôt Rodrigo, notre spécialiste en santé oculaire et rendez-vous. 🙂",
     "placeholder": "Écrivez ici…",
     "outraCoisa": "Autre chose",
-    "close": "Fermer",
+    "fallbackReply": "Hmm, je ne suis pas sûr de ce que vous cherchez. 🙂 Vous pouvez choisir l'une des options ci-dessus — ou, si vous préférez, nous contacter directement.",
+    "fallbackLink": "Nous contacter",
+    "vera": {
+      "name": "Vera",
+      "role": "Conseil produit",
+      "desc": "Lunettes de soleil, collections, soldes et le style idéal pour vous.",
+      "cta": "Parler à Vera",
+      "greeting": "Bonjour ! Je suis Vera 👋 Je vous aide à trouver les lunettes parfaites. Que recherchez-vous ?"
+    },
+    "rodrigo": {
+      "name": "Rodrigo",
+      "role": "Santé oculaire et rendez-vous",
+      "desc": "Questions sur votre vue, rendez-vous et horaires du magasin.",
+      "cta": "Parler à Rodrigo",
+      "greeting": "Bonjour ! Je suis Rodrigo 👋 Je suis là pour les questions de santé oculaire et les rendez-vous. Comment puis-je aider ?"
+    },
     "labels": {
       "sol": "Lunettes de soleil",
+      "saldos": "Voir soldes/offres",
+      "colecao": "Voir la collection MindTheLook",
+      "estilo": "Découvrir mon style",
       "graduados": "Lunettes de vue",
       "consulta": "Prendre rendez-vous",
-      "saldos": "Voir soldes/offres",
+      "lentes_contacto": "Lentilles de contact",
       "contactos": "Horaires et boutiques"
     },
     "replies": {
-      "sol": "Bon choix ! 🕶️ Nous avons des lunettes de soleil de plusieurs marques. Je vous emmène à notre sélection.",
-      "graduados": "Les lunettes de vue nécessitent d'abord un rendez-vous d'optométrie — nous ne vendons pas de verres correcteurs directement en ligne. J'ouvre la prise de rendez-vous pour vous. 👓",
-      "consulta": "Bien sûr ! 📅 J'ouvre la prise de votre rendez-vous.",
+      "sol": "Excellent choix ! 🕶️ Nous avons des lunettes de soleil de plusieurs marques — je vous emmène à notre sélection.",
       "saldos": "Nous avons des soldes en cours, jusqu'à -50%. 🏷️ Je vous montre la liste.",
+      "colecao": "La collection MindTheLook, c'est vraiment notre signature ! ✨ Je vous montre les modèles.",
+      "estilo": "J'adore cette question ! 💫 Découvrons votre style avec notre quiz rapide.",
+      "graduados": "Les lunettes de vue nécessitent d'abord un rendez-vous d'optométrie — nous ne vendons pas de verres correcteurs directement en ligne. J'ouvre la prise de rendez-vous. 👓",
+      "consulta": "Bien sûr ! 📅 J'ouvre la prise de votre rendez-vous.",
+      "lentes_contacto": "Les lentilles de contact nécessitent toujours un rendez-vous d'adaptation. J'ouvre la prise de rendez-vous. 👁️",
+      "carta_conducao": "L'examen du permis de conduire doit aussi être réservé. Je m'en occupe tout de suite. 🚗",
       "contactos": "Voici notre adresse, nos horaires et nos contacts. 📍"
-    },
-    "fallbackReply": "Hmm, je ne suis pas sûr de ce que vous cherchez. 🙂 Vous pouvez choisir l'une des options ci-dessus — ou, si vous préférez, nous parler directement.",
-    "fallbackLink": "Nous contacter"
+    }
   },
   "product": {
     "addCart": "Ajouter au Panier",

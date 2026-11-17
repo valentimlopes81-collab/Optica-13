@@ -27,7 +27,6 @@ import {
   Search,
   ShoppingBag,
   Eye,
-  MessageCircle,
   Send,
   ChevronDown,
   Minus,
@@ -2241,20 +2240,52 @@ function RayBanMetaGallery({ open, onClose, openBook }) {
   );
 }
 
-/* ── ASSISTENTE DE NAVEGAÇÃO (router por palavras-chave, SEM IA) ──────────
-   Encaminha a pessoa para a página certa com base em botões rápidos e num
-   mapeamento de palavras-chave (ver src/assistant-keywords.json). Corre 100%
-   no frontend — zero chamadas a APIs externas de IA. */
+/* ── EQUIPA DE APOIO: VERA + RODRIGO (router por palavras-chave, SEM IA) ──
+   Duas pessoas especializadas, encaminham para a página/marcação certa com
+   base em botões rápidos e num mapeamento de palavras-chave (ver
+   src/assistant-keywords.json). Corre 100% no frontend — zero chamadas a
+   APIs externas de IA, zero custo. Nunca aparece a palavra "bot": mostra-se
+   sempre só o nome da pessoa (Vera ou Rodrigo).
+   - Vera  → aconselhamento de produto (óculos de sol, coleções, saldos, estilo).
+   - Rodrigo → saúde ocular e marcações (nunca dá diagnóstico/conteúdo de
+     saúde próprio — encaminha sempre para a marcação de consulta). */
 const assistantNorm = (s) =>
   (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+
+const AGENT_META = {
+  vera: { color: "var(--wine)", initial: "V" },
+  rodrigo: { color: "var(--forest)", initial: "R" },
+};
+
+function AssistantAvatar({ agent, size = 22 }) {
+  const meta = AGENT_META[agent];
+  if (!meta) return null;
+  return (
+    <div
+      className="flex items-center justify-center flex-shrink-0"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        background: meta.color,
+        color: "#fff",
+        fontSize: Math.round(size * 0.46),
+        fontWeight: 700,
+      }}
+    >
+      {meta.initial}
+    </div>
+  );
+}
 
 function AssistantWidget({ setPage, openBook }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([
-    { from: "bot", greetingKey: true, showQuickReplies: true },
-  ]);
+  const [messages, setMessages] = useState([]);
+  // null = mostra o seletor de pessoa (Vera/Rodrigo); senão, quem está a falar.
+  const [activeAgent, setActiveAgent] = useState(null);
+  const [showPicker, setShowPicker] = useState(true);
   const scrollRef = useRef(null);
 
   // Balão de boas-vindas junto ao ícone (uma vez por sessão).
@@ -2286,9 +2317,10 @@ function AssistantWidget({ setPage, openBook }) {
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages, open]);
+  }, [messages, open, showPicker]);
 
-  const quickIntents = ASSISTANT.intents.filter((i) => i.quickReply);
+  const intentsFor = (agent) => ASSISTANT.intents.filter((i) => i.agent === agent);
+  const quickIntentsFor = (agent) => intentsFor(agent).filter((i) => i.quickReply);
 
   const runAction = (action) => {
     if (!action) return;
@@ -2304,21 +2336,44 @@ function AssistantWidget({ setPage, openBook }) {
     }, 650);
   };
 
-  const matchIntent = (text) => {
-    const t = assistantNorm(text);
-    if (!t) return null;
+  const matchIntent = (text, agent) => {
+    const tt = assistantNorm(text);
+    if (!tt) return null;
     return (
-      ASSISTANT.intents.find((it) =>
-        it.keywords.some((k) => t.includes(assistantNorm(k)))
+      intentsFor(agent).find((it) =>
+        it.keywords.some((k) => tt.includes(assistantNorm(k)))
       ) || null
     );
+  };
+
+  const matchAnyIntent = (text) => {
+    const tt = assistantNorm(text);
+    if (!tt) return null;
+    return (
+      ASSISTANT.intents.find((it) =>
+        it.keywords.some((k) => tt.includes(assistantNorm(k)))
+      ) || null
+    );
+  };
+
+  // Escolher a Vera ou o Rodrigo — na 1ª vez começa a conversa; se já havia
+  // conversa com a outra pessoa, continua no mesmo fio com um separador.
+  const pickAgent = (agent) => {
+    const isFirst = messages.length === 0;
+    setActiveAgent(agent);
+    setShowPicker(false);
+    setMessages((m) => [
+      ...m,
+      ...(isFirst ? [] : [{ from: "divider", agent }]),
+      { from: "bot", agent, greetingKey: true, showQuickReplies: true },
+    ]);
   };
 
   const handleIntent = (intent) => {
     setMessages((m) => [
       ...m,
       { from: "user", text: t("assistant.labels." + intent.id) },
-      { from: "bot", text: t("assistant.replies." + intent.id) },
+      { from: "bot", agent: activeAgent, text: t("assistant.replies." + intent.id) },
     ]);
     runAction(intent.action);
   };
@@ -2327,23 +2382,48 @@ function AssistantWidget({ setPage, openBook }) {
     const fb = ASSISTANT.fallback;
     setMessages((m) => [
       ...m,
-      { from: "bot", text: t("assistant.fallbackReply"), showQuickReplies: true, fallbackLink: fb },
+      { from: "bot", agent: activeAgent, text: t("assistant.fallbackReply"), showQuickReplies: true, fallbackLink: fb },
     ]);
+  };
+
+  // A pessoa ativa percebe que a pergunta é da área da outra e propõe o reencaminhamento.
+  const acceptHandoff = (handoff) => {
+    const intent = ASSISTANT.intents.find((it) => it.id === handoff.intentId);
+    setActiveAgent(handoff.toAgent);
+    setMessages((m) => [
+      ...m,
+      { from: "divider", agent: handoff.toAgent },
+      { from: "bot", agent: handoff.toAgent, text: t("assistant.replies." + intent.id) },
+    ]);
+    if (intent) runAction(intent.action);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const text = input.trim();
-    if (!text) return;
+    if (!text || !activeAgent) return;
     setInput("");
-    const intent = matchIntent(text);
     setMessages((m) => [...m, { from: "user", text }]);
-    if (intent) {
-      setMessages((m) => [...m, { from: "bot", text: t("assistant.replies." + intent.id) }]);
-      runAction(intent.action);
-    } else {
-      handleFallback();
+    const direct = matchIntent(text, activeAgent);
+    if (direct) {
+      setMessages((m) => [...m, { from: "bot", agent: activeAgent, text: t("assistant.replies." + direct.id) }]);
+      runAction(direct.action);
+      return;
     }
+    const other = matchAnyIntent(text);
+    if (other && other.agent !== activeAgent) {
+      setMessages((m) => [
+        ...m,
+        {
+          from: "bot",
+          agent: activeAgent,
+          text: t("assistant.handoffTo" + (other.agent === "vera" ? "Vera" : "Rodrigo")),
+          handoff: { toAgent: other.agent, intentId: other.id },
+        },
+      ]);
+      return;
+    }
+    handleFallback();
   };
 
   return (
@@ -2353,7 +2433,7 @@ function AssistantWidget({ setPage, openBook }) {
         <div
           data-assistant-hint
           className="fixed bottom-24 right-4 sm:right-6 z-50"
-          style={{ width: "min(230px, calc(100vw - 6rem))" }}
+          style={{ width: "min(240px, calc(100vw - 6rem))" }}
         >
           <div
             onClick={openChat}
@@ -2367,10 +2447,10 @@ function AssistantWidget({ setPage, openBook }) {
               textTransform: "none",
             }}
           >
-            <p className="text-sm font-medium leading-snug">{t("assistant.greeting")}</p>
+            <p className="text-sm font-medium leading-snug">{t("assistant.hint")}</p>
             <button
               onClick={(e) => { e.stopPropagation(); dismissHint(); }}
-              aria-label="Fechar"
+              aria-label={t("common.close")}
               className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center transition-colors hover:bg-black/10"
               style={{ color: "#999" }}
             >
@@ -2385,15 +2465,20 @@ function AssistantWidget({ setPage, openBook }) {
         </div>
       )}
 
-      {/* Ícone do assistente — canto inferior direito */}
+      {/* Ícone do apoio — canto inferior direito (duo Vera + Rodrigo, sem ícone de "bot") */}
       {!open && (
         <button
           onClick={openChat}
-          aria-label="Abrir assistente"
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
-          style={{ background: "var(--forest)", color: "#fff" }}
+          aria-label={t("assistant.pickerTitle")}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl transition-transform hover:scale-110"
+          style={{ background: "var(--forest)" }}
         >
-          <MessageCircle size={26} strokeWidth={1.8} />
+          <span className="absolute" style={{ left: 7, top: 7 }}>
+            <AssistantAvatar agent="vera" size={26} />
+          </span>
+          <span className="absolute" style={{ right: 7, bottom: 7, boxShadow: "0 0 0 2px var(--forest)", borderRadius: "50%" }}>
+            <AssistantAvatar agent="rodrigo" size={26} />
+          </span>
         </button>
       )}
 
@@ -2405,7 +2490,7 @@ function AssistantWidget({ setPage, openBook }) {
             background: "white",
             border: "1px solid var(--mist)",
             width: "min(360px, calc(100vw - 2rem))",
-            height: "min(540px, calc(100vh - 2rem))",
+            height: "min(560px, calc(100vh - 2rem))",
             // Chat legível: fonte com minúsculas (Nord é só maiúsculas) e sem uppercase.
             fontFamily: "'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif",
             textTransform: "none",
@@ -2416,97 +2501,186 @@ function AssistantWidget({ setPage, openBook }) {
             className="flex items-center justify-between px-5 py-4 flex-shrink-0"
             style={{ background: "var(--forest)", color: "#fff" }}
           >
-            <div className="flex items-center gap-2.5">
-              <MessageCircle size={20} strokeWidth={1.8} />
-              <div>
-                <p className="font-semibold text-sm leading-tight">{t("assistant.title")}</p>
-                <p className="text-[11px] opacity-70 leading-tight normal-case">{t("assistant.subtitle")}</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label={t("assistant.close")}
-              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-white/15"
-            >
-              <X size={16} />
-            </button>
-          </div>
-
-          {/* Mensagens */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3" style={{ background: "var(--cream-dark)" }}>
-            {messages.map((msg, idx) => (
-              <div key={idx}>
-                <div className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className="max-w-[82%] px-3.5 py-2.5 text-sm leading-snug normal-case"
-                    style={
-                      msg.from === "user"
-                        ? { background: "var(--forest)", color: "#fff", borderRadius: "14px 14px 3px 14px" }
-                        : { background: "#fff", color: "#333", border: "1px solid var(--mist)", borderRadius: "14px 14px 14px 3px" }
-                    }
-                  >
-                    {msg.greetingKey ? t("assistant.greeting") : msg.text}
-                  </div>
+            {showPicker || !activeAgent ? (
+              <p className="font-semibold text-sm leading-tight">Óptica 13</p>
+            ) : (
+              <div className="flex items-center gap-2.5 min-w-0">
+                <AssistantAvatar agent={activeAgent} size={30} />
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm leading-tight truncate">{t("assistant." + activeAgent + ".name")}</p>
+                  <p className="text-[11px] opacity-70 leading-tight normal-case truncate">{t("assistant." + activeAgent + ".role")}</p>
                 </div>
-
-                {/* Link de rede de segurança (fallback) */}
-                {msg.fallbackLink && (
-                  <div className="mt-2 flex justify-start">
-                    <button
-                      onClick={() => { setPage(msg.fallbackLink.action.value); setOpen(false); }}
-                      className="text-xs font-semibold underline"
-                      style={{ color: "var(--wine)", textTransform: "none" }}
-                    >
-                      {t("assistant.fallbackLink")} →
-                    </button>
-                  </div>
-                )}
-
-                {/* Botões de resposta rápida */}
-                {msg.showQuickReplies && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {quickIntents.map((it) => (
-                      <button
-                        key={it.id}
-                        onClick={() => handleIntent(it)}
-                        className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
-                        style={{ borderColor: "var(--forest)", color: "var(--forest)", background: "#fff", textTransform: "none" }}
-                      >
-                        {t("assistant.labels." + it.id)}
-                      </button>
-                    ))}
-                    <button
-                      onClick={handleFallback}
-                      className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
-                      style={{ borderColor: "var(--mist)", color: "#777", background: "#fff", textTransform: "none" }}
-                    >
-                      {t("assistant.outraCoisa")}
-                    </button>
-                  </div>
-                )}
               </div>
-            ))}
+            )}
+            <div className="flex items-center gap-1 flex-shrink-0">
+              {activeAgent && !showPicker && (
+                <button
+                  onClick={() => setShowPicker(true)}
+                  className="text-xs font-semibold underline opacity-90 hover:opacity-100 px-1.5"
+                  style={{ textTransform: "none" }}
+                >
+                  {t("assistant.switchLink")}
+                </button>
+              )}
+              {showPicker && activeAgent && (
+                <button
+                  onClick={() => setShowPicker(false)}
+                  className="text-xs font-semibold underline opacity-90 hover:opacity-100 px-1.5"
+                  style={{ textTransform: "none" }}
+                >
+                  {t("assistant.backToChat")}
+                </button>
+              )}
+              <button
+                onClick={() => setOpen(false)}
+                aria-label={t("common.close")}
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-white/15"
+              >
+                <X size={16} />
+              </button>
+            </div>
           </div>
 
-          {/* Campo de texto livre */}
-          <form onSubmit={handleSubmit} className="flex items-center gap-2 p-3 flex-shrink-0 border-t" style={{ borderColor: "var(--mist)", background: "#fff" }}>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={t("assistant.placeholder")}
-              className="flex-1 px-3 py-2.5 rounded-xl border text-sm outline-none normal-case"
-              style={{ borderColor: "var(--mist)" }}
-            />
-            <button
-              type="submit"
-              aria-label="Enviar"
-              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105"
-              style={{ background: "var(--forest)", color: "#fff" }}
-            >
-              <Send size={16} />
-            </button>
-          </form>
+          {showPicker ? (
+            /* Seletor: Vera ou Rodrigo */
+            <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3" style={{ background: "var(--cream-dark)" }}>
+              <p className="font-semibold text-base mb-0.5 normal-case" style={{ color: "var(--forest)" }}>
+                {t("assistant.pickerTitle")}
+              </p>
+              <p className="text-xs mb-3 normal-case" style={{ color: "#777" }}>
+                {t("assistant.pickerSubtitle")}
+              </p>
+              {["vera", "rodrigo"].map((agent) => (
+                <button
+                  key={agent}
+                  onClick={() => pickAgent(agent)}
+                  className="w-full text-left p-4 rounded-2xl border transition-all hover:-translate-y-0.5"
+                  style={{ borderColor: "var(--mist)", background: "#fff" }}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <AssistantAvatar agent={agent} size={40} />
+                    <div>
+                      <p className="font-semibold text-sm normal-case" style={{ color: "var(--forest)" }}>
+                        {t("assistant." + agent + ".name")}
+                      </p>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "var(--gold)" }}>
+                        {t("assistant." + agent + ".role")}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs leading-relaxed mb-3 normal-case" style={{ color: "#666" }}>
+                    {t("assistant." + agent + ".desc")}
+                  </p>
+                  <p className="text-xs font-semibold normal-case" style={{ color: "var(--forest)" }}>
+                    {t("assistant." + agent + ".cta")} →
+                  </p>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <>
+              {/* Mensagens */}
+              <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-3" style={{ background: "var(--cream-dark)" }}>
+                {messages.map((msg, idx) => {
+                  if (msg.from === "divider") {
+                    return (
+                      <div key={idx} className="flex justify-center my-1">
+                        <span className="text-[10px] font-semibold uppercase tracking-wide px-3 py-1 rounded-full normal-case" style={{ color: "#999", background: "var(--mist)" }}>
+                          {t("assistant.switchedTo" + (msg.agent === "vera" ? "Vera" : "Rodrigo"))}
+                        </span>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={idx}>
+                      <div className={`flex items-end gap-1.5 ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
+                        {msg.from === "bot" && <AssistantAvatar agent={msg.agent || activeAgent} size={20} />}
+                        <div
+                          className="max-w-[78%] px-3.5 py-2.5 text-sm leading-snug normal-case"
+                          style={
+                            msg.from === "user"
+                              ? { background: "var(--forest)", color: "#fff", borderRadius: "14px 14px 3px 14px" }
+                              : { background: "#fff", color: "#333", border: "1px solid var(--mist)", borderRadius: "14px 14px 14px 3px" }
+                          }
+                        >
+                          {msg.greetingKey ? t("assistant." + msg.agent + ".greeting") : msg.text}
+                        </div>
+                      </div>
+
+                      {/* Botão de reencaminhamento para a outra pessoa */}
+                      {msg.handoff && (
+                        <div className="mt-2 ml-6 flex justify-start">
+                          <button
+                            onClick={() => acceptHandoff(msg.handoff)}
+                            className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5 normal-case"
+                            style={{ borderColor: AGENT_META[msg.handoff.toAgent].color, color: AGENT_META[msg.handoff.toAgent].color, background: "#fff" }}
+                          >
+                            {t("assistant." + msg.handoff.toAgent + ".cta")}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Link de rede de segurança (fallback) */}
+                      {msg.fallbackLink && (
+                        <div className="mt-2 ml-6 flex justify-start">
+                          <button
+                            onClick={() => { setPage(msg.fallbackLink.action.value); setOpen(false); }}
+                            className="text-xs font-semibold underline"
+                            style={{ color: "var(--wine)", textTransform: "none" }}
+                          >
+                            {t("assistant.fallbackLink")} →
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Botões de resposta rápida da pessoa ativa */}
+                      {msg.showQuickReplies && (
+                        <div className="mt-3 ml-6 flex flex-wrap gap-2">
+                          {quickIntentsFor(activeAgent).map((it) => (
+                            <button
+                              key={it.id}
+                              onClick={() => handleIntent(it)}
+                              className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
+                              style={{ borderColor: "var(--forest)", color: "var(--forest)", background: "#fff", textTransform: "none" }}
+                            >
+                              {t("assistant.labels." + it.id)}
+                            </button>
+                          ))}
+                          <button
+                            onClick={handleFallback}
+                            className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5"
+                            style={{ borderColor: "var(--mist)", color: "#777", background: "#fff", textTransform: "none" }}
+                          >
+                            {t("assistant.outraCoisa")}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Campo de texto livre */}
+              <form onSubmit={handleSubmit} className="flex items-center gap-2 p-3 flex-shrink-0 border-t" style={{ borderColor: "var(--mist)", background: "#fff" }}>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={t("assistant.placeholder")}
+                  className="flex-1 px-3 py-2.5 rounded-xl border text-sm outline-none normal-case"
+                  style={{ borderColor: "var(--mist)" }}
+                />
+                <button
+                  type="submit"
+                  aria-label="Enviar"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105"
+                  style={{ background: "var(--forest)", color: "#fff" }}
+                >
+                  <Send size={16} />
+                </button>
+              </form>
+            </>
+          )}
         </div>
       )}
     </>

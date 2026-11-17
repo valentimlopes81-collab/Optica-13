@@ -83,28 +83,54 @@
     "aros": "Frames"
   },
   "assistant": {
-    "greeting": "Hi! 👋 What are you looking for today?",
-    "title": "Óptica 13 Assistant",
-    "subtitle": "We help you find what you need",
+    "hint": "Need a hand? Talk to Vera or Rodrigo 👋",
+    "pickerTitle": "How can we help?",
+    "pickerSubtitle": "Choose who you'd like to talk to:",
+    "backToChat": "Back to the chat",
+    "switchLink": "Switch",
+    "switchedToVera": "now talking to Vera",
+    "switchedToRodrigo": "now talking to Rodrigo",
+    "handoffToVera": "That question is more for Vera, our product specialist. 🙂",
+    "handoffToRodrigo": "That question is more for Rodrigo, our eye-health and appointments specialist. 🙂",
     "placeholder": "Type here…",
     "outraCoisa": "Something else",
-    "close": "Close",
+    "fallbackReply": "Hmm, I'm not sure what you're looking for. 🙂 You can pick one of the options above — or, if you prefer, talk to us directly.",
+    "fallbackLink": "Talk to us",
+    "vera": {
+      "name": "Vera",
+      "role": "Product advice",
+      "desc": "Sunglasses, collections, sales and the ideal style for you.",
+      "cta": "Talk to Vera",
+      "greeting": "Hi! I'm Vera 👋 I help you find the perfect glasses. What are you looking for?"
+    },
+    "rodrigo": {
+      "name": "Rodrigo",
+      "role": "Eye health & appointments",
+      "desc": "Questions about your vision, appointments and store hours.",
+      "cta": "Talk to Rodrigo",
+      "greeting": "Hi! I'm Rodrigo 👋 I'm here for eye-health questions and appointments. How can I help?"
+    },
     "labels": {
       "sol": "Sunglasses",
+      "saldos": "See sale/offers",
+      "colecao": "See the MindTheLook collection",
+      "estilo": "Discover my style",
       "graduados": "Prescription glasses",
       "consulta": "Book an appointment",
-      "saldos": "See sale/offers",
+      "lentes_contacto": "Contact lenses",
       "contactos": "Hours & stores"
     },
     "replies": {
-      "sol": "Great choice! 🕶️ We have sunglasses from several brands. Let me take you to our selection.",
+      "sol": "Great choice! 🕶️ We have sunglasses from several brands — let me take you to our selection.",
+      "saldos": "We have a sale on, up to -50%. 🏷️ Let me show you the list.",
+      "colecao": "The MindTheLook collection is really our signature! ✨ Let me show you the models.",
+      "estilo": "I love this question! 💫 Let's discover your style with our quick quiz.",
       "graduados": "Prescription glasses require an optometry appointment first — we don't sell prescription lenses directly online. I'll open the booking for you now. 👓",
       "consulta": "Of course! 📅 I'll open your appointment booking.",
-      "saldos": "We have a sale on, up to -50%. 🏷️ Let me show you the list.",
+      "lentes_contacto": "Contact lenses always require a fitting appointment. I'll open the booking for you. 👁️",
+      "carta_conducao": "The driving licence exam also needs to be booked. I'll take care of that now. 🚗",
       "contactos": "Here are our address, opening hours and contacts. 📍"
-    },
-    "fallbackReply": "Hmm, I'm not sure what you're looking for. 🙂 You can pick one of the options above — or, if you prefer, talk to us directly.",
-    "fallbackLink": "Talk to us"
+    }
   },
   "product": {
     "addCart": "Add to Cart",

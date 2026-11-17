@@ -1,50 +1,90 @@
 {
-  "_comment": "Dicionário do assistente de navegação (router por palavras-chave, SEM IA). Editar à vontade: adicionar sinónimos em 'keywords', mudar textos em 'reply', ou destinos em 'action'. action.type: 'page' (navega para action.value: outlet | saldos | contact | mindthelook | services) ou 'book' (abre a marcação com o serviço action.value). A correspondência ignora maiúsculas e acentos. Os 'intents' marcados com quickReply:true aparecem como botões de resposta rápida, pela ordem em que estão aqui.",
-  "greeting": "Olá! 👋 O que procura hoje?",
+  "_comment": "Dicionário do assistente de navegação (router por palavras-chave, SEM IA — zero custo). Duas pessoas: 'vera' (aconselhamento de produto) e 'rodrigo' (saúde ocular e marcações). Editar à vontade: adicionar sinónimos em 'keywords', mudar destinos em 'action'. Cada intent tem um campo 'agent' ('vera' ou 'rodrigo') que diz a quem pertence — é o único campo novo. action.type: 'page' (navega para action.value: outlet | saldos | contact | mindthelook | quiz) ou 'book' (abre a marcação com o serviço action.value). A correspondência ignora maiúsculas e acentos. Os 'intents' marcados com quickReply:true aparecem como botões de resposta rápida no chat dessa pessoa. Os campos 'label'/'reply' aqui são só PT, para o dono do site conseguir ler o ficheiro — o texto realmente mostrado ao cliente (nas 5 línguas) vem de src/i18n/locales/*.json (chave assistant.labels.<id> / assistant.replies.<id>). IMPORTANTE: o Rodrigo nunca dá diagnóstico nem conteúdo de saúde próprio — encaminha sempre para marcação.",
   "intents": [
     {
       "id": "sol",
+      "agent": "vera",
       "label": "Óculos de sol",
       "quickReply": true,
       "keywords": ["sol", "solar", "solares", "praia", "conducao", "condução", "conduzir", "verao", "verão", "espelhad", "polarizad"],
-      "reply": "Boa escolha! 🕶️ Temos óculos de sol de várias marcas. Vou levá-lo à nossa seleção.",
+      "reply": "Boa escolha! Temos óculos de sol de várias marcas — vou levá-lo à nossa seleção.",
       "action": { "type": "page", "value": "outlet" }
     },
     {
+      "id": "saldos",
+      "agent": "vera",
+      "label": "Ver saldos/promoções",
+      "quickReply": true,
+      "keywords": ["saldo", "saldos", "desconto", "descontos", "promocao", "promoção", "promo", "barato", "baratos", "liquidacao", "liquidação", "campanha", "oferta", "ofertas", "outlet"],
+      "reply": "Temos saldos a decorrer, até -50%. Vou mostrar-lhe a lista.",
+      "action": { "type": "page", "value": "saldos" }
+    },
+    {
+      "id": "colecao",
+      "agent": "vera",
+      "label": "Ver coleção MindTheLook",
+      "quickReply": true,
+      "keywords": ["colecao", "coleção", "mindthelook", "mind the look", "novidades", "lancamentos", "lançamentos", "tendencia", "tendência", "moda"],
+      "reply": "A coleção MindTheLook tem mesmo a nossa cara! Vou mostrar-lhe os modelos.",
+      "action": { "type": "page", "value": "mindthelook" }
+    },
+    {
+      "id": "estilo",
+      "agent": "vera",
+      "label": "Descobrir o meu estilo",
+      "quickReply": true,
+      "keywords": ["estilo", "quiz", "que oculos", "que óculos", "ajuda a escolher", "recomendacao", "recomendação", "o que me fica bem", "qual o modelo", "aconselhar", "aconselhamento"],
+      "reply": "Adoro esta pergunta! Vamos descobrir o seu estilo com o nosso quiz rápido.",
+      "action": { "type": "page", "value": "quiz" }
+    },
+    {
       "id": "graduados",
+      "agent": "rodrigo",
       "label": "Óculos graduados",
       "quickReply": true,
       "keywords": ["grau", "graduad", "miopia", "astigmatismo", "hipermetropia", "presbiopia", "lentes graduadas", "lente graduada", "vista cansada", "dioptria", "receita", "prescricao", "prescrição", "ver mal", "ver ao perto", "ver ao longe"],
-      "reply": "Para óculos graduados é necessária primeiro uma consulta de optometria — não fazemos venda direta de lentes graduadas online. Vou abrir já a marcação para si. 👓",
+      "reply": "Para óculos graduados é necessária primeiro uma consulta de optometria — não fazemos venda direta de lentes graduadas online. Vou abrir já a marcação para si.",
       "action": { "type": "book", "value": "Consulta de Optometria" }
     },
     {
       "id": "consulta",
+      "agent": "rodrigo",
       "label": "Marcar consulta",
       "quickReply": true,
       "keywords": ["marcar", "marcacao", "marcação", "consulta", "exame", "agendar", "agendamento", "optometria", "rastreio", "horario de atendimento", "horário de atendimento"],
-      "reply": "Com certeza! 📅 Vou abrir a marcação da sua consulta.",
+      "reply": "Com certeza! Vou abrir a marcação da sua consulta.",
       "action": { "type": "book", "value": "Consulta de Optometria" }
     },
     {
-      "id": "saldos",
-      "label": "Ver saldos/promoções",
+      "id": "lentes_contacto",
+      "agent": "rodrigo",
+      "label": "Lentes de contacto",
       "quickReply": true,
-      "keywords": ["saldo", "saldos", "desconto", "descontos", "promocao", "promoção", "promo", "barato", "baratos", "liquidacao", "liquidação", "campanha", "oferta", "ofertas", "outlet"],
-      "reply": "Temos saldos a decorrer, até -50%. 🏷️ Vou mostrar-lhe a lista.",
-      "action": { "type": "page", "value": "saldos" }
+      "keywords": ["lentes de contacto", "lente de contacto", "lentes de contato", "contactologia", "lentes gelatinosas", "lentes rigidas", "lentes rígidas"],
+      "reply": "As lentes de contacto exigem sempre uma consulta de adaptação. Vou abrir a marcação para si.",
+      "action": { "type": "book", "value": "Consulta de Contactologia" }
+    },
+    {
+      "id": "carta_conducao",
+      "agent": "rodrigo",
+      "label": "Exame para carta de condução",
+      "quickReply": false,
+      "keywords": ["carta de conducao", "carta de condução", "exame de conducao", "exame de condução", "atestado medico", "atestado médico", "certificado medico", "certificado médico"],
+      "reply": "Para o exame da carta de condução também é preciso marcar. Vou tratar disso já.",
+      "action": { "type": "book", "value": "Exame Carta de Condução" }
     },
     {
       "id": "contactos",
+      "agent": "rodrigo",
       "label": "Horários e lojas",
       "quickReply": true,
       "keywords": ["onde fica", "onde ficam", "morada", "endereco", "endereço", "localizacao", "localização", "como chegar", "horario", "horário", "aberto", "abre", "fecha", "contacto", "contactos", "telefone", "email", "loja", "lojas", "mapa", "direcoes", "direções"],
-      "reply": "Aqui ficam a nossa morada, horários e contactos. 📍",
+      "reply": "Aqui ficam a nossa morada, horários e contactos.",
       "action": { "type": "page", "value": "contact" }
     }
   ],
   "fallback": {
-    "reply": "Hmm, não tenho a certeza do que procura. 🙂 Pode escolher uma das opções acima — ou, se preferir, falar connosco diretamente.",
+    "reply": "Hmm, não tenho a certeza do que procura. Pode escolher uma das opções acima — ou, se preferir, falar connosco diretamente.",
     "linkLabel": "Falar connosco",
     "action": { "type": "page", "value": "contact" }
   }

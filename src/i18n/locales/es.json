@@ -83,28 +83,54 @@
     "aros": "Monturas"
   },
   "assistant": {
-    "greeting": "¡Hola! 👋 ¿Qué busca hoy?",
-    "title": "Asistente Óptica 13",
-    "subtitle": "Le ayudamos a encontrar lo que busca",
+    "hint": "¿Necesita ayuda? Hable con Vera o Rodrigo 👋",
+    "pickerTitle": "¿Cómo podemos ayudar?",
+    "pickerSubtitle": "Elija con quién quiere hablar:",
+    "backToChat": "Volver a la conversación",
+    "switchLink": "Cambiar",
+    "switchedToVera": "ahora hablando con Vera",
+    "switchedToRodrigo": "ahora hablando con Rodrigo",
+    "handoffToVera": "Esa pregunta es más para Vera, nuestra especialista en producto. 🙂",
+    "handoffToRodrigo": "Esa pregunta es más para Rodrigo, nuestro especialista en salud ocular y citas. 🙂",
     "placeholder": "Escriba aquí…",
     "outraCoisa": "Otra cosa",
-    "close": "Cerrar",
+    "fallbackReply": "Mmm, no estoy seguro de lo que busca. 🙂 Puede elegir una de las opciones de arriba — o, si lo prefiere, hablar con nosotros directamente.",
+    "fallbackLink": "Hablar con nosotros",
+    "vera": {
+      "name": "Vera",
+      "role": "Asesoramiento de producto",
+      "desc": "Gafas de sol, colecciones, rebajas y el estilo ideal para usted.",
+      "cta": "Hablar con Vera",
+      "greeting": "¡Hola! Soy Vera 👋 Le ayudo a encontrar las gafas perfectas. ¿Qué busca?"
+    },
+    "rodrigo": {
+      "name": "Rodrigo",
+      "role": "Salud ocular y citas",
+      "desc": "Dudas sobre su visión, citas y horarios de la tienda.",
+      "cta": "Hablar con Rodrigo",
+      "greeting": "¡Hola! Soy Rodrigo 👋 Estoy aquí para dudas de salud ocular y citas. ¿Cómo puedo ayudar?"
+    },
     "labels": {
       "sol": "Gafas de sol",
+      "saldos": "Ver rebajas/ofertas",
+      "colecao": "Ver la colección MindTheLook",
+      "estilo": "Descubrir mi estilo",
       "graduados": "Gafas graduadas",
       "consulta": "Reservar cita",
-      "saldos": "Ver rebajas/ofertas",
+      "lentes_contacto": "Lentes de contacto",
       "contactos": "Horarios y tiendas"
     },
     "replies": {
-      "sol": "¡Buena elección! 🕶️ Tenemos gafas de sol de varias marcas. Le llevo a nuestra selección.",
-      "graduados": "Las gafas graduadas requieren primero una cita de optometría — no vendemos lentes graduadas directamente online. Le abro ahora la reserva de cita. 👓",
+      "sol": "¡Buena elección! 🕶️ Tenemos gafas de sol de varias marcas — le llevo a nuestra selección.",
+      "saldos": "Tenemos rebajas en marcha, hasta -50%. 🏷️ Le muestro la lista.",
+      "colecao": "¡La colección MindTheLook es realmente nuestro sello! ✨ Le muestro los modelos.",
+      "estilo": "¡Me encanta esta pregunta! 💫 Vamos a descubrir su estilo con nuestro quiz rápido.",
+      "graduados": "Las gafas graduadas requieren primero una cita de optometría — no vendemos lentes graduadas directamente online. Le abro ahora la reserva. 👓",
       "consulta": "¡Por supuesto! 📅 Le abro la reserva de su cita.",
-      "saldos": "Tenemos rebajas, hasta -50%. 🏷️ Le muestro la lista.",
+      "lentes_contacto": "Las lentes de contacto siempre requieren una cita de adaptación. Le abro la reserva. 👁️",
+      "carta_conducao": "Para el examen del permiso de conducir también hay que reservar. Me encargo ahora. 🚗",
       "contactos": "Aquí tiene nuestra dirección, horarios y contactos. 📍"
-    },
-    "fallbackReply": "Mmm, no estoy seguro de lo que busca. 🙂 Puede elegir una de las opciones de arriba — o, si lo prefiere, hablar con nosotros directamente.",
-    "fallbackLink": "Hablar con nosotros"
+    }
   },
   "product": {
     "addCart": "Añadir al Carrito",

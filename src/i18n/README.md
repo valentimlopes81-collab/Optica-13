@@ -23,8 +23,9 @@ ficheiros.
 
 Texto fixo de interface visível em todas as páginas:
 menu/navegação, botões do cabeçalho, seletor de idioma, rodapé, **botões dos
-slides** do carrossel, **assistente de chat** (saudação, balão, botões rápidos,
-respostas, fallback), **rótulos e categorias** das listagens (Óculos de Sol /
+slides** do carrossel, **chat da Vera e do Rodrigo** (seletor de pessoa,
+saudações, botões rápidos, respostas, reencaminhamento entre as duas pessoas,
+fallback), **rótulos e categorias** das listagens (Óculos de Sol /
 Sunglasses / Gafas de sol / Lunettes de soleil / Sonnenbrille, Aros/Monturas…),
 filtros, e os **rótulos** da ficha de produto (Material, Cor, Garantia, etc.).
 
