@@ -83,28 +83,54 @@
     "aros": "Aros"
   },
   "assistant": {
-    "greeting": "Olá! 👋 O que procura hoje?",
-    "title": "Assistente Óptica 13",
-    "subtitle": "Ajudamos a encontrar o que procura",
+    "hint": "Precisa de ajuda? Fale com a Vera ou o Rodrigo 👋",
+    "pickerTitle": "Como podemos ajudar?",
+    "pickerSubtitle": "Escolha com quem quer falar:",
+    "backToChat": "Voltar à conversa",
+    "switchLink": "Trocar",
+    "switchedToVera": "agora a falar com a Vera",
+    "switchedToRodrigo": "agora a falar com o Rodrigo",
+    "handoffToVera": "Essa pergunta é mais da área da Vera, a nossa especialista em produto. 🙂",
+    "handoffToRodrigo": "Essa pergunta é mais da área do Rodrigo, o nosso especialista em saúde ocular e marcações. 🙂",
     "placeholder": "Escreva aqui…",
     "outraCoisa": "Outra coisa",
-    "close": "Fechar",
+    "fallbackReply": "Hmm, não tenho a certeza do que procura. 🙂 Pode escolher uma das opções acima — ou, se preferir, falar connosco diretamente.",
+    "fallbackLink": "Falar connosco",
+    "vera": {
+      "name": "Vera",
+      "role": "Aconselhamento de produto",
+      "desc": "Óculos de sol, coleções, saldos e qual o estilo ideal para si.",
+      "cta": "Falar com a Vera",
+      "greeting": "Olá! Sou a Vera 👋 Ajudo a encontrar os óculos perfeitos para si. O que procura?"
+    },
+    "rodrigo": {
+      "name": "Rodrigo",
+      "role": "Saúde ocular e marcações",
+      "desc": "Dúvidas sobre a sua visão, consultas e horários da loja.",
+      "cta": "Falar com o Rodrigo",
+      "greeting": "Olá! Sou o Rodrigo 👋 Estou aqui para dúvidas de saúde ocular e marcações. Como posso ajudar?"
+    },
     "labels": {
       "sol": "Óculos de sol",
+      "saldos": "Ver saldos/promoções",
+      "colecao": "Ver coleção MindTheLook",
+      "estilo": "Descobrir o meu estilo",
       "graduados": "Óculos graduados",
       "consulta": "Marcar consulta",
-      "saldos": "Ver saldos/promoções",
+      "lentes_contacto": "Lentes de contacto",
       "contactos": "Horários e lojas"
     },
     "replies": {
-      "sol": "Boa escolha! 🕶️ Temos óculos de sol de várias marcas. Vou levá-lo à nossa seleção.",
+      "sol": "Boa escolha! 🕶️ Temos óculos de sol de várias marcas — vou levá-lo à nossa seleção.",
+      "saldos": "Temos saldos a decorrer, até -50%. 🏷️ Vou mostrar-lhe a lista.",
+      "colecao": "A coleção MindTheLook tem mesmo a nossa cara! ✨ Vou mostrar-lhe os modelos.",
+      "estilo": "Adoro esta pergunta! 💫 Vamos descobrir o seu estilo com o nosso quiz rápido.",
       "graduados": "Para óculos graduados é necessária primeiro uma consulta de optometria — não fazemos venda direta de lentes graduadas online. Vou abrir já a marcação para si. 👓",
       "consulta": "Com certeza! 📅 Vou abrir a marcação da sua consulta.",
-      "saldos": "Temos saldos a decorrer, até -50%. 🏷️ Vou mostrar-lhe a lista.",
+      "lentes_contacto": "As lentes de contacto exigem sempre uma consulta de adaptação. Vou abrir a marcação para si. 👁️",
+      "carta_conducao": "Para o exame da carta de condução também é preciso marcar. Vou tratar disso já. 🚗",
       "contactos": "Aqui ficam a nossa morada, horários e contactos. 📍"
-    },
-    "fallbackReply": "Hmm, não tenho a certeza do que procura. 🙂 Pode escolher uma das opções acima — ou, se preferir, falar connosco diretamente.",
-    "fallbackLink": "Falar connosco"
+    }
   },
   "product": {
     "addCart": "Adicionar ao Carrinho",

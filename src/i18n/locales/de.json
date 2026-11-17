@@ -83,28 +83,54 @@
     "aros": "Fassungen"
   },
   "assistant": {
-    "greeting": "Hallo! 👋 Wonach suchen Sie heute?",
-    "title": "Óptica 13 Assistent",
-    "subtitle": "Wir helfen Ihnen zu finden, was Sie suchen",
+    "hint": "Brauchen Sie Hilfe? Sprechen Sie mit Vera oder Rodrigo 👋",
+    "pickerTitle": "Wie können wir helfen?",
+    "pickerSubtitle": "Wählen Sie, mit wem Sie sprechen möchten:",
+    "backToChat": "Zurück zum Chat",
+    "switchLink": "Wechseln",
+    "switchedToVera": "jetzt im Gespräch mit Vera",
+    "switchedToRodrigo": "jetzt im Gespräch mit Rodrigo",
+    "handoffToVera": "Diese Frage beantwortet besser Vera, unsere Produktspezialistin. 🙂",
+    "handoffToRodrigo": "Diese Frage beantwortet besser Rodrigo, unser Spezialist für Augengesundheit und Termine. 🙂",
     "placeholder": "Hier schreiben…",
     "outraCoisa": "Etwas anderes",
-    "close": "Schließen",
+    "fallbackReply": "Hmm, ich bin mir nicht sicher, wonach Sie suchen. 🙂 Sie können eine der Optionen oben wählen — oder uns direkt kontaktieren.",
+    "fallbackLink": "Mit uns sprechen",
+    "vera": {
+      "name": "Vera",
+      "role": "Produktberatung",
+      "desc": "Sonnenbrillen, Kollektionen, Sale und der ideale Stil für Sie.",
+      "cta": "Mit Vera sprechen",
+      "greeting": "Hallo! Ich bin Vera 👋 Ich helfe Ihnen, die perfekte Brille zu finden. Wonach suchen Sie?"
+    },
+    "rodrigo": {
+      "name": "Rodrigo",
+      "role": "Augengesundheit & Termine",
+      "desc": "Fragen zu Ihrer Sehkraft, Terminen und Öffnungszeiten.",
+      "cta": "Mit Rodrigo sprechen",
+      "greeting": "Hallo! Ich bin Rodrigo 👋 Ich bin für Fragen zur Augengesundheit und Terminvereinbarungen da. Wie kann ich helfen?"
+    },
     "labels": {
-      "sol": "Sonnenbrillen",
+      "sol": "Sonnenbrille",
+      "saldos": "Sale/Angebote ansehen",
+      "colecao": "MindTheLook-Kollektion ansehen",
+      "estilo": "Meinen Stil entdecken",
       "graduados": "Korrektionsbrillen",
       "consulta": "Termin buchen",
-      "saldos": "Sale/Angebote ansehen",
+      "lentes_contacto": "Kontaktlinsen",
       "contactos": "Öffnungszeiten & Geschäfte"
     },
     "replies": {
-      "sol": "Gute Wahl! 🕶️ Wir haben Sonnenbrillen von mehreren Marken. Ich bringe Sie zu unserer Auswahl.",
-      "graduados": "Für Korrektionsbrillen ist zunächst ein Optometrie-Termin nötig — wir verkaufen korrigierende Gläser nicht direkt online. Ich öffne jetzt die Terminbuchung für Sie. 👓",
+      "sol": "Gute Wahl! 🕶️ Wir haben Sonnenbrillen von mehreren Marken — ich bringe Sie zu unserer Auswahl.",
+      "saldos": "Wir haben gerade Sale, bis zu -50%. 🏷️ Ich zeige Ihnen die Liste.",
+      "colecao": "Die MindTheLook-Kollektion ist wirklich unsere Handschrift! ✨ Ich zeige Ihnen die Modelle.",
+      "estilo": "Diese Frage liebe ich! 💫 Entdecken wir Ihren Stil mit unserem kurzen Quiz.",
+      "graduados": "Für Korrektionsbrillen ist zunächst ein Optometrie-Termin nötig — wir verkaufen korrigierende Gläser nicht direkt online. Ich öffne jetzt die Terminbuchung. 👓",
       "consulta": "Gerne! 📅 Ich öffne Ihre Terminbuchung.",
-      "saldos": "Wir haben einen Sale, bis zu -50%. 🏷️ Ich zeige Ihnen die Liste.",
+      "lentes_contacto": "Kontaktlinsen erfordern immer einen Anpassungstermin. Ich öffne die Terminbuchung für Sie. 👁️",
+      "carta_conducao": "Auch die Führerschein-Untersuchung muss gebucht werden. Ich kümmere mich gleich darum. 🚗",
       "contactos": "Hier finden Sie unsere Adresse, Öffnungszeiten und Kontakte. 📍"
-    },
-    "fallbackReply": "Hmm, ich bin mir nicht sicher, wonach Sie suchen. 🙂 Sie können eine der Optionen oben wählen — oder, wenn Sie möchten, direkt mit uns sprechen.",
-    "fallbackLink": "Mit uns sprechen"
+    }
   },
   "product": {
     "addCart": "In den Warenkorb",
