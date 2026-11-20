@@ -101,7 +101,8 @@
       "role": "Asesoramiento de producto",
       "desc": "Gafas de sol, colecciones, rebajas y el estilo ideal para usted.",
       "cta": "Hablar con Vera",
-      "greeting": "¡Hola! Soy Vera 👋 Le ayudo a encontrar las gafas perfectas. ¿Qué busca?"
+      "greeting": "¡Hola! Soy Vera 👋 Le ayudo a encontrar las gafas perfectas. ¿Qué busca?",
+      "quizCta": "Hacer el quiz de estilo"
     },
     "rodrigo": {
       "name": "Rodrigo",
@@ -118,6 +119,7 @@
       "graduados": "Gafas graduadas",
       "consulta": "Reservar cita",
       "lentes_contacto": "Lentes de contacto",
+      "seguros_protocolos": "Seguros y protocolos",
       "contactos": "Horarios y tiendas"
     },
     "replies": {
@@ -128,6 +130,7 @@
       "graduados": "Las gafas graduadas requieren primero una cita de optometría — no vendemos lentes graduadas directamente online. Le abro ahora la reserva. 👓",
       "consulta": "¡Por supuesto! 📅 Le abro la reserva de su cita.",
       "lentes_contacto": "Las lentes de contacto siempre requieren una cita de adaptación. Le abro la reserva. 👁️",
+      "seguros_protocolos": "Trabajamos con varios seguros y protocolos de descuento. 🤝 Le muestro las condiciones.",
       "carta_conducao": "Para el examen del permiso de conducir también hay que reservar. Me encargo ahora. 🚗",
       "contactos": "Aquí tiene nuestra dirección, horarios y contactos. 📍"
     }

@@ -1,48 +1,48 @@
 {
-  "_comment": "Dicionário do assistente de navegação (router por palavras-chave, SEM IA — zero custo). Duas pessoas: 'vera' (aconselhamento de produto) e 'rodrigo' (saúde ocular e marcações). Editar à vontade: adicionar sinónimos em 'keywords', mudar destinos em 'action'. Cada intent tem um campo 'agent' ('vera' ou 'rodrigo') que diz a quem pertence — é o único campo novo. action.type: 'page' (navega para action.value: outlet | saldos | contact | mindthelook | quiz) ou 'book' (abre a marcação com o serviço action.value). A correspondência ignora maiúsculas e acentos. Os 'intents' marcados com quickReply:true aparecem como botões de resposta rápida no chat dessa pessoa. Os campos 'label'/'reply' aqui são só PT, para o dono do site conseguir ler o ficheiro — o texto realmente mostrado ao cliente (nas 5 línguas) vem de src/i18n/locales/*.json (chave assistant.labels.<id> / assistant.replies.<id>). IMPORTANTE: o Rodrigo nunca dá diagnóstico nem conteúdo de saúde próprio — encaminha sempre para marcação.",
+  "_comment": "Dicionário do assistente de navegação (router por palavras-chave, SEM IA — zero custo). Duas pessoas: 'vera' (aconselhamento de produto) e 'rodrigo' (saúde ocular e marcações). Editar à vontade: adicionar sinónimos em 'keywords', mudar destinos em 'action'. Cada intent tem um campo 'agent' ('vera' ou 'rodrigo') que diz a quem pertence — é o único campo novo. A ORDEM da lista 'intents' é também a ordem dos botões de resposta rápida no chat dessa pessoa — o 'estilo' (quiz) está primeiro de propósito para a Vera, por ser a forma mais eficaz de ajudar quem não sabe bem o que quer. action.type: 'page' (navega para action.value: outlet | saldos | contact | mindthelook | quiz | vantagens) ou 'book' (abre a marcação com o serviço action.value). A correspondência ignora maiúsculas e acentos. Os 'intents' marcados com quickReply:true aparecem como botões de resposta rápida no chat dessa pessoa. Os campos 'label'/'reply' aqui são só PT, para o dono do site conseguir ler o ficheiro — o texto realmente mostrado ao cliente (nas 5 línguas) vem de src/i18n/locales/*.json (chave assistant.labels.<id> / assistant.replies.<id>). IMPORTANTE: o Rodrigo nunca dá diagnóstico nem conteúdo de saúde próprio — encaminha sempre para marcação.",
   "intents": [
+    {
+      "id": "estilo",
+      "agent": "vera",
+      "label": "Descobrir o meu estilo",
+      "quickReply": true,
+      "keywords": ["estilo", "quiz", "que oculos", "que óculos", "ajuda a escolher", "ajudar a escolher", "ajuda-me a escolher", "nao sei o que quero", "não sei o que quero", "nao sei qual escolher", "não sei qual escolher", "nao sei", "não sei", "preciso de ajuda", "ajuda", "recomendacao", "recomendação", "recomendar", "recomenda", "o que me fica bem", "o que fica bem", "qual o modelo", "qual fica melhor", "aconselhar", "aconselhamento", "sugestao", "sugestão", "sugerir", "para o meu rosto", "para o meu formato de cara", "formato de rosto", "formato de cara", "redondo", "redonda", "oval", "quadrado", "quadrada", "coracao", "coração", "presente", "oferecer", "dar de presente", "e para um presente", "não sei o que dar"],
+      "reply": "Adoro esta pergunta! Vamos descobrir o seu estilo com o nosso quiz rápido — é a forma mais certeira de encontrar o modelo ideal para si (ou para quem vai receber de presente).",
+      "action": { "type": "page", "value": "quiz" }
+    },
     {
       "id": "sol",
       "agent": "vera",
       "label": "Óculos de sol",
       "quickReply": true,
-      "keywords": ["sol", "solar", "solares", "praia", "conducao", "condução", "conduzir", "verao", "verão", "espelhad", "polarizad"],
+      "keywords": ["sol", "solar", "solares", "praia", "ferias", "férias", "conducao", "condução", "conduzir", "carro", "verao", "verão", "espelhad", "polarizad", "escuro", "escuros", "escura", "uv", "proteção uv", "protecao uv", "ray-ban", "rayban", "ray ban", "oakley", "carrera", "polaroid", "tom ford", "havaianas", "victoria beckham", "prada", "redondos", "aviador", "aviadores", "wayfarer", "gatinho", "preto", "preta", "pretos", "pretas", "castanho", "castanhos", "dourado", "dourados", "dourada", "tartaruga"],
       "reply": "Boa escolha! Temos óculos de sol de várias marcas — vou levá-lo à nossa seleção.",
       "action": { "type": "page", "value": "outlet" }
-    },
-    {
-      "id": "saldos",
-      "agent": "vera",
-      "label": "Ver saldos/promoções",
-      "quickReply": true,
-      "keywords": ["saldo", "saldos", "desconto", "descontos", "promocao", "promoção", "promo", "barato", "baratos", "liquidacao", "liquidação", "campanha", "oferta", "ofertas", "outlet"],
-      "reply": "Temos saldos a decorrer, até -50%. Vou mostrar-lhe a lista.",
-      "action": { "type": "page", "value": "saldos" }
     },
     {
       "id": "colecao",
       "agent": "vera",
       "label": "Ver coleção MindTheLook",
       "quickReply": true,
-      "keywords": ["colecao", "coleção", "mindthelook", "mind the look", "novidades", "lancamentos", "lançamentos", "tendencia", "tendência", "moda"],
+      "keywords": ["colecao", "coleção", "mindthelook", "mind the look", "vera velosa", "novidades", "lancamentos", "lançamentos", "tendencia", "tendência", "tendencias", "tendências", "moda", "moderno", "moderna", "atual", "diferente", "original", "exclusivo", "exclusiva"],
       "reply": "A coleção MindTheLook tem mesmo a nossa cara! Vou mostrar-lhe os modelos.",
       "action": { "type": "page", "value": "mindthelook" }
     },
     {
-      "id": "estilo",
+      "id": "saldos",
       "agent": "vera",
-      "label": "Descobrir o meu estilo",
+      "label": "Ver saldos/promoções",
       "quickReply": true,
-      "keywords": ["estilo", "quiz", "que oculos", "que óculos", "ajuda a escolher", "recomendacao", "recomendação", "o que me fica bem", "qual o modelo", "aconselhar", "aconselhamento"],
-      "reply": "Adoro esta pergunta! Vamos descobrir o seu estilo com o nosso quiz rápido.",
-      "action": { "type": "page", "value": "quiz" }
+      "keywords": ["saldo", "saldos", "desconto", "descontos", "promocao", "promoção", "promocoes", "promoções", "promo", "barato", "baratos", "barata", "baratas", "em conta", "mais em conta", "liquidacao", "liquidação", "campanha", "oferta", "ofertas", "outlet", "preco", "preço", "precos", "preços", "mais baixo"],
+      "reply": "Temos saldos a decorrer, até -50%. Vou mostrar-lhe a lista.",
+      "action": { "type": "page", "value": "saldos" }
     },
     {
       "id": "graduados",
       "agent": "rodrigo",
       "label": "Óculos graduados",
       "quickReply": true,
-      "keywords": ["grau", "graduad", "miopia", "astigmatismo", "hipermetropia", "presbiopia", "lentes graduadas", "lente graduada", "vista cansada", "dioptria", "receita", "prescricao", "prescrição", "ver mal", "ver ao perto", "ver ao longe"],
+      "keywords": ["grau", "graduad", "miopia", "astigmatismo", "hipermetropia", "presbiopia", "lentes graduadas", "lente graduada", "vista cansada", "dioptria", "receita", "prescricao", "prescrição", "ver mal", "visao turva", "visão turva", "visao enevoada", "visão enevoada", "ver ao perto", "ver ao longe", "dor de cabeca", "dor de cabeça", "dores de cabeca", "dores de cabeça", "olhos cansados", "cansaco visual", "cansaço visual", "vista cansa", "nao vejo bem", "não vejo bem"],
       "reply": "Para óculos graduados é necessária primeiro uma consulta de optometria — não fazemos venda direta de lentes graduadas online. Vou abrir já a marcação para si.",
       "action": { "type": "book", "value": "Consulta de Optometria" }
     },
@@ -51,7 +51,7 @@
       "agent": "rodrigo",
       "label": "Marcar consulta",
       "quickReply": true,
-      "keywords": ["marcar", "marcacao", "marcação", "consulta", "exame", "agendar", "agendamento", "optometria", "rastreio", "horario de atendimento", "horário de atendimento"],
+      "keywords": ["marcar", "marcacao", "marcação", "consulta", "exame", "exame de vista", "exame a vista", "agendar", "agendamento", "optometria", "rastreio", "horario de atendimento", "horário de atendimento", "disponibilidade", "vaga", "vagas"],
       "reply": "Com certeza! Vou abrir a marcação da sua consulta.",
       "action": { "type": "book", "value": "Consulta de Optometria" }
     },
@@ -60,9 +60,18 @@
       "agent": "rodrigo",
       "label": "Lentes de contacto",
       "quickReply": true,
-      "keywords": ["lentes de contacto", "lente de contacto", "lentes de contato", "contactologia", "lentes gelatinosas", "lentes rigidas", "lentes rígidas"],
+      "keywords": ["lentes de contacto", "lente de contacto", "lentes de contato", "lente de contato", "contactologia", "lentes gelatinosas", "lentes rigidas", "lentes rígidas", "lentes diarias", "lentes diárias", "lentes mensais", "lentes toricas", "lentes tóricas"],
       "reply": "As lentes de contacto exigem sempre uma consulta de adaptação. Vou abrir a marcação para si.",
       "action": { "type": "book", "value": "Consulta de Contactologia" }
+    },
+    {
+      "id": "seguros_protocolos",
+      "agent": "rodrigo",
+      "label": "Seguros e protocolos",
+      "quickReply": true,
+      "keywords": ["seguro", "seguros", "protocolo", "protocolos", "comparticipacao", "comparticipação", "comparticipa", "adse", "multicare", "medis", "médis", "advancecare", "allianz", "fidelidade", "generali", "lusitania", "lusitânia", "acoreana", "açoreana", "convenio", "convénio", "convencao", "convenção", "desconto do seguro", "cartao de saude", "cartão de saúde"],
+      "reply": "Trabalhamos com vários seguros e protocolos de desconto. Vou mostrar-lhe as condições.",
+      "action": { "type": "page", "value": "vantagens" }
     },
     {
       "id": "carta_conducao",

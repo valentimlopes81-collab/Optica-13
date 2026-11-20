@@ -101,7 +101,8 @@
       "role": "Produktberatung",
       "desc": "Sonnenbrillen, Kollektionen, Sale und der ideale Stil für Sie.",
       "cta": "Mit Vera sprechen",
-      "greeting": "Hallo! Ich bin Vera 👋 Ich helfe Ihnen, die perfekte Brille zu finden. Wonach suchen Sie?"
+      "greeting": "Hallo! Ich bin Vera 👋 Ich helfe Ihnen, die perfekte Brille zu finden. Wonach suchen Sie?",
+      "quizCta": "Stil-Quiz machen"
     },
     "rodrigo": {
       "name": "Rodrigo",
@@ -118,6 +119,7 @@
       "graduados": "Korrektionsbrillen",
       "consulta": "Termin buchen",
       "lentes_contacto": "Kontaktlinsen",
+      "seguros_protocolos": "Versicherungen & Vereinbarungen",
       "contactos": "Öffnungszeiten & Geschäfte"
     },
     "replies": {
@@ -128,6 +130,7 @@
       "graduados": "Für Korrektionsbrillen ist zunächst ein Optometrie-Termin nötig — wir verkaufen korrigierende Gläser nicht direkt online. Ich öffne jetzt die Terminbuchung. 👓",
       "consulta": "Gerne! 📅 Ich öffne Ihre Terminbuchung.",
       "lentes_contacto": "Kontaktlinsen erfordern immer einen Anpassungstermin. Ich öffne die Terminbuchung für Sie. 👁️",
+      "seguros_protocolos": "Wir arbeiten mit mehreren Versicherungen und Rabattvereinbarungen zusammen. 🤝 Ich zeige Ihnen die Details.",
       "carta_conducao": "Auch die Führerschein-Untersuchung muss gebucht werden. Ich kümmere mich gleich darum. 🚗",
       "contactos": "Hier finden Sie unsere Adresse, Öffnungszeiten und Kontakte. 📍"
     }
