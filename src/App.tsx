@@ -2382,7 +2382,14 @@ function AssistantWidget({ setPage, openBook }) {
     const fb = ASSISTANT.fallback;
     setMessages((m) => [
       ...m,
-      { from: "bot", agent: activeAgent, text: t("assistant.fallbackReply"), showQuickReplies: true, fallbackLink: fb },
+      {
+        from: "bot",
+        agent: activeAgent,
+        text: t("assistant.fallbackReply"),
+        showQuickReplies: true,
+        fallbackLink: fb,
+        quizCta: activeAgent === "vera",
+      },
     ]);
   };
 
@@ -2616,6 +2623,19 @@ function AssistantWidget({ setPage, openBook }) {
                             style={{ borderColor: AGENT_META[msg.handoff.toAgent].color, color: AGENT_META[msg.handoff.toAgent].color, background: "#fff" }}
                           >
                             {t("assistant." + msg.handoff.toAgent + ".cta")}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* CTA em destaque para o quiz de estilo (só na Vera, quando não entende o pedido) */}
+                      {msg.quizCta && (
+                        <div className="mt-2 ml-6 flex justify-start">
+                          <button
+                            onClick={() => { setPage("quiz"); setOpen(false); }}
+                            className="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:-translate-y-0.5 normal-case"
+                            style={{ borderColor: "var(--wine)", color: "#fff", background: "var(--wine)" }}
+                          >
+                            {t("assistant.vera.quizCta")}
                           </button>
                         </div>
                       )}

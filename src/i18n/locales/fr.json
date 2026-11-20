@@ -101,7 +101,8 @@
       "role": "Conseil produit",
       "desc": "Lunettes de soleil, collections, soldes et le style idéal pour vous.",
       "cta": "Parler à Vera",
-      "greeting": "Bonjour ! Je suis Vera 👋 Je vous aide à trouver les lunettes parfaites. Que recherchez-vous ?"
+      "greeting": "Bonjour ! Je suis Vera 👋 Je vous aide à trouver les lunettes parfaites. Que recherchez-vous ?",
+      "quizCta": "Faire le quiz de style"
     },
     "rodrigo": {
       "name": "Rodrigo",
@@ -118,6 +119,7 @@
       "graduados": "Lunettes de vue",
       "consulta": "Prendre rendez-vous",
       "lentes_contacto": "Lentilles de contact",
+      "seguros_protocolos": "Assurances et accords",
       "contactos": "Horaires et boutiques"
     },
     "replies": {
@@ -128,6 +130,7 @@
       "graduados": "Les lunettes de vue nécessitent d'abord un rendez-vous d'optométrie — nous ne vendons pas de verres correcteurs directement en ligne. J'ouvre la prise de rendez-vous. 👓",
       "consulta": "Bien sûr ! 📅 J'ouvre la prise de votre rendez-vous.",
       "lentes_contacto": "Les lentilles de contact nécessitent toujours un rendez-vous d'adaptation. J'ouvre la prise de rendez-vous. 👁️",
+      "seguros_protocolos": "Nous travaillons avec plusieurs assurances et accords de réduction. 🤝 Je vous montre les conditions.",
       "carta_conducao": "L'examen du permis de conduire doit aussi être réservé. Je m'en occupe tout de suite. 🚗",
       "contactos": "Voici notre adresse, nos horaires et nos contacts. 📍"
     }

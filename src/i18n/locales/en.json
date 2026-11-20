@@ -101,7 +101,8 @@
       "role": "Product advice",
       "desc": "Sunglasses, collections, sales and the ideal style for you.",
       "cta": "Talk to Vera",
-      "greeting": "Hi! I'm Vera 👋 I help you find the perfect glasses. What are you looking for?"
+      "greeting": "Hi! I'm Vera 👋 I help you find the perfect glasses. What are you looking for?",
+      "quizCta": "Take the style quiz"
     },
     "rodrigo": {
       "name": "Rodrigo",
@@ -118,6 +119,7 @@
       "graduados": "Prescription glasses",
       "consulta": "Book an appointment",
       "lentes_contacto": "Contact lenses",
+      "seguros_protocolos": "Insurance & protocols",
       "contactos": "Hours & stores"
     },
     "replies": {
@@ -128,6 +130,7 @@
       "graduados": "Prescription glasses require an optometry appointment first — we don't sell prescription lenses directly online. I'll open the booking for you now. 👓",
       "consulta": "Of course! 📅 I'll open your appointment booking.",
       "lentes_contacto": "Contact lenses always require a fitting appointment. I'll open the booking for you. 👁️",
+      "seguros_protocolos": "We work with several insurers and discount protocols. 🤝 Let me show you the details.",
       "carta_conducao": "The driving licence exam also needs to be booked. I'll take care of that now. 🚗",
       "contactos": "Here are our address, opening hours and contacts. 📍"
     }

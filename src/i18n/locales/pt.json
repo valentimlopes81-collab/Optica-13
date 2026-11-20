@@ -101,7 +101,8 @@
       "role": "Aconselhamento de produto",
       "desc": "Óculos de sol, coleções, saldos e qual o estilo ideal para si.",
       "cta": "Falar com a Vera",
-      "greeting": "Olá! Sou a Vera 👋 Ajudo a encontrar os óculos perfeitos para si. O que procura?"
+      "greeting": "Olá! Sou a Vera 👋 Ajudo a encontrar os óculos perfeitos para si. O que procura?",
+      "quizCta": "Fazer o quiz de estilo"
     },
     "rodrigo": {
       "name": "Rodrigo",
@@ -118,6 +119,7 @@
       "graduados": "Óculos graduados",
       "consulta": "Marcar consulta",
       "lentes_contacto": "Lentes de contacto",
+      "seguros_protocolos": "Seguros e protocolos",
       "contactos": "Horários e lojas"
     },
     "replies": {
@@ -128,6 +130,7 @@
       "graduados": "Para óculos graduados é necessária primeiro uma consulta de optometria — não fazemos venda direta de lentes graduadas online. Vou abrir já a marcação para si. 👓",
       "consulta": "Com certeza! 📅 Vou abrir a marcação da sua consulta.",
       "lentes_contacto": "As lentes de contacto exigem sempre uma consulta de adaptação. Vou abrir a marcação para si. 👁️",
+      "seguros_protocolos": "Trabalhamos com vários seguros e protocolos de desconto. 🤝 Vou mostrar-lhe as condições.",
       "carta_conducao": "Para o exame da carta de condução também é preciso marcar. Vou tratar disso já. 🚗",
       "contactos": "Aqui ficam a nossa morada, horários e contactos. 📍"
     }
